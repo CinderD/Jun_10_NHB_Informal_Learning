@@ -1,0 +1,60 @@
+% \begin{table*}[t]
+% \small
+% \centering
+% \caption{\textbf{Summary of key support--engagement effects across the four matched settings.} Constructive-ratio contrasts compare conversations with versus without scaffolding support. Adjusted models report the association of having scaffolding support with constructive-turn count (Poisson rate ratio) and with having at least one constructive turn (logit odds ratio). Adjacent-turn lift is the difference in the probability that the next user turn is constructive after scaffolded versus direct-response assistant turns.}
+% \label{tab:key_effects}
+
+% \setlength{\tabcolsep}{4pt}
+% \renewcommand{\arraystretch}{1.1}
+
+% \resizebox{\textwidth}{!}{%
+% \begin{tabular}{lrrrrrrr}
+% \toprule
+% Setting 
+% & \makecell{Constructive ratio\\Has S2 / No S2}
+% & \makecell{Difference\\(pp)}
+% & \makecell{Depth diff.\\(turns)}
+% & \makecell{Poisson\\RR}
+% & \makecell{Logit\\OR}
+% & \makecell{Adjacent lift\\(pp)}
+% & \makecell{Around first S2\\diff.} \\
+% \midrule
+% WildChat coding  & 0.094 / 0.055 & +3.9 & +2.23 & 1.852 & 1.761 & +2.68 & +0.014 \\
+% WildChat writing & 0.032 / 0.020 & +1.2 & +3.13 & 1.569 & 1.437 & +1.13 & -0.042 \\
+% Copilot coding   & 0.062 / 0.035 & +2.7 & +2.63 & 1.870 & 1.736 & +1.65 & -0.003 \\
+% Copilot writing  & 0.037 / 0.026 & +1.1 & +1.61 & 1.240 & 1.251 & +0.01 & -0.039 \\
+% \bottomrule
+% \end{tabular}%
+% }
+% \end{table*}
+
+\begin{table*}[t]
+\small
+\centering
+\caption{
+\textbf{Summary of key support--engagement associations in WildChat.}
+Constructive-ratio contrasts compare conversations with versus without scaffolded support. Adjusted models report the association of scaffolded-support presence with constructive-turn count (Poisson rate ratio) and with having at least one constructive turn (logit odds ratio). Adjacent-turn lift is the difference in the probability that the next user turn is constructive after scaffolded versus non-scaffolded reference assistant turns.
+}
+\label{tab:support_engagement_summary}
+
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.1}
+
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrrrrr}
+\toprule
+Setting 
+& \makecell{Constructive ratio\\Has S2 / No S2}
+& \makecell{Difference\\(pp)}
+& \makecell{Depth diff.\\(turns)}
+& \makecell{Poisson\\RR}
+& \makecell{Logit\\OR}
+& \makecell{Adjacent lift\\(pp)}
+& \makecell{Around first S2\\diff.} \\
+\midrule
+WildChat coding  & 0.094 / 0.055 & +3.9 & +2.23 & 1.852 & 1.761 & +2.68 & +0.014 \\
+WildChat writing & 0.032 / 0.020 & +1.2 & +3.13 & 1.569 & 1.437 & +1.13 & -0.042 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

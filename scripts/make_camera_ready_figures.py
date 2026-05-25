@@ -1,0 +1,987 @@
+from __future__ import annotations
+
+from pathlib import Path
+
+import matplotlib
+
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.colors import LinearSegmentedColormap, Normalize
+from matplotlib.gridspec import GridSpec
+from matplotlib.lines import Line2D
+from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch, Rectangle
+
+
+ROOT = Path(__file__).resolve().parents[1]
+FIG_DIR = ROOT / "figures"
+SVG_DIR = ROOT / "figures_svg_editable" / "final_figures"
+
+
+COLORS = {
+    "ink": "#17212B",
+    "muted": "#5D6874",
+    "grid": "#E5E9ED",
+    "blue": "#2F5F83",
+    "blue2": "#86AEC7",
+    "teal": "#2D8068",
+    "teal2": "#89B9AA",
+    "gold": "#B87923",
+    "gold2": "#F3D79B",
+    "rose": "#C86A78",
+    "lav": "#7960A8",
+    "pale": "#F8F6EF",
+    "panel": "#FFFFFF",
+    "line": "#D8DEE5",
+    "grey": "#BFC7D5",
+    "s1": "#B9C3CF",
+    "s2": "#2E7C6B",
+}
+
+SETTING_COLORS = {
+    "WC-Coding": "#2F5F83",
+    "WC-Writing": "#86AEC7",
+    "CP-Coding": "#C85D7A",
+    "CP-Writing": "#E99A83",
+}
+
+plt.rcParams.update(
+    {
+        "font.family": "Nimbus Sans",
+        "font.size": 9,
+        "axes.titlesize": 11,
+        "axes.labelsize": 9.5,
+        "xtick.labelsize": 8.5,
+        "ytick.labelsize": 8.5,
+        "legend.fontsize": 8.5,
+        "figure.facecolor": "white",
+        "axes.facecolor": "white",
+        "savefig.facecolor": "white",
+        "pdf.fonttype": 42,
+        "ps.fonttype": 42,
+        "svg.fonttype": "none",
+        "axes.linewidth": 0.8,
+    }
+)
+
+
+def _save(fig: plt.Figure, stem: str) -> None:
+    FIG_DIR.mkdir(parents=True, exist_ok=True)
+    SVG_DIR.mkdir(parents=True, exist_ok=True)
+    svg_path = SVG_DIR / f"{stem}.svg"
+    fig.savefig(FIG_DIR / f"{stem}.pdf", bbox_inches="tight", pad_inches=0.025)
+    fig.savefig(svg_path, bbox_inches="tight", pad_inches=0.025)
+    svg_path.write_text("\n".join(line.rstrip() for line in svg_path.read_text().splitlines()) + "\n")
+    plt.close(fig)
+
+
+def _clean(ax):
+    ax.set_xticks([])
+    ax.set_yticks([])
+    for sp in ax.spines.values():
+        sp.set_visible(False)
+
+
+def _shadow_box(
+    ax,
+    xy,
+    width,
+    height,
+    *,
+    radius=0.018,
+    face="white",
+    edge="#D9E0E7",
+    lw=0.9,
+    shadow=True,
+    alpha=1.0,
+    zorder=2,
+):
+    x, y = xy
+    if shadow:
+        ax.add_patch(
+            FancyBboxPatch(
+                (x + 0.006, y - 0.007),
+                width,
+                height,
+                boxstyle=f"round,pad=0.008,rounding_size={radius}",
+                linewidth=0,
+                facecolor="#000000",
+                alpha=0.055,
+                zorder=zorder - 1,
+            )
+        )
+    patch = FancyBboxPatch(
+        (x, y),
+        width,
+        height,
+        boxstyle=f"round,pad=0.008,rounding_size={radius}",
+        linewidth=lw,
+        edgecolor=edge,
+        facecolor=face,
+        alpha=alpha,
+        zorder=zorder,
+    )
+    ax.add_patch(patch)
+    return patch
+
+
+def _pill(ax, x, y, w, h, text, *, fc, ec=None, color=None, fs=7.5, weight="bold"):
+    ec = ec or fc
+    color = color or COLORS["ink"]
+    _shadow_box(ax, (x, y), w, h, radius=h / 2.5, face=fc, edge=ec, lw=0.7, shadow=False, zorder=5)
+    ax.text(x + w / 2, y + h / 2, text, ha="center", va="center", fontsize=fs, color=color, weight=weight, zorder=6)
+
+
+def _arrow(ax, xy1, xy2, *, color="#9AA7B3", lw=1.2, rad=0.0, ms=10, zorder=8):
+    ax.add_patch(
+        FancyArrowPatch(
+            xy1,
+            xy2,
+            arrowstyle="-|>",
+            mutation_scale=ms,
+            linewidth=lw,
+            color=color,
+            connectionstyle=f"arc3,rad={rad}",
+            zorder=zorder,
+        )
+    )
+
+
+def make_figure1() -> None:
+    fig, ax = plt.subplots(figsize=(7.7, 4.45))
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    _clean(ax)
+    ax.set_facecolor("white")
+
+    ax.text(
+        0.035,
+        0.955,
+        "From everyday LLM use to evidence about informal learning",
+        ha="left",
+        va="center",
+        fontsize=12.0,
+        weight="bold",
+        color=COLORS["ink"],
+    )
+    ax.text(
+        0.035,
+        0.918,
+        "A behavioural framework linking task ecology, turn-level codes and multi-scale association tests.",
+        ha="left",
+        va="center",
+        fontsize=7.5,
+        color=COLORS["muted"],
+    )
+
+    # Three major cards.
+    left = (0.035, 0.105, 0.285, 0.750)
+    mid = (0.360, 0.105, 0.305, 0.750)
+    right = (0.705, 0.105, 0.260, 0.750)
+    for x, y, w, h in [left, mid, right]:
+        _shadow_box(ax, (x, y), w, h, radius=0.018, face="white", edge="#D8E0E7", lw=0.85, shadow=False)
+
+    def card_header(x, y, label, title, subtitle):
+        ax.add_patch(Circle((x + 0.033, y + 0.700), 0.014, facecolor="#F1F4F7", edgecolor="#C9D3DD", lw=0.6, zorder=4))
+        ax.text(x + 0.033, y + 0.700, label, fontsize=7.2, weight="bold", color=COLORS["ink"], ha="center", va="center", zorder=5)
+        ax.text(x + 0.057, y + 0.702, title, fontsize=8.3, weight="bold", color=COLORS["ink"], ha="left", va="center")
+        ax.text(x + 0.026, y + 0.632, subtitle, fontsize=6.1, color=COLORS["muted"], ha="left", linespacing=1.15)
+
+    card_header(left[0], left[1], "a", "Interaction ecology", "Natural conversations in matched\nusage contexts.")
+    card_header(mid[0], mid[1], "b", "Turn-level labels", "Adjacent turns coded as observable\nbehavioural signals.")
+    card_header(right[0], right[1], "c", "Inference scales", "Shared labels support descriptive,\nassociational and temporal analyses.")
+
+    # Left card: clean 2-by-2 ecology matrix plus user framing.
+    ax.text(0.064, 0.665, "Platform x task setting", fontsize=7.2, weight="bold", color=COLORS["muted"])
+    matrix_x, matrix_y = 0.064, 0.420
+    cell_w, cell_h = 0.103, 0.085
+    for row, platform in enumerate(["WildChat", "Copilot"]):
+        ax.text(matrix_x - 0.003, matrix_y + (1 - row) * cell_h + 0.034, platform, fontsize=6.6, color=COLORS["muted"], ha="right", va="center")
+    for col, task in enumerate(["Coding", "Writing"]):
+        ax.text(matrix_x + col * cell_w + cell_w / 2, matrix_y + 2 * cell_h + 0.025, task, fontsize=6.6, color=COLORS["muted"], ha="center")
+    for row in range(2):
+        for col in range(2):
+            fc = "#E2F1F7" if col == 0 else "#F4F0FA"
+            ec = "#B5D5E2" if col == 0 else "#D1C5E5"
+            _shadow_box(
+                ax,
+                (matrix_x + col * cell_w, matrix_y + (1 - row) * cell_h),
+                cell_w - 0.012,
+                cell_h - 0.014,
+                radius=0.010,
+                face=fc,
+                edge=ec,
+                lw=0.7,
+                shadow=False,
+            )
+    _shadow_box(ax, (0.071, 0.265), 0.210, 0.060, radius=0.014, face="#FFF7E6", edge="#E5BA65", lw=0.7, shadow=False)
+    ax.text(0.086, 0.302, "User framing", fontsize=6.9, weight="bold", color=COLORS["gold"])
+    ax.text(0.086, 0.280, "Intentional or unintentional learning context", fontsize=6.2, color=COLORS["ink"])
+    _shadow_box(ax, (0.071, 0.165), 0.210, 0.052, radius=0.014, face="#FAFBFC", edge="#DFE5EA", lw=0.6, shadow=False)
+    ax.text(0.086, 0.192, "Matched settings define contextual contrasts.", fontsize=6.4, color=COLORS["muted"], ha="left", va="center")
+
+    # Middle card: timeline.
+    for x, label, sub, fc, ec, col in [
+        (0.388, "User t-1", "prior state", "#E6F3F8", "#A9C8D7", COLORS["blue"]),
+        (0.494, "Assistant t", "support", "#FFF0CE", "#E4B45C", COLORS["gold"]),
+        (0.600, "User t+1", "uptake", "#E6F3F8", "#A9C8D7", COLORS["blue"]),
+    ]:
+        _shadow_box(ax, (x, 0.657), 0.082, 0.076, radius=0.014, face=fc, edge=ec, lw=0.75, shadow=False)
+        ax.text(x + 0.010, 0.702, label, fontsize=6.4, weight="bold", color=col)
+        ax.text(x + 0.010, 0.676, sub, fontsize=6.1, color=COLORS["ink"], linespacing=1.03)
+    _arrow(ax, (0.470, 0.695), (0.494, 0.695), lw=0.9, ms=7, color="#65717C")
+    _arrow(ax, (0.576, 0.695), (0.600, 0.695), lw=0.9, ms=7, color="#65717C")
+
+    ax.text(0.390, 0.590, "User codes", fontsize=7.2, weight="bold", color=COLORS["blue"])
+    for i, (letter, desc, fc) in enumerate(
+        [("A", "active", "#DAECF6"), ("C", "constructive", "#BFE5DD"), ("P", "passive", "#EDF2F6")]
+    ):
+        cy = 0.545 - i * 0.053
+        ax.add_patch(Circle((0.407, cy), 0.014, facecolor=fc, edgecolor="#8CB6CC", linewidth=0.7))
+        ax.text(0.407, cy, letter, ha="center", va="center", fontsize=6.4, weight="bold", color=COLORS["blue"])
+        ax.text(0.432, cy, desc, ha="left", va="center", fontsize=6.4, color=COLORS["ink"])
+
+    ax.text(0.522, 0.590, "Assistant codes", fontsize=7.2, weight="bold", color=COLORS["gold"], ha="left")
+    _pill(ax, 0.522, 0.528, 0.065, 0.032, "S1 direct", fc="#F7F9FB", ec="#C7D0DA", color=COLORS["muted"], fs=5.9)
+    _pill(ax, 0.597, 0.528, 0.068, 0.032, "S2 scaffold", fc="#FFF0CE", ec="#E4B45C", color=COLORS["gold"], fs=5.7)
+    ax.text(0.522, 0.482, "S2 forms", fontsize=6.8, weight="bold", color=COLORS["gold"])
+    for i, lab in enumerate(["M1 feedback", "M2 hint", "M3 instruct", "M4 explain", "M5 model", "M6 question"]):
+        col = i % 2
+        row = i // 2
+        _pill(
+            ax,
+            0.522 + col * 0.073,
+            0.445 - row * 0.038,
+            0.067,
+            0.026,
+            lab,
+            fc="#FFFBF2",
+            ec="#E7C582",
+            color=COLORS["ink"],
+            fs=5.25,
+            weight="normal",
+        )
+    _shadow_box(ax, (0.392, 0.165), 0.235, 0.052, radius=0.014, face="#FAFBFC", edge="#DFE5EA", lw=0.6, shadow=False)
+    ax.text(
+        0.405,
+        0.192,
+        "Labels are behavioural signatures, not outcomes.",
+        fontsize=6.3,
+        color=COLORS["muted"],
+        ha="left",
+        va="center",
+    )
+
+    # Right card: evidence modules.
+    modules = [
+        (0.728, 0.620, "#E7F2F7", "#BCD6E2", "Prevalence", "Engagement signatures\nacross settings.", "bars"),
+        (0.728, 0.455, "#FFF0CE", "#E8C679", "Support association", "Scaffolding aligned with\nconstructive participation.", "network"),
+        (0.728, 0.290, "#F0EAF7", "#D2C6E4", "Local coupling", "S2 predicts next-turn uptake\nconditional on prior state.", "couple"),
+    ]
+    for x, y, fc, ec, title, desc, icon in modules:
+        _shadow_box(ax, (x, y), 0.212, 0.112, radius=0.014, face=fc, edge=ec, lw=0.7, shadow=False)
+        ax.text(x + 0.070, y + 0.082, title, fontsize=6.35, weight="bold", color=COLORS["ink"])
+        ax.text(x + 0.070, y + 0.043, desc, fontsize=5.2, color=COLORS["muted"], linespacing=1.08)
+        if icon == "bars":
+            for j, bh in enumerate([0.055, 0.040, 0.026]):
+                ax.add_patch(Rectangle((x + 0.023 + j * 0.018, y + 0.028), 0.010, bh, facecolor="#5A8EAA", edgecolor="none"))
+            ax.plot([x + 0.016, x + 0.068], [y + 0.026, y + 0.026], color="#7FA6BA", lw=0.8)
+        elif icon == "network":
+            pts = [(x + 0.030, y + 0.067), (x + 0.055, y + 0.083), (x + 0.060, y + 0.045), (x + 0.038, y + 0.035)]
+            for p1, p2 in [(pts[0], pts[1]), (pts[0], pts[2]), (pts[0], pts[3]), (pts[2], pts[1])]:
+                ax.plot([p1[0], p2[0]], [p1[1], p2[1]], color="#C79B4A", lw=0.9)
+            for p in pts:
+                ax.add_patch(Circle(p, 0.009, facecolor="#A8792D", edgecolor="white", lw=0.5))
+        else:
+            xs = [x + 0.024, x + 0.045, x + 0.066]
+            for xx in xs:
+                ax.add_patch(Circle((xx, y + 0.067), 0.010, facecolor="#F6F2FB", edgecolor=COLORS["lav"], lw=0.7))
+            _arrow(ax, (xs[0] + 0.010, y + 0.067), (xs[1] - 0.010, y + 0.067), lw=0.8, ms=6, color=COLORS["lav"])
+            _arrow(ax, (xs[1] + 0.010, y + 0.067), (xs[2] - 0.010, y + 0.067), lw=0.8, ms=6, color=COLORS["lav"])
+            ax.text(x + 0.019, y + 0.028, "S2 -> C", fontsize=6.1, weight="bold", color=COLORS["lav"])
+
+    _arrow(ax, (0.322, 0.500), (0.358, 0.500), color="#A7B2BC", lw=1.2, ms=10)
+    _arrow(ax, (0.668, 0.500), (0.705, 0.500), color="#A7B2BC", lw=1.2, ms=10)
+
+    _save(fig, "fig1_analytic_framework_final")
+
+
+def make_figure2() -> None:
+    labels = ["WC coding", "WC writing", "CP coding", "CP writing"]
+    active = np.array([80.4, 79.5, 86.3, 70.8])
+    constructive = np.array([18.4, 13.6, 12.6, 23.5])
+    passive = np.array([1.2, 6.9, 1.1, 5.8])
+    cog_intent = np.array([76.6, 28.2, 68.3, 26.0])
+    cog_unintent = np.array([32.5, 10.5, 33.2, 6.4])
+    con_intent = np.array([13.1, 5.2, 8.3, 5.4])
+    con_unintent = np.array([5.7, 1.5, 3.3, 2.0])
+    depth = {
+        "WC coding": [0.151, 0.286, 0.463],
+        "WC writing": [0.060, 0.092, 0.150],
+        "CP coding": [0.105, 0.193, 0.354],
+        "CP writing": [0.074, 0.111, 0.211],
+    }
+
+    fig = plt.figure(figsize=(7.85, 4.20))
+    gs = GridSpec(2, 2, figure=fig, height_ratios=[1.12, 0.56], width_ratios=[1.12, 1.18], hspace=0.86, wspace=0.42)
+    axa = fig.add_subplot(gs[0, 0])
+    gs_b = gs[0, 1].subgridspec(1, 2, wspace=0.28)
+    axb1 = fig.add_subplot(gs_b[0, 0])
+    axb2 = fig.add_subplot(gs_b[0, 1])
+    axc = fig.add_subplot(gs[1, :])
+
+    y = np.arange(len(labels))
+    axa.barh(y, active, color="#9DC4D5", edgecolor="white", linewidth=0.8, height=0.60, label="Active")
+    axa.barh(y, constructive, left=active, color=COLORS["teal"], edgecolor="white", linewidth=0.8, height=0.60, label="Constructive")
+    axa.barh(y, passive, left=active + constructive, color="#D7DADF", edgecolor="white", linewidth=0.8, height=0.60, label="Passive")
+    for i in range(len(labels)):
+        axa.text(active[i] / 2, i, f"{active[i]:.1f}", ha="center", va="center", fontsize=8.0, color=COLORS["ink"])
+        axa.text(active[i] + constructive[i] / 2, i, f"{constructive[i]:.1f}", ha="center", va="center", fontsize=8.0, color="white")
+        axa.text(101.7, i, f"P {passive[i]:.1f}", ha="left", va="center", fontsize=7.8, color=COLORS["muted"])
+    axa.set_yticks(y, labels)
+    axa.invert_yaxis()
+    axa.set_xlim(0, 111)
+    axa.set_xlabel("Share of cognitively engaged turns (%)")
+    axa.set_title("Engagement composition", loc="left", pad=18)
+    axa.grid(axis="x", color=COLORS["grid"], linewidth=0.8)
+    axa.set_axisbelow(True)
+    axa.spines[["top", "right", "left"]].set_visible(False)
+    axa.text(-0.17, 1.06, "a", transform=axa.transAxes, fontsize=14, weight="bold")
+    axa.tick_params(axis="y", length=0, pad=2)
+
+    handles = [
+        Rectangle((0, 0), 1, 1, facecolor="#8BB8CC", edgecolor=COLORS["ink"], linewidth=0.55),
+        Rectangle((0, 0), 1, 1, facecolor=COLORS["teal"], edgecolor=COLORS["ink"], linewidth=0.55),
+        Rectangle((0, 0), 1, 1, facecolor="#DADADA", edgecolor=COLORS["ink"], linewidth=0.55),
+    ]
+    axa.legend(handles, ["Active", "Constructive", "Passive"], loc="upper left", bbox_to_anchor=(0.27, 1.18), ncol=3, frameon=False, handlelength=1.0, columnspacing=0.75, fontsize=7.6)
+
+    def intent_dumbbell(ax, left_vals, right_vals, title, xlim, show_y=False):
+        yy = np.arange(len(labels))
+        for i, name in enumerate(labels):
+            ax.plot([left_vals[i], right_vals[i]], [i, i], color="#C7D0D8", lw=2.0, zorder=1)
+            ax.scatter(left_vals[i], i, s=38, color=COLORS["grey"], edgecolor="white", linewidth=0.7, zorder=3)
+            ax.scatter(right_vals[i], i, s=38, color="#2D71B8", edgecolor="white", linewidth=0.7, zorder=3)
+            ax.text(right_vals[i] + xlim[1] * 0.035, i, f"+{right_vals[i] - left_vals[i]:.1f}", fontsize=7.2, ha="left", va="center", color=COLORS["ink"])
+        ax.set_yticks(yy, labels if show_y else [])
+        ax.invert_yaxis()
+        ax.set_xlim(*xlim)
+        ax.set_title(title, loc="center", pad=7, fontsize=8.6, weight="bold")
+        ax.set_xlabel("User-turn rate (%)", fontsize=7.5)
+        ax.grid(axis="x", color=COLORS["grid"], linewidth=0.8)
+        ax.spines[["top", "right", "left"]].set_visible(False)
+        ax.tick_params(axis="y", length=0, pad=2)
+        ax.tick_params(axis="x", labelsize=7.5)
+
+    intent_dumbbell(axb1, cog_unintent, cog_intent, "Cognitive", (0, 86), show_y=True)
+    intent_dumbbell(axb2, con_unintent, con_intent, "Constructive", (0, 14.6), show_y=False)
+    axb1.text(-0.42, 1.10, "b", transform=axb1.transAxes, fontsize=14, weight="bold")
+    axb1.text(0.00, 1.26, "Explicit learning framing", transform=axb1.transAxes, fontsize=9.0, color=COLORS["ink"], ha="left")
+    axb2.legend(
+        [
+            Line2D([0], [0], marker="o", color="none", markerfacecolor="#2D71B8", markeredgecolor="white", markersize=5.6),
+            Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["grey"], markeredgecolor="white", markersize=5.6),
+        ],
+        ["Intent.", "Unintent."],
+        loc="upper right",
+        bbox_to_anchor=(1.04, 1.42),
+        ncol=2,
+        frameon=False,
+        fontsize=7.3,
+        handletextpad=0.2,
+        columnspacing=0.8,
+    )
+
+    depth_matrix = np.array(list(depth.values()))
+    cmap = LinearSegmentedColormap.from_list("depth", ["#F3F6F6", "#A8C8D7", "#2F5F83"])
+    axc.imshow(depth_matrix, cmap=cmap, norm=Normalize(0.05, 0.47), aspect="auto")
+    axc.set_xticks(np.arange(3), ["2-3\nuser turns", "4-6\nuser turns", "7+\nuser turns"], fontsize=8.0)
+    axc.set_yticks(np.arange(len(labels)), labels)
+    axc.set_xlabel("Conversation length", fontweight="bold", labelpad=7)
+    axc.set_ylabel("Setting", labelpad=5)
+    axc.set_title("Share with >=1 constructive user turn", loc="left", pad=7)
+    axc.set_xticks(np.arange(-0.5, 3, 1), minor=True)
+    axc.set_yticks(np.arange(-0.5, len(labels), 1), minor=True)
+    axc.grid(which="minor", color="white", linewidth=1.2)
+    axc.tick_params(axis="both", which="both", length=0)
+    for sp in axc.spines.values():
+        sp.set_visible(False)
+    for i in range(depth_matrix.shape[0]):
+        for j in range(depth_matrix.shape[1]):
+            val = depth_matrix[i, j]
+            axc.text(j, i, f"{val * 100:.1f}%", ha="center", va="center", fontsize=8.3, color="white" if val > 0.30 else COLORS["ink"])
+    for tick in axc.get_xticklabels():
+        tick.set_fontweight("bold")
+    axc.text(-0.055, 1.08, "c", transform=axc.transAxes, fontsize=14, weight="bold")
+    fig.subplots_adjust(left=0.105, right=0.985, top=0.830, bottom=0.145)
+    fig.text(0.985, 0.034, "WC, WildChat; CP, Copilot.", ha="right", fontsize=7.6, color=COLORS["muted"])
+
+    _save(fig, "fig_engagement_ecology_compact_final")
+
+
+def make_figure3() -> None:
+    labels = ["WC coding", "CP coding", "WC writing", "CP writing"]
+    no_s2 = np.array([5.5, 3.5, 2.0, 2.6])
+    has_s2 = np.array([9.4, 6.2, 3.2, 3.7])
+    persistence_labels = ["WC coding", "CP coding"]
+    p_no = np.array([0.440, 0.240])
+    p_has = np.array([0.895, 0.759])
+    depth_diff = np.array([2.23, 2.63, 3.13, 1.61])
+    pois = np.array([1.852, 1.870, 1.569, 1.240])
+    logit = np.array([1.761, 1.736, 1.437, 1.251])
+
+    fig = plt.figure(figsize=(7.85, 4.85))
+    gs = GridSpec(2, 2, figure=fig, width_ratios=[1.04, 1.16], height_ratios=[1.0, 0.88], wspace=0.42, hspace=0.66)
+    axa = fig.add_subplot(gs[0, 0])
+    axb = fig.add_subplot(gs[0, 1])
+    axc = fig.add_subplot(gs[1, 0])
+    axd = fig.add_subplot(gs[1, 1])
+
+    def dumbbell(ax, left, right, ylabels, title, xlabel, xlim, diff_fmt="{:+.1f}", scale=1, value_fmt="{:.1f}"):
+        y = np.arange(len(ylabels))
+        for i in range(len(ylabels)):
+            ax.plot([left[i], right[i]], [i, i], color="#B9C2CB", lw=2.4, zorder=1)
+            ax.scatter(left[i], i, s=58, color=COLORS["s1"], edgecolor="white", linewidth=0.8, zorder=3)
+            ax.scatter(right[i], i, s=58, color=COLORS["s2"], edgecolor="white", linewidth=0.8, zorder=3)
+            left_label_y = i + 0.27 if i < len(ylabels) - 1 else i - 0.27
+            ax.text(left[i], left_label_y, value_fmt.format(left[i]), fontsize=7.3, ha="center", va="center", color=COLORS["muted"])
+            ax.text(right[i], i - 0.27, value_fmt.format(right[i]), fontsize=7.3, ha="center", va="center", color=COLORS["ink"])
+            ax.text(right[i] + (xlim[1] - xlim[0]) * 0.04, i, diff_fmt.format((right[i] - left[i]) * scale), fontsize=8.3, ha="left", va="center", color=COLORS["ink"])
+        ax.set_yticks(y, ylabels)
+        ax.invert_yaxis()
+        ax.set_xlim(*xlim)
+        ax.set_title(title, loc="left", pad=8)
+        ax.set_xlabel(xlabel)
+        ax.grid(axis="x", color=COLORS["grid"], lw=0.8)
+        ax.spines[["top", "right", "left"]].set_visible(False)
+        ax.tick_params(axis="y", length=0, pad=2)
+
+    dumbbell(axa, no_s2, has_s2, labels, "Conversation-level constructive ratio", "Constructive user turns (%)", (0, 10.9))
+    axa.text(-0.16, 1.06, "a", transform=axa.transAxes, fontsize=14, weight="bold")
+
+    y = np.arange(len(labels))
+    axb.axvline(1.0, color=COLORS["ink"], lw=1.0)
+    for i in range(len(labels)):
+        axb.plot([1.0, pois[i]], [i - 0.12, i - 0.12], color="#C9D2D9", lw=1.5, zorder=1)
+        axb.plot([1.0, logit[i]], [i + 0.12, i + 0.12], color="#C9D2D9", lw=1.5, zorder=1)
+        axb.scatter(pois[i], i - 0.12, s=48, color=COLORS["s2"], edgecolor="white", linewidth=0.7, zorder=3)
+        axb.scatter(logit[i], i + 0.12, s=48, color="#5A6470", edgecolor="white", linewidth=0.7, zorder=3)
+        axb.text(max(pois[i], logit[i]) + 0.035, i, f"{pois[i]:.2f} / {logit[i]:.2f}", va="center", fontsize=7.5, color=COLORS["ink"])
+    axb.set_yticks(y, labels)
+    axb.invert_yaxis()
+    axb.set_xlim(0.94, 2.03)
+    axb.set_title("Adjusted association models", loc="left", pad=8)
+    axb.set_xlabel("Association estimate")
+    axb.grid(axis="x", color=COLORS["grid"], lw=0.8)
+    axb.spines[["top", "right", "left"]].set_visible(False)
+    axb.tick_params(axis="y", length=0, pad=2)
+    axb.text(-0.12, 1.06, "b", transform=axb.transAxes, fontsize=14, weight="bold")
+    axb.legend(
+        [
+            Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["s2"], markersize=6.5),
+            Line2D([0], [0], marker="o", color="none", markerfacecolor="#5A6470", markersize=6.5),
+        ],
+        ["Poisson RR", "Logit OR"],
+        frameon=False,
+        loc="lower right",
+        fontsize=8.0,
+        handletextpad=0.3,
+    )
+
+    dumbbell(
+        axc,
+        p_no,
+        p_has,
+        persistence_labels,
+        "Coding failure persistence",
+        "Probability of persistence",
+        (0, 1.02),
+        scale=100,
+        value_fmt="{:.3f}",
+    )
+    axc.text(-0.16, 1.13, "c", transform=axc.transAxes, fontsize=14, weight="bold")
+
+    y_depth = np.arange(len(labels))
+    axd.axvline(0, color=COLORS["ink"], lw=0.9)
+    axd.barh(y_depth, depth_diff, color=COLORS["s2"], edgecolor="white", linewidth=0.8, height=0.56)
+    for i, val in enumerate(depth_diff):
+        axd.text(val + 0.08, i, f"+{val:.2f}", va="center", ha="left", fontsize=8.2, color=COLORS["ink"])
+    axd.set_yticks(y_depth, labels)
+    axd.invert_yaxis()
+    axd.set_xlim(0, 3.55)
+    axd.set_title("Post-answer depth", loc="left", pad=8)
+    axd.set_xlabel("Has S2 - no S2 (turns)")
+    axd.grid(axis="x", color=COLORS["grid"], lw=0.8)
+    axd.spines[["top", "right", "left"]].set_visible(False)
+    axd.tick_params(axis="y", length=0, pad=2)
+    axd.text(-0.12, 1.13, "d", transform=axd.transAxes, fontsize=14, weight="bold")
+
+    fig.legend(
+        [
+            Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["s1"], markeredgecolor=COLORS["ink"], markersize=6.5),
+            Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["s2"], markeredgecolor=COLORS["ink"], markersize=6.5),
+        ],
+        ["No S2", "Has S2"],
+        loc="upper left",
+        bbox_to_anchor=(0.115, 0.985),
+        ncol=2,
+        frameon=False,
+        fontsize=8.2,
+        handletextpad=0.3,
+    )
+    fig.text(0.985, 0.032, "WC, WildChat; CP, Copilot.", ha="right", fontsize=7.6, color=COLORS["muted"])
+    fig.subplots_adjust(left=0.115, right=0.985, top=0.880, bottom=0.165)
+
+    _save(fig, "fig_support_association_compact_final_v2")
+
+
+def make_figure4() -> None:
+    rows = ["M1\nfeedback", "M2\nhint", "M3\ninstruct", "M4\nexplain", "M5\nmodel", "M6\nquestion"]
+    mean_cols = ["M1", "M2", "M3", "M4", "M5", "M6"]
+    settings = ["WC coding", "WC writing", "CP coding", "CP writing"]
+    # Pooled from the latest level-2 metrics for the four matched settings.
+    # Effects are with-label minus without-label differences among scaffolded conversations.
+    effect_overall = {
+        "Intentional": {
+            "mean": np.array([1.69, 8.37, -16.06, 26.98, 11.42, -6.60]),
+            "low": np.array([0.84, 7.63, -16.73, 26.24, 10.73, -7.70]),
+            "high": np.array([2.53, 9.12, -15.38, 27.71, 12.11, -5.51]),
+        },
+        "Unintentional": {
+            "mean": np.array([16.70, 14.23, -4.99, 16.68, 9.92, 0.09]),
+            "low": np.array([15.94, 13.59, -5.51, 16.21, 9.30, -0.61]),
+            "high": np.array([17.46, 14.86, -4.47, 17.16, 10.54, 0.79]),
+        },
+    }
+    effect_constructive = {
+        "Intentional": {
+            "mean": np.array([12.67, 2.49, -4.94, 5.96, 2.25, -2.37]),
+            "low": np.array([12.09, 2.06, -5.31, 5.62, 1.87, -2.89]),
+            "high": np.array([13.25, 2.92, -4.57, 6.31, 2.64, -1.84]),
+        },
+        "Unintentional": {
+            "mean": np.array([5.66, 1.35, -1.24, 3.09, 1.36, -0.73]),
+            "low": np.array([5.27, 1.10, -1.45, 2.90, 1.12, -0.99]),
+            "high": np.array([6.05, 1.60, -1.03, 3.28, 1.61, -0.48]),
+        },
+    }
+    interaction_p_overall = np.array([0.000, 0.000, 0.000, 0.000, 0.00141651, 0.000])
+    interaction_p_constructive = np.array([0.000, 0.00000091, 0.000, 0.000, 0.00006791, 0.00000041])
+    supply = np.array(
+        [
+            [8.8, 16.6, 10.1, 9.4],
+            [14.7, 9.6, 21.5, 9.8],
+            [29.7, 59.2, 21.4, 66.5],
+            [84.0, 29.5, 77.5, 28.8],
+            [23.9, 15.0, 24.5, 11.4],
+            [6.9, 6.9, 6.6, 4.2],
+        ]
+    )
+
+    fig = plt.figure(figsize=(7.45, 5.30))
+    gs = fig.add_gridspec(2, 2, height_ratios=[3.12, 1.0], hspace=0.46, wspace=0.24)
+    ax_overall = fig.add_subplot(gs[0, 0])
+    ax_constructive = fig.add_subplot(gs[0, 1])
+    ax_supply = fig.add_subplot(gs[1, :])
+    cmap_s = LinearSegmentedColormap.from_list("supply", ["#F3F6F6", "#B8C9D2", "#2E5F7F"])
+
+    def _p_label(p: float) -> str:
+        if p < 0.001:
+            return "p<.001"
+        return f"p={p:.3f}".replace("0.", ".")
+
+    def _draw_bracket(ax: plt.Axes, x1: float, x2: float, y: float, label: str, color: str, *, above: bool, span: float) -> None:
+        tick = span * 0.010
+        if above:
+            ys = [y - tick, y, y, y - tick]
+            va = "bottom"
+            text_y = y + span * 0.012
+        else:
+            ys = [y + tick, y, y, y + tick]
+            va = "top"
+            text_y = y - span * 0.012
+        ax.plot([x1, x1, x2, x2], ys, color=color, linewidth=0.95, zorder=4)
+        ax.text((x1 + x2) / 2, text_y, label, ha="center", va=va, fontsize=5.9, color=color, fontweight="bold")
+
+    centers = np.arange(len(rows))
+    offsets = np.array([-0.17, 0.17])
+    width = 0.29
+
+    def _purpose_panel(ax: plt.Axes, effects: dict, pvals: np.ndarray, title: str, ylim: tuple[float, float]) -> None:
+        specs = [
+            ("Intentional", offsets[0], "#2F5F83"),
+            ("Unintentional", offsets[1], "#BFC7D5"),
+        ]
+        y_span = ylim[1] - ylim[0]
+        ax.axhline(0, color=COLORS["ink"], linewidth=0.9, zorder=1)
+        ax.grid(axis="y", color=COLORS["grid"], linewidth=0.75, zorder=0)
+        for intent, offset, color in specs:
+            vals = effects[intent]["mean"]
+            low = effects[intent]["low"]
+            high = effects[intent]["high"]
+            xpos = centers + offset
+            ax.bar(xpos, vals, width=width, color=color, edgecolor="white", linewidth=0.65, zorder=2)
+            ax.errorbar(
+                xpos,
+                vals,
+                yerr=np.vstack([vals - low, high - vals]),
+                fmt="none",
+                ecolor=COLORS["ink"],
+                elinewidth=0.8,
+                capsize=2.0,
+                capthick=0.8,
+                zorder=3,
+            )
+            for xi, val in zip(xpos, vals):
+                if val >= 0:
+                    y_text = val + y_span * 0.020
+                    va = "bottom"
+                else:
+                    y_text = val - y_span * 0.020
+                    va = "top"
+                ax.text(xi, y_text, f"{val:+.1f}", ha="center", va=va, fontsize=5.6, color=COLORS["ink"], zorder=5)
+        for i, center in enumerate(centers):
+            int_mean = effects["Intentional"]["mean"][i]
+            un_mean = effects["Unintentional"]["mean"][i]
+            high = max(effects["Intentional"]["high"][i], effects["Unintentional"]["high"][i])
+            low = min(effects["Intentional"]["low"][i], effects["Unintentional"]["low"][i])
+            delta = int_mean - un_mean
+            color = "#1B7A4B" if delta >= 0 else "#B4443E"
+            label = f"Δ={delta:+.1f}\n{_p_label(pvals[i])}"
+            if high > 1:
+                y = high + y_span * 0.095
+                above = True
+            else:
+                y = low - y_span * 0.095
+                above = False
+            _draw_bracket(ax, center + offsets[0], center + offsets[1], y, label, color, above=above, span=y_span)
+        ax.set_ylim(*ylim)
+        ax.set_xlim(centers[0] - 0.58, centers[-1] + 0.58)
+        ax.set_title(title, loc="left", pad=3, fontsize=9.2, fontweight="bold")
+        ax.set_xticks(centers, rows)
+        ax.spines[["top", "right"]].set_visible(False)
+        ax.tick_params(axis="x", length=0, pad=4, labelsize=7.3)
+        ax.tick_params(axis="y", labelsize=7.5)
+
+    _purpose_panel(ax_overall, effect_overall, interaction_p_overall, "Overall cognitive engagement", (-30, 40))
+    _purpose_panel(ax_constructive, effect_constructive, interaction_p_constructive, "Constructive engagement", (-13, 19))
+    ax_overall.set_ylabel("Difference (pp)")
+    ax_constructive.set_ylabel("")
+
+    handles = [
+        Rectangle((0, 0), 1, 1, facecolor="#2F5F83", edgecolor="none"),
+        Rectangle((0, 0), 1, 1, facecolor="#BFC7D5", edgecolor="none"),
+        Line2D([0], [0], color="#1B7A4B", linewidth=1.2),
+        Line2D([0], [0], color="#B4443E", linewidth=1.2),
+    ]
+    fig.legend(
+        handles,
+        ["Intentional", "Unintentional", "Δ Int.>Unint.", "Δ Int.<Unint."],
+        loc="upper right",
+        bbox_to_anchor=(0.985, 0.973),
+        ncol=4,
+        frameon=False,
+        handlelength=1.0,
+        columnspacing=0.95,
+        fontsize=7.3,
+    )
+    fig.text(0.030, 0.946, "a", fontsize=14, weight="bold")
+    fig.text(0.085, 0.943, "Purpose x support-form association", fontsize=11, color=COLORS["ink"])
+
+    data = supply.T
+    ax_supply.imshow(data, cmap=cmap_s, norm=Normalize(0, 84), aspect="auto")
+    ax_supply.set_xticks(np.arange(len(mean_cols)), mean_cols)
+    ax_supply.set_yticks(np.arange(len(settings)), settings)
+    ax_supply.set_title("Supply within scaffolded assistant turns (%)", loc="left", pad=7)
+    ax_supply.tick_params(axis="both", length=0)
+    ax_supply.set_xticks(np.arange(-0.5, len(mean_cols), 1), minor=True)
+    ax_supply.set_yticks(np.arange(-0.5, len(settings), 1), minor=True)
+    ax_supply.grid(which="minor", color="white", linewidth=1.1)
+    ax_supply.tick_params(which="minor", bottom=False, left=False)
+    for sp in ax_supply.spines.values():
+        sp.set_visible(False)
+    for i in range(data.shape[0]):
+        for j in range(data.shape[1]):
+            val = data[i, j]
+            txt_color = "white" if val > 68 else COLORS["ink"]
+            ax_supply.text(j, i, f"{val:.1f}", ha="center", va="center", fontsize=7.8, color=txt_color)
+    ax_supply.text(-0.055, 1.12, "b", transform=ax_supply.transAxes, fontsize=14, weight="bold")
+    fig.subplots_adjust(left=0.085, right=0.985, top=0.835, bottom=0.080)
+    fig.text(0.985, 0.022, "WC, WildChat; CP, Copilot. Means labels are non-exclusive.", ha="right", fontsize=7.8, color=COLORS["muted"])
+    _save(fig, "fig_support_form_supply_compact_final_v2")
+
+
+def make_figure5() -> None:
+    order = ["WC coding", "CP coding", "WC writing", "CP writing"]
+    keys = order
+    # 95% CIs were recalculated from the same A2U pair files and level-2
+    # conversation metrics that produce the point estimates.
+    lift = np.array([2.6756, 1.6511, 1.1281, 0.0075])
+    lift_ci = np.array(
+        [
+            [2.2904, 3.0607],
+            [1.3345, 1.9677],
+            [0.9487, 1.3075],
+            [-0.1822, 0.1971],
+        ]
+    )
+    cond = {
+        "prior constructive": {
+            "WC coding": (26.0563, 30.0682),
+            "CP coding": (22.1660, 24.0970),
+            "WC writing": (6.0528, 12.3195),
+            "CP writing": (11.9005, 10.9958),
+        },
+        "prior active": {
+            "WC coding": (9.6341, 11.7894),
+            "CP coding": (5.7988, 7.6452),
+            "WC writing": (1.9286, 2.5838),
+            "CP writing": (2.7018, 2.1734),
+        },
+        "prior passive": {
+            "WC coding": (12.9630, 15.0327),
+            "CP coding": (7.9681, 11.6279),
+            "WC writing": (2.1182, 3.5857),
+            "CP writing": (2.2337, 4.7619),
+        },
+    }
+    cond_ci = {
+        "prior constructive": {
+            "WC coding": ((24.5124, 27.6619), (28.8784, 31.2854)),
+            "CP coding": ((20.3896, 24.0504), (22.7481, 25.4995)),
+            "WC writing": ((5.0744, 7.2055), (10.5635, 14.3206)),
+            "CP writing": ((10.4421, 13.5319), (9.7337, 12.3990)),
+        },
+        "prior active": {
+            "WC coding": ((9.2175, 10.0673), (11.3335, 12.2611)),
+            "CP coding": ((5.4772, 6.1381), (7.2753, 8.0323)),
+            "WC writing": ((1.6596, 2.2403), (2.2383, 2.9809)),
+            "CP writing": ((2.1820, 3.3412), (1.8754, 2.5175)),
+        },
+        "prior passive": {
+            "WC coding": ((9.4704, 17.4946), (10.2307, 21.5475)),
+            "CP coding": ((5.2171, 11.9863), (7.1746, 18.3005)),
+            "WC writing": ((1.3602, 3.2845), (1.8977, 6.6729)),
+            "CP writing": ((1.3099, 3.7838), (1.6326, 13.0910)),
+        },
+    }
+    next_s2 = np.array(
+        [
+            [65.5, 50.7, 29.5],
+            [64.3, 48.7, 23.1],
+            [37.8, 43.2, 18.8],
+            [54.8, 71.8, 7.8],
+        ]
+    )
+    before_after = np.array([1.4, -0.3, -4.2, -3.9])
+    before_after_ci = np.array(
+        [
+            [0.9496, 1.7999],
+            [-0.6294, 0.1045],
+            [-4.6790, -3.8188],
+            [-4.1862, -3.5434],
+        ]
+    )
+
+    ref_color = "#B8C4CF"
+    ref_err = "#7E8B97"
+    scaf_color = COLORS["s2"]
+    scaf_err = "#2F6F61"
+    rose = "#B96B78"
+    rose_err = "#8F4F5A"
+    guide = "#CDD4DB"
+
+    def _pp(val: float) -> str:
+        return f"{val:+.1f}".replace("-", "−") + " pp"
+
+    def _xerr(value: float, ci: tuple[float, float]) -> np.ndarray:
+        return np.array([[value - ci[0]], [ci[1] - value]])
+
+    fig = plt.figure(figsize=(7.45, 5.55))
+    gs = GridSpec(
+        2,
+        4,
+        figure=fig,
+        height_ratios=[1.0, 0.98],
+        width_ratios=[1.16, 0.92, 0.92, 0.92],
+        hspace=0.86,
+        wspace=0.56,
+    )
+    axa = fig.add_subplot(gs[0, 0])
+    axs_b = [fig.add_subplot(gs[0, i]) for i in range(1, 4)]
+    axc = fig.add_subplot(gs[1, 0:2])
+    axd = fig.add_subplot(gs[1, 2:4])
+
+    y = np.arange(len(order))
+    axa.barh(y, lift, height=0.26, color=scaf_color, edgecolor="none", zorder=2)
+    axa.errorbar(
+        lift,
+        y,
+        xerr=np.vstack([lift - lift_ci[:, 0], lift_ci[:, 1] - lift]),
+        fmt="none",
+        ecolor=COLORS["ink"],
+        elinewidth=0.75,
+        capsize=2.1,
+        capthick=0.75,
+        zorder=4,
+    )
+    axa.scatter(lift, y, s=22, color=scaf_color, edgecolor=COLORS["ink"], lw=0.45, zorder=3)
+    for i, val in enumerate(lift):
+        if val > 0.65:
+            axa.text(
+                val - 0.14,
+                i,
+                _pp(val),
+                va="center",
+                ha="right",
+                fontsize=7.3,
+                color="white",
+                bbox=dict(facecolor=scaf_color, edgecolor="none", pad=0.15),
+                zorder=5,
+            )
+        else:
+            axa.text(val + 0.14, i, _pp(val), va="center", ha="left", fontsize=7.3, color=COLORS["ink"], zorder=5)
+    axa.axvline(0, color=COLORS["ink"], lw=0.9)
+    axa.set_yticks(y, order)
+    axa.invert_yaxis()
+    axa.set_xlim(-0.35, 3.35)
+    axa.set_xlabel("Next-turn constructive lift (percentage points)")
+    axa.set_title("Overall adjacent-turn\ncontrast", loc="left", pad=5, fontsize=9.2, fontweight="bold")
+    axa.grid(axis="x", color=COLORS["grid"], lw=0.65)
+    axa.spines[["top", "right"]].set_visible(False)
+    axa.tick_params(axis="both", labelsize=7.4)
+    axa.text(-0.22, 1.08, "a", transform=axa.transAxes, fontsize=13, weight="bold")
+
+    for ax, (title, vals) in zip(axs_b, cond.items()):
+        for i, name in enumerate(keys):
+            s1, s2 = vals[name]
+            ref_y = i - 0.075
+            scaf_y = i + 0.075
+            ref_ci, scaf_ci = cond_ci[title][name]
+            ax.plot([s1, s2], [ref_y, scaf_y], color=guide, lw=0.9, zorder=1)
+            ax.errorbar(s1, ref_y, xerr=_xerr(s1, ref_ci), fmt="none", ecolor=ref_err, elinewidth=0.7, capsize=1.7, capthick=0.7, zorder=2)
+            ax.errorbar(s2, scaf_y, xerr=_xerr(s2, scaf_ci), fmt="none", ecolor=scaf_err, elinewidth=0.7, capsize=1.7, capthick=0.7, zorder=2)
+            ax.scatter(s1, ref_y, s=24, color=ref_color, edgecolor=COLORS["ink"], lw=0.45, zorder=3)
+            ax.scatter(s2, scaf_y, s=24, color=scaf_color, edgecolor=COLORS["ink"], lw=0.45, zorder=3)
+            dx = s2 - s1
+            ax.text(
+                min(max(s2 + 1.05, 1.0), 34.1),
+                scaf_y,
+                _pp(dx),
+                va="center",
+                fontsize=6.8,
+                color=COLORS["ink"],
+                bbox=dict(facecolor="white", edgecolor="none", alpha=0.86, pad=0.12),
+                zorder=5,
+            )
+        ax.set_title(title, pad=3, fontsize=8.1)
+        ax.set_yticks(y)
+        ax.set_yticklabels(order if ax is axs_b[0] else [])
+        ax.invert_yaxis()
+        ax.set_xlim(0, 35)
+        ax.set_xticks([0, 10, 20, 30])
+        ax.grid(axis="x", color=COLORS["grid"], lw=0.65)
+        ax.spines[["top", "right"]].set_visible(False)
+        ax.tick_params(axis="both", labelsize=7.0)
+    axs_b[0].text(-0.30, 1.08, "b", transform=axs_b[0].transAxes, fontsize=13, weight="bold")
+    fig.text(0.650, 0.875, "Adjacent-turn contrast by prior user state", ha="center", fontsize=9.2, fontweight="bold", color=COLORS["ink"])
+    fig.text(0.650, 0.507, "P(next constructive turn) (%)", ha="center", fontsize=8.0)
+
+    legend_handles = [
+        Line2D([0], [0], marker="o", linestyle="None", markerfacecolor=ref_color, markeredgecolor=COLORS["ink"], markeredgewidth=0.45, markersize=5.0),
+        Line2D([0], [0], marker="o", linestyle="None", markerfacecolor=scaf_color, markeredgecolor=COLORS["ink"], markeredgewidth=0.45, markersize=5.0),
+    ]
+    fig.legend(
+        legend_handles,
+        ["non-scaffolded reference", "scaffolded support"],
+        loc="upper right",
+        bbox_to_anchor=(0.987, 0.977),
+        frameon=False,
+        ncol=2,
+        handletextpad=0.4,
+        columnspacing=0.9,
+        fontsize=7.0,
+    )
+
+    cmap = LinearSegmentedColormap.from_list("s2", ["#F4F7F6", "#A8C8BD", "#2F7C68"])
+    axc.imshow(next_s2, cmap=cmap, norm=Normalize(0, 75), aspect="auto")
+    axc.set_xticks(np.arange(3), ["prior\nconstructive", "prior\nactive", "prior\npassive"])
+    axc.set_yticks(np.arange(len(order)), order)
+    axc.set_title("P(next assistant scaffolded | prior user state)", loc="left", pad=6, fontsize=9.2, fontweight="bold")
+    axc.set_xticks(np.arange(-0.5, 3, 1), minor=True)
+    axc.set_yticks(np.arange(-0.5, len(order), 1), minor=True)
+    axc.grid(which="minor", color="white", linewidth=1.1)
+    axc.tick_params(axis="both", which="both", length=0)
+    axc.tick_params(axis="both", labelsize=7.4)
+    for sp in axc.spines.values():
+        sp.set_visible(False)
+    for i in range(next_s2.shape[0]):
+        for j in range(next_s2.shape[1]):
+            val = next_s2[i, j]
+            axc.text(j, i, f"{val:.1f}%", ha="center", va="center", fontsize=7.6, color="white" if val > 50 else COLORS["ink"])
+    axc.text(-0.13, 1.08, "c", transform=axc.transAxes, fontsize=13, weight="bold")
+
+    y2 = np.arange(len(order))
+    d_colors = [scaf_color if val >= 0 else rose for val in before_after]
+    axd.barh(y2, before_after, height=0.26, color=d_colors, edgecolor="none", zorder=2)
+    for i, val in enumerate(before_after):
+        err_color = COLORS["ink"] if val >= 0 else rose_err
+        axd.errorbar(
+            val,
+            y2[i],
+            xerr=_xerr(val, tuple(before_after_ci[i])),
+            fmt="none",
+            ecolor=err_color,
+            elinewidth=0.75,
+            capsize=2.1,
+            capthick=0.75,
+            zorder=4,
+        )
+    axd.scatter(before_after, y2, s=24, color=d_colors, edgecolor=COLORS["ink"], lw=0.45, zorder=3)
+    for i, val in enumerate(before_after):
+        ha = "left" if val >= 0 else "right"
+        axd.text(
+            val + (0.15 if val >= 0 else -0.15),
+            i,
+            _pp(val),
+            va="center",
+            ha=ha,
+            fontsize=7.3,
+            bbox=dict(facecolor="white", edgecolor="none", alpha=0.86, pad=0.12),
+            zorder=5,
+        )
+    axd.axvline(0, color=COLORS["ink"], lw=0.9)
+    axd.set_yticks(y2, order)
+    axd.invert_yaxis()
+    axd.set_xlim(-5.05, 2.05)
+    axd.set_xlabel("After − before first scaffolded turn (percentage points)")
+    axd.set_title("Coarse within-conversation contrast", loc="left", pad=6, fontsize=9.2, fontweight="bold")
+    axd.grid(axis="x", color=COLORS["grid"], lw=0.65)
+    axd.spines[["top", "right"]].set_visible(False)
+    axd.tick_params(axis="both", labelsize=7.4)
+    axd.tick_params(axis="y", pad=1.5)
+    axd.text(-0.10, 1.08, "d", transform=axd.transAxes, fontsize=13, weight="bold")
+
+    fig.subplots_adjust(left=0.105, right=0.985, top=0.835, bottom=0.135)
+    fig.text(0.105, 0.960, "Support–engagement coupling is local and state-dependent", fontsize=10.8, color=COLORS["ink"])
+    fig.text(
+        0.50,
+        0.038,
+        "WC = WildChat; CP = Copilot. Error bars show 95% CI where displayed; numbers report scaffolded − reference differences.",
+        ha="center",
+        fontsize=6.8,
+        color=COLORS["muted"],
+    )
+    _save(fig, "fig_temporal_coupling_scale_compact_final_v5")
+
+
+def main() -> None:
+    make_figure1()
+    make_figure2()
+    make_figure3()
+    make_figure4()
+    make_figure5()
+
+
+if __name__ == "__main__":
+    main()

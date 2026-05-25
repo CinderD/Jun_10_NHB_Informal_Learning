@@ -1,0 +1,84 @@
+
+
+% \begin{table*}[t]
+% \small
+% \centering
+% \caption{\textbf{Dataset and behavioural overview.} Summary statistics for the four matched settings analysed in the study. Percentages for cognitive, constructive and emotional engagement are computed over user turns; percentages for scaffolding support are computed over assistant turns.}
+% \label{tab:dataset_overview}
+
+% \setlength{\tabcolsep}{4pt}
+% \renewcommand{\arraystretch}{1.1}
+
+% \resizebox{\textwidth}{!}{%
+% \begin{tabular}{lrrrrrrrr}
+% \toprule
+% Setting 
+% & Conversations 
+% & \makecell{User\\turns} 
+% & \makecell{Assistant\\turns} 
+% & \makecell{Intentional\\conv. (\%)} 
+% & \makecell{S2 turns\\(\%)} 
+% & \makecell{Cognitive\\(\%)} 
+% & \makecell{Constructive\\(\%)} 
+% & \makecell{Emotional\\(\%)} \\
+% \midrule
+% WildChat coding  & 31,878 & 124,073 & 124,623 & 37.13 & 51.03 & 50.21 & 9.23 & 0.95 \\
+% WildChat writing & 39,534 & 163,705 & 164,824 & 25.80 & 23.53 & 16.34 & 2.22 & 0.57 \\
+% Copilot coding   & 31,879 & 127,435 & 125,610 & 44.59 & 49.50 & 48.11 & 6.05 & 0.76 \\
+% Copilot writing  & 39,534 & 148,401 & 146,641 & 36.98 & 41.00 & 13.88 & 3.26 & 0.30 \\
+% \midrule
+% Total / pooled   & 142,825 & 563,614 & 561,698 & -- & 40.00 & 30.3 & 4.9 & 0.62 \\
+% \bottomrule
+% \end{tabular}%
+% }
+% \end{table*}
+
+\begin{table*}[t]
+\small
+\centering
+\caption{
+\textbf{Dataset and behavioural overview.}
+Summary statistics for the two WildChat task settings analysed in the study. Constructive engagement is reported as the stricter depth level within cognitive engagement and serves as the focal user-side outcome in subsequent analyses.
+}
+\label{tab:dataset_overview}
+
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.1}
+
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrccccc}
+\toprule
+& \multicolumn{3}{c}{Sample size}
+& \multicolumn{1}{c}{User framing}
+& \multicolumn{1}{c}{Assistant support}
+& \multicolumn{2}{c}{Cognitive engagement}
+& \multicolumn{1}{c}{Emotional engagement} \\
+\cmidrule(lr){2-4}
+\cmidrule(lr){5-5}
+\cmidrule(lr){6-6}
+\cmidrule(lr){7-8}
+\cmidrule(lr){9-9}
+Setting 
+& Conversations 
+& \makecell{User\\turns} 
+& \makecell{Assistant\\turns} 
+& \makecell{Intentional\\conv. (\%)} 
+& \makecell{Scaffolded\\turns (\%)} 
+& \makecell{Overall\\(\%)} 
+& \makecell{Constructive\\level (\%)} 
+& \makecell{Emotional\\(\%)} \\
+\midrule
+WildChat coding  & 31,878 & 124,073 & 124,623 & 37.13 & 51.03 & 50.21 & 9.23 & 0.95 \\
+WildChat writing & 39,534 & 163,705 & 164,824 & 25.80 & 23.53 & 16.34 & 2.22 & 0.57 \\
+\midrule
+Total / pooled   & 71,412 & 287,778 & 289,447 & 30.86 & 35.37 & 30.9 & 5.2 & 0.73 \\
+\bottomrule
+\end{tabular}%
+}
+
+\vspace{2mm}
+\begin{minipage}{0.98\textwidth}
+\footnotesize
+\textit{Note.} Percentages for cognitive, constructive and emotional engagement are computed over user turns; percentages for scaffolded support are computed over assistant turns. The constructive-level column reports the share of all user turns that reached the constructive depth level within cognitive engagement. Figure~\ref{fig:engagement_ecology}a reports the composition of passive, active and constructive uptake among cognitively engaged turns.
+\end{minipage}
+\end{table*}

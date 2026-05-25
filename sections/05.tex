@@ -1,0 +1,141 @@
+\clearpage
+\section*{Supplementary information}
+Supplementary information is provided below.
+
+\section*{Appendix A\quad Supporting methods}
+
+\subsection*{A.1\quad Corpus construction and matched analytic settings}
+
+The analyses use four platform-by-task settings: WildChat coding, WildChat writing, Copilot coding and Copilot writing. These settings were chosen to compare a public corpus with a proprietary product corpus while holding task ecology constant at a coarse level. Coding and writing were selected because both are common everyday LLM use cases, yet they differ in the opportunities they create for visible learning-oriented engagement. Coding conversations often contain error messages, debugging attempts, execution failures and iterative repair. Writing conversations more often involve drafting, rewriting, shortening, tone adjustment and direct editing.
+
+The matched analytic corpus contains 142,825 conversations. WildChat contributes 31,878 coding conversations and 39,534 writing conversations; Copilot contributes 31,879 coding conversations and 39,534 writing conversations. Matching was used to keep the main comparisons focused on platform-by-task settings rather than on large differences in corpus size. All reported analyses use the refreshed Level 1--4 outputs after the latest user-turn update pass.
+
+For each conversation, the pipeline retained the ordered turn sequence, role labels, available topic and language metadata, learning-intent indicators and model metadata where available. The model metadata are used only for robustness checks in WildChat because model assignment in naturalistic public conversations is observational and may reflect time, user population, task mix and logging context.
+
+\subsection*{A.2\quad Annotation ontology}
+
+The codebook translates learning-science constructs into role-specific behavioural signatures. User turns are labelled for engagement. Passive engagement (\texttt{P}) marks acknowledgement, reception or minimal continuation without visible transformation. Active engagement (\texttt{A}) marks task-relevant action or follow-up, such as asking for a reformatted answer or applying supplied information. Constructive engagement (\texttt{C}) marks deeper work with ideas, such as testing an implication, revising a hypothesis, articulating a constraint, transferring a mechanism or extending an explanation. Emotional engagement is labelled separately because affective expressions were rare and not the main analytic outcome.
+
+Assistant turns are labelled for support. \texttt{S1} denotes a non-scaffolded reference response: the assistant provides the requested information or deliverable without materially structuring the user's process. \texttt{S2} denotes scaffolded support: the assistant structures, regulates, diagnoses or redirects the user's work while leaving some responsibility with the user. Scaffolded turns can also receive support-intent labels and support-means labels. Intention labels distinguish metacognitive support (\texttt{I1}), cognitive support (\texttt{I2}) and affective support (\texttt{I3}). Means labels distinguish feedback (\texttt{M1}), hinting (\texttt{M2}), instructing (\texttt{M3}), explaining (\texttt{M4}), modelling (\texttt{M5}) and questioning (\texttt{M6}). Means labels are non-mutually exclusive because a single assistant turn can both explain a mechanism and provide an example or hint. Supplementary Table~\ref{tab:support_supply} reports the support-means supply profile across the four platform-by-task settings.
+
+\subsection*{A.3\quad LLM-assisted annotation pipeline}
+
+The annotation pipeline combined prompt-based labelling with deterministic parser checks and targeted post-processing. During development, prompts were iterated against validation examples and disagreement cases. Common failure modes included treating brief acknowledgements as active engagement, treating any long assistant answer as scaffolding, collapsing directive instructions into scaffolding without checking whether responsibility remained with the user, and over-labelling sparse support means.
+
+Production labels were generated at turn level. Parser checks enforced the expected label schema, normalized label variants and flagged missing or malformed outputs. Post-processing rules were used only when a recurring error pattern could be specified transparently, such as a narrow class of user-turn false positives. Prompt versions, run metadata, disagreement files and update outputs were retained with the analysis artifacts so that validation cases can be traced without reproducing raw conversation text in the manuscript.
+
+\subsection*{A.4\quad Human verification and update provenance}
+
+Human verification was used to quantify label reliability and identify boundary cases. Coding validation combined three review rounds, with 658 task turns and 643 turns after deduplication. Writing validation used 210 reviewed conversations. Because many labels are sparse or prevalence-imbalanced, agreement is reported with per-label F1, Matthews correlation coefficient and Gwet's AC1 rather than with a single global agreement statistic.
+
+The final user-turn check contained 100 WildChat coding examples and 100 WildChat writing examples reviewed after the update pass. These examples were used to identify residual false positives and calibrate patch-style update filters, especially for Active and Passive user-turn labels. The last WildChat user-turn update pass scanned 31,879 coding conversations and 39,534 writing conversations, applying 1,815 coding updates and 21 writing updates. The main manuscript reports the refreshed labels produced by this final pass.
+
+\subsection*{A.5\quad Outcome construction}
+
+At the turn level, the focal user-side outcome is a binary indicator for constructive engagement. At the conversation level, we use both the count of constructive user turns and an indicator for whether at least one constructive user turn occurs. Constructive ratios divide constructive user turns by total user turns. Cognitive engagement ratios include passive, active and constructive cognitive engagement.
+
+At the assistant side, scaffolded support is represented by the \texttt{S2} label. Conversation-level scaffolding presence indicates whether at least one assistant turn in the conversation is labelled \texttt{S2}. Support-form analyses condition on conversations or turns with scaffolded support and then compare the presence versus absence of each means label. These comparisons are descriptive because means labels can co-occur and because conversations are not randomly assigned to receive a support form.
+
+Behavioural depth is computed from turn counts and turn ordering. Post-answer depth counts turns after the first assistant response. Persistence after failure is analysed only for coding-oriented conversations because debugging failures, error messages and failed-execution contexts are more directly observable in coding than in writing.
+
+\subsection*{A.6\quad Statistical model specification}
+
+The main analyses use simple estimands matched to the claim being made. Descriptive prevalence analyses report proportions within platform-by-task settings. Context analyses compare learning intent, task ecology and depth groups. Conversation-level support associations use Poisson generalized linear models for constructive-turn counts and logistic models for binary constructive-engagement outcomes. Adjacent-turn analyses use assistant-to-user and user-to-assistant turn pairs to estimate local conditional probabilities.
+
+Covariates are included when they correspond to observed compositional differences at the analysis level. Depending on the analysis, these include learning intent, topic or task indicators, turn counts, emotional ratios, error-related variables and turn index. Adjusted estimates are interpreted as measured-covariate-adjusted associations. They do not remove unobserved user motivation, prior expertise, task difficulty or time-varying conversational state.
+
+\subsection*{A.7\quad Temporal scale}
+
+The temporal analyses deliberately separate adjacent-turn ordering from coarser within-conversation summaries. The adjacent-turn analyses ask whether the immediately following user turn is more likely to be constructive after scaffolded support than after a non-scaffolded reference response, and whether that contrast depends on the prior user state. The reverse adjacent-turn analysis asks whether the assistant is more likely to provide scaffolded support after constructive, active or passive user turns.
+
+The coarser analyses ask a different question: whether constructive engagement is higher after the first scaffolded assistant turn than before it, and whether constructive engagement increases from the first to the second half of a conversation. These are not treatment-effect estimates. The first scaffolded turn may occur precisely because the user is struggling, because a difficult task has emerged or because the exchange is already developing. The main temporal claim is therefore scale-specific: the clearest evidence concerns local, state-conditioned coupling rather than cumulative uplift.
+
+\section*{Appendix B\quad Robustness and interpretive boundaries}
+
+\subsection*{B.1\quad WildChat model-snapshot robustness}
+
+WildChat includes user-facing model metadata that make it possible to repeat major descriptive patterns across model snapshots and coarse model families. These analyses preserved the main directional patterns reported in the main text: coding generally showed higher cognitive engagement than writing; intentionality gaps were visible across most user-facing models; scaffolded conversations were generally more constructive; and adjacent-turn contrasts were more interpretable than coarser within-conversation contrasts. Supplementary Figures~\ref{fig:supp_model_prevalence}--\ref{fig:supp_model_family} report these WildChat model-snapshot checks.
+
+These checks are used as robustness analyses rather than model-causal comparisons. WildChat model labels are not experimentally assigned. They may be confounded with calendar time, user population, task mix, interface changes and logging context. For this reason, the manuscript does not claim that a specific model family caused the observed engagement differences.
+
+\subsection*{B.2\quad Label uncertainty}
+
+The label scheme intentionally separates top-level constructs from finer support forms. Top-level labels such as constructive engagement and scaffolded support have clearer behavioural anchors. Fine-grained labels, especially sparse or boundary-heavy labels, are less stable. This is why the main claims rely most heavily on constructive engagement, scaffolded support presence, support-form patterns that are consistent across settings and temporal contrasts that can be expressed with simple conditional probabilities.
+
+\subsection*{B.3\quad Selection into support}
+
+The most important threat to causal interpretation is selection into support. More complex tasks, more motivated users or already-developing exchanges may both elicit scaffolded support and produce constructive follow-up. Conversation-level adjusted models reduce measured compositional differences but cannot remove unobserved selection. Adjacent-turn analyses reduce the temporal window and condition on local state, but they still cannot identify randomized exposure effects. The safest interpretation is therefore local, state-dependent coupling between assistant support and user engagement.
+
+\subsection*{B.4\quad Privacy-preserving reporting}
+
+The study analyses naturalistic conversations, so the manuscript avoids reproducing raw conversation text. Operational examples are de-identified and paraphrased to illustrate decision rules without exposing user content. Aggregate statistics, model summaries and validation metrics are reported in the manuscript and supplementary tables.
+
+\section*{Appendix C\quad Supporting tables}
+\setcounter{table}{0}
+\renewcommand{\thetable}{C\arabic{table}}
+
+\input{tables/table_label_examples}
+
+\input{tables/table_label_validation}
+
+\input{tables/table_model_specs}
+
+\input{tables/table_temporal_estimands}
+
+\input{tables/table_support_supply}
+
+\clearpage
+\section*{Appendix D\quad Supporting figures}
+\setcounter{figure}{0}
+\renewcommand{\thefigure}{D\arabic{figure}}
+
+The supporting figures report extended temporal checks and WildChat model-snapshot robustness analyses. They are included to make the main claims auditable without shifting the manuscript's emphasis away from the four matched dataset-by-task settings. Model-snapshot figures are descriptive robustness checks because WildChat model labels are observational rather than experimentally assigned.
+
+\begin{figure*}[!htbp]
+\centering
+\includegraphics[width=0.90\textwidth]{figures/supplementary/ExtendedDataFigure1_around_first_S2.pdf}
+\caption{\textbf{Coarse around-first-scaffold contrasts provide limited evidence for cumulative improvement.} Bars show the difference in constructive engagement after versus before the first scaffolded assistant turn within conversations containing scaffolded support. The contrasts are small and mixed across dataset-by-task settings, supporting the main-text interpretation that the clearest temporal evidence concerns local adjacent-turn coupling rather than broad cumulative uplift.}
+\label{fig:supp_around_first_s2}
+\end{figure*}
+
+\begin{figure*}[p]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/supplementary/ExtendedDataFigure2_intent_moderates_support_effect.pdf}
+\caption{\textbf{Scaffolded-support associations vary by user framing.} Stratified model estimates compare the association between scaffolded-support presence and constructive participation in intentional versus unintentional conversations. The figure is interpreted as descriptive moderation rather than evidence that intent causally changes support effectiveness, because user framing, task complexity and persistence are not randomly assigned.}
+\label{fig:supp_intent_moderation}
+\end{figure*}
+
+\begin{figure*}[p]
+\centering
+\includegraphics[width=\textwidth]{figures/supplementary/SupplementaryFigure_Model1_prevalence_profile.pdf}
+\caption{\textbf{WildChat model-snapshot prevalence profiles preserve the main domain contrast.} Across user-facing WildChat model snapshots, coding-oriented conversations generally show higher cognitive engagement and higher assistant scaffolding rates than writing-oriented conversations. The model labels are observational and may reflect time, user mix and traffic composition, so the figure is used as a robustness check rather than a model-causal comparison.}
+\label{fig:supp_model_prevalence}
+\end{figure*}
+
+\begin{figure*}[p]
+\centering
+\includegraphics[width=\textwidth]{figures/supplementary/SupplementaryFigure_Model2_intent_gaps.pdf}
+\caption{\textbf{Intentionality gaps are visible across WildChat model snapshots.} The figure reports model-specific differences between intentional and unintentional conversations in cognitive and constructive engagement, separately for coding and writing. Most model snapshots preserve the directional pattern that intentionally framed conversations contain richer learning-oriented participation.}
+\label{fig:supp_model_intent}
+\end{figure*}
+
+\begin{figure*}[p]
+\centering
+\includegraphics[width=\textwidth]{figures/supplementary/SupplementaryFigure_Model3_conversation_association.pdf}
+\caption{\textbf{Conversation-level support associations are broadly positive across WildChat model snapshots.} The figure repeats major conversation-level analyses by user-facing WildChat model snapshot, including constructive participation, adjusted support associations and coarse before--after contrasts around the first scaffolded assistant turn. The pattern supports the distinction between stable conversation-level associations and more mixed coarse temporal contrasts.}
+\label{fig:supp_model_conversation}
+\end{figure*}
+
+\begin{figure*}[p]
+\centering
+\includegraphics[width=\textwidth]{figures/supplementary/SupplementaryFigure_Model4_local_temporal.pdf}
+\caption{\textbf{Local temporal signals vary across WildChat model snapshots.} The figure reports adjacent-turn constructive lifts and emotion-to-support responsiveness by model snapshot. Adjacent-turn constructive lifts are often positive, especially in coding-oriented conversations, but the magnitude varies across snapshots; emotion-to-support responsiveness is more heterogeneous and is treated as exploratory.}
+\label{fig:supp_model_temporal}
+\end{figure*}
+
+\begin{figure*}[p]
+\centering
+\includegraphics[width=0.96\textwidth]{figures/supplementary/SupplementaryFigure_Model5_family_summary.pdf}
+\caption{\textbf{Coarse model-family aggregation preserves the main directional patterns.} WildChat model snapshots are grouped into coarse model families to summarize cognitive engagement prevalence, adjusted support associations and adjacent-turn constructive lift. Coding remains higher than writing across families, and the support-association and local-lift patterns remain directionally consistent on average.}
+\label{fig:supp_model_family}
+\end{figure*}
