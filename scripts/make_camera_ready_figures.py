@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
+os.environ.setdefault("MPLCONFIGDIR", "/tmp/matplotlib-codex")
 import matplotlib
 
 matplotlib.use("Agg")
@@ -66,12 +68,17 @@ plt.rcParams.update(
 
 
 def _save(fig: plt.Figure, stem: str) -> None:
+    _save_many(fig, [stem])
+
+
+def _save_many(fig: plt.Figure, stems: list[str]) -> None:
     FIG_DIR.mkdir(parents=True, exist_ok=True)
     SVG_DIR.mkdir(parents=True, exist_ok=True)
-    svg_path = SVG_DIR / f"{stem}.svg"
-    fig.savefig(FIG_DIR / f"{stem}.pdf", bbox_inches="tight", pad_inches=0.025)
-    fig.savefig(svg_path, bbox_inches="tight", pad_inches=0.025)
-    svg_path.write_text("\n".join(line.rstrip() for line in svg_path.read_text().splitlines()) + "\n")
+    for stem in stems:
+        svg_path = SVG_DIR / f"{stem}.svg"
+        fig.savefig(FIG_DIR / f"{stem}.pdf", bbox_inches="tight", pad_inches=0.025)
+        fig.savefig(svg_path, bbox_inches="tight", pad_inches=0.025)
+        svg_path.write_text("\n".join(line.rstrip() for line in svg_path.read_text().splitlines()) + "\n")
     plt.close(fig)
 
 
@@ -187,7 +194,7 @@ def make_figure1() -> None:
         ax.text(x + 0.057, y + 0.702, title, fontsize=8.3, weight="bold", color=COLORS["ink"], ha="left", va="center")
         ax.text(x + 0.026, y + 0.632, subtitle, fontsize=6.1, color=COLORS["muted"], ha="left", linespacing=1.15)
 
-    card_header(left[0], left[1], "a", "Interaction ecology", "Natural conversations in matched\nusage contexts.")
+    card_header(left[0], left[1], "a", "Interaction ecology", "Natural conversations in public\nchat corpora.")
     card_header(mid[0], mid[1], "b", "Turn-level labels", "Adjacent turns coded as observable\nbehavioural signals.")
     card_header(right[0], right[1], "c", "Inference scales", "Shared labels support descriptive,\nassociational and temporal analyses.")
 
@@ -195,7 +202,7 @@ def make_figure1() -> None:
     ax.text(0.064, 0.665, "Platform x task setting", fontsize=7.2, weight="bold", color=COLORS["muted"])
     matrix_x, matrix_y = 0.064, 0.420
     cell_w, cell_h = 0.103, 0.085
-    for row, platform in enumerate(["WildChat", "Copilot"]):
+    for row, platform in enumerate(["WildChat", "LMSYS"]):
         ax.text(matrix_x - 0.003, matrix_y + (1 - row) * cell_h + 0.034, platform, fontsize=6.6, color=COLORS["muted"], ha="right", va="center")
     for col, task in enumerate(["Coding", "Writing"]):
         ax.text(matrix_x + col * cell_w + cell_w / 2, matrix_y + 2 * cell_h + 0.025, task, fontsize=6.6, color=COLORS["muted"], ha="center")
@@ -218,7 +225,7 @@ def make_figure1() -> None:
     ax.text(0.086, 0.302, "User framing", fontsize=6.9, weight="bold", color=COLORS["gold"])
     ax.text(0.086, 0.280, "Intentional or unintentional learning context", fontsize=6.2, color=COLORS["ink"])
     _shadow_box(ax, (0.071, 0.165), 0.210, 0.052, radius=0.014, face="#FAFBFC", edge="#DFE5EA", lw=0.6, shadow=False)
-    ax.text(0.086, 0.192, "Matched settings define contextual contrasts.", fontsize=6.4, color=COLORS["muted"], ha="left", va="center")
+    ax.text(0.086, 0.192, "Task settings define contextual contrasts.", fontsize=6.4, color=COLORS["muted"], ha="left", va="center")
 
     # Middle card: timeline.
     for x, label, sub, fc, ec, col in [
@@ -307,19 +314,19 @@ def make_figure1() -> None:
 
 
 def make_figure2() -> None:
-    labels = ["WC coding", "WC writing", "CP coding", "CP writing"]
-    active = np.array([80.4, 79.5, 86.3, 70.8])
-    constructive = np.array([18.4, 13.6, 12.6, 23.5])
-    passive = np.array([1.2, 6.9, 1.1, 5.8])
-    cog_intent = np.array([76.6, 28.2, 68.3, 26.0])
-    cog_unintent = np.array([32.5, 10.5, 33.2, 6.4])
-    con_intent = np.array([13.1, 5.2, 8.3, 5.4])
-    con_unintent = np.array([5.7, 1.5, 3.3, 2.0])
+    labels = ["WC coding", "LMSYS coding", "WC writing", "LMSYS writing"]
+    active = np.array([80.4, 86.4, 79.5, 82.7])
+    constructive = np.array([18.4, 12.0, 13.6, 10.0])
+    passive = np.array([1.2, 1.6, 6.9, 7.3])
+    cog_intent = np.array([76.6, 74.6, 28.2, 28.2])
+    cog_unintent = np.array([32.5, 23.2, 10.5, 10.3])
+    con_intent = np.array([13.1, 7.6, 5.2, 3.5])
+    con_unintent = np.array([5.7, 3.1, 1.5, 1.0])
     depth = {
         "WC coding": [0.151, 0.286, 0.463],
+        "LMSYS coding": [0.095, 0.204, 0.340],
         "WC writing": [0.060, 0.092, 0.150],
-        "CP coding": [0.105, 0.193, 0.354],
-        "CP writing": [0.074, 0.111, 0.211],
+        "LMSYS writing": [0.033, 0.063, 0.112],
     }
 
     fig = plt.figure(figsize=(7.85, 4.20))
@@ -414,24 +421,23 @@ def make_figure2() -> None:
         tick.set_fontweight("bold")
     axc.text(-0.055, 1.08, "c", transform=axc.transAxes, fontsize=14, weight="bold")
     fig.subplots_adjust(left=0.105, right=0.985, top=0.830, bottom=0.145)
-    fig.text(0.985, 0.034, "WC, WildChat; CP, Copilot.", ha="right", fontsize=7.6, color=COLORS["muted"])
+    fig.text(0.985, 0.034, "WC, WildChat; LMSYS, LMSYS Chat-1M.", ha="right", fontsize=7.6, color=COLORS["muted"])
 
     _save(fig, "fig_engagement_ecology_compact_final")
 
 
 def make_figure3() -> None:
-    labels = ["WC coding", "CP coding", "WC writing", "CP writing"]
-    no_s2 = np.array([5.5, 3.5, 2.0, 2.6])
-    has_s2 = np.array([9.4, 6.2, 3.2, 3.7])
-    persistence_labels = ["WC coding", "CP coding"]
-    p_no = np.array([0.440, 0.240])
-    p_has = np.array([0.895, 0.759])
-    depth_diff = np.array([2.23, 2.63, 3.13, 1.61])
-    pois = np.array([1.852, 1.870, 1.569, 1.240])
-    logit = np.array([1.761, 1.736, 1.437, 1.251])
+    labels = ["WC coding", "LMSYS coding", "WC writing", "LMSYS writing"]
+    no_s2 = np.array([5.45, 3.89, 1.96, 1.04])
+    has_s2 = np.array([9.43, 5.90, 3.22, 2.25])
+    depth_diff = np.array([2.23, 1.43, 3.13, 2.10])
+    pois = np.array([1.852, 1.626, 1.569, 1.985])
+    logit = np.array([1.761, 1.542, 1.437, 1.764])
+    strat_intentional = np.array([1.968, 1.665, 1.579, 2.334])
+    strat_unintentional = np.array([1.633, 1.600, 1.567, 1.842])
 
-    fig = plt.figure(figsize=(7.85, 4.85))
-    gs = GridSpec(2, 2, figure=fig, width_ratios=[1.04, 1.16], height_ratios=[1.0, 0.88], wspace=0.42, hspace=0.66)
+    fig = plt.figure(figsize=(7.85, 5.0))
+    gs = GridSpec(2, 2, figure=fig, width_ratios=[1.04, 1.16], height_ratios=[1.0, 0.88], wspace=0.42, hspace=0.74)
     axa = fig.add_subplot(gs[0, 0])
     axb = fig.add_subplot(gs[0, 1])
     axc = fig.add_subplot(gs[1, 0])
@@ -483,22 +489,37 @@ def make_figure3() -> None:
         ],
         ["Poisson RR", "Logit OR"],
         frameon=False,
-        loc="lower right",
-        fontsize=8.0,
+        loc="upper right",
+        bbox_to_anchor=(1.0, 1.30),
+        ncol=2,
+        fontsize=7.8,
         handletextpad=0.3,
+        columnspacing=0.8,
     )
 
-    dumbbell(
-        axc,
-        p_no,
-        p_has,
-        persistence_labels,
-        "Coding failure persistence",
-        "Probability of persistence",
-        (0, 1.02),
-        scale=100,
-        value_fmt="{:.3f}",
-    )
+    yc = np.arange(len(labels))
+    axc.axvline(1.0, color=COLORS["ink"], lw=1.0)
+    for i in range(len(labels)):
+        axc.plot([1.0, strat_intentional[i]], [i - 0.12, i - 0.12], color="#C9D2D9", lw=1.5, zorder=1)
+        axc.plot([1.0, strat_unintentional[i]], [i + 0.12, i + 0.12], color="#C9D2D9", lw=1.5, zorder=1)
+        axc.scatter(strat_intentional[i], i - 0.12, s=48, color=COLORS["blue"], edgecolor="white", linewidth=0.7, zorder=3)
+        axc.scatter(strat_unintentional[i], i + 0.12, s=48, color=COLORS["grey"], edgecolor="white", linewidth=0.7, zorder=3)
+        axc.text(
+            max(strat_intentional[i], strat_unintentional[i]) + 0.045,
+            i,
+            f"{strat_intentional[i]:.2f} / {strat_unintentional[i]:.2f}",
+            va="center",
+            fontsize=7.5,
+            color=COLORS["ink"],
+        )
+    axc.set_yticks(yc, labels)
+    axc.invert_yaxis()
+    axc.set_xlim(0.94, 2.55)
+    axc.set_title("Framing-stratified association", loc="left", pad=8)
+    axc.set_xlabel("Poisson RR (intentional / unintentional)")
+    axc.grid(axis="x", color=COLORS["grid"], lw=0.8)
+    axc.spines[["top", "right", "left"]].set_visible(False)
+    axc.tick_params(axis="y", length=0, pad=2)
     axc.text(-0.16, 1.13, "c", transform=axc.transAxes, fontsize=14, weight="bold")
 
     y_depth = np.arange(len(labels))
@@ -529,52 +550,52 @@ def make_figure3() -> None:
         fontsize=8.2,
         handletextpad=0.3,
     )
-    fig.text(0.985, 0.032, "WC, WildChat; CP, Copilot.", ha="right", fontsize=7.6, color=COLORS["muted"])
-    fig.subplots_adjust(left=0.115, right=0.985, top=0.880, bottom=0.165)
+    fig.text(0.985, 0.032, "WC, WildChat; LMSYS, LMSYS Chat-1M.", ha="right", fontsize=7.6, color=COLORS["muted"])
+    fig.subplots_adjust(left=0.115, right=0.985, top=0.835, bottom=0.160)
 
-    _save(fig, "fig_support_association_compact_final_v2")
+    _save_many(fig, ["fig_support_association_compact_final_v2", "fig_support_association_wildchat_only_with_ci"])
 
 
 def make_figure4() -> None:
     rows = ["M1\nfeedback", "M2\nhint", "M3\ninstruct", "M4\nexplain", "M5\nmodel", "M6\nquestion"]
     mean_cols = ["M1", "M2", "M3", "M4", "M5", "M6"]
-    settings = ["WC coding", "WC writing", "CP coding", "CP writing"]
-    # Pooled from the latest level-2 metrics for the four matched settings.
+    settings = ["WC coding", "LMSYS coding", "WC writing", "LMSYS writing"]
+    # Pooled from the latest level-2 metrics for WildChat and LMSYS.
     # Effects are with-label minus without-label differences among scaffolded conversations.
     effect_overall = {
         "Intentional": {
-            "mean": np.array([1.69, 8.37, -16.06, 26.98, 11.42, -6.60]),
-            "low": np.array([0.84, 7.63, -16.73, 26.24, 10.73, -7.70]),
-            "high": np.array([2.53, 9.12, -15.38, 27.71, 12.11, -5.51]),
+            "mean": np.array([-4.97, 3.79, -12.98, 30.00, 6.88, -15.47]),
+            "low": np.array([-6.05, 2.81, -13.83, 29.06, 6.03, -16.59]),
+            "high": np.array([-3.88, 4.78, -12.12, 30.95, 7.73, -14.36]),
         },
         "Unintentional": {
-            "mean": np.array([16.70, 14.23, -4.99, 16.68, 9.92, 0.09]),
-            "low": np.array([15.94, 13.59, -5.51, 16.21, 9.30, -0.61]),
-            "high": np.array([17.46, 14.86, -4.47, 17.16, 10.54, 0.79]),
+            "mean": np.array([15.26, 13.10, -0.69, 13.81, 9.26, -3.88]),
+            "low": np.array([14.31, 12.30, -1.27, 13.26, 8.53, -4.57]),
+            "high": np.array([16.20, 13.90, -0.11, 14.35, 9.99, -3.20]),
         },
     }
     effect_constructive = {
         "Intentional": {
-            "mean": np.array([12.67, 2.49, -4.94, 5.96, 2.25, -2.37]),
-            "low": np.array([12.09, 2.06, -5.31, 5.62, 1.87, -2.89]),
-            "high": np.array([13.25, 2.92, -4.57, 6.31, 2.64, -1.84]),
+            "mean": np.array([9.41, 4.13, -2.56, 7.08, 0.65, -4.90]),
+            "low": np.array([8.69, 3.51, -3.03, 6.64, 0.15, -5.43]),
+            "high": np.array([10.13, 4.76, -2.09, 7.51, 1.14, -4.37]),
         },
         "Unintentional": {
-            "mean": np.array([5.66, 1.35, -1.24, 3.09, 1.36, -0.73]),
-            "low": np.array([5.27, 1.10, -1.45, 2.90, 1.12, -0.99]),
-            "high": np.array([6.05, 1.60, -1.03, 3.28, 1.61, -0.48]),
+            "mean": np.array([5.77, 2.27, -0.51, 3.47, 1.34, -1.66]),
+            "low": np.array([5.26, 1.91, -0.75, 3.26, 1.04, -1.92]),
+            "high": np.array([6.27, 2.62, -0.28, 3.69, 1.64, -1.41]),
         },
     }
-    interaction_p_overall = np.array([0.000, 0.000, 0.000, 0.000, 0.00141651, 0.000])
-    interaction_p_constructive = np.array([0.000, 0.00000091, 0.000, 0.000, 0.00006791, 0.00000041])
+    interaction_p_overall = np.array([3.32e-167, 9.08e-47, 1.49e-120, 2.88e-186, 3.38e-05, 1.83e-67])
+    interaction_p_constructive = np.array([4.05e-16, 3.75e-07, 3.04e-14, 1.91e-47, 0.0187, 3.72e-27])
     supply = np.array(
         [
-            [8.8, 16.6, 10.1, 9.4],
-            [14.7, 9.6, 21.5, 9.8],
-            [29.7, 59.2, 21.4, 66.5],
-            [84.0, 29.5, 77.5, 28.8],
-            [23.9, 15.0, 24.5, 11.4],
-            [6.9, 6.9, 6.6, 4.2],
+            [8.8, 4.5, 16.6, 11.3],
+            [14.7, 8.2, 9.6, 10.9],
+            [29.7, 10.4, 59.2, 52.3],
+            [84.0, 79.2, 29.5, 26.9],
+            [23.9, 18.3, 15.0, 10.3],
+            [6.9, 10.6, 6.9, 13.4],
         ]
     )
 
@@ -663,7 +684,7 @@ def make_figure4() -> None:
         ax.tick_params(axis="x", length=0, pad=4, labelsize=7.3)
         ax.tick_params(axis="y", labelsize=7.5)
 
-    _purpose_panel(ax_overall, effect_overall, interaction_p_overall, "Overall cognitive engagement", (-30, 40))
+    _purpose_panel(ax_overall, effect_overall, interaction_p_overall, "Overall cognitive engagement", (-30, 43))
     _purpose_panel(ax_constructive, effect_constructive, interaction_p_constructive, "Constructive engagement", (-13, 19))
     ax_overall.set_ylabel("Difference (pp)")
     ax_constructive.set_ylabel("")
@@ -686,7 +707,7 @@ def make_figure4() -> None:
         fontsize=7.3,
     )
     fig.text(0.030, 0.946, "a", fontsize=14, weight="bold")
-    fig.text(0.085, 0.943, "Purpose x support-form association", fontsize=11, color=COLORS["ink"])
+    fig.text(0.085, 0.943, "User framing x support-form association", fontsize=11, color=COLORS["ink"])
 
     data = supply.T
     ax_supply.imshow(data, cmap=cmap_s, norm=Normalize(0, 84), aspect="auto")
@@ -707,79 +728,80 @@ def make_figure4() -> None:
             ax_supply.text(j, i, f"{val:.1f}", ha="center", va="center", fontsize=7.8, color=txt_color)
     ax_supply.text(-0.055, 1.12, "b", transform=ax_supply.transAxes, fontsize=14, weight="bold")
     fig.subplots_adjust(left=0.085, right=0.985, top=0.835, bottom=0.080)
-    fig.text(0.985, 0.022, "WC, WildChat; CP, Copilot. Means labels are non-exclusive.", ha="right", fontsize=7.8, color=COLORS["muted"])
+    fig.text(0.985, 0.022, "WC, WildChat; LMSYS, LMSYS Chat-1M. Means labels are non-exclusive.", ha="right", fontsize=7.8, color=COLORS["muted"])
     _save(fig, "fig_support_form_supply_compact_final_v2")
 
 
 def make_figure5() -> None:
-    order = ["WC coding", "CP coding", "WC writing", "CP writing"]
+    order = ["WC coding", "LMSYS coding", "WC writing", "LMSYS writing"]
     keys = order
     # 95% CIs were recalculated from the same A2U pair files and level-2
     # conversation metrics that produce the point estimates.
-    lift = np.array([2.6756, 1.6511, 1.1281, 0.0075])
+    lift = np.array([2.6756, 2.0136, 1.1281, 0.2666])
     lift_ci = np.array(
         [
             [2.2904, 3.0607],
-            [1.3345, 1.9677],
+            [1.6100, 2.4200],
             [0.9487, 1.3075],
-            [-0.1822, 0.1971],
+            [0.0200, 0.5200],
         ]
     )
     cond = {
         "prior constructive": {
             "WC coding": (26.0563, 30.0682),
-            "CP coding": (22.1660, 24.0970),
+            "LMSYS coding": (21.8174, 24.2271),
             "WC writing": (6.0528, 12.3195),
-            "CP writing": (11.9005, 10.9958),
+            "LMSYS writing": (11.4618, 9.0909),
         },
         "prior active": {
             "WC coding": (9.6341, 11.7894),
-            "CP coding": (5.7988, 7.6452),
+            "LMSYS coding": (6.1475, 8.3257),
             "WC writing": (1.9286, 2.5838),
-            "CP writing": (2.7018, 2.1734),
+            "LMSYS writing": (2.1687, 2.0536),
         },
         "prior passive": {
             "WC coding": (12.9630, 15.0327),
-            "CP coding": (7.9681, 11.6279),
+            "LMSYS coding": (7.1197, 13.8462),
             "WC writing": (2.1182, 3.5857),
-            "CP writing": (2.2337, 4.7619),
+            "LMSYS writing": (2.2831, 4.7619),
         },
     }
     cond_ci = {
         "prior constructive": {
             "WC coding": ((24.5124, 27.6619), (28.8784, 31.2854)),
-            "CP coding": ((20.3896, 24.0504), (22.7481, 25.4995)),
+            "LMSYS coding": ((20.1415, 23.4933), (22.1178, 26.3365)),
             "WC writing": ((5.0744, 7.2055), (10.5635, 14.3206)),
-            "CP writing": ((10.4421, 13.5319), (9.7337, 12.3990)),
+            "LMSYS writing": ((8.9170, 14.0066), (6.0877, 12.0942)),
         },
         "prior active": {
             "WC coding": ((9.2175, 10.0673), (11.3335, 12.2611)),
-            "CP coding": ((5.4772, 6.1381), (7.2753, 8.0323)),
+            "LMSYS coding": ((5.8279, 6.4671), (7.7067, 8.9448)),
             "WC writing": ((1.6596, 2.2403), (2.2383, 2.9809)),
-            "CP writing": ((2.1820, 3.3412), (1.8754, 2.5175)),
+            "LMSYS writing": ((1.7641, 2.5732), (1.4846, 2.6227)),
         },
         "prior passive": {
             "WC coding": ((9.4704, 17.4946), (10.2307, 21.5475)),
-            "CP coding": ((5.2171, 11.9863), (7.1746, 18.3005)),
+            "LMSYS coding": ((4.2525, 9.9870), (5.4496, 22.2427)),
             "WC writing": ((1.3602, 3.2845), (1.8977, 6.6729)),
-            "CP writing": ((1.3099, 3.7838), (1.6326, 13.0910)),
+            "LMSYS writing": ((0.8843, 3.6819), (-0.4968, 10.0206)),
         },
     }
     next_s2 = np.array(
         [
             [65.5, 50.7, 29.5],
-            [64.3, 48.7, 23.1],
             [37.8, 43.2, 18.8],
-            [54.8, 71.8, 7.8],
+            [40.6, 26.7, 14.9],
+            [34.2, 31.2, 12.1],
         ]
     )
-    before_after = np.array([1.4, -0.3, -4.2, -3.9])
+    next_s2 = next_s2[[0, 2, 1, 3]]
+    before_after = np.array([1.4, 1.5, -4.2, -2.5])
     before_after_ci = np.array(
         [
             [0.9496, 1.7999],
-            [-0.6294, 0.1045],
+            [1.0285, 1.9563],
             [-4.6790, -3.8188],
-            [-4.1862, -3.5434],
+            [-2.9772, -1.9935],
         ]
     )
 
@@ -845,7 +867,7 @@ def make_figure5() -> None:
     axa.set_yticks(y, order)
     axa.invert_yaxis()
     axa.set_xlim(-0.35, 3.35)
-    axa.set_xlabel("Next-turn constructive lift (percentage points)")
+    axa.set_xlabel("Next-turn constructive lift (pp)")
     axa.set_title("Overall adjacent-turn\ncontrast", loc="left", pad=5, fontsize=9.2, fontweight="bold")
     axa.grid(axis="x", color=COLORS["grid"], lw=0.65)
     axa.spines[["top", "right"]].set_visible(False)
@@ -963,11 +985,10 @@ def make_figure5() -> None:
     axd.text(-0.10, 1.08, "d", transform=axd.transAxes, fontsize=13, weight="bold")
 
     fig.subplots_adjust(left=0.105, right=0.985, top=0.835, bottom=0.135)
-    fig.text(0.105, 0.960, "Support–engagement coupling is local and state-dependent", fontsize=10.8, color=COLORS["ink"])
     fig.text(
         0.50,
         0.038,
-        "WC = WildChat; CP = Copilot. Error bars show 95% CI where displayed; numbers report scaffolded − reference differences.",
+        "WC = WildChat; LMSYS = LMSYS Chat-1M. Error bars show 95% CI where displayed; numbers report scaffolded − reference differences.",
         ha="center",
         fontsize=6.8,
         color=COLORS["muted"],
@@ -976,7 +997,6 @@ def make_figure5() -> None:
 
 
 def main() -> None:
-    make_figure1()
     make_figure2()
     make_figure3()
     make_figure4()
