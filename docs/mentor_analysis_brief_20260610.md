@@ -38,6 +38,19 @@ The current manuscript files have been updated so that Abstract, Introduction, R
 
 The annotation pipeline remains the same Level 1--4 framework: task filtering, turn-level LLM-assisted annotation, parser checks, targeted post-processing and human verification. The latest manuscript treats labels as behavioural signatures, not as direct measurements of learning outcomes.
 
+### Candidate public-corpus checks
+
+The main manuscript currently uses LMSYS Chat-1M as the public replacement/replication corpus alongside WildChat. Other candidate corpora were checked with the same pipeline logic but are not folded into the main manuscript because their sampling frames differ too strongly from broad everyday public chat.
+
+| Corpus | Current status | Filtered usable size | Main pattern | Recommendation |
+| --- | --- | ---: | --- | --- |
+| LMSYS Chat-1M | Completed and included in the manuscript | 31,879 coding; 21,023 writing conversations | Replicates the broad WildChat pattern: coding shows higher learning-oriented engagement than writing; scaffolded conversations are more constructive; local adjacent-turn coupling is positive but weaker in writing. | Main public replication corpus. |
+| ShareChat strict-English | Completed strict-English check | 2,481 coding; 1,539 writing conversations | Constructive engagement remains materially higher than WildChat after strict language filtering: 15.17% in coding and 5.18% in writing, with stronger adjacent-turn lifts (+6.21 and +3.35 pp). This suggests the high constructive rate is not caused only by non-English content or missing post-processing, but by public-share selection and more engaged conversations. | Useful exploratory robustness corpus, but too small and selected for the main replacement analysis. |
+| SWE-chat | Completed pipeline check | 1,536 coding; 3 writing conversations | Coding is a useful agentic software-engineering stress test, with 32.36% cognitive engagement and 19.45% scaffolded assistant turns. The writing side is essentially absent after filtering, so the corpus cannot support the paper's coding-versus-writing design. | Coding-specific appendix check only if needed; not a balanced main corpus. |
+| ThoughtTrace | Completed/re-filtered check | 2 coding; 14 writing conversations | The retained sample is too small for stable descriptive, regression or temporal analyses; several regressions are singular or underpowered. | Do not use for main or appendix claims. |
+
+This means the latest dataset update is not simply "more datasets in the paper." The defensible manuscript decision is to use WildChat plus LMSYS for the main evidence, and to keep ShareChat, SWE-chat and ThoughtTrace as internal feasibility checks unless reviewers specifically ask for broader corpus screening.
+
 ## 4. Findings for Sections 2.1--2.3
 
 ### Section 2.1: Everyday conversations contain learning-oriented engagement
@@ -71,7 +84,7 @@ Conversations containing at least one scaffolded assistant turn show higher cons
 
 Adjusted models remain positive across all four settings, suggesting that scaffolded-support presence is not fully explained by measured user framing, task ecology and interaction depth. The interpretation remains associational because scaffolding is not randomized and may be elicited by task complexity or user motivation.
 
-Figure to show: `figures/fig_support_association_wildchat_only_with_ci.pdf`
+Figure to show: `figures/fig_support_association_wild_lmsys_with_ci.pdf`
 
 Main visual point: scaffolded conversations are more constructive and deeper, and adjusted association estimates remain above 1 across settings.
 
@@ -105,6 +118,7 @@ For data-use review, the key question is whether aggregate behavioural analysis 
 - Support association summary: `tables/table4.tex`
 - Figure 1 framework: `figures/figure_1_all_wild_lmsys.png`
 - Figure 2 engagement ecology: `figures/fig_engagement_ecology_compact_final.pdf`
-- Figure 3 support association: `figures/fig_support_association_wildchat_only_with_ci.pdf`
+- Figure 3 support association: `figures/fig_support_association_wild_lmsys_with_ci.pdf`
 - Figure 4 support forms and supply: `figures/fig_support_form_supply_compact_final_v2.pdf`
 - Figure 5 temporal coupling: `figures/fig_temporal_coupling_scale_compact_final_v5.pdf`
+- Figure 6 temporal estimand schematic: `figures/figure5_temporal_schematic_refined.pdf`
