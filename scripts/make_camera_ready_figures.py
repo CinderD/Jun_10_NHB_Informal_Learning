@@ -842,15 +842,15 @@ def make_figure5() -> None:
     def _has_ci(ci) -> bool:
         return not np.isnan(np.asarray(ci, dtype=float)).any()
 
-    fig = plt.figure(figsize=(7.45, 6.15))
+    fig = plt.figure(figsize=(7.85, 6.15))
     gs = GridSpec(
         2,
         4,
         figure=fig,
         height_ratios=[1.0, 0.98],
-        width_ratios=[1.16, 0.92, 0.92, 0.92],
+        width_ratios=[1.20, 0.96, 0.96, 0.96],
         hspace=0.86,
-        wspace=0.72,
+        wspace=0.74,
     )
     axa = fig.add_subplot(gs[0, 0])
     axs_b = [fig.add_subplot(gs[0, i]) for i in range(1, 4)]
@@ -874,7 +874,7 @@ def make_figure5() -> None:
         )
     axa.scatter(lift, y, s=22, color=scaf_color, edgecolor=COLORS["ink"], lw=0.45, zorder=3)
     for i, val in enumerate(lift):
-        if val > 0.65:
+        if val > 1.6:
             axa.text(
                 val - 0.14,
                 i,
@@ -887,7 +887,17 @@ def make_figure5() -> None:
                 zorder=5,
             )
         else:
-            axa.text(val + 0.14, i, _pp(val), va="center", ha="left", fontsize=7.3, color=COLORS["ink"], zorder=5)
+            axa.text(
+                val + 0.18,
+                i,
+                _pp(val),
+                va="center",
+                ha="left",
+                fontsize=7.3,
+                color=COLORS["ink"],
+                bbox=dict(facecolor="white", edgecolor="none", alpha=0.88, pad=0.10),
+                zorder=5,
+            )
     axa.axvline(0, color=COLORS["ink"], lw=0.9)
     axa.set_yticks(y, order)
     axa.invert_yaxis()
@@ -913,11 +923,18 @@ def make_figure5() -> None:
             ax.scatter(s1, ref_y, s=24, color=ref_color, edgecolor=COLORS["ink"], lw=0.45, zorder=3)
             ax.scatter(s2, scaf_y, s=24, color=scaf_color, edgecolor=COLORS["ink"], lw=0.45, zorder=3)
             dx = s2 - s1
+            if dx >= 0:
+                x_label = min(s2 + 0.95, 37.0)
+                text_y = scaf_y
+            else:
+                x_label = min(max(s1, s2) + 1.35, 37.0)
+                text_y = scaf_y + 0.18
             ax.text(
-                min(max(s2 + 1.05, 1.0), 37.3),
-                scaf_y,
+                x_label,
+                text_y,
                 _pp(dx),
                 va="center",
+                ha="left",
                 fontsize=6.8,
                 color=COLORS["ink"],
                 bbox=dict(facecolor="white", edgecolor="none", alpha=0.86, pad=0.12),
