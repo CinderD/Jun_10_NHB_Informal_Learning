@@ -568,6 +568,12 @@ def make_figure4() -> None:
     constructive_effect = np.array([11.17, 2.98, -2.00, 5.48, 1.67, -3.13])
     constructive_low = np.array([10.47, 2.48, -2.33, 5.19, 1.27, -3.47])
     constructive_high = np.array([11.88, 3.48, -1.68, 5.77, 2.06, -2.80])
+    coding_effect = np.array([12.35, 2.99, 1.59, 4.03, -0.59, -3.96])
+    coding_low = np.array([11.38, 2.34, 1.05, 3.56, -1.05, -4.41])
+    coding_high = np.array([13.33, 3.64, 2.13, 4.49, -0.13, -3.52])
+    writing_effect = np.array([10.93, 3.02, -3.38, 4.30, 6.67, -0.84])
+    writing_low = np.array([10.00, 2.36, -3.80, 3.80, 5.76, -1.27])
+    writing_high = np.array([11.87, 3.69, -2.95, 4.80, 7.59, -0.42])
     # Rows are support forms; columns follow the six displayed task settings.
     supply = np.array(
         [
@@ -580,18 +586,30 @@ def make_figure4() -> None:
         ]
     )
 
-    fig = plt.figure(figsize=(7.45, 4.95))
-    gs = fig.add_gridspec(2, 1, height_ratios=[2.25, 1.55], hspace=0.46)
-    ax_constructive = fig.add_subplot(gs[0, 0])
+    fig = plt.figure(figsize=(7.45, 5.85))
+    gs = fig.add_gridspec(2, 2, height_ratios=[3.08, 1.45], hspace=0.43, wspace=0.25)
+    ax_pooled = fig.add_subplot(gs[0, 0])
+    ax_task = fig.add_subplot(gs[0, 1])
     ax_supply = fig.add_subplot(gs[1, :])
     cmap_s = LinearSegmentedColormap.from_list("supply", ["#F3F6F6", "#B8C9D2", "#2E5F7F"])
 
     centers = np.arange(len(rows))
+    ylim = (-6.0, 14.8)
+
+    def _style_support_axis(ax: plt.Axes, title: str) -> None:
+        ax.axhline(0, color=COLORS["ink"], linewidth=0.9, zorder=1)
+        ax.grid(axis="y", color=COLORS["grid"], linewidth=0.75, zorder=0)
+        ax.set_ylim(*ylim)
+        ax.set_xlim(centers[0] - 0.62, centers[-1] + 0.62)
+        ax.set_xticks(centers, rows)
+        ax.set_title(title, loc="left", pad=6, fontsize=9.4, fontweight="bold")
+        ax.spines[["top", "right"]].set_visible(False)
+        ax.tick_params(axis="x", length=0, pad=5, labelsize=7.5)
+        ax.tick_params(axis="y", labelsize=7.6)
+
     bar_colors = [COLORS["teal"] if val >= 0 else COLORS["rose"] for val in constructive_effect]
-    ax_constructive.axhline(0, color=COLORS["ink"], linewidth=0.9, zorder=1)
-    ax_constructive.grid(axis="y", color=COLORS["grid"], linewidth=0.75, zorder=0)
-    ax_constructive.bar(centers, constructive_effect, width=0.62, color=bar_colors, edgecolor="white", linewidth=0.7, zorder=2)
-    ax_constructive.errorbar(
+    ax_pooled.bar(centers, constructive_effect, width=0.62, color=bar_colors, edgecolor="white", linewidth=0.7, zorder=2)
+    ax_pooled.errorbar(
         centers,
         constructive_effect,
         yerr=np.vstack([constructive_effect - constructive_low, constructive_high - constructive_effect]),
@@ -604,21 +622,48 @@ def make_figure4() -> None:
     )
     for x, val in zip(centers, constructive_effect):
         if val >= 0:
-            y_text = val + 0.58
+            y_text = val + 0.52
             va = "bottom"
         else:
-            y_text = val - 0.58
+            y_text = val - 0.52
             va = "top"
-        ax_constructive.text(x, y_text, f"{val:+.1f}", ha="center", va=va, fontsize=7.5, color=COLORS["ink"], zorder=4)
-    ax_constructive.set_ylim(-5.2, 13.0)
-    ax_constructive.set_xlim(centers[0] - 0.62, centers[-1] + 0.62)
-    ax_constructive.set_xticks(centers, rows)
-    ax_constructive.set_ylabel("Constructive engagement difference (pp)")
-    ax_constructive.set_title("Support-form association with constructive engagement", loc="left", pad=6, fontsize=10.4, fontweight="bold")
-    ax_constructive.spines[["top", "right"]].set_visible(False)
-    ax_constructive.tick_params(axis="x", length=0, pad=5, labelsize=8.0)
-    ax_constructive.tick_params(axis="y", labelsize=8.0)
-    fig.text(0.030, 0.940, "a", fontsize=14, weight="bold")
+        ax_pooled.text(x, y_text, f"{val:+.1f}", ha="center", va=va, fontsize=6.5, color=COLORS["ink"], zorder=4)
+    _style_support_axis(ax_pooled, "Pooled constructive association")
+    ax_pooled.set_ylabel("Constructive engagement difference (pp)")
+    ax_pooled.text(-0.15, 1.12, "a", transform=ax_pooled.transAxes, fontsize=14, weight="bold")
+
+    offsets = np.array([-0.17, 0.17])
+    width = 0.29
+    task_specs = [
+        ("Coding", coding_effect, coding_low, coding_high, COLORS["blue"], offsets[0]),
+        ("Writing", writing_effect, writing_low, writing_high, COLORS["grey"], offsets[1]),
+    ]
+    for label, vals, lows, highs, color, offset in task_specs:
+        xpos = centers + offset
+        ax_task.bar(xpos, vals, width=width, color=color, edgecolor="white", linewidth=0.65, zorder=2, label=label)
+        ax_task.errorbar(
+            xpos,
+            vals,
+            yerr=np.vstack([vals - lows, highs - vals]),
+            fmt="none",
+            ecolor=COLORS["ink"],
+            elinewidth=0.78,
+            capsize=1.8,
+            capthick=0.78,
+            zorder=3,
+        )
+        for xi, val in zip(xpos, vals):
+            if val >= 0:
+                y_text = val + 0.50
+                va = "bottom"
+            else:
+                y_text = val - 0.50
+                va = "top"
+            ax_task.text(xi, y_text, f"{val:+.1f}", ha="center", va=va, fontsize=5.6, color=COLORS["ink"], zorder=4)
+    _style_support_axis(ax_task, "Constructive association by task ecology")
+    ax_task.set_ylabel("")
+    ax_task.legend(loc="upper right", frameon=False, ncol=2, fontsize=7.2, handlelength=0.9, columnspacing=0.8)
+    ax_task.text(-0.13, 1.12, "b", transform=ax_task.transAxes, fontsize=14, weight="bold")
 
     data = supply.T
     ax_supply.imshow(data, cmap=cmap_s, norm=Normalize(0, 84), aspect="auto")
@@ -637,8 +682,8 @@ def make_figure4() -> None:
             val = data[i, j]
             txt_color = "white" if val > 68 else COLORS["ink"]
             ax_supply.text(j, i, f"{val:.1f}", ha="center", va="center", fontsize=7.8, color=txt_color)
-    ax_supply.text(-0.055, 1.12, "b", transform=ax_supply.transAxes, fontsize=14, weight="bold")
-    fig.subplots_adjust(left=0.090, right=0.985, top=0.865, bottom=0.080)
+    ax_supply.text(-0.055, 1.12, "c", transform=ax_supply.transAxes, fontsize=14, weight="bold")
+    fig.subplots_adjust(left=0.085, right=0.985, top=0.835, bottom=0.075)
     fig.text(0.985, 0.020, "WC, WildChat; LMSYS, LMSYS Chat-1M; SC, ShareChat strict-English. Means labels are non-exclusive.", ha="right", fontsize=7.5, color=COLORS["muted"])
     _save(fig, "fig_support_form_supply_compact_final_v2")
 
