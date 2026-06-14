@@ -562,34 +562,12 @@ def make_figure4() -> None:
     rows = ["M1\nfeedback", "M2\nhint", "M3\ninstruct", "M4\nexplain", "M5\nmodel", "M6\nquestion"]
     mean_cols = ["M1", "M2", "M3", "M4", "M5", "M6"]
     settings = ["WC coding", "LMSYS coding", "SC coding", "WC writing", "LMSYS writing", "SC writing"]
-    # Pooled from the latest level-2 metrics for WildChat and LMSYS.
-    # Effects are with-label minus without-label differences among scaffolded conversations.
-    effect_overall = {
-        "Intentional": {
-            "mean": np.array([-4.97, 3.79, -12.98, 30.00, 6.88, -15.47]),
-            "low": np.array([-6.05, 2.81, -13.83, 29.06, 6.03, -16.59]),
-            "high": np.array([-3.88, 4.78, -12.12, 30.95, 7.73, -14.36]),
-        },
-        "Unintentional": {
-            "mean": np.array([15.26, 13.10, -0.69, 13.81, 9.26, -3.88]),
-            "low": np.array([14.31, 12.30, -1.27, 13.26, 8.53, -4.57]),
-            "high": np.array([16.20, 13.90, -0.11, 14.35, 9.99, -3.20]),
-        },
-    }
-    effect_constructive = {
-        "Intentional": {
-            "mean": np.array([9.41, 4.13, -2.56, 7.08, 0.65, -4.90]),
-            "low": np.array([8.69, 3.51, -3.03, 6.64, 0.15, -5.43]),
-            "high": np.array([10.13, 4.76, -2.09, 7.51, 1.14, -4.37]),
-        },
-        "Unintentional": {
-            "mean": np.array([5.77, 2.27, -0.51, 3.47, 1.34, -1.66]),
-            "low": np.array([5.26, 1.91, -0.75, 3.26, 1.04, -1.92]),
-            "high": np.array([6.27, 2.62, -0.28, 3.69, 1.64, -1.41]),
-        },
-    }
-    interaction_p_overall = np.array([3.32e-167, 9.08e-47, 1.49e-120, 2.88e-186, 3.38e-05, 1.83e-67])
-    interaction_p_constructive = np.array([4.05e-16, 3.75e-07, 3.04e-14, 1.91e-47, 0.0187, 3.72e-27])
+    # Pooled from the latest six-setting level-2 metrics. Estimates compare
+    # scaffolded conversations containing each non-exclusive support form with
+    # scaffolded conversations without that form, using constructive ratio.
+    constructive_effect = np.array([11.17, 2.98, -2.00, 5.48, 1.67, -3.13])
+    constructive_low = np.array([10.47, 2.48, -2.33, 5.19, 1.27, -3.47])
+    constructive_high = np.array([11.88, 3.48, -1.68, 5.77, 2.06, -2.80])
     # Rows are support forms; columns follow the six displayed task settings.
     supply = np.array(
         [
@@ -602,115 +580,45 @@ def make_figure4() -> None:
         ]
     )
 
-    fig = plt.figure(figsize=(7.45, 5.85))
-    gs = fig.add_gridspec(2, 2, height_ratios=[3.12, 1.45], hspace=0.43, wspace=0.24)
-    ax_overall = fig.add_subplot(gs[0, 0])
-    ax_constructive = fig.add_subplot(gs[0, 1])
+    fig = plt.figure(figsize=(7.45, 4.95))
+    gs = fig.add_gridspec(2, 1, height_ratios=[2.25, 1.55], hspace=0.46)
+    ax_constructive = fig.add_subplot(gs[0, 0])
     ax_supply = fig.add_subplot(gs[1, :])
     cmap_s = LinearSegmentedColormap.from_list("supply", ["#F3F6F6", "#B8C9D2", "#2E5F7F"])
 
-    def _p_label(p: float) -> str:
-        if p < 0.001:
-            return "p<.001"
-        return f"p={p:.3f}".replace("0.", ".")
-
-    def _draw_bracket(ax: plt.Axes, x1: float, x2: float, y: float, label: str, color: str, *, above: bool, span: float) -> None:
-        tick = span * 0.010
-        if above:
-            ys = [y - tick, y, y, y - tick]
-            va = "bottom"
-            text_y = y + span * 0.012
-        else:
-            ys = [y + tick, y, y, y + tick]
-            va = "top"
-            text_y = y - span * 0.012
-        ax.plot([x1, x1, x2, x2], ys, color=color, linewidth=0.95, zorder=4)
-        ax.text((x1 + x2) / 2, text_y, label, ha="center", va=va, fontsize=5.9, color=color, fontweight="bold")
-
     centers = np.arange(len(rows))
-    offsets = np.array([-0.17, 0.17])
-    width = 0.29
-
-    def _purpose_panel(ax: plt.Axes, effects: dict, pvals: np.ndarray, title: str, ylim: tuple[float, float]) -> None:
-        specs = [
-            ("Intentional", offsets[0], "#2F5F83"),
-            ("Unintentional", offsets[1], "#BFC7D5"),
-        ]
-        y_span = ylim[1] - ylim[0]
-        ax.axhline(0, color=COLORS["ink"], linewidth=0.9, zorder=1)
-        ax.grid(axis="y", color=COLORS["grid"], linewidth=0.75, zorder=0)
-        for intent, offset, color in specs:
-            vals = effects[intent]["mean"]
-            low = effects[intent]["low"]
-            high = effects[intent]["high"]
-            xpos = centers + offset
-            ax.bar(xpos, vals, width=width, color=color, edgecolor="white", linewidth=0.65, zorder=2)
-            ax.errorbar(
-                xpos,
-                vals,
-                yerr=np.vstack([vals - low, high - vals]),
-                fmt="none",
-                ecolor=COLORS["ink"],
-                elinewidth=0.8,
-                capsize=2.0,
-                capthick=0.8,
-                zorder=3,
-            )
-            for xi, val in zip(xpos, vals):
-                if val >= 0:
-                    y_text = val + y_span * 0.020
-                    va = "bottom"
-                else:
-                    y_text = val - y_span * 0.020
-                    va = "top"
-                ax.text(xi, y_text, f"{val:+.1f}", ha="center", va=va, fontsize=5.6, color=COLORS["ink"], zorder=5)
-        for i, center in enumerate(centers):
-            int_mean = effects["Intentional"]["mean"][i]
-            un_mean = effects["Unintentional"]["mean"][i]
-            high = max(effects["Intentional"]["high"][i], effects["Unintentional"]["high"][i])
-            low = min(effects["Intentional"]["low"][i], effects["Unintentional"]["low"][i])
-            delta = int_mean - un_mean
-            color = "#1B7A4B" if delta >= 0 else "#B4443E"
-            label = f"Δ={delta:+.1f}\n{_p_label(pvals[i])}"
-            if high > 1:
-                y = high + y_span * 0.095
-                above = True
-            else:
-                y = low - y_span * 0.095
-                above = False
-            _draw_bracket(ax, center + offsets[0], center + offsets[1], y, label, color, above=above, span=y_span)
-        ax.set_ylim(*ylim)
-        ax.set_xlim(centers[0] - 0.58, centers[-1] + 0.58)
-        ax.set_title(title, loc="left", pad=3, fontsize=9.2, fontweight="bold")
-        ax.set_xticks(centers, rows)
-        ax.spines[["top", "right"]].set_visible(False)
-        ax.tick_params(axis="x", length=0, pad=4, labelsize=7.3)
-        ax.tick_params(axis="y", labelsize=7.5)
-
-    _purpose_panel(ax_overall, effect_overall, interaction_p_overall, "Overall cognitive engagement", (-30, 43))
-    _purpose_panel(ax_constructive, effect_constructive, interaction_p_constructive, "Constructive engagement", (-13, 19))
-    ax_overall.set_ylabel("Difference (pp)")
-    ax_constructive.set_ylabel("")
-
-    handles = [
-        Rectangle((0, 0), 1, 1, facecolor="#2F5F83", edgecolor="none"),
-        Rectangle((0, 0), 1, 1, facecolor="#BFC7D5", edgecolor="none"),
-        Line2D([0], [0], color="#1B7A4B", linewidth=1.2),
-        Line2D([0], [0], color="#B4443E", linewidth=1.2),
-    ]
-    fig.legend(
-        handles,
-        ["Intentional", "Unintentional", "Δ Int.>Unint.", "Δ Int.<Unint."],
-        loc="upper right",
-        bbox_to_anchor=(0.985, 0.973),
-        ncol=4,
-        frameon=False,
-        handlelength=1.0,
-        columnspacing=0.95,
-        fontsize=7.3,
+    bar_colors = [COLORS["teal"] if val >= 0 else COLORS["rose"] for val in constructive_effect]
+    ax_constructive.axhline(0, color=COLORS["ink"], linewidth=0.9, zorder=1)
+    ax_constructive.grid(axis="y", color=COLORS["grid"], linewidth=0.75, zorder=0)
+    ax_constructive.bar(centers, constructive_effect, width=0.62, color=bar_colors, edgecolor="white", linewidth=0.7, zorder=2)
+    ax_constructive.errorbar(
+        centers,
+        constructive_effect,
+        yerr=np.vstack([constructive_effect - constructive_low, constructive_high - constructive_effect]),
+        fmt="none",
+        ecolor=COLORS["ink"],
+        elinewidth=0.85,
+        capsize=2.2,
+        capthick=0.85,
+        zorder=3,
     )
-    fig.text(0.030, 0.946, "a", fontsize=14, weight="bold")
-    fig.text(0.085, 0.943, "User framing × support-form association", fontsize=11, color=COLORS["ink"])
+    for x, val in zip(centers, constructive_effect):
+        if val >= 0:
+            y_text = val + 0.58
+            va = "bottom"
+        else:
+            y_text = val - 0.58
+            va = "top"
+        ax_constructive.text(x, y_text, f"{val:+.1f}", ha="center", va=va, fontsize=7.5, color=COLORS["ink"], zorder=4)
+    ax_constructive.set_ylim(-5.2, 13.0)
+    ax_constructive.set_xlim(centers[0] - 0.62, centers[-1] + 0.62)
+    ax_constructive.set_xticks(centers, rows)
+    ax_constructive.set_ylabel("Constructive engagement difference (pp)")
+    ax_constructive.set_title("Support-form association with constructive engagement", loc="left", pad=6, fontsize=10.4, fontweight="bold")
+    ax_constructive.spines[["top", "right"]].set_visible(False)
+    ax_constructive.tick_params(axis="x", length=0, pad=5, labelsize=8.0)
+    ax_constructive.tick_params(axis="y", labelsize=8.0)
+    fig.text(0.030, 0.940, "a", fontsize=14, weight="bold")
 
     data = supply.T
     ax_supply.imshow(data, cmap=cmap_s, norm=Normalize(0, 84), aspect="auto")
@@ -730,7 +638,7 @@ def make_figure4() -> None:
             txt_color = "white" if val > 68 else COLORS["ink"]
             ax_supply.text(j, i, f"{val:.1f}", ha="center", va="center", fontsize=7.8, color=txt_color)
     ax_supply.text(-0.055, 1.12, "b", transform=ax_supply.transAxes, fontsize=14, weight="bold")
-    fig.subplots_adjust(left=0.085, right=0.985, top=0.835, bottom=0.075)
+    fig.subplots_adjust(left=0.090, right=0.985, top=0.865, bottom=0.080)
     fig.text(0.985, 0.020, "WC, WildChat; LMSYS, LMSYS Chat-1M; SC, ShareChat strict-English. Means labels are non-exclusive.", ha="right", fontsize=7.5, color=COLORS["muted"])
     _save(fig, "fig_support_form_supply_compact_final_v2")
 
