@@ -314,23 +314,25 @@ def make_figure1() -> None:
 
 
 def make_figure2() -> None:
-    labels = ["WC coding", "LMSYS coding", "WC writing", "LMSYS writing"]
-    active = np.array([80.4, 86.4, 79.5, 82.7])
-    constructive = np.array([18.4, 12.0, 13.6, 10.0])
-    passive = np.array([1.2, 1.6, 6.9, 7.3])
-    cog_intent = np.array([76.6, 74.6, 28.2, 28.2])
-    cog_unintent = np.array([32.5, 23.2, 10.5, 10.3])
-    con_intent = np.array([13.1, 7.6, 5.2, 3.5])
-    con_unintent = np.array([5.7, 3.1, 1.5, 1.0])
+    labels = ["WC coding", "LMSYS coding", "SC coding", "WC writing", "LMSYS writing", "SC writing"]
+    active = np.array([80.4, 86.4, 62.0, 79.5, 82.7, 69.7])
+    constructive = np.array([18.4, 12.0, 33.7, 13.6, 10.0, 15.7])
+    passive = np.array([1.2, 1.6, 4.3, 6.9, 7.3, 14.6])
+    cog_intent = np.array([76.6, 74.6, 73.8, 28.2, 28.2, 46.4])
+    cog_unintent = np.array([32.5, 23.2, 28.0, 10.5, 10.3, 24.9])
+    con_intent = np.array([13.1, 7.6, 22.0, 5.2, 3.5, 7.2])
+    con_unintent = np.array([5.7, 3.1, 9.2, 1.5, 1.0, 3.2])
     depth = {
         "WC coding": [0.151, 0.286, 0.463],
         "LMSYS coding": [0.095, 0.204, 0.340],
+        "SC coding": [0.278, 0.434, 0.613],
         "WC writing": [0.060, 0.092, 0.150],
         "LMSYS writing": [0.033, 0.063, 0.112],
+        "SC writing": [0.076, 0.182, 0.313],
     }
 
-    fig = plt.figure(figsize=(7.85, 4.20))
-    gs = GridSpec(2, 2, figure=fig, height_ratios=[1.12, 0.56], width_ratios=[1.12, 1.18], hspace=0.86, wspace=0.42)
+    fig = plt.figure(figsize=(7.85, 4.95))
+    gs = GridSpec(2, 2, figure=fig, height_ratios=[1.22, 0.76], width_ratios=[1.12, 1.18], hspace=0.74, wspace=0.42)
     axa = fig.add_subplot(gs[0, 0])
     gs_b = gs[0, 1].subgridspec(1, 2, wspace=0.28)
     axb1 = fig.add_subplot(gs_b[0, 0])
@@ -381,7 +383,7 @@ def make_figure2() -> None:
         ax.tick_params(axis="x", labelsize=7.5)
 
     intent_dumbbell(axb1, cog_unintent, cog_intent, "Cognitive", (0, 86), show_y=True)
-    intent_dumbbell(axb2, con_unintent, con_intent, "Constructive", (0, 14.6), show_y=False)
+    intent_dumbbell(axb2, con_unintent, con_intent, "Constructive", (0, 25.5), show_y=False)
     axb1.text(-0.42, 1.10, "b", transform=axb1.transAxes, fontsize=14, weight="bold")
     axb1.text(0.00, 1.26, "Explicit learning framing", transform=axb1.transAxes, fontsize=9.0, color=COLORS["ink"], ha="left")
     axb2.legend(
@@ -401,10 +403,10 @@ def make_figure2() -> None:
 
     depth_matrix = np.array(list(depth.values()))
     cmap = LinearSegmentedColormap.from_list("depth", ["#F3F6F6", "#A8C8D7", "#2F5F83"])
-    axc.imshow(depth_matrix, cmap=cmap, norm=Normalize(0.05, 0.47), aspect="auto")
+    axc.imshow(depth_matrix, cmap=cmap, norm=Normalize(0.03, 0.62), aspect="auto")
     axc.set_xticks(np.arange(3), ["2-3\nuser turns", "4-6\nuser turns", "7+\nuser turns"], fontsize=8.0)
     axc.set_yticks(np.arange(len(labels)), labels)
-    axc.set_xlabel("Conversation length", fontweight="bold", labelpad=7)
+    axc.set_xlabel("Conversation length", fontweight="bold", labelpad=3)
     axc.set_ylabel("Setting", labelpad=5)
     axc.set_title("Share with >=1 constructive user turn", loc="left", pad=7)
     axc.set_xticks(np.arange(-0.5, 3, 1), minor=True)
@@ -420,23 +422,23 @@ def make_figure2() -> None:
     for tick in axc.get_xticklabels():
         tick.set_fontweight("bold")
     axc.text(-0.055, 1.08, "c", transform=axc.transAxes, fontsize=14, weight="bold")
-    fig.subplots_adjust(left=0.105, right=0.985, top=0.830, bottom=0.145)
-    fig.text(0.985, 0.034, "WC, WildChat; LMSYS, LMSYS Chat-1M.", ha="right", fontsize=7.6, color=COLORS["muted"])
+    fig.subplots_adjust(left=0.105, right=0.985, top=0.850, bottom=0.165)
+    fig.text(0.985, 0.030, "WC, WildChat; LMSYS, LMSYS Chat-1M; SC, ShareChat strict-English.", ha="right", fontsize=7.6, color=COLORS["muted"])
 
     _save(fig, "fig_engagement_ecology_compact_final")
 
 
 def make_figure3() -> None:
-    labels = ["WC coding", "LMSYS coding", "WC writing", "LMSYS writing"]
-    no_s2 = np.array([5.45, 3.89, 1.96, 1.04])
-    has_s2 = np.array([9.43, 5.90, 3.22, 2.25])
-    depth_diff = np.array([2.23, 1.43, 3.13, 2.10])
-    pois = np.array([1.852, 1.626, 1.569, 1.985])
-    logit = np.array([1.761, 1.542, 1.437, 1.764])
-    strat_intentional = np.array([1.968, 1.665, 1.579, 2.334])
-    strat_unintentional = np.array([1.633, 1.600, 1.567, 1.842])
+    labels = ["WC coding", "LMSYS coding", "SC coding", "WC writing", "LMSYS writing", "SC writing"]
+    no_s2 = np.array([5.45, 3.89, 9.20, 1.96, 1.04, 3.20])
+    has_s2 = np.array([9.43, 5.90, 16.70, 3.22, 2.25, 5.80])
+    depth_diff = np.array([2.23, 1.43, 3.36, 3.13, 2.10, 3.39])
+    pois = np.array([1.852, 1.626, 1.893, 1.569, 1.985, 2.491])
+    logit = np.array([1.761, 1.542, 2.140, 1.437, 1.764, 1.757])
+    strat_intentional = np.array([1.968, 1.665, 2.114, 1.579, 2.334, 1.857])
+    strat_unintentional = np.array([1.633, 1.600, 1.681, 1.567, 1.842, 2.261])
 
-    fig = plt.figure(figsize=(7.85, 5.0))
+    fig = plt.figure(figsize=(7.85, 5.65))
     gs = GridSpec(2, 2, figure=fig, width_ratios=[1.04, 1.16], height_ratios=[1.0, 0.88], wspace=0.42, hspace=0.74)
     axa = fig.add_subplot(gs[0, 0])
     axb = fig.add_subplot(gs[0, 1])
@@ -462,7 +464,7 @@ def make_figure3() -> None:
         ax.spines[["top", "right", "left"]].set_visible(False)
         ax.tick_params(axis="y", length=0, pad=2)
 
-    dumbbell(axa, no_s2, has_s2, labels, "Conversation-level constructive ratio", "Constructive user turns (%)", (0, 10.9))
+    dumbbell(axa, no_s2, has_s2, labels, "Conversation-level constructive ratio", "Constructive user turns (%)", (0, 18.8))
     axa.text(-0.16, 1.06, "a", transform=axa.transAxes, fontsize=14, weight="bold")
 
     y = np.arange(len(labels))
@@ -475,7 +477,7 @@ def make_figure3() -> None:
         axb.text(max(pois[i], logit[i]) + 0.035, i, f"{pois[i]:.2f} / {logit[i]:.2f}", va="center", fontsize=7.5, color=COLORS["ink"])
     axb.set_yticks(y, labels)
     axb.invert_yaxis()
-    axb.set_xlim(0.94, 2.03)
+    axb.set_xlim(0.94, 2.65)
     axb.set_title("Adjusted association models", loc="left", pad=8)
     axb.set_xlabel("Association estimate")
     axb.grid(axis="x", color=COLORS["grid"], lw=0.8)
@@ -514,7 +516,7 @@ def make_figure3() -> None:
         )
     axc.set_yticks(yc, labels)
     axc.invert_yaxis()
-    axc.set_xlim(0.94, 2.55)
+    axc.set_xlim(0.94, 2.65)
     axc.set_title("Framing-stratified association", loc="left", pad=8)
     axc.set_xlabel("Poisson RR (intentional / unintentional)")
     axc.grid(axis="x", color=COLORS["grid"], lw=0.8)
@@ -529,7 +531,7 @@ def make_figure3() -> None:
         axd.text(val + 0.08, i, f"+{val:.2f}", va="center", ha="left", fontsize=8.2, color=COLORS["ink"])
     axd.set_yticks(y_depth, labels)
     axd.invert_yaxis()
-    axd.set_xlim(0, 3.55)
+    axd.set_xlim(0, 3.85)
     axd.set_title("Post-answer depth", loc="left", pad=8)
     axd.set_xlabel("Has S2 - no S2 (turns)")
     axd.grid(axis="x", color=COLORS["grid"], lw=0.8)
@@ -550,16 +552,16 @@ def make_figure3() -> None:
         fontsize=8.2,
         handletextpad=0.3,
     )
-    fig.text(0.985, 0.032, "WC, WildChat; LMSYS, LMSYS Chat-1M.", ha="right", fontsize=7.6, color=COLORS["muted"])
-    fig.subplots_adjust(left=0.115, right=0.985, top=0.835, bottom=0.160)
+    fig.text(0.985, 0.030, "WC, WildChat; LMSYS, LMSYS Chat-1M; SC, ShareChat strict-English.", ha="right", fontsize=7.6, color=COLORS["muted"])
+    fig.subplots_adjust(left=0.115, right=0.985, top=0.835, bottom=0.140)
 
-    _save_many(fig, ["fig_support_association_compact_final_v2", "fig_support_association_wildchat_only_with_ci"])
+    _save_many(fig, ["fig_support_association_compact_final_v2", "fig_support_association_wild_lmsys_with_ci"])
 
 
 def make_figure4() -> None:
     rows = ["M1\nfeedback", "M2\nhint", "M3\ninstruct", "M4\nexplain", "M5\nmodel", "M6\nquestion"]
     mean_cols = ["M1", "M2", "M3", "M4", "M5", "M6"]
-    settings = ["WC coding", "LMSYS coding", "WC writing", "LMSYS writing"]
+    settings = ["WC coding", "LMSYS coding", "SC coding", "WC writing", "LMSYS writing", "SC writing"]
     # Pooled from the latest level-2 metrics for WildChat and LMSYS.
     # Effects are with-label minus without-label differences among scaffolded conversations.
     effect_overall = {
@@ -588,19 +590,20 @@ def make_figure4() -> None:
     }
     interaction_p_overall = np.array([3.32e-167, 9.08e-47, 1.49e-120, 2.88e-186, 3.38e-05, 1.83e-67])
     interaction_p_constructive = np.array([4.05e-16, 3.75e-07, 3.04e-14, 1.91e-47, 0.0187, 3.72e-27])
+    # Rows are support forms; columns follow the six displayed task settings.
     supply = np.array(
         [
-            [8.8, 4.5, 16.6, 11.3],
-            [14.7, 8.2, 9.6, 10.9],
-            [29.7, 10.4, 59.2, 52.3],
-            [84.0, 79.2, 29.5, 26.9],
-            [23.9, 18.3, 15.0, 10.3],
-            [6.9, 10.6, 6.9, 13.4],
+            [8.8, 4.5, 13.3, 16.6, 11.3, 24.2],
+            [14.7, 8.2, 12.7, 9.6, 10.9, 23.2],
+            [29.7, 10.4, 25.7, 59.2, 52.3, 22.9],
+            [84.0, 79.2, 81.2, 29.5, 26.9, 45.2],
+            [23.9, 18.3, 18.4, 15.0, 10.3, 23.5],
+            [6.9, 10.6, 18.6, 6.9, 13.4, 38.1],
         ]
     )
 
-    fig = plt.figure(figsize=(7.45, 5.30))
-    gs = fig.add_gridspec(2, 2, height_ratios=[3.12, 1.0], hspace=0.46, wspace=0.24)
+    fig = plt.figure(figsize=(7.45, 5.85))
+    gs = fig.add_gridspec(2, 2, height_ratios=[3.12, 1.45], hspace=0.43, wspace=0.24)
     ax_overall = fig.add_subplot(gs[0, 0])
     ax_constructive = fig.add_subplot(gs[0, 1])
     ax_supply = fig.add_subplot(gs[1, :])
@@ -707,7 +710,7 @@ def make_figure4() -> None:
         fontsize=7.3,
     )
     fig.text(0.030, 0.946, "a", fontsize=14, weight="bold")
-    fig.text(0.085, 0.943, "User framing x support-form association", fontsize=11, color=COLORS["ink"])
+    fig.text(0.085, 0.943, "User framing × support-form association", fontsize=11, color=COLORS["ink"])
 
     data = supply.T
     ax_supply.imshow(data, cmap=cmap_s, norm=Normalize(0, 84), aspect="auto")
@@ -727,81 +730,98 @@ def make_figure4() -> None:
             txt_color = "white" if val > 68 else COLORS["ink"]
             ax_supply.text(j, i, f"{val:.1f}", ha="center", va="center", fontsize=7.8, color=txt_color)
     ax_supply.text(-0.055, 1.12, "b", transform=ax_supply.transAxes, fontsize=14, weight="bold")
-    fig.subplots_adjust(left=0.085, right=0.985, top=0.835, bottom=0.080)
-    fig.text(0.985, 0.022, "WC, WildChat; LMSYS, LMSYS Chat-1M. Means labels are non-exclusive.", ha="right", fontsize=7.8, color=COLORS["muted"])
+    fig.subplots_adjust(left=0.085, right=0.985, top=0.835, bottom=0.075)
+    fig.text(0.985, 0.020, "WC, WildChat; LMSYS, LMSYS Chat-1M; SC, ShareChat strict-English. Means labels are non-exclusive.", ha="right", fontsize=7.5, color=COLORS["muted"])
     _save(fig, "fig_support_form_supply_compact_final_v2")
 
 
 def make_figure5() -> None:
-    order = ["WC coding", "LMSYS coding", "WC writing", "LMSYS writing"]
+    order = ["WC coding", "LMSYS coding", "SC coding", "WC writing", "LMSYS writing", "SC writing"]
     keys = order
     # 95% CIs were recalculated from the same A2U pair files and level-2
     # conversation metrics that produce the point estimates.
-    lift = np.array([2.6756, 2.0136, 1.1281, 0.2666])
+    lift = np.array([2.6756, 2.0136, 6.21, 1.1281, 0.2666, 3.35])
     lift_ci = np.array(
         [
             [2.2904, 3.0607],
             [1.6100, 2.4200],
+            [np.nan, np.nan],
             [0.9487, 1.3075],
             [0.0200, 0.5200],
+            [np.nan, np.nan],
         ]
     )
     cond = {
         "prior constructive": {
             "WC coding": (26.0563, 30.0682),
             "LMSYS coding": (21.8174, 24.2271),
+            "SC coding": (32.24, 36.75),
             "WC writing": (6.0528, 12.3195),
             "LMSYS writing": (11.4618, 9.0909),
+            "SC writing": (22.91, 25.74),
         },
         "prior active": {
             "WC coding": (9.6341, 11.7894),
             "LMSYS coding": (6.1475, 8.3257),
+            "SC coding": (14.45, 17.51),
             "WC writing": (1.9286, 2.5838),
             "LMSYS writing": (2.1687, 2.0536),
+            "SC writing": (6.24, 7.46),
         },
         "prior passive": {
             "WC coding": (12.9630, 15.0327),
             "LMSYS coding": (7.1197, 13.8462),
+            "SC coding": (9.23, 28.77),
             "WC writing": (2.1182, 3.5857),
             "LMSYS writing": (2.2831, 4.7619),
+            "SC writing": (1.38, 9.33),
         },
     }
     cond_ci = {
         "prior constructive": {
             "WC coding": ((24.5124, 27.6619), (28.8784, 31.2854)),
             "LMSYS coding": ((20.1415, 23.4933), (22.1178, 26.3365)),
+            "SC coding": ((np.nan, np.nan), (np.nan, np.nan)),
             "WC writing": ((5.0744, 7.2055), (10.5635, 14.3206)),
             "LMSYS writing": ((8.9170, 14.0066), (6.0877, 12.0942)),
+            "SC writing": ((np.nan, np.nan), (np.nan, np.nan)),
         },
         "prior active": {
             "WC coding": ((9.2175, 10.0673), (11.3335, 12.2611)),
             "LMSYS coding": ((5.8279, 6.4671), (7.7067, 8.9448)),
+            "SC coding": ((np.nan, np.nan), (np.nan, np.nan)),
             "WC writing": ((1.6596, 2.2403), (2.2383, 2.9809)),
             "LMSYS writing": ((1.7641, 2.5732), (1.4846, 2.6227)),
+            "SC writing": ((np.nan, np.nan), (np.nan, np.nan)),
         },
         "prior passive": {
             "WC coding": ((9.4704, 17.4946), (10.2307, 21.5475)),
             "LMSYS coding": ((4.2525, 9.9870), (5.4496, 22.2427)),
+            "SC coding": ((np.nan, np.nan), (np.nan, np.nan)),
             "WC writing": ((1.3602, 3.2845), (1.8977, 6.6729)),
             "LMSYS writing": ((0.8843, 3.6819), (-0.4968, 10.0206)),
+            "SC writing": ((np.nan, np.nan), (np.nan, np.nan)),
         },
     }
     next_s2 = np.array(
         [
             [65.5, 50.7, 29.5],
-            [37.8, 43.2, 18.8],
             [40.6, 26.7, 14.9],
+            [66.3, 53.7, 43.7],
+            [37.8, 43.2, 18.8],
             [34.2, 31.2, 12.1],
+            [39.6, 29.3, 26.5],
         ]
     )
-    next_s2 = next_s2[[0, 2, 1, 3]]
-    before_after = np.array([1.4, 1.5, -4.2, -2.5])
+    before_after = np.array([1.4, 1.5, 0.7, -4.2, -2.5, -0.6])
     before_after_ci = np.array(
         [
             [0.9496, 1.7999],
             [1.0285, 1.9563],
+            [np.nan, np.nan],
             [-4.6790, -3.8188],
             [-2.9772, -1.9935],
+            [np.nan, np.nan],
         ]
     )
 
@@ -819,7 +839,10 @@ def make_figure5() -> None:
     def _xerr(value: float, ci: tuple[float, float]) -> np.ndarray:
         return np.array([[value - ci[0]], [ci[1] - value]])
 
-    fig = plt.figure(figsize=(7.45, 5.55))
+    def _has_ci(ci) -> bool:
+        return not np.isnan(np.asarray(ci, dtype=float)).any()
+
+    fig = plt.figure(figsize=(7.45, 6.15))
     gs = GridSpec(
         2,
         4,
@@ -827,7 +850,7 @@ def make_figure5() -> None:
         height_ratios=[1.0, 0.98],
         width_ratios=[1.16, 0.92, 0.92, 0.92],
         hspace=0.86,
-        wspace=0.56,
+        wspace=0.72,
     )
     axa = fig.add_subplot(gs[0, 0])
     axs_b = [fig.add_subplot(gs[0, i]) for i in range(1, 4)]
@@ -836,17 +859,19 @@ def make_figure5() -> None:
 
     y = np.arange(len(order))
     axa.barh(y, lift, height=0.26, color=scaf_color, edgecolor="none", zorder=2)
-    axa.errorbar(
-        lift,
-        y,
-        xerr=np.vstack([lift - lift_ci[:, 0], lift_ci[:, 1] - lift]),
-        fmt="none",
-        ecolor=COLORS["ink"],
-        elinewidth=0.75,
-        capsize=2.1,
-        capthick=0.75,
-        zorder=4,
-    )
+    valid_lift_ci = ~np.isnan(lift_ci).any(axis=1)
+    if valid_lift_ci.any():
+        axa.errorbar(
+            lift[valid_lift_ci],
+            y[valid_lift_ci],
+            xerr=np.vstack([lift[valid_lift_ci] - lift_ci[valid_lift_ci, 0], lift_ci[valid_lift_ci, 1] - lift[valid_lift_ci]]),
+            fmt="none",
+            ecolor=COLORS["ink"],
+            elinewidth=0.75,
+            capsize=2.1,
+            capthick=0.75,
+            zorder=4,
+        )
     axa.scatter(lift, y, s=22, color=scaf_color, edgecolor=COLORS["ink"], lw=0.45, zorder=3)
     for i, val in enumerate(lift):
         if val > 0.65:
@@ -866,7 +891,7 @@ def make_figure5() -> None:
     axa.axvline(0, color=COLORS["ink"], lw=0.9)
     axa.set_yticks(y, order)
     axa.invert_yaxis()
-    axa.set_xlim(-0.35, 3.35)
+    axa.set_xlim(-0.35, 6.90)
     axa.set_xlabel("Next-turn constructive lift (pp)")
     axa.set_title("Overall adjacent-turn\ncontrast", loc="left", pad=5, fontsize=9.2, fontweight="bold")
     axa.grid(axis="x", color=COLORS["grid"], lw=0.65)
@@ -881,13 +906,15 @@ def make_figure5() -> None:
             scaf_y = i + 0.075
             ref_ci, scaf_ci = cond_ci[title][name]
             ax.plot([s1, s2], [ref_y, scaf_y], color=guide, lw=0.9, zorder=1)
-            ax.errorbar(s1, ref_y, xerr=_xerr(s1, ref_ci), fmt="none", ecolor=ref_err, elinewidth=0.7, capsize=1.7, capthick=0.7, zorder=2)
-            ax.errorbar(s2, scaf_y, xerr=_xerr(s2, scaf_ci), fmt="none", ecolor=scaf_err, elinewidth=0.7, capsize=1.7, capthick=0.7, zorder=2)
+            if _has_ci(ref_ci):
+                ax.errorbar(s1, ref_y, xerr=_xerr(s1, ref_ci), fmt="none", ecolor=ref_err, elinewidth=0.7, capsize=1.7, capthick=0.7, zorder=2)
+            if _has_ci(scaf_ci):
+                ax.errorbar(s2, scaf_y, xerr=_xerr(s2, scaf_ci), fmt="none", ecolor=scaf_err, elinewidth=0.7, capsize=1.7, capthick=0.7, zorder=2)
             ax.scatter(s1, ref_y, s=24, color=ref_color, edgecolor=COLORS["ink"], lw=0.45, zorder=3)
             ax.scatter(s2, scaf_y, s=24, color=scaf_color, edgecolor=COLORS["ink"], lw=0.45, zorder=3)
             dx = s2 - s1
             ax.text(
-                min(max(s2 + 1.05, 1.0), 34.1),
+                min(max(s2 + 1.05, 1.0), 37.3),
                 scaf_y,
                 _pp(dx),
                 va="center",
@@ -900,7 +927,7 @@ def make_figure5() -> None:
         ax.set_yticks(y)
         ax.set_yticklabels(order if ax is axs_b[0] else [])
         ax.invert_yaxis()
-        ax.set_xlim(0, 35)
+        ax.set_xlim(0, 38.5)
         ax.set_xticks([0, 10, 20, 30])
         ax.grid(axis="x", color=COLORS["grid"], lw=0.65)
         ax.spines[["top", "right"]].set_visible(False)
@@ -948,22 +975,23 @@ def make_figure5() -> None:
     axd.barh(y2, before_after, height=0.26, color=d_colors, edgecolor="none", zorder=2)
     for i, val in enumerate(before_after):
         err_color = COLORS["ink"] if val >= 0 else rose_err
-        axd.errorbar(
-            val,
-            y2[i],
-            xerr=_xerr(val, tuple(before_after_ci[i])),
-            fmt="none",
-            ecolor=err_color,
-            elinewidth=0.75,
-            capsize=2.1,
-            capthick=0.75,
-            zorder=4,
-        )
+        if _has_ci(before_after_ci[i]):
+            axd.errorbar(
+                val,
+                y2[i],
+                xerr=_xerr(val, tuple(before_after_ci[i])),
+                fmt="none",
+                ecolor=err_color,
+                elinewidth=0.75,
+                capsize=2.1,
+                capthick=0.75,
+                zorder=4,
+            )
     axd.scatter(before_after, y2, s=24, color=d_colors, edgecolor=COLORS["ink"], lw=0.45, zorder=3)
     for i, val in enumerate(before_after):
-        ha = "left" if val >= 0 else "right"
+        ha = "left"
         axd.text(
-            val + (0.15 if val >= 0 else -0.15),
+            val + (0.15 if val >= 0 else 0.18),
             i,
             _pp(val),
             va="center",
@@ -988,7 +1016,7 @@ def make_figure5() -> None:
     fig.text(
         0.50,
         0.038,
-        "WC = WildChat; LMSYS = LMSYS Chat-1M. Error bars show 95% CI where displayed; numbers report scaffolded − reference differences.",
+        "WC = WildChat; LMSYS = LMSYS Chat-1M; SC = ShareChat strict-English. Error bars show 95% CI where displayed; numbers report scaffolded − reference differences.",
         ha="center",
         fontsize=6.8,
         color=COLORS["muted"],
