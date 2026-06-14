@@ -10,7 +10,7 @@ The analyses use six task settings formed by crossing three public conversationa
 
 The analytic corpus contains 128,334 conversations and 979,974 total turns. WildChat contributes 31,878 coding conversations and 39,534 writing conversations; LMSYS contributes 31,879 coding conversations and 21,023 writing conversations; ShareChat strict-English contributes 2,481 coding conversations and 1,539 writing conversations. All reported analyses use the refreshed Level 1--4 outputs after the latest user-turn update pass and the replacement-data annotation runs.
 
-SWE-chat and ThoughtTrace were also processed with the same pipeline as feasibility and boundary checks. They are not part of the main six-setting analysis because SWE-chat provides almost no usable writing sample after filtering and ThoughtTrace remains small with near-saturated scaffolding, which limits stable support-association estimation.
+SWE-chat and ThoughtTrace were also processed with the same pipeline as feasibility and boundary checks (Supplementary Table~\ref{tab:boundary_checks})~\cite{baumann2026swechat,jin2026thoughttrace}. SWE-chat retained a usable coding sample (1,536 conversations) but only three writing conversations after filtering, so it can serve only as a coding-specific stress test rather than as part of the main coding--writing comparison. ThoughtTrace retained 56 coding and 61 writing conversations after the all-LLM v3 filter, but the sample remains small and scaffolded support is near-saturated, especially in coding where all conversations contain at least one scaffolded assistant turn. These properties make ThoughtTrace useful as a feasibility check but not as stable evidence for conversation-level support-association estimation.
 
 For each conversation, the pipeline retained the ordered turn sequence, role labels, available topic and language metadata, learning-intent indicators and model metadata where available. Model metadata are used only for robustness checks where the corpus exposes usable model labels, because model assignment in naturalistic public conversations is observational and may reflect time, user population, task mix and logging context.
 
@@ -85,6 +85,8 @@ The study analyses naturalistic conversations, so the manuscript avoids reproduc
 \input{tables/table_temporal_estimands}
 
 \input{tables/table_support_supply}
+
+\input{tables/table_boundary_checks}
 
 \clearpage
 \section*{Appendix D\quad Supporting figures}
