@@ -562,18 +562,25 @@ def make_figure4() -> None:
     rows = ["M1\nfeedback", "M2\nhint", "M3\ninstruct", "M4\nexplain", "M5\nmodel", "M6\nquestion"]
     mean_cols = ["M1", "M2", "M3", "M4", "M5", "M6"]
     settings = ["WC coding", "LMSYS coding", "SC coding", "WC writing", "LMSYS writing", "SC writing"]
-    # Pooled from the latest six-setting level-2 metrics. Estimates compare
-    # scaffolded conversations containing each non-exclusive support form with
-    # scaffolded conversations without that form, using constructive ratio.
-    constructive_effect = np.array([11.17, 2.98, -2.00, 5.48, 1.67, -3.13])
-    constructive_low = np.array([10.47, 2.48, -2.33, 5.19, 1.27, -3.47])
-    constructive_high = np.array([11.88, 3.48, -1.68, 5.77, 2.06, -2.80])
+    # Estimates compare scaffolded conversations containing each non-exclusive
+    # support form with scaffolded conversations without that form, using the
+    # constructive ratio. Values are pooled over the six public-chat settings
+    # and stratified by the indicated conversational context.
+    intentional_effect = np.array([14.68, 3.74, -2.77, 6.67, 0.13, -4.81])
+    intentional_low = np.array([13.53, 2.81, -3.44, 6.02, -0.56, -5.56])
+    intentional_high = np.array([15.83, 4.67, -2.10, 7.31, 0.82, -4.07])
+    unintentional_effect = np.array([6.67, 1.62, -1.04, 3.04, 1.08, -1.28])
+    unintentional_low = np.array([5.94, 1.16, -1.34, 2.76, 0.68, -1.59])
+    unintentional_high = np.array([7.41, 2.09, -0.74, 3.32, 1.48, -0.96])
+    framing_p = np.array([1.77e-30, 6.23e-05, 3.99e-06, 3.86e-24, 2.01e-02, 9.34e-18])
+
     coding_effect = np.array([12.35, 2.99, 1.59, 4.03, -0.59, -3.96])
     coding_low = np.array([11.38, 2.34, 1.05, 3.56, -1.05, -4.41])
     coding_high = np.array([13.33, 3.64, 2.13, 4.49, -0.13, -3.52])
     writing_effect = np.array([10.93, 3.02, -3.38, 4.30, 6.67, -0.84])
     writing_low = np.array([10.00, 2.36, -3.80, 3.80, 5.76, -1.27])
     writing_high = np.array([11.87, 3.69, -2.95, 4.80, 7.59, -0.42])
+    task_p = np.array([3.93e-02, 9.41e-01, 1.23e-45, 4.33e-01, 4.95e-44, 3.71e-23])
     # Rows are support forms; columns follow the six displayed task settings.
     supply = np.array(
         [
@@ -588,13 +595,14 @@ def make_figure4() -> None:
 
     fig = plt.figure(figsize=(7.45, 5.85))
     gs = fig.add_gridspec(2, 2, height_ratios=[3.08, 1.45], hspace=0.43, wspace=0.25)
-    ax_pooled = fig.add_subplot(gs[0, 0])
+    ax_framing = fig.add_subplot(gs[0, 0])
     ax_task = fig.add_subplot(gs[0, 1])
     ax_supply = fig.add_subplot(gs[1, :])
     cmap_s = LinearSegmentedColormap.from_list("supply", ["#F3F6F6", "#B8C9D2", "#2E5F7F"])
 
     centers = np.arange(len(rows))
-    ylim = (-6.0, 14.8)
+    ylim = (-9.4, 19.2)
+    y_span = ylim[1] - ylim[0]
 
     def _style_support_axis(ax: plt.Axes, title: str) -> None:
         ax.axhline(0, color=COLORS["ink"], linewidth=0.9, zorder=1)
@@ -607,62 +615,118 @@ def make_figure4() -> None:
         ax.tick_params(axis="x", length=0, pad=5, labelsize=7.5)
         ax.tick_params(axis="y", labelsize=7.6)
 
-    bar_colors = [COLORS["teal"] if val >= 0 else COLORS["rose"] for val in constructive_effect]
-    ax_pooled.bar(centers, constructive_effect, width=0.62, color=bar_colors, edgecolor="white", linewidth=0.7, zorder=2)
-    ax_pooled.errorbar(
-        centers,
-        constructive_effect,
-        yerr=np.vstack([constructive_effect - constructive_low, constructive_high - constructive_effect]),
-        fmt="none",
-        ecolor=COLORS["ink"],
-        elinewidth=0.85,
-        capsize=2.2,
-        capthick=0.85,
-        zorder=3,
-    )
-    for x, val in zip(centers, constructive_effect):
-        if val >= 0:
-            y_text = val + 0.52
-            va = "bottom"
-        else:
-            y_text = val - 0.52
-            va = "top"
-        ax_pooled.text(x, y_text, f"{val:+.1f}", ha="center", va=va, fontsize=6.5, color=COLORS["ink"], zorder=4)
-    _style_support_axis(ax_pooled, "Pooled constructive association")
-    ax_pooled.set_ylabel("Constructive engagement difference (pp)")
-    ax_pooled.text(-0.15, 1.12, "a", transform=ax_pooled.transAxes, fontsize=14, weight="bold")
+    def _p_label(p: float) -> str:
+        if p < 0.001:
+            return "p<.001"
+        return f"p={p:.3f}".replace("0.", ".")
 
-    offsets = np.array([-0.17, 0.17])
-    width = 0.29
-    task_specs = [
-        ("Coding", coding_effect, coding_low, coding_high, COLORS["blue"], offsets[0]),
-        ("Writing", writing_effect, writing_low, writing_high, COLORS["grey"], offsets[1]),
-    ]
-    for label, vals, lows, highs, color, offset in task_specs:
-        xpos = centers + offset
-        ax_task.bar(xpos, vals, width=width, color=color, edgecolor="white", linewidth=0.65, zorder=2, label=label)
-        ax_task.errorbar(
-            xpos,
-            vals,
-            yerr=np.vstack([vals - lows, highs - vals]),
-            fmt="none",
-            ecolor=COLORS["ink"],
-            elinewidth=0.78,
-            capsize=1.8,
-            capthick=0.78,
-            zorder=3,
-        )
-        for xi, val in zip(xpos, vals):
-            if val >= 0:
-                y_text = val + 0.50
-                va = "bottom"
+    def _draw_bracket(ax: plt.Axes, x0: float, x1: float, y: float, label: str, color: str, above: bool) -> None:
+        tick = y_span * 0.010
+        if above:
+            ys = [y - tick, y, y, y - tick]
+            va = "bottom"
+            text_y = y + y_span * 0.010
+        else:
+            ys = [y + tick, y, y, y + tick]
+            va = "top"
+            text_y = y - y_span * 0.010
+        ax.plot([x0, x0, x1, x1], ys, color=color, linewidth=0.82, zorder=5)
+        ax.text((x0 + x1) / 2, text_y, label, ha="center", va=va, fontsize=5.25, color=color, linespacing=0.92, zorder=6)
+
+    def _draw_grouped_support_panel(
+        ax: plt.Axes,
+        first_label: str,
+        second_label: str,
+        first_vals: np.ndarray,
+        first_low: np.ndarray,
+        first_high: np.ndarray,
+        second_vals: np.ndarray,
+        second_low: np.ndarray,
+        second_high: np.ndarray,
+        pvals: np.ndarray,
+        title: str,
+    ) -> None:
+        offsets = np.array([-0.17, 0.17])
+        width = 0.29
+        specs = [
+            (first_label, first_vals, first_low, first_high, COLORS["blue"], offsets[0]),
+            (second_label, second_vals, second_low, second_high, COLORS["grey"], offsets[1]),
+        ]
+        for label, vals, lows, highs, color, offset in specs:
+            xpos = centers + offset
+            ax.bar(xpos, vals, width=width, color=color, edgecolor="white", linewidth=0.65, zorder=2, label=label)
+            ax.errorbar(
+                xpos,
+                vals,
+                yerr=np.vstack([vals - lows, highs - vals]),
+                fmt="none",
+                ecolor=COLORS["ink"],
+                elinewidth=0.78,
+                capsize=1.8,
+                capthick=0.78,
+                zorder=3,
+            )
+            for xi, val in zip(xpos, vals):
+                if val >= 0:
+                    y_text = val + 0.43
+                    va = "bottom"
+                else:
+                    y_text = val - 0.43
+                    va = "top"
+                ax.text(xi, y_text, f"{val:+.1f}", ha="center", va=va, fontsize=5.45, color=COLORS["ink"], zorder=4)
+
+        for i in range(len(centers)):
+            delta = first_vals[i] - second_vals[i]
+            shown_delta = 0.0 if abs(delta) < 0.05 else delta
+            color = COLORS["muted"] if abs(delta) < 0.05 else (COLORS["teal"] if delta >= 0 else COLORS["rose"])
+            above = max(first_high[i], second_high[i]) >= abs(min(first_low[i], second_low[i]))
+            if above:
+                y = max(first_high[i], second_high[i]) + y_span * 0.075
             else:
-                y_text = val - 0.50
-                va = "top"
-            ax_task.text(xi, y_text, f"{val:+.1f}", ha="center", va=va, fontsize=5.6, color=COLORS["ink"], zorder=4)
-    _style_support_axis(ax_task, "Constructive association by task ecology")
+                y = min(first_low[i], second_low[i]) - y_span * 0.052
+            _draw_bracket(
+                ax,
+                centers[i] + offsets[0],
+                centers[i] + offsets[1],
+                y,
+                f"Δ={shown_delta:+.1f}\n{_p_label(pvals[i])}",
+                color,
+                above,
+            )
+
+        _style_support_axis(ax, title)
+        ax.legend(loc="upper right", frameon=False, ncol=2, fontsize=7.0, handlelength=0.9, columnspacing=0.75)
+
+    _draw_grouped_support_panel(
+        ax_framing,
+        "Intentional",
+        "Unintentional",
+        intentional_effect,
+        intentional_low,
+        intentional_high,
+        unintentional_effect,
+        unintentional_low,
+        unintentional_high,
+        framing_p,
+        "Constructive association by user framing",
+    )
+    ax_framing.set_ylabel("Constructive engagement difference (pp)")
+    ax_framing.text(-0.15, 1.12, "a", transform=ax_framing.transAxes, fontsize=14, weight="bold")
+
+    _draw_grouped_support_panel(
+        ax_task,
+        "Coding",
+        "Writing",
+        coding_effect,
+        coding_low,
+        coding_high,
+        writing_effect,
+        writing_low,
+        writing_high,
+        task_p,
+        "Constructive association by task ecology",
+    )
     ax_task.set_ylabel("")
-    ax_task.legend(loc="upper right", frameon=False, ncol=2, fontsize=7.2, handlelength=0.9, columnspacing=0.8)
     ax_task.text(-0.13, 1.12, "b", transform=ax_task.transAxes, fontsize=14, weight="bold")
 
     data = supply.T
