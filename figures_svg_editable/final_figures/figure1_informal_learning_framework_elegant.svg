@@ -37,7 +37,7 @@
 <rect x="200" y="393" width="130" height="48" rx="10" ry="10" fill="#F8FBFE" stroke="#7FA4C8" stroke-width="1.5"/>
 <text x="265.0" y="424.0" font-size="18" font-weight="600" fill="#163D6B" text-anchor="middle">WildChat</text>
 <rect x="355" y="393" width="130" height="48" rx="10" ry="10" fill="#F8FBFE" stroke="#7FA4C8" stroke-width="1.5"/>
-<text x="420.0" y="424.0" font-size="18" font-weight="600" fill="#163D6B" text-anchor="middle">Copilot</text>
+<text x="420.0" y="424.0" font-size="18" font-weight="600" fill="#163D6B" text-anchor="middle">LMSYS</text>
 <line x1="68" y1="466" x2="512" y2="466" stroke="#AFC3D7" stroke-width="1.4" stroke-linecap="round" stroke-dasharray="4 6"/>
 <text x="200" y="534" font-size="25" font-weight="700" fill="#163D6B" text-anchor="start">Task ecology</text>
 <rect x="200" y="561" width="130" height="48" rx="10" ry="10" fill="#F8FBFE" stroke="#7FA4C8" stroke-width="1.5"/>

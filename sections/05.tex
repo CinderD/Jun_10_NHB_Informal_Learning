@@ -6,11 +6,13 @@ Supplementary information is provided below.
 
 \subsection*{A.1\quad Corpus construction and analytic settings}
 
-The analyses use six task settings formed by crossing three public conversational corpora with two task ecologies: WildChat coding, WildChat writing, LMSYS coding, LMSYS writing, ShareChat coding and ShareChat writing. Coding and writing were selected because both are common everyday LLM use cases, yet they differ in the opportunities they create for visible learning-oriented engagement. Coding conversations often contain error messages, debugging attempts, execution failures and iterative repair. Writing conversations more often involve drafting, rewriting, shortening, tone adjustment and direct editing.
+The analyses use seven reportable task settings: WildChat coding, WildChat writing, LMSYS coding, LMSYS writing, ShareChat coding, ShareChat writing and SWE-chat coding. Coding and writing were selected because both are common everyday LLM use cases, yet they differ in the opportunities they create for visible learning-oriented engagement. Coding conversations often contain error messages, debugging attempts, execution failures and iterative repair. Writing conversations more often involve drafting, rewriting, shortening, tone adjustment and direct editing. SWE-chat contributes only to the coding ecology because it is a software-engineering interaction corpus, and it is included as a recent coding-specific setting rather than as a source of writing evidence.
 
-The analytic corpus contains 128,334 conversations and 979,974 total turns. WildChat contributes 31,878 coding conversations and 39,534 writing conversations; LMSYS contributes 31,879 coding conversations and 21,023 writing conversations; ShareChat strict-English contributes 2,481 coding conversations and 1,539 writing conversations. All reported analyses use the refreshed Level 1--4 outputs after the latest user-turn update pass and the replacement-data annotation runs.
+The analytic corpus contains 129,870 conversations and 996,293 total turns. WildChat contributes 31,878 coding conversations and 39,534 writing conversations; LMSYS contributes 31,879 coding conversations and 21,023 writing conversations; ShareChat strict-English contributes 2,481 coding conversations and 1,539 writing conversations; SWE-chat contributes 1,536 coding conversations. All reported analyses use the refreshed Level 1--4 outputs after the latest user-turn update pass and the additional public-corpus annotation runs.
 
-SWE-chat and ThoughtTrace were also processed with the same pipeline as feasibility and boundary checks (Supplementary Table~\ref{tab:boundary_checks})~\cite{baumann2026swechat,jin2026thoughttrace}. SWE-chat retained a usable coding sample (1,536 conversations) but only three writing conversations after filtering, so it can serve only as a coding-specific stress test rather than as part of the main coding--writing comparison. ThoughtTrace retained 56 coding and 61 writing conversations after the all-LLM v3 filter, but the sample remains small and scaffolded support is near-saturated, especially in coding where all conversations contain at least one scaffolded assistant turn. These properties make ThoughtTrace useful as a feasibility check but not as stable evidence for conversation-level support-association estimation.
+ShareChat strict-English refers to the subset retained after applying the shared English-language filter to the publicly shared conversation corpus. The filter excludes conversations with substantial non-English user or assistant content while retaining code snippets, URLs, stack traces and task artifacts when the surrounding interaction is in English. It is used to make ShareChat comparable with the English-only WildChat, LMSYS and SWE-chat analytic settings.
+
+ThoughtTrace was also processed with the same pipeline as a feasibility and boundary check (Supplementary Table~\ref{tab:boundary_checks})~\cite{jin2026thoughttrace}. It retained 56 coding and 61 writing conversations after the stricter English, task-domain and minimum-depth filters, but the sample remains small and scaffolded support is near-saturated, especially in coding where all conversations contain at least one scaffolded assistant turn. These properties make ThoughtTrace useful as a feasibility check but not as stable evidence for conversation-level support-association estimation.
 
 For each conversation, the pipeline retained the ordered turn sequence, role labels, available topic and language metadata, learning-intent indicators and model metadata where available. Model metadata are used only for robustness checks where the corpus exposes usable model labels, because model assignment in naturalistic public conversations is observational and may reflect time, user population, task mix and logging context.
 
@@ -18,7 +20,7 @@ For each conversation, the pipeline retained the ordered turn sequence, role lab
 
 The codebook translates learning-science constructs into role-specific behavioural signatures. User turns are labelled for engagement. Passive engagement (\texttt{P}) marks acknowledgement, reception or minimal continuation without visible transformation. Active engagement (\texttt{A}) marks task-relevant action or follow-up, such as asking for a reformatted answer or applying supplied information. Constructive engagement (\texttt{C}) marks deeper work with ideas, such as testing an implication, revising a hypothesis, articulating a constraint, transferring a mechanism or extending an explanation. Emotional engagement is labelled separately because affective expressions were rare and not the main analytic outcome.
 
-Assistant turns are labelled for support. \texttt{S1} denotes a non-scaffolded reference response: the assistant provides the requested information or deliverable without materially structuring the user's process. \texttt{S2} denotes scaffolded support: the assistant structures, regulates, diagnoses or redirects the user's work while leaving some responsibility with the user. Scaffolded turns can also receive support-intent labels and support-means labels. Intention labels distinguish metacognitive support (\texttt{I1}), cognitive support (\texttt{I2}) and affective support (\texttt{I3}). Means labels distinguish feedback (\texttt{M1}), hinting (\texttt{M2}), instructing (\texttt{M3}), explaining (\texttt{M4}), modelling (\texttt{M5}) and questioning (\texttt{M6}). Means labels are non-mutually exclusive because a single assistant turn can both explain a mechanism and provide an example or hint. Supplementary Table~\ref{tab:support_supply} reports the support-means supply profile across the six task settings.
+Assistant turns are labelled for support. \texttt{S1} denotes a non-scaffolded reference response: the assistant provides the requested information or deliverable without materially structuring the user's process. \texttt{S2} denotes scaffolded support: the assistant structures, regulates, diagnoses or redirects the user's work while leaving some responsibility with the user. Scaffolded turns can also receive support-intent labels and support-means labels. Intention labels distinguish metacognitive support (\texttt{I1}), cognitive support (\texttt{I2}) and affective support (\texttt{I3}). Means labels distinguish feedback (\texttt{M1}), hinting (\texttt{M2}), instructing (\texttt{M3}), explaining (\texttt{M4}), modelling (\texttt{M5}) and questioning (\texttt{M6}). Means labels are non-mutually exclusive because a single assistant turn can both explain a mechanism and provide an example or hint. Supplementary Table~\ref{tab:support_supply} reports the support-means supply profile across the seven reportable task settings.
 
 \subsection*{A.3\quad LLM-assisted annotation pipeline}
 
@@ -30,7 +32,7 @@ Production labels were generated at turn level. Parser checks enforced the expec
 
 Human verification was used to quantify label reliability and identify boundary cases. Coding validation combined three review rounds, with 658 task turns and 643 turns after deduplication. Writing validation used 210 reviewed conversations. Because many labels are sparse or prevalence-imbalanced, agreement is reported with per-label F1, Matthews correlation coefficient and Gwet's AC1 rather than with a single global agreement statistic.
 
-The final user-turn check contained 100 coding examples and 100 writing examples reviewed after the update pass. These examples were used to identify residual false positives and calibrate patch-style update filters, especially for Active and Passive user-turn labels. The last WildChat user-turn update pass scanned 31,878 coding conversations and 39,534 writing conversations, applying 1,815 coding updates and 21 writing updates. LMSYS and ShareChat were then processed with the stabilized replacement-data workflow using the same construct definitions and post-processing logic. The main manuscript reports the refreshed labels produced by these final production runs.
+The final user-turn check contained 100 coding examples and 100 writing examples reviewed after the update pass. These examples were used to identify residual false positives and calibrate patch-style update filters, especially for Active and Passive user-turn labels. The last WildChat user-turn update pass scanned 31,878 coding conversations and 39,534 writing conversations, applying 1,815 coding updates and 21 writing updates. LMSYS, ShareChat and SWE-chat coding were then processed with the stabilized public-corpus workflow using the same construct definitions and post-processing logic. The main manuscript reports the refreshed labels produced by these final production runs.
 
 \subsection*{A.5\quad Outcome construction}
 
@@ -42,7 +44,7 @@ Behavioural depth is computed from turn counts and turn ordering. Post-answer de
 
 \subsection*{A.6\quad Statistical model specification}
 
-The main analyses use simple estimands matched to the claim being made. Descriptive prevalence analyses report proportions within the six public-chat task settings. Context analyses compare learning intent, task ecology and depth groups. Conversation-level support associations use Poisson generalized linear models for constructive-turn counts and logistic models for binary constructive-engagement outcomes. Adjacent-turn analyses use assistant-to-user and user-to-assistant turn pairs to estimate local conditional probabilities.
+The main analyses use simple estimands matched to the claim being made. Descriptive prevalence analyses report proportions within the seven reportable task settings. Context analyses compare learning intent, task ecology and depth groups. Conversation-level support associations use Poisson generalized linear models for constructive-turn counts and logistic models for binary constructive-engagement outcomes. Adjacent-turn analyses use assistant-to-user and user-to-assistant turn pairs to estimate local conditional probabilities.
 
 Covariates are included when they correspond to observed compositional differences at the analysis level. Depending on the analysis, these include learning intent, topic or task indicators, turn counts, emotional ratios, error-related variables and turn index. Adjusted estimates are interpreted as measured-covariate-adjusted associations. They do not remove unobserved user motivation, prior expertise, task difficulty or time-varying conversational state.
 
@@ -72,6 +74,7 @@ The most important threat to causal interpretation is selection into support. Mo
 
 The study analyses naturalistic conversations, so the manuscript avoids reproducing raw conversation text. Operational examples are de-identified and paraphrased to illustrate decision rules without exposing user content. Aggregate statistics, model summaries and validation metrics are reported in the manuscript and supplementary tables. The analyses do not link conversations into user histories or estimate longitudinal user-level trajectories; temporal claims are restricted to within-conversation turn ordering.
 
+\clearpage
 \section*{Appendix C\quad Supporting tables}
 \setcounter{table}{0}
 \renewcommand{\thetable}{C\arabic{table}}
@@ -93,7 +96,7 @@ The study analyses naturalistic conversations, so the manuscript avoids reproduc
 \setcounter{figure}{0}
 \renewcommand{\thefigure}{D\arabic{figure}}
 
-The supporting figures report extended temporal checks and model-snapshot robustness analyses where model metadata are available. They are included to make the main claims auditable without shifting the manuscript's emphasis away from the six reportable public-chat task settings. Model-snapshot figures are descriptive robustness checks because model labels in naturalistic corpora are observational rather than experimentally assigned.
+The supporting figures report extended temporal checks, the overall cognitive support-form counterpart and model-snapshot robustness analyses where model metadata are available. They are included to make the main claims auditable without shifting the manuscript's emphasis away from constructive engagement as the main user-side outcome. Model-snapshot figures are descriptive robustness checks because model labels in naturalistic corpora are observational rather than experimentally assigned.
 
 \begin{figure*}[!htbp]
 \centering
@@ -107,6 +110,13 @@ The supporting figures report extended temporal checks and model-snapshot robust
 \includegraphics[width=0.92\textwidth]{figures/supplementary/ExtendedDataFigure2_intent_moderates_support_effect.pdf}
 \caption{\textbf{Scaffolded-support associations vary by user framing.} Stratified model estimates compare the association between scaffolded-support presence and constructive participation in intentional versus unintentional conversations. The figure is interpreted as descriptive moderation rather than evidence that intent causally changes support effectiveness, because user framing, task complexity and persistence are not randomly assigned.}
 \label{fig:supp_intent_moderation}
+\end{figure*}
+
+\begin{figure*}[p]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/supplementary/SupplementaryFigure_support_form_cognitive_association.pdf}
+\caption{\textbf{Support-form associations with overall cognitive engagement.} Bars compare scaffolded conversations containing a support form with scaffolded conversations without that form, stratified by intentional versus unintentional user framing. Error bars show 95\% confidence intervals, and bracket annotations compare the two framing strata. This supplementary panel preserves the broader mechanism that some support forms align with overall cognitive uptake, while the main text focuses on the stricter constructive-engagement outcome.}
+\label{fig:supp_support_form_cognitive}
 \end{figure*}
 
 \begin{figure*}[p]
