@@ -630,8 +630,19 @@ def make_figure4() -> None:
             ys = [y + tick, y, y, y + tick]
             va = "top"
             text_y = y - y_span * 0.010
-        ax.plot([x0, x0, x1, x1], ys, color=color, linewidth=0.82, zorder=5)
-        ax.text((x0 + x1) / 2, text_y, label, ha="center", va=va, fontsize=5.25, color=color, linespacing=0.92, zorder=6)
+        ax.plot([x0, x0, x1, x1], ys, color=color, linewidth=0.95, zorder=5)
+        ax.text(
+            (x0 + x1) / 2,
+            text_y,
+            label,
+            ha="center",
+            va=va,
+            fontsize=5.9,
+            color=color,
+            fontweight="bold",
+            linespacing=0.92,
+            zorder=6,
+        )
 
     def _draw_grouped_support_panel(
         ax: plt.Axes,
@@ -678,7 +689,7 @@ def make_figure4() -> None:
         for i in range(len(centers)):
             delta = first_vals[i] - second_vals[i]
             shown_delta = 0.0 if abs(delta) < 0.05 else delta
-            color = COLORS["muted"] if abs(delta) < 0.05 else (COLORS["teal"] if delta >= 0 else COLORS["rose"])
+            color = COLORS["muted"] if abs(delta) < 0.05 else ("#1B7A4B" if delta >= 0 else "#B4443E")
             above = max(first_high[i], second_high[i]) >= abs(min(first_low[i], second_low[i]))
             if above:
                 y = max(first_high[i], second_high[i]) + y_span * 0.075
