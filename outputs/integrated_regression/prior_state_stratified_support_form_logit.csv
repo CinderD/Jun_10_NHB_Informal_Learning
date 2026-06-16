@@ -1,0 +1,64 @@
+scope,prior_user_state,term,coef_log_odds,cluster_robust_se,z,p_value,odds_ratio,ci_low,ci_high,n_pairs,n_conversations,log_likelihood,se_type
+"six public-chat settings, dataset FE",prior constructive,scaffolded_support_S2,-0.044955,0.094499,-0.475716,0.634276,0.956041,0.794396,1.150577,18237,13070,-9582.200944,conversation-cluster robust sandwich
+"six public-chat settings, dataset FE",prior constructive,M1,-0.346931,0.059867,-5.795033,6.83076e-09,0.706854,0.628593,0.794858,18237,13070,-9582.200944,conversation-cluster robust sandwich
+"six public-chat settings, dataset FE",prior constructive,M2,-0.103161,0.070028,-1.473155,0.140709,0.901981,0.786301,1.034680,18237,13070,-9582.200944,conversation-cluster robust sandwich
+"six public-chat settings, dataset FE",prior constructive,M3,-0.109001,0.065931,-1.653269,0.098276,0.896729,0.788025,1.020429,18237,13070,-9582.200944,conversation-cluster robust sandwich
+"six public-chat settings, dataset FE",prior constructive,M4,0.536814,0.086008,6.241434,4.33578e-10,1.710549,1.445187,2.024637,18237,13070,-9582.200944,conversation-cluster robust sandwich
+"six public-chat settings, dataset FE",prior constructive,M5,-0.231495,0.071711,-3.228175,0.00124583,0.793347,0.689321,0.913071,18237,13070,-9582.200944,conversation-cluster robust sandwich
+"six public-chat settings, dataset FE",prior constructive,M6,-0.104389,0.140947,-0.740626,0.45892,0.900875,0.683420,1.187520,18237,13070,-9582.200944,conversation-cluster robust sandwich
+"six public-chat settings, dataset FE",prior active,scaffolded_support_S2,-0.346864,0.066907,-5.184253,2.16883e-07,0.706902,0.620021,0.805956,93373,51084,-24147.359292,conversation-cluster robust sandwich
+"six public-chat settings, dataset FE",prior active,M1,-0.188448,0.069053,-2.729011,0.00635245,0.828244,0.723400,0.948282,93373,51084,-24147.359292,conversation-cluster robust sandwich
+"six public-chat settings, dataset FE",prior active,M2,0.128499,0.054975,2.337421,0.0194173,1.137120,1.020965,1.266489,93373,51084,-24147.359292,conversation-cluster robust sandwich
+"six public-chat settings, dataset FE",prior active,M3,-0.023304,0.048786,-0.477675,0.632882,0.976965,0.887874,1.074996,93373,51084,-24147.359292,conversation-cluster robust sandwich
+"six public-chat settings, dataset FE",prior active,M4,0.758544,0.063212,12.000001,3.5529e-33,2.135165,1.886359,2.416788,93373,51084,-24147.359292,conversation-cluster robust sandwich
+"six public-chat settings, dataset FE",prior active,M5,-0.186138,0.045329,-4.106391,4.01888e-05,0.830159,0.759585,0.907290,93373,51084,-24147.359292,conversation-cluster robust sandwich
+"six public-chat settings, dataset FE",prior active,M6,-0.353898,0.108261,-3.268935,0.00107953,0.701947,0.567741,0.867876,93373,51084,-24147.359292,conversation-cluster robust sandwich
+"six public-chat settings, dataset FE",prior passive,scaffolded_support_S2,-0.324026,0.380193,-0.852269,0.394065,0.723231,0.343282,1.523715,2804,2248,-582.037757,conversation-cluster robust sandwich
+"six public-chat settings, dataset FE",prior passive,M1,0.773139,0.311444,2.482438,0.0130487,2.166557,1.176695,3.989113,2804,2248,-582.037757,conversation-cluster robust sandwich
+"six public-chat settings, dataset FE",prior passive,M2,0.577574,0.320319,1.803120,0.0713693,1.781711,0.950990,3.338092,2804,2248,-582.037757,conversation-cluster robust sandwich
+"six public-chat settings, dataset FE",prior passive,M3,0.286490,0.406136,0.705404,0.480559,1.331745,0.600774,2.952096,2804,2248,-582.037757,conversation-cluster robust sandwich
+"six public-chat settings, dataset FE",prior passive,M4,1.017085,0.313608,3.243171,0.00118207,2.765124,1.495429,5.112853,2804,2248,-582.037757,conversation-cluster robust sandwich
+"six public-chat settings, dataset FE",prior passive,M5,-0.848902,0.403197,-2.105429,0.035254,0.427884,0.194142,0.943049,2804,2248,-582.037757,conversation-cluster robust sandwich
+"six public-chat settings, dataset FE",prior passive,M6,0.614807,0.345231,1.780857,0.0749357,1.849301,0.940028,3.638096,2804,2248,-582.037757,conversation-cluster robust sandwich
+"six public-chat settings, model/source FE",prior constructive,scaffolded_support_S2,-0.063513,0.095379,-0.665901,0.505474,0.938462,0.778445,1.131371,18237,13070,-9535.889122,conversation-cluster robust sandwich
+"six public-chat settings, model/source FE",prior constructive,M1,-0.321593,0.059578,-5.397824,6.74539e-08,0.724993,0.645090,0.814794,18237,13070,-9535.889122,conversation-cluster robust sandwich
+"six public-chat settings, model/source FE",prior constructive,M2,-0.098202,0.070143,-1.400030,0.161504,0.906465,0.790031,1.040060,18237,13070,-9535.889122,conversation-cluster robust sandwich
+"six public-chat settings, model/source FE",prior constructive,M3,-0.078644,0.066602,-1.180808,0.237679,0.924369,0.811247,1.053266,18237,13070,-9535.889122,conversation-cluster robust sandwich
+"six public-chat settings, model/source FE",prior constructive,M4,0.543518,0.086592,6.276749,3.45725e-10,1.722054,1.453242,2.040589,18237,13070,-9535.889122,conversation-cluster robust sandwich
+"six public-chat settings, model/source FE",prior constructive,M5,-0.209850,0.071022,-2.954709,0.00312965,0.810706,0.705355,0.931791,18237,13070,-9535.889122,conversation-cluster robust sandwich
+"six public-chat settings, model/source FE",prior constructive,M6,-0.054767,0.141776,-0.386296,0.699278,0.946705,0.717022,1.249962,18237,13070,-9535.889122,conversation-cluster robust sandwich
+"six public-chat settings, model/source FE",prior active,scaffolded_support_S2,-0.355152,0.067490,-5.262304,1.42261e-07,0.701067,0.614201,0.800217,93373,51084,-24025.335871,conversation-cluster robust sandwich
+"six public-chat settings, model/source FE",prior active,M1,-0.184082,0.069861,-2.634954,0.00841487,0.831868,0.725416,0.953941,93373,51084,-24025.335871,conversation-cluster robust sandwich
+"six public-chat settings, model/source FE",prior active,M2,0.135426,0.055393,2.444831,0.014492,1.145024,1.027220,1.276338,93373,51084,-24025.335871,conversation-cluster robust sandwich
+"six public-chat settings, model/source FE",prior active,M3,-0.018160,0.049397,-0.367625,0.713153,0.982004,0.891385,1.081836,93373,51084,-24025.335871,conversation-cluster robust sandwich
+"six public-chat settings, model/source FE",prior active,M4,0.752014,0.063760,11.794468,4.16828e-32,2.121267,1.872069,2.403637,93373,51084,-24025.335871,conversation-cluster robust sandwich
+"six public-chat settings, model/source FE",prior active,M5,-0.185720,0.045349,-4.095317,4.21591e-05,0.830506,0.759873,0.907706,93373,51084,-24025.335871,conversation-cluster robust sandwich
+"six public-chat settings, model/source FE",prior active,M6,-0.284811,0.109462,-2.601912,0.00927055,0.752157,0.606921,0.932147,93373,51084,-24025.335871,conversation-cluster robust sandwich
+"six public-chat settings, model/source FE",prior passive,scaffolded_support_S2,-0.348110,0.383805,-0.906998,0.364408,0.706021,0.332749,1.498024,2804,2248,-578.976947,conversation-cluster robust sandwich
+"six public-chat settings, model/source FE",prior passive,M1,0.770530,0.318726,2.417528,0.0156263,2.160911,1.156995,4.035918,2804,2248,-578.976947,conversation-cluster robust sandwich
+"six public-chat settings, model/source FE",prior passive,M2,0.581706,0.323152,1.800098,0.0718451,1.789087,0.949640,3.370576,2804,2248,-578.976947,conversation-cluster robust sandwich
+"six public-chat settings, model/source FE",prior passive,M3,0.419949,0.415661,1.010315,0.312345,1.521883,0.673850,3.437156,2804,2248,-578.976947,conversation-cluster robust sandwich
+"six public-chat settings, model/source FE",prior passive,M4,1.056216,0.316160,3.340767,0.000835472,2.875470,1.547349,5.343545,2804,2248,-578.976947,conversation-cluster robust sandwich
+"six public-chat settings, model/source FE",prior passive,M5,-0.786110,0.419500,-1.873922,0.0609412,0.455614,0.200222,1.036770,2804,2248,-578.976947,conversation-cluster robust sandwich
+"six public-chat settings, model/source FE",prior passive,M6,0.783089,0.341980,2.289866,0.0220291,2.188222,1.119417,4.277510,2804,2248,-578.976947,conversation-cluster robust sandwich
+"WildChat only, model FE",prior constructive,scaffolded_support_S2,-0.010598,0.115637,-0.091650,0.926976,0.989458,0.788796,1.241165,11666,8292,-6060.125339,conversation-cluster robust sandwich
+"WildChat only, model FE",prior constructive,M1,-0.394949,0.074754,-5.283298,1.26879e-07,0.673714,0.581894,0.780024,11666,8292,-6060.125339,conversation-cluster robust sandwich
+"WildChat only, model FE",prior constructive,M2,-0.027731,0.082025,-0.338086,0.735299,0.972650,0.828201,1.142292,11666,8292,-6060.125339,conversation-cluster robust sandwich
+"WildChat only, model FE",prior constructive,M3,-0.101862,0.076730,-1.327544,0.184329,0.903154,0.777049,1.049725,11666,8292,-6060.125339,conversation-cluster robust sandwich
+"WildChat only, model FE",prior constructive,M4,0.607596,0.102412,5.932843,2.97734e-09,1.836011,1.502105,2.244142,11666,8292,-6060.125339,conversation-cluster robust sandwich
+"WildChat only, model FE",prior constructive,M5,-0.227013,0.085312,-2.660985,0.00779123,0.796910,0.674203,0.941951,11666,8292,-6060.125339,conversation-cluster robust sandwich
+"WildChat only, model FE",prior constructive,M6,0.242292,0.205114,1.181256,0.237501,1.274166,0.852373,1.904682,11666,8292,-6060.125339,conversation-cluster robust sandwich
+"WildChat only, model FE",prior active,scaffolded_support_S2,-0.322217,0.079928,-4.031337,5.54605e-05,0.724541,0.619479,0.847421,52807,27210,-14628.238460,conversation-cluster robust sandwich
+"WildChat only, model FE",prior active,M1,-0.258989,0.080567,-3.214586,0.00130633,0.771832,0.659087,0.903863,52807,27210,-14628.238460,conversation-cluster robust sandwich
+"WildChat only, model FE",prior active,M2,0.148673,0.063827,2.329323,0.0198419,1.160294,1.023853,1.314918,52807,27210,-14628.238460,conversation-cluster robust sandwich
+"WildChat only, model FE",prior active,M3,-0.008693,0.056141,-0.154838,0.876949,0.991345,0.888049,1.106656,52807,27210,-14628.238460,conversation-cluster robust sandwich
+"WildChat only, model FE",prior active,M4,0.738957,0.074089,9.973857,1.98372e-23,2.093750,1.810751,2.420978,52807,27210,-14628.238460,conversation-cluster robust sandwich
+"WildChat only, model FE",prior active,M5,-0.173860,0.052887,-3.287397,0.00101118,0.840415,0.757662,0.932206,52807,27210,-14628.238460,conversation-cluster robust sandwich
+"WildChat only, model FE",prior active,M6,-0.227807,0.153980,-1.479461,0.139017,0.796278,0.588836,1.076800,52807,27210,-14628.238460,conversation-cluster robust sandwich
+"WildChat only, model FE",prior passive,scaffolded_support_S2,-0.987359,0.535736,-1.842996,0.0653296,0.372559,0.130367,1.064690,1571,1274,-304.310364,conversation-cluster robust sandwich
+"WildChat only, model FE",prior passive,M1,0.816290,0.480895,1.697437,0.089614,2.262091,0.881381,5.805725,1571,1274,-304.310364,conversation-cluster robust sandwich
+"WildChat only, model FE",prior passive,M2,1.108990,0.427083,2.596658,0.00941355,3.031294,1.312464,7.001140,1571,1274,-304.310364,conversation-cluster robust sandwich
+"WildChat only, model FE",prior passive,M3,0.830976,0.555708,1.495346,0.134824,2.295557,0.772432,6.822069,1571,1274,-304.310364,conversation-cluster robust sandwich
+"WildChat only, model FE",prior passive,M4,1.033959,0.488490,2.116644,0.0342901,2.812176,1.079523,7.325771,1571,1274,-304.310364,conversation-cluster robust sandwich
+"WildChat only, model FE",prior passive,M5,-0.475396,0.558334,-0.851455,0.394517,0.621639,0.208101,1.856955,1571,1274,-304.310364,conversation-cluster robust sandwich
+"WildChat only, model FE",prior passive,M6,1.046304,0.542070,1.930201,0.053582,2.847109,0.983976,8.238030,1571,1274,-304.310364,conversation-cluster robust sandwich

@@ -4,6 +4,8 @@ Data scope: six main public-chat task settings: WildChat, LMSYS Chat-1M and Shar
 
 Model-label check: `chat_model` is complete for WildChat. LMSYS and ShareChat production columns are empty, but the conversation identifiers retain recoverable information: LMSYS contains model name and ShareChat contains public assistant/source family. The primary pooled model uses dataset fixed effects; a sensitivity replaces them with model/source fixed effects.
 
+Claim-level consistency audit: Sections 2.1 and 2.2 are descriptive consistency claims over the six public-chat settings. Inferential checks enter where the manuscript makes contrasts or model claims: Section 2.3 uses bootstrap CIs/p values for raw scaffolded versus reference contrasts and adjusted conversation-level models; Section 2.4 reports support-form CIs and between-stratum p values in the main figure; Section 2.5 uses conversation-cluster bootstrap CIs for adjacent-turn lifts and cluster-robust adjacent-turn regressions.
+
 Integrated adjacent-turn logit outcome: whether the next user turn is constructive. Predictors include scaffolded support, prior user state, user framing, task, assistant-turn index, support means M1-M6 and dataset or model/source fixed effects. Standard errors are clustered by conversation.
 
 Key pooled estimates with dataset fixed effects:
@@ -58,3 +60,18 @@ Nested scaffolding block tests:
 - WildChat only, model FE; broad S2 added after user/context controls: LR chi-square(1)=418.6, p=5.0317e-93.
 - WildChat only, model FE; support forms M1-M6 added beyond broad S2: LR chi-square(6)=519.4, p=5.63341e-109.
 - WildChat only, model FE; full scaffolding block S2 plus M1-M6 added after user/context controls: LR chi-square(7)=937.9, p=3.08909e-198.
+
+Prior-state by support-form interaction checks:
+
+- six public-chat settings, dataset FE; prior state x M1-M6 block: LR chi-square(18)=308.6, p=8.33426e-55.
+- six public-chat settings, model/source FE; prior state x M1-M6 block: LR chi-square(18)=300.2, p=4.43565e-53.
+- WildChat only, model FE; prior state x M1-M6 block: LR chi-square(18)=186.0, p=6.27436e-30.
+
+Pooled model/source FE, state-stratified selected support forms:
+
+- prior constructive M1: OR 0.725, 95% CI [0.645, 0.815], p=6.74539e-08.
+- prior constructive M4: OR 1.722, 95% CI [1.453, 2.041], p=3.45725e-10.
+- prior active M1: OR 0.832, 95% CI [0.725, 0.954], p=0.00841487.
+- prior active M4: OR 2.121, 95% CI [1.872, 2.404], p=4.16828e-32.
+- prior passive M1: OR 2.161, 95% CI [1.157, 4.036], p=0.0156263.
+- prior passive M4: OR 2.875, 95% CI [1.547, 5.344], p=0.000835472.

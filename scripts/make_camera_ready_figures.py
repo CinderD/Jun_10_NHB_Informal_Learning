@@ -841,17 +841,15 @@ def make_figure5() -> None:
             [39.6, 29.3, 26.5],
         ]
     )
-    before_after = np.array([1.4, 1.5, 0.7, -4.2, -2.5, -0.6])
-    before_after_ci = np.array(
-        [
-            [0.9496, 1.7999],
-            [1.0285, 1.9563],
-            [np.nan, np.nan],
-            [-4.6790, -3.8188],
-            [-2.9772, -1.9935],
-            [np.nan, np.nan],
-        ]
-    )
+    form_states = ["prior constructive", "prior active", "prior passive"]
+    form_or = {
+        "M1 feedback": np.array([0.7250, 0.8319, 2.1609]),
+        "M4 explaining": np.array([1.7221, 2.1213, 2.8755]),
+    }
+    form_ci = {
+        "M1 feedback": np.array([[0.6451, 0.8148], [0.7254, 0.9539], [1.1570, 4.0359]]),
+        "M4 explaining": np.array([[1.4532, 2.0406], [1.8721, 2.4036], [1.5473, 5.3435]]),
+    }
 
     ref_color = "#B8C4CF"
     ref_err = "#7E8B97"
@@ -1015,53 +1013,55 @@ def make_figure5() -> None:
             axc.text(j, i, f"{val:.1f}%", ha="center", va="center", fontsize=7.6, color="white" if val > 50 else COLORS["ink"])
     axc.text(-0.13, 1.08, "c", transform=axc.transAxes, fontsize=13, weight="bold")
 
-    y2 = np.arange(len(order))
-    d_colors = [scaf_color if val >= 0 else rose for val in before_after]
-    axd.barh(y2, before_after, height=0.26, color=d_colors, edgecolor="none", zorder=2)
-    for i, val in enumerate(before_after):
-        err_color = COLORS["ink"] if val >= 0 else rose_err
-        if _has_ci(before_after_ci[i]):
-            axd.errorbar(
-                val,
-                y2[i],
-                xerr=_xerr(val, tuple(before_after_ci[i])),
-                fmt="none",
-                ecolor=err_color,
-                elinewidth=0.75,
-                capsize=2.1,
-                capthick=0.75,
-                zorder=4,
-            )
-    axd.scatter(before_after, y2, s=24, color=d_colors, edgecolor=COLORS["ink"], lw=0.45, zorder=3)
-    for i, val in enumerate(before_after):
-        ha = "left"
-        axd.text(
-            val + (0.15 if val >= 0 else 0.18),
-            i,
-            _pp(val),
-            va="center",
-            ha=ha,
-            fontsize=7.3,
-            bbox=dict(facecolor="white", edgecolor="none", alpha=0.86, pad=0.12),
-            zorder=5,
+    y2 = np.arange(len(form_states))
+    form_offsets = {"M1 feedback": -0.09, "M4 explaining": 0.09}
+    form_colors = {"M1 feedback": ref_err, "M4 explaining": scaf_color}
+    for label, vals in form_or.items():
+        ypos = y2 + form_offsets[label]
+        ci = form_ci[label]
+        axd.errorbar(
+            vals,
+            ypos,
+            xerr=np.vstack([vals - ci[:, 0], ci[:, 1] - vals]),
+            fmt="none",
+            ecolor=form_colors[label],
+            elinewidth=0.75,
+            capsize=2.1,
+            capthick=0.75,
+            zorder=3,
         )
-    axd.axvline(0, color=COLORS["ink"], lw=0.9)
-    axd.set_yticks(y2, order)
+        axd.scatter(vals, ypos, s=25, color=form_colors[label], edgecolor=COLORS["ink"], lw=0.45, zorder=4, label=label)
+        for x, yv in zip(vals, ypos):
+            label_x = x - 0.08 if x < 1 else min(x + 0.12, 5.18)
+            axd.text(
+                label_x,
+                yv,
+                f"{x:.2f}",
+                va="center",
+                ha="right" if x < 1 else "left",
+                fontsize=7.0,
+                bbox=dict(facecolor="white", edgecolor="none", alpha=0.86, pad=0.10),
+                zorder=5,
+            )
+    axd.axvline(1, color=COLORS["ink"], lw=0.9)
+    axd.set_yticks(y2, form_states)
     axd.invert_yaxis()
-    axd.set_xlim(-5.05, 2.05)
-    axd.set_xlabel("After − before first scaffolded turn (percentage points)")
-    axd.set_title("Coarse within-conversation contrast", loc="left", pad=6, fontsize=9.2, fontweight="bold")
+    axd.set_xlim(0.45, 5.55)
+    axd.set_xticks([1, 2, 3, 4, 5])
+    axd.set_xlabel("Adjusted OR for next constructive turn")
+    axd.set_title("Support-form signal by prior state", loc="left", pad=6, fontsize=9.2, fontweight="bold")
     axd.grid(axis="x", color=COLORS["grid"], lw=0.65)
     axd.spines[["top", "right"]].set_visible(False)
     axd.tick_params(axis="both", labelsize=7.4)
     axd.tick_params(axis="y", pad=1.5)
+    axd.legend(loc="upper right", frameon=False, fontsize=7.0, handletextpad=0.4)
     axd.text(-0.10, 1.08, "d", transform=axd.transAxes, fontsize=13, weight="bold")
 
     fig.subplots_adjust(left=0.105, right=0.985, top=0.835, bottom=0.135)
     fig.text(
         0.50,
         0.038,
-        "WC = WildChat; LMSYS = LMSYS Chat-1M; SC = ShareChat strict-English. Error bars show 95% CI where displayed; numbers report scaffolded − reference differences.",
+        "WC = WildChat; LMSYS = LMSYS Chat-1M; SC = ShareChat strict-English. Error bars show 95% CI where displayed; panel d reports pooled model/source FE odds ratios.",
         ha="center",
         fontsize=6.8,
         color=COLORS["muted"],

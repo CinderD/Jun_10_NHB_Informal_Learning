@@ -349,6 +349,38 @@ def _make_design(
     return X, y, clusters, names
 
 
+PRIOR_STATES = [
+    ("constructive", "C", "prior constructive"),
+    ("active", "A", "prior active"),
+    ("passive", "P", "prior passive"),
+]
+
+
+def _make_interaction_design(
+    rows: list[dict[str, str]],
+    include_dataset: bool,
+    include_model: bool,
+) -> tuple[np.ndarray, np.ndarray, list[str], list[str]]:
+    base_x, y, clusters, names = _make_design(
+        rows,
+        include_s2=True,
+        include_support_forms=True,
+        include_dataset=include_dataset,
+        include_model=include_model,
+    )
+    interaction_names = [f"prior_{state}_x_M{j}" for state, _, _ in PRIOR_STATES for j in range(1, 7)]
+    X = np.zeros((base_x.shape[0], base_x.shape[1] + len(interaction_names)), dtype=float)
+    X[:, : base_x.shape[1]] = base_x
+    for i, r in enumerate(rows):
+        lvl = r.get("prev_user_Cognitive_level") or ""
+        offset = base_x.shape[1]
+        for state, code, _ in PRIOR_STATES:
+            for j in range(1, 7):
+                X[i, offset] = _f(r, f"asst_has_M{j}") if lvl == code else 0.0
+                offset += 1
+    return X, y, clusters, names + interaction_names
+
+
 def _load_a2u_rows(wildchat_only: bool = False) -> list[dict[str, str]]:
     rows = []
     for setting, (dataset, task, path) in LEVEL3_A2U.items():
@@ -492,6 +524,123 @@ def _write_scaffolding_block_tests(
         writer.writerows(out_rows)
 
 
+def _write_prior_state_support_form_checks(
+    pooled: list[dict[str, str]],
+    wild: list[dict[str, str]],
+) -> None:
+    specs = [
+        ("six public-chat settings, dataset FE", pooled, True, False),
+        ("six public-chat settings, model/source FE", pooled, False, True),
+        ("WildChat only, model FE", wild, False, True),
+    ]
+    block_rows: list[dict[str, str]] = []
+    coef_rows: list[dict[str, str]] = []
+    strat_rows: list[dict[str, str]] = []
+    for scope, rows, include_dataset, include_model in specs:
+        reduced_x, y, clusters, reduced_names = _make_design(
+            rows,
+            include_s2=True,
+            include_support_forms=True,
+            include_dataset=include_dataset,
+            include_model=include_model,
+        )
+        _, _, reduced_ll = _fit_logit_cluster(reduced_x, y, clusters, reduced_names)
+        full_x, y_full, clusters_full, full_names = _make_interaction_design(
+            rows,
+            include_dataset=include_dataset,
+            include_model=include_model,
+        )
+        beta, se, full_ll = _fit_logit_cluster(full_x, y_full, clusters_full, full_names)
+        lr = 2 * (full_ll - reduced_ll)
+        df = len(full_names) - len(reduced_names)
+        p = float(stats.chi2.sf(lr, df)) if df > 0 else float("nan")
+        block_rows.append(
+            {
+                "scope": scope,
+                "comparison": "prior user state x support forms M1-M6 added beyond main effects",
+                "lr_chi2": f"{lr:.6f}",
+                "df": str(df),
+                "p_value": f"{p:.6g}",
+                "n_pairs": str(len(rows)),
+                "n_conversations": str(len(set(clusters_full))),
+                "notes": "Tests whether support-form coefficients vary by immediately preceding user engagement state.",
+            }
+        )
+        for name, b, s in zip(full_names, beta, se):
+            if "_x_M" not in name:
+                continue
+            z = b / s if s > 0 else float("nan")
+            pv = math.erfc(abs(z) / math.sqrt(2)) if s > 0 else float("nan")
+            coef_rows.append(
+                {
+                    "scope": scope,
+                    "term": name,
+                    "coef_log_odds": f"{b:.6f}",
+                    "cluster_robust_se": f"{s:.6f}",
+                    "z": f"{z:.6f}",
+                    "p_value": f"{pv:.6g}",
+                    "odds_ratio_multiplier": f"{math.exp(b):.6f}",
+                    "ci_low": f"{math.exp(b - 1.96 * s):.6f}",
+                    "ci_high": f"{math.exp(b + 1.96 * s):.6f}",
+                    "n_pairs": str(len(rows)),
+                    "n_conversations": str(len(set(clusters_full))),
+                    "se_type": "conversation-cluster robust sandwich",
+                }
+            )
+
+        for state, code, state_label in PRIOR_STATES:
+            sub = [r for r in rows if (r.get("prev_user_Cognitive_level") or "") == code]
+            if len(sub) < 500:
+                continue
+            X, ys, cls, names = _make_design(
+                sub,
+                include_s2=True,
+                include_support_forms=True,
+                include_dataset=include_dataset,
+                include_model=include_model,
+            )
+            b2, s2, ll2 = _fit_logit_cluster(X, ys, cls, names)
+            for term in ["scaffolded_support_S2", "M1", "M2", "M3", "M4", "M5", "M6"]:
+                if term not in names:
+                    continue
+                idx = names.index(term)
+                b = float(b2[idx])
+                s = float(s2[idx])
+                z = b / s if s > 0 else float("nan")
+                pv = math.erfc(abs(z) / math.sqrt(2)) if s > 0 else float("nan")
+                strat_rows.append(
+                    {
+                        "scope": scope,
+                        "prior_user_state": state_label,
+                        "term": term,
+                        "coef_log_odds": f"{b:.6f}",
+                        "cluster_robust_se": f"{s:.6f}",
+                        "z": f"{z:.6f}",
+                        "p_value": f"{pv:.6g}",
+                        "odds_ratio": f"{math.exp(b):.6f}",
+                        "ci_low": f"{math.exp(b - 1.96 * s):.6f}",
+                        "ci_high": f"{math.exp(b + 1.96 * s):.6f}",
+                        "n_pairs": str(len(sub)),
+                        "n_conversations": str(len(set(cls))),
+                        "log_likelihood": f"{ll2:.6f}",
+                        "se_type": "conversation-cluster robust sandwich",
+                    }
+                )
+
+    with open(OUT / "prior_state_support_form_interaction_block_tests.csv", "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=list(block_rows[0].keys()))
+        writer.writeheader()
+        writer.writerows(block_rows)
+    with open(OUT / "prior_state_support_form_interaction_coefficients.csv", "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=list(coef_rows[0].keys()))
+        writer.writeheader()
+        writer.writerows(coef_rows)
+    with open(OUT / "prior_state_stratified_support_form_logit.csv", "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=list(strat_rows[0].keys()))
+        writer.writeheader()
+        writer.writerows(strat_rows)
+
+
 def compute_integrated_logit() -> None:
     pooled = _load_a2u_rows(wildchat_only=False)
     wild = _load_a2u_rows(wildchat_only=True)
@@ -524,6 +673,7 @@ def compute_integrated_logit() -> None:
         include_model=True,
     )
     _write_scaffolding_block_tests(pooled, wild)
+    _write_prior_state_support_form_checks(pooled, wild)
     lr = 2 * (wild_model_ll - wild_nomodel_ll)
     df = wild_model_k - wild_nomodel_k
     p = float(stats.chi2.sf(lr, df)) if df > 0 else float("nan")
@@ -585,6 +735,8 @@ def write_tex_tables() -> None:
     wild = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_wildchat_model_fe.csv")))
     blocks = list(csv.DictReader(open(OUT / "integrated_model_block_tests.csv")))
     scaf_blocks = list(csv.DictReader(open(OUT / "integrated_scaffolding_block_tests.csv")))
+    state_form_blocks = list(csv.DictReader(open(OUT / "prior_state_support_form_interaction_block_tests.csv")))
+    state_form_strat = list(csv.DictReader(open(OUT / "prior_state_stratified_support_form_logit.csv")))
     pooled_block = blocks[0]
     wild_block = blocks[1]
 
@@ -654,6 +806,44 @@ def write_tex_tables() -> None:
             )
         f.write("\\bottomrule\n\\end{tabular}%\n}\n\\end{table*}\n")
 
+    state_form_path = ROOT / "tables" / "table_prior_state_support_form_interactions.tex"
+    by_scope_state_term = {
+        (r["scope"], r["prior_user_state"], r["term"]): r
+        for r in state_form_strat
+        if r["scope"] == "six public-chat settings, model/source FE"
+    }
+
+    def or_cell(r: dict[str, str]) -> str:
+        p = float(r["p_value"])
+        ptxt = "$<.001$" if p < 0.001 else f"{p:.3f}".replace("0.", ".")
+        return f"{float(r['odds_ratio']):.2f} [{float(r['ci_low']):.2f}, {float(r['ci_high']):.2f}], {ptxt}"
+
+    with open(state_form_path, "w") as f:
+        f.write("\\begin{table*}[p]\n\\scriptsize\n\\centering\n")
+        f.write(
+            "\\caption{\\textbf{Prior user state and support form jointly structure adjacent-turn constructive engagement.} "
+            "The first panel reports likelihood-ratio tests adding prior-state $\\times$ M1--M6 interactions to the integrated adjacent-turn logistic model. "
+            "The second panel reports pooled model/source fixed-effect estimates for selected support forms within each prior user state. Estimates are odds ratios with 95\\% confidence intervals and two-sided p values from conversation-cluster robust standard errors.}\\label{tab:prior_state_support_form_interactions}\n"
+        )
+        f.write("\\setlength{\\tabcolsep}{4pt}\n\\renewcommand{\\arraystretch}{1.08}\n")
+        f.write("\\resizebox{\\textwidth}{!}{%\n")
+        f.write("\\begin{tabular}{llcc}\n\\toprule\n")
+        f.write("Panel & Scope / prior state & Term or test & Estimate \\\\\n\\midrule\n")
+        for r in state_form_blocks:
+            p = float(r["p_value"])
+            ptxt = "$<.001$" if p < 0.001 else f"{p:.3f}".replace("0.", ".")
+            f.write(
+                f"Interaction block & {r['scope']} & Prior state $\\times$ M1--M6 & LR $\\chi^2_{{{r['df']}}}={float(r['lr_chi2']):.1f}$, {ptxt} \\\\\n"
+            )
+        f.write("\\midrule\n")
+        for state_label in ["prior constructive", "prior active", "prior passive"]:
+            for term, label in [("M1", "M1 feedback"), ("M4", "M4 explaining")]:
+                r = by_scope_state_term[("six public-chat settings, model/source FE", state_label, term)]
+                f.write(
+                    f"State-stratified model/source FE & {state_label} & {label} & {or_cell(r)} \\\\\n"
+                )
+        f.write("\\bottomrule\n\\end{tabular}%\n}\n\\end{table*}\n")
+
     contrasts = list(csv.DictReader(open(OUT / "key_percentage_lifts_significance.csv")))
     contrast_path = ROOT / "tables" / "table_key_contrast_significance.tex"
     compact = [r for r in contrasts if r["contrast"] in {"constructive_ratio_has_s2_minus_no_s2", "adjacent_next_constructive_s2_minus_s1"}]
@@ -683,6 +873,8 @@ def write_report() -> None:
     wild = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_wildchat_model_fe.csv")))
     blocks = list(csv.DictReader(open(OUT / "integrated_model_block_tests.csv")))
     scaf_blocks = list(csv.DictReader(open(OUT / "integrated_scaffolding_block_tests.csv")))
+    state_form_blocks = list(csv.DictReader(open(OUT / "prior_state_support_form_interaction_block_tests.csv")))
+    state_form_strat = list(csv.DictReader(open(OUT / "prior_state_stratified_support_form_logit.csv")))
     pooled_block = blocks[0]
     wild_block = blocks[1]
     by_pooled = {r["term"]: r for r in pooled}
@@ -693,6 +885,7 @@ def write_report() -> None:
         f.write("# Integrated Regression and Significance Report\n\n")
         f.write("Data scope: six main public-chat task settings: WildChat, LMSYS Chat-1M and ShareChat strict-English coding/writing. SWE-chat and ThoughtTrace are not included in the main pooled model.\n\n")
         f.write("Model-label check: `chat_model` is complete for WildChat. LMSYS and ShareChat production columns are empty, but the conversation identifiers retain recoverable information: LMSYS contains model name and ShareChat contains public assistant/source family. The primary pooled model uses dataset fixed effects; a sensitivity replaces them with model/source fixed effects.\n\n")
+        f.write("Claim-level consistency audit: Sections 2.1 and 2.2 are descriptive consistency claims over the six public-chat settings. Inferential checks enter where the manuscript makes contrasts or model claims: Section 2.3 uses bootstrap CIs/p values for raw scaffolded versus reference contrasts and adjusted conversation-level models; Section 2.4 reports support-form CIs and between-stratum p values in the main figure; Section 2.5 uses conversation-cluster bootstrap CIs for adjacent-turn lifts and cluster-robust adjacent-turn regressions.\n\n")
         f.write("Integrated adjacent-turn logit outcome: whether the next user turn is constructive. Predictors include scaffolded support, prior user state, user framing, task, assistant-turn index, support means M1-M6 and dataset or model/source fixed effects. Standard errors are clustered by conversation.\n\n")
         f.write("Key pooled estimates with dataset fixed effects:\n\n")
         for term in ["scaffolded_support_S2", "prior_user_constructive", "prior_user_active", "prior_user_passive", "intentional_framing", "coding_task", "M1", "M4", "M6"]:
@@ -721,6 +914,18 @@ def write_report() -> None:
         for r in scaf_blocks:
             f.write(
                 f"- {r['scope']}; {r['comparison']}: LR chi-square({r['df']})={float(r['lr_chi2']):.1f}, p={r['p_value']}.\n"
+            )
+        f.write("\nPrior-state by support-form interaction checks:\n\n")
+        for r in state_form_blocks:
+            f.write(
+                f"- {r['scope']}; prior state x M1-M6 block: LR chi-square({r['df']})={float(r['lr_chi2']):.1f}, p={r['p_value']}.\n"
+            )
+        f.write("\nPooled model/source FE, state-stratified selected support forms:\n\n")
+        for r in state_form_strat:
+            if r["scope"] != "six public-chat settings, model/source FE" or r["term"] not in {"M1", "M4"}:
+                continue
+            f.write(
+                f"- {r['prior_user_state']} {r['term']}: OR {float(r['odds_ratio']):.3f}, 95% CI [{float(r['ci_low']):.3f}, {float(r['ci_high']):.3f}], p={r['p_value']}.\n"
             )
 
 
