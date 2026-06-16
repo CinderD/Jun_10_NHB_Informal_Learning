@@ -454,13 +454,13 @@ z
     <text style="font-size: 6.1px; font-family: 'Nimbus Sans'; fill: #5d6874" transform="translate(316.441388 66.684204)">associational and temporal analyses.</text>
    </g>
    <g id="text_9">
-    <text style="font-weight: 700; font-size: 7.2px; font-family: 'Nimbus Sans'; text-anchor: start; fill: #5d6874" x="29.858168" y="84.44718" transform="rotate(-0 29.858168 84.44718)">Corpus x task setting</text>
+    <text style="font-weight: 700; font-size: 7.2px; font-family: 'Nimbus Sans'; text-anchor: start; fill: #5d6874" x="29.858168" y="84.44718" transform="rotate(-0 29.858168 84.44718)">Platform x task setting</text>
    </g>
    <g id="text_10">
     <text style="font-size: 6.6px; font-family: 'Nimbus Sans'; text-anchor: end; fill: #5d6874" x="28.569188" y="117.218997" transform="rotate(-0 28.569188 117.218997)">WildChat</text>
    </g>
    <g id="text_11">
-    <text style="font-size: 6.6px; font-family: 'Nimbus Sans'; text-anchor: end; fill: #5d6874" x="28.569188" y="138.228365" transform="rotate(-0 28.569188 138.228365)">LMSYS</text>
+    <text style="font-size: 6.6px; font-family: 'Nimbus Sans'; text-anchor: end; fill: #5d6874" x="28.569188" y="138.228365" transform="rotate(-0 28.569188 138.228365)">Copilot</text>
    </g>
    <g id="text_12">
     <text style="font-size: 6.6px; font-family: 'Nimbus Sans'; text-anchor: middle; fill: #5d6874" x="51.985658" y="96.78258" transform="rotate(-0 51.985658 96.78258)">Coding</text>
@@ -702,10 +702,10 @@ z
 " clip-path="url(#p571c3fdabc)" style="fill: #fffbf2; stroke: #e7c582; stroke-width: 0.7; stroke-linejoin: miter"/>
    </g>
    <g id="text_43">
-    <text style="font-weight: 700; font-size: 5.9px; font-family: 'Nimbus Sans'; text-anchor: middle; fill: #5d6874" x="240.606398" y="115.806575" transform="rotate(-0 240.606398 115.806575)">reference</text>
+    <text style="font-weight: 700; font-size: 5.9px; font-family: 'Nimbus Sans'; text-anchor: middle; fill: #5d6874" x="240.606398" y="115.806575" transform="rotate(-0 240.606398 115.806575)">S1 direct</text>
    </g>
    <g id="text_44">
-    <text style="font-weight: 700; font-size: 5.7px; font-family: 'Nimbus Sans'; text-anchor: middle; fill: #b87923" x="273.475388" y="115.755465" transform="rotate(-0 273.475388 115.755465)">scaffold</text>
+    <text style="font-weight: 700; font-size: 5.7px; font-family: 'Nimbus Sans'; text-anchor: middle; fill: #b87923" x="273.475388" y="115.755465" transform="rotate(-0 273.475388 115.755465)">S2 scaffold</text>
    </g>
    <g id="text_45">
     <text style="font-size: 5.25px; font-family: 'Nimbus Sans'; text-anchor: middle; fill: #17212b" x="241.036057" y="136.857357" transform="rotate(-0 241.036057 136.857357)">M1 feedback</text>
