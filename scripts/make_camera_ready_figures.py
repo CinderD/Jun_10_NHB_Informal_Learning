@@ -319,18 +319,18 @@ def make_figure1() -> None:
 
 def make_figure2() -> None:
     labels = ["WC coding", "LMSYS coding", "SC coding", "SWE coding", "WC writing", "LMSYS writing", "SC writing"]
-    active = np.array([80.4, 86.4, 62.0, 36.2, 79.5, 82.7, 69.7])
-    constructive = np.array([18.4, 12.0, 33.7, 55.5, 13.6, 10.0, 15.7])
-    passive = np.array([1.2, 1.6, 4.3, 8.4, 6.9, 7.3, 14.6])
-    cog_intent = np.array([76.6, 74.6, 73.8, 56.8, 28.2, 28.2, 46.4])
-    cog_unintent = np.array([32.5, 23.2, 28.0, 26.3, 10.5, 10.3, 24.9])
-    con_intent = np.array([13.1, 7.6, 22.0, 26.9, 5.2, 3.5, 7.2])
-    con_unintent = np.array([5.7, 3.1, 9.2, 14.0, 1.5, 1.0, 3.2])
+    active = np.array([80.4, 86.4, 62.0, 41.6, 79.5, 82.7, 69.7])
+    constructive = np.array([18.4, 12.0, 33.7, 48.5, 13.6, 10.0, 15.7])
+    passive = np.array([1.2, 1.6, 4.3, 9.9, 6.9, 7.3, 14.6])
+    cog_intent = np.array([76.6, 74.6, 73.8, 59.3, 28.2, 28.2, 46.4])
+    cog_unintent = np.array([32.5, 23.2, 28.0, 26.4, 10.5, 10.3, 24.9])
+    con_intent = np.array([13.1, 7.6, 22.0, 28.3, 5.2, 3.5, 7.2])
+    con_unintent = np.array([5.7, 3.1, 9.2, 12.6, 1.5, 1.0, 3.2])
     depth = {
         "WC coding": [0.151, 0.286, 0.463],
         "LMSYS coding": [0.095, 0.204, 0.340],
         "SC coding": [0.278, 0.434, 0.613],
-        "SWE coding": [0.305, 0.477, 0.726],
+        "SWE coding": [0.244, 0.469, 0.770],
         "WC writing": [0.060, 0.092, 0.150],
         "LMSYS writing": [0.033, 0.063, 0.112],
         "SC writing": [0.076, 0.182, 0.313],
@@ -408,7 +408,7 @@ def make_figure2() -> None:
 
     depth_matrix = np.array(list(depth.values()))
     cmap = LinearSegmentedColormap.from_list("depth", ["#F3F6F6", "#A8C8D7", "#2F5F83"])
-    axc.imshow(depth_matrix, cmap=cmap, norm=Normalize(0.03, 0.73), aspect="auto")
+    axc.imshow(depth_matrix, cmap=cmap, norm=Normalize(0.03, 0.78), aspect="auto")
     axc.set_xticks(np.arange(3), ["2-3\nuser turns", "4-6\nuser turns", "7+\nuser turns"], fontsize=8.0)
     axc.set_yticks(np.arange(len(labels)), labels)
     axc.set_xlabel("Conversation length", fontweight="bold", labelpad=3)
@@ -435,13 +435,13 @@ def make_figure2() -> None:
 
 def make_figure3() -> None:
     labels = ["WC coding", "LMSYS coding", "SC coding", "SWE coding", "WC writing", "LMSYS writing", "SC writing"]
-    no_s2 = np.array([5.45, 3.89, 9.20, 13.30, 1.96, 1.04, 3.20])
-    has_s2 = np.array([9.43, 5.90, 16.70, 17.30, 3.22, 2.25, 5.80])
-    depth_diff = np.array([2.23, 1.43, 3.36, 6.41, 3.13, 2.10, 3.39])
-    pois = np.array([1.852, 1.626, 1.893, 1.268, 1.569, 1.985, 2.491])
-    logit = np.array([1.761, 1.542, 2.140, 1.350, 1.437, 1.764, 1.757])
-    strat_intentional = np.array([1.968, 1.665, 2.114, 1.627, 1.579, 2.334, 1.857])
-    strat_unintentional = np.array([1.633, 1.600, 1.681, 1.240, 1.567, 1.842, 2.261])
+    no_s2 = np.array([5.45, 3.89, 9.20, 12.05, 1.96, 1.04, 3.20])
+    has_s2 = np.array([9.43, 5.90, 16.70, 20.68, 3.22, 2.25, 5.80])
+    depth_diff = np.array([2.23, 1.43, 3.36, 6.29, 3.13, 2.10, 3.39])
+    pois = np.array([1.852, 1.626, 1.893, 1.746, 1.569, 1.985, 2.491])
+    logit = np.array([1.761, 1.542, 2.140, 1.974, 1.437, 1.764, 1.757])
+    strat_intentional = np.array([1.968, 1.665, 2.114, 1.726, 1.579, 2.334, 1.857])
+    strat_unintentional = np.array([1.633, 1.600, 1.681, 1.695, 1.567, 1.842, 2.261])
 
     fig = plt.figure(figsize=(7.85, 6.10))
     gs = GridSpec(2, 2, figure=fig, width_ratios=[1.04, 1.16], height_ratios=[1.0, 0.88], wspace=0.42, hspace=0.74)
@@ -469,7 +469,7 @@ def make_figure3() -> None:
         ax.spines[["top", "right", "left"]].set_visible(False)
         ax.tick_params(axis="y", length=0, pad=2)
 
-    dumbbell(axa, no_s2, has_s2, labels, "Conversation-level constructive ratio", "Constructive user turns (%)", (0, 18.8))
+    dumbbell(axa, no_s2, has_s2, labels, "Conversation-level constructive ratio", "Constructive user turns (%)", (0, 22.2))
     axa.text(-0.16, 1.06, "a", transform=axa.transAxes, fontsize=14, weight="bold")
 
     y = np.arange(len(labels))
@@ -571,37 +571,37 @@ def make_figure4() -> None:
     # support form with scaffolded conversations without that form, using the
     # constructive ratio. Values are pooled over the seven reportable settings
     # and stratified by the indicated conversational context.
-    intentional_effect = np.array([9.99, 4.29, -2.39, 7.41, 0.45, -4.15])
-    intentional_low = np.array([9.27, 3.67, -2.86, 6.97, -0.04, -4.71])
-    intentional_high = np.array([10.71, 4.92, -1.91, 7.85, 0.95, -3.59])
-    unintentional_effect = np.array([6.09, 2.33, -0.60, 3.65, 1.09, -1.17])
-    unintentional_low = np.array([5.60, 1.98, -0.84, 3.43, 0.79, -1.43])
-    unintentional_high = np.array([6.58, 2.68, -0.36, 3.87, 1.39, -0.90])
-    framing_p = np.array([1.31e-18, 7.04e-08, 4.58e-11, 2.66e-50, 3.07e-02, 3.18e-21])
+    intentional_effect = np.array([10.04, 4.30, -2.44, 7.43, 0.39, -3.84])
+    intentional_low = np.array([9.33, 3.68, -2.92, 6.98, -0.11, -4.41])
+    intentional_high = np.array([10.76, 4.92, -1.97, 7.87, 0.88, -3.27])
+    unintentional_effect = np.array([6.25, 2.30, -0.63, 3.66, 1.03, -0.89])
+    unintentional_low = np.array([5.75, 1.96, -0.87, 3.44, 0.73, -1.16])
+    unintentional_high = np.array([6.74, 2.65, -0.39, 3.89, 1.33, -0.61])
+    framing_p = np.array([1.13e-17, 4.33e-08, 2.38e-11, 3.42e-50, 2.94e-02, 4.03e-20])
 
-    coding_effect = np.array([9.66, 3.12, 1.48, 4.28, -0.65, -3.65])
-    coding_low = np.array([9.03, 2.66, 1.12, 3.89, -1.00, -4.01])
-    coding_high = np.array([10.30, 3.57, 1.85, 4.67, -0.29, -3.28])
-    writing_effect = np.array([7.78, 3.10, -3.05, 3.83, 4.93, -1.06])
-    writing_low = np.array([7.27, 2.66, -3.34, 3.52, 4.47, -1.35])
-    writing_high = np.array([8.30, 3.53, -2.75, 4.14, 5.39, -0.77])
-    task_p = np.array([6.03e-06, 9.50e-01, 2.45e-79, 7.85e-02, 4.91e-78, 2.64e-27])
-    cognitive_intentional_effect = np.array([-4.40, 3.60, -12.32, 29.59, 6.70, -14.31])
-    cognitive_intentional_low = np.array([-5.45, 2.65, -13.15, 28.65, 5.87, -15.37])
-    cognitive_intentional_high = np.array([-3.36, 4.55, -11.49, 30.52, 7.53, -13.24])
-    cognitive_unintentional_effect = np.array([15.01, 12.87, -0.68, 13.44, 8.72, -3.17])
-    cognitive_unintentional_low = np.array([14.13, 12.10, -1.24, 12.91, 8.01, -3.83])
-    cognitive_unintentional_high = np.array([15.90, 13.64, -0.12, 13.98, 9.44, -2.52])
-    cognitive_framing_p = np.array([1.20e-169, 6.71e-50, 1.99e-114, 6.10e-191, 2.72e-04, 2.25e-68])
+    coding_effect = np.array([8.39, 3.42, -1.61, 5.94, 1.65, -2.49])
+    coding_low = np.array([7.95, 3.07, -1.86, 5.72, 1.36, -2.77])
+    coding_high = np.array([8.83, 3.77, -1.36, 6.16, 1.93, -2.21])
+    writing_effect = np.array([10.59, 2.85, -2.33, 4.25, 0.68, -1.45])
+    writing_low = np.array([7.77, 1.28, -3.32, 3.37, -0.65, -2.45])
+    writing_high = np.array([13.42, 4.42, -1.35, 5.13, 2.00, -0.45])
+    task_p = np.array([1.31e-01, 4.87e-01, 1.65e-01, 2.75e-04, 1.61e-01, 4.98e-02])
+    cognitive_intentional_effect = np.array([-4.42, 3.55, -12.30, 29.52, 6.67, -14.09])
+    cognitive_intentional_low = np.array([-5.46, 2.60, -13.13, 28.59, 5.85, -15.15])
+    cognitive_intentional_high = np.array([-3.38, 4.50, -11.47, 30.45, 7.50, -13.04])
+    cognitive_unintentional_effect = np.array([15.12, 12.82, -0.70, 13.46, 8.64, -2.79])
+    cognitive_unintentional_low = np.array([14.24, 12.05, -1.26, 12.93, 7.93, -3.44])
+    cognitive_unintentional_high = np.array([16.01, 13.59, -0.14, 13.99, 9.35, -2.13])
+    cognitive_framing_p = np.array([3.75e-173, 3.61e-50, 8.72e-114, 2.31e-189, 4.15e-04, 4.87e-71])
     # Rows are support forms; columns follow the seven displayed task settings.
     supply = np.array(
         [
-            [8.8, 4.5, 13.3, 20.9, 16.6, 11.3, 24.2],
-            [14.7, 8.2, 12.7, 15.1, 9.6, 10.9, 23.2],
-            [29.7, 10.4, 25.7, 19.2, 59.2, 52.3, 22.9],
-            [84.0, 79.2, 81.2, 54.8, 29.5, 26.9, 45.2],
-            [23.9, 18.3, 18.4, 0.2, 15.0, 10.3, 23.5],
-            [6.9, 10.6, 18.6, 52.0, 6.9, 13.4, 38.1],
+            [8.8, 4.5, 13.3, 21.0, 16.6, 11.3, 24.2],
+            [14.7, 8.2, 12.7, 16.4, 9.6, 10.9, 23.2],
+            [29.7, 10.4, 25.7, 16.8, 59.2, 52.3, 22.9],
+            [84.0, 79.2, 81.2, 56.2, 29.5, 26.9, 45.2],
+            [23.9, 18.3, 18.4, 0.5, 15.0, 10.3, 23.5],
+            [6.9, 10.6, 18.6, 57.7, 6.9, 13.4, 38.1],
         ]
     )
 
@@ -810,13 +810,13 @@ def make_figure5() -> None:
     keys = order
     # 95% CIs were recalculated from the same A2U pair files and level-2
     # conversation metrics that produce the point estimates.
-    lift = np.array([2.6756, 2.0136, 6.21, 4.9881, 1.1281, 0.2666, 3.35])
+    lift = np.array([2.6756, 2.0136, 6.21, 4.9345, 1.1281, 0.2666, 3.35])
     lift_ci = np.array(
         [
             [2.2904, 3.0607],
             [1.6100, 2.4200],
             [np.nan, np.nan],
-            [2.5698, 7.4065],
+            [2.6689, 7.2000],
             [0.9487, 1.3075],
             [0.0200, 0.5200],
             [np.nan, np.nan],
@@ -827,7 +827,7 @@ def make_figure5() -> None:
             "WC coding": (26.0563, 30.0682),
             "LMSYS coding": (21.8174, 24.2271),
             "SC coding": (32.24, 36.75),
-            "SWE coding": (21.3793, 26.6476),
+            "SWE coding": (29.0429, 26.9316),
             "WC writing": (6.0528, 12.3195),
             "LMSYS writing": (11.4618, 9.0909),
             "SC writing": (22.91, 25.74),
@@ -836,7 +836,7 @@ def make_figure5() -> None:
             "WC coding": (9.6341, 11.7894),
             "LMSYS coding": (6.1475, 8.3257),
             "SC coding": (14.45, 17.51),
-            "SWE coding": (15.7058, 17.1141),
+            "SWE coding": (17.5595, 19.8910),
             "WC writing": (1.9286, 2.5838),
             "LMSYS writing": (2.1687, 2.0536),
             "SC writing": (6.24, 7.46),
@@ -845,7 +845,7 @@ def make_figure5() -> None:
             "WC coding": (12.9630, 15.0327),
             "LMSYS coding": (7.1197, 13.8462),
             "SC coding": (9.23, 28.77),
-            "SWE coding": (12.5000, 19.3548),
+            "SWE coding": (15.1724, 11.3636),
             "WC writing": (2.1182, 3.5857),
             "LMSYS writing": (2.2831, 4.7619),
             "SC writing": (1.38, 9.33),
@@ -856,7 +856,7 @@ def make_figure5() -> None:
             "WC coding": ((24.5124, 27.6619), (28.8784, 31.2854)),
             "LMSYS coding": ((20.1415, 23.4933), (22.1178, 26.3365)),
             "SC coding": ((np.nan, np.nan), (np.nan, np.nan)),
-            "SWE coding": ((18.0427, 24.7159), (22.0090, 31.2861)),
+            "SWE coding": ((25.4285, 32.6573), (22.8465, 31.0167)),
             "WC writing": ((5.0744, 7.2055), (10.5635, 14.3206)),
             "LMSYS writing": ((8.9170, 14.0066), (6.0877, 12.0942)),
             "SC writing": ((np.nan, np.nan), (np.nan, np.nan)),
@@ -865,7 +865,7 @@ def make_figure5() -> None:
             "WC coding": ((9.2175, 10.0673), (11.3335, 12.2611)),
             "LMSYS coding": ((5.8279, 6.4671), (7.7067, 8.9448)),
             "SC coding": ((np.nan, np.nan), (np.nan, np.nan)),
-            "SWE coding": ((12.5260, 18.8856), (12.8378, 21.3904)),
+            "SWE coding": ((14.6828, 20.4362), (15.8069, 23.9751)),
             "WC writing": ((1.6596, 2.2403), (2.2383, 2.9809)),
             "LMSYS writing": ((1.7641, 2.5732), (1.4846, 2.6227)),
             "SC writing": ((np.nan, np.nan), (np.nan, np.nan)),
@@ -874,7 +874,7 @@ def make_figure5() -> None:
             "WC coding": ((9.4704, 17.4946), (10.2307, 21.5475)),
             "LMSYS coding": ((4.2525, 9.9870), (5.4496, 22.2427)),
             "SC coding": ((np.nan, np.nan), (np.nan, np.nan)),
-            "SWE coding": ((5.8842, 19.1158), (5.4470, 33.2627)),
+            "SWE coding": ((9.3330, 21.0118), (1.9860, 20.7413)),
             "WC writing": ((1.3602, 3.2845), (1.8977, 6.6729)),
             "LMSYS writing": ((0.8843, 3.6819), (-0.4968, 10.0206)),
             "SC writing": ((np.nan, np.nan), (np.nan, np.nan)),
@@ -885,19 +885,19 @@ def make_figure5() -> None:
             [65.5, 50.7, 29.5],
             [40.6, 26.7, 14.9],
             [66.3, 53.7, 43.7],
-            [35.0, 35.7, 19.1],
+            [37.1, 32.7, 18.5],
             [37.8, 43.2, 18.8],
             [34.2, 31.2, 12.1],
             [39.6, 29.3, 26.5],
         ]
     )
-    before_after = np.array([1.4, 1.5, 0.7, -11.7, -4.2, -2.5, -0.6])
+    before_after = np.array([1.4, 1.5, 0.7, -7.1, -4.2, -2.5, -0.6])
     before_after_ci = np.array(
         [
             [0.9496, 1.7999],
             [1.0285, 1.9563],
             [np.nan, np.nan],
-            [-14.8413, -8.6531],
+            [-10.0252, -4.1196],
             [-4.6790, -3.8188],
             [-2.9772, -1.9935],
             [np.nan, np.nan],
@@ -1100,7 +1100,7 @@ def make_figure5() -> None:
     axd.axvline(0, color=COLORS["ink"], lw=0.9)
     axd.set_yticks(y2, order)
     axd.invert_yaxis()
-    axd.set_xlim(-15.80, 2.05)
+    axd.set_xlim(-11.00, 2.05)
     axd.set_xlabel("After − before first scaffolded turn (percentage points)")
     axd.set_title("Coarse within-conversation contrast", loc="left", pad=6, fontsize=9.2, fontweight="bold")
     axd.grid(axis="x", color=COLORS["grid"], lw=0.65)
