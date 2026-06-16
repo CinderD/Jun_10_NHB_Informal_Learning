@@ -46,3 +46,15 @@ Consistency of key unadjusted contrasts:
 
 - constructive_ratio_has_s2_minus_no_s2: 6/6 settings are positive; 6/6 have p<0.05.
 - adjacent_next_constructive_s2_minus_s1: 6/6 settings are positive; 5/6 have p<0.05.
+
+Nested scaffolding block tests:
+
+- six public-chat settings, dataset FE; broad S2 added after user/context controls: LR chi-square(1)=585.0, p=3.11956e-129.
+- six public-chat settings, dataset FE; support forms M1-M6 added beyond broad S2: LR chi-square(6)=895.1, p=4.21789e-190.
+- six public-chat settings, dataset FE; full scaffolding block S2 plus M1-M6 added after user/context controls: LR chi-square(7)=1480.1, p=0.
+- six public-chat settings, model/source FE; broad S2 added after user/context controls: LR chi-square(1)=509.5, p=7.99876e-113.
+- six public-chat settings, model/source FE; support forms M1-M6 added beyond broad S2: LR chi-square(6)=827.9, p=1.42297e-175.
+- six public-chat settings, model/source FE; full scaffolding block S2 plus M1-M6 added after user/context controls: LR chi-square(7)=1337.5, p=1.30888e-284.
+- WildChat only, model FE; broad S2 added after user/context controls: LR chi-square(1)=418.6, p=5.0317e-93.
+- WildChat only, model FE; support forms M1-M6 added beyond broad S2: LR chi-square(6)=519.4, p=5.63341e-109.
+- WildChat only, model FE; full scaffolding block S2 plus M1-M6 added after user/context controls: LR chi-square(7)=937.9, p=3.08909e-198.

@@ -285,13 +285,13 @@ def _assistant_model_key(row: dict[str, str]) -> str:
 
 def _make_design(
     rows: list[dict[str, str]],
+    include_s2: bool = True,
     include_support_forms: bool = True,
     include_dataset: bool = True,
     include_model: bool = False,
 ) -> tuple[np.ndarray, np.ndarray, list[str], list[str]]:
     names = [
         "Intercept",
-        "scaffolded_support_S2",
         "prior_user_constructive",
         "prior_user_active",
         "prior_user_passive",
@@ -301,6 +301,8 @@ def _make_design(
         "coding_task",
         "log_assistant_turn_index",
     ]
+    if include_s2:
+        names.insert(1, "scaffolded_support_S2")
     if include_support_forms:
         names.extend([f"M{i}" for i in range(1, 7)])
     if include_dataset:
@@ -320,7 +322,8 @@ def _make_design(
     name_to_idx = {name: i for i, name in enumerate(names)}
     for i, r in enumerate(rows):
         X[i, name_to_idx["Intercept"]] = 1
-        X[i, name_to_idx["scaffolded_support_S2"]] = 1 if r.get("asst_Support_Type") == "S2" else 0
+        if include_s2:
+            X[i, name_to_idx["scaffolded_support_S2"]] = 1 if r.get("asst_Support_Type") == "S2" else 0
         lvl = r.get("prev_user_Cognitive_level") or "NA"
         X[i, name_to_idx["prior_user_constructive"]] = 1 if lvl == "C" else 0
         X[i, name_to_idx["prior_user_active"]] = 1 if lvl == "A" else 0
@@ -370,6 +373,7 @@ def _write_model_rows(
 ) -> tuple[float, int, int]:
     X, y, clusters, names = _make_design(
         rows,
+        include_s2=True,
         include_support_forms=True,
         include_dataset=include_dataset,
         include_model=include_model,
@@ -403,6 +407,91 @@ def _write_model_rows(
     return ll, len(rows), X.shape[1]
 
 
+def _fit_logit_for_block_test(
+    rows: list[dict[str, str]],
+    include_dataset: bool,
+    include_model: bool,
+    include_s2: bool,
+    include_support_forms: bool,
+) -> tuple[float, int, int]:
+    X, y, clusters, names = _make_design(
+        rows,
+        include_s2=include_s2,
+        include_support_forms=include_support_forms,
+        include_dataset=include_dataset,
+        include_model=include_model,
+    )
+    _, _, ll = _fit_logit_cluster(X, y, clusters, names)
+    return ll, X.shape[1], len(rows)
+
+
+def _write_scaffolding_block_tests(
+    pooled: list[dict[str, str]],
+    wild: list[dict[str, str]],
+) -> None:
+    specs = [
+        ("six public-chat settings, dataset FE", pooled, True, False),
+        ("six public-chat settings, model/source FE", pooled, False, True),
+        ("WildChat only, model FE", wild, False, True),
+    ]
+    out_rows: list[dict[str, str]] = []
+    for scope, rows, include_dataset, include_model in specs:
+        no_scaf_ll, no_scaf_k, n_pairs = _fit_logit_for_block_test(
+            rows, include_dataset, include_model, include_s2=False, include_support_forms=False
+        )
+        s2_ll, s2_k, _ = _fit_logit_for_block_test(
+            rows, include_dataset, include_model, include_s2=True, include_support_forms=False
+        )
+        full_ll, full_k, _ = _fit_logit_for_block_test(
+            rows, include_dataset, include_model, include_s2=True, include_support_forms=True
+        )
+        comparisons = [
+            (
+                "broad S2 added after user/context controls",
+                no_scaf_ll,
+                no_scaf_k,
+                s2_ll,
+                s2_k,
+                "Tests whether scaffolded-support presence adds signal before decomposing support form.",
+            ),
+            (
+                "support forms M1-M6 added beyond broad S2",
+                s2_ll,
+                s2_k,
+                full_ll,
+                full_k,
+                "Tests whether specific support forms explain additional signal beyond S2 presence.",
+            ),
+            (
+                "full scaffolding block S2 plus M1-M6 added after user/context controls",
+                no_scaf_ll,
+                no_scaf_k,
+                full_ll,
+                full_k,
+                "Tests the joint contribution of scaffolding features after user state, task/framing, turn index and fixed effects.",
+            ),
+        ]
+        for comparison, reduced_ll, reduced_k, full_model_ll, full_model_k, notes in comparisons:
+            lr = 2 * (full_model_ll - reduced_ll)
+            df = full_model_k - reduced_k
+            p = float(stats.chi2.sf(lr, df)) if df > 0 else float("nan")
+            out_rows.append(
+                {
+                    "scope": scope,
+                    "comparison": comparison,
+                    "lr_chi2": f"{lr:.6f}",
+                    "df": str(df),
+                    "p_value": f"{p:.6g}",
+                    "n_pairs": str(n_pairs),
+                    "notes": notes,
+                }
+            )
+    with open(OUT / "integrated_scaffolding_block_tests.csv", "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=list(out_rows[0].keys()))
+        writer.writeheader()
+        writer.writerows(out_rows)
+
+
 def compute_integrated_logit() -> None:
     pooled = _load_a2u_rows(wildchat_only=False)
     wild = _load_a2u_rows(wildchat_only=True)
@@ -434,6 +523,7 @@ def compute_integrated_logit() -> None:
         include_dataset=False,
         include_model=True,
     )
+    _write_scaffolding_block_tests(pooled, wild)
     lr = 2 * (wild_model_ll - wild_nomodel_ll)
     df = wild_model_k - wild_nomodel_k
     p = float(stats.chi2.sf(lr, df)) if df > 0 else float("nan")
@@ -494,6 +584,7 @@ def write_tex_tables() -> None:
     pooled_model = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_pooled_model_source_fe.csv")))
     wild = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_wildchat_model_fe.csv")))
     blocks = list(csv.DictReader(open(OUT / "integrated_model_block_tests.csv")))
+    scaf_blocks = list(csv.DictReader(open(OUT / "integrated_scaffolding_block_tests.csv")))
     pooled_block = blocks[0]
     wild_block = blocks[1]
 
@@ -538,6 +629,31 @@ def write_tex_tables() -> None:
         f.write("\\bottomrule\n\\end{tabular}%\n}\n")
         f.write("\\end{table*}\n")
 
+    block_table_path = ROOT / "tables" / "table_integrated_scaffolding_block_tests.tex"
+    with open(block_table_path, "w") as f:
+        f.write("\\begin{table*}[p]\n\\scriptsize\n\\centering\n")
+        f.write(
+            "\\caption{\\textbf{Incremental contribution of scaffolding features in integrated adjacent-turn models.} "
+            "Likelihood-ratio block tests compare nested logistic regressions for whether the next user turn is constructive. "
+            "All models include prior user state, user framing, task ecology, assistant-turn index and the indicated dataset or model/source fixed effects.}\\label{tab:integrated_scaffolding_block_tests}\n"
+        )
+        f.write("\\setlength{\\tabcolsep}{4pt}\n\\renewcommand{\\arraystretch}{1.08}\n")
+        f.write("\\resizebox{\\textwidth}{!}{%\n")
+        f.write("\\begin{tabular}{llcc}\n\\toprule\n")
+        f.write("Scope & Added feature block & LR $\\chi^2$ (df) & p value \\\\\n\\midrule\n")
+        labels = {
+            "broad S2 added after user/context controls": "Broad S2 after user/context controls",
+            "support forms M1-M6 added beyond broad S2": "M1--M6 forms beyond broad S2",
+            "full scaffolding block S2 plus M1-M6 added after user/context controls": "Full scaffolding block after user/context controls",
+        }
+        for r in scaf_blocks:
+            p = float(r["p_value"])
+            ptxt = "$<.001$" if p < 0.001 else f"{p:.3f}".replace("0.", ".")
+            f.write(
+                f"{r['scope']} & {labels[r['comparison']]} & {float(r['lr_chi2']):.1f} ({r['df']}) & {ptxt} \\\\\n"
+            )
+        f.write("\\bottomrule\n\\end{tabular}%\n}\n\\end{table*}\n")
+
     contrasts = list(csv.DictReader(open(OUT / "key_percentage_lifts_significance.csv")))
     contrast_path = ROOT / "tables" / "table_key_contrast_significance.tex"
     compact = [r for r in contrasts if r["contrast"] in {"constructive_ratio_has_s2_minus_no_s2", "adjacent_next_constructive_s2_minus_s1"}]
@@ -566,6 +682,7 @@ def write_report() -> None:
     pooled_model = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_pooled_model_source_fe.csv")))
     wild = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_wildchat_model_fe.csv")))
     blocks = list(csv.DictReader(open(OUT / "integrated_model_block_tests.csv")))
+    scaf_blocks = list(csv.DictReader(open(OUT / "integrated_scaffolding_block_tests.csv")))
     pooled_block = blocks[0]
     wild_block = blocks[1]
     by_pooled = {r["term"]: r for r in pooled}
@@ -600,6 +717,11 @@ def write_report() -> None:
             positive = sum(float(r["estimate"]) > 0 for r in sub)
             significant = sum(float(r["p_value"]) < 0.05 for r in sub)
             f.write(f"- {contrast}: {positive}/{len(sub)} settings are positive; {significant}/{len(sub)} have p<0.05.\n")
+        f.write("\nNested scaffolding block tests:\n\n")
+        for r in scaf_blocks:
+            f.write(
+                f"- {r['scope']}; {r['comparison']}: LR chi-square({r['df']})={float(r['lr_chi2']):.1f}, p={r['p_value']}.\n"
+            )
 
 
 def main() -> None:
