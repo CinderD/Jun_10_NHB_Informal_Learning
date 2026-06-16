@@ -1,0 +1,27 @@
+\begin{table*}[p]
+\scriptsize
+\centering
+\caption{\textbf{Uncertainty estimates for key percentage-point contrasts.} Constructive-ratio contrasts are conversation-bootstrap estimates weighted by user turns; adjacent-turn contrasts bootstrap conversations over assistant-to-user pairs. Percentage-point differences are the effect sizes reported in the main figures.}\label{tab:key_contrast_significance}
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.10}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llccc}
+\toprule
+Setting & Contrast & Effect & 95\% CI & p value \\
+\midrule
+WC coding & Has S2 $-$ no S2 constructive ratio & +4.56 pp & [+4.15, +4.99] & $<.001$ \\
+LMSYS coding & Has S2 $-$ no S2 constructive ratio & +2.51 pp & [+2.19, +2.86] & $<.001$ \\
+SC coding & Has S2 $-$ no S2 constructive ratio & +7.34 pp & [+5.29, +9.27] & $<.001$ \\
+WC writing & Has S2 $-$ no S2 constructive ratio & +0.99 pp & [+0.82, +1.16] & $<.001$ \\
+LMSYS writing & Has S2 $-$ no S2 constructive ratio & +1.09 pp & [+0.87, +1.31] & $<.001$ \\
+SC writing & Has S2 $-$ no S2 constructive ratio & +3.20 pp & [+1.55, +4.89] & $<.001$ \\
+WC coding & Adjacent S2 $-$ reference lift & +2.68 pp & [+2.22, +3.09] & $<.001$ \\
+LMSYS coding & Adjacent S2 $-$ reference lift & +2.01 pp & [+1.54, +2.55] & $<.001$ \\
+SC coding & Adjacent S2 $-$ reference lift & +6.21 pp & [+4.35, +8.10] & $<.001$ \\
+WC writing & Adjacent S2 $-$ reference lift & +1.13 pp & [+0.88, +1.41] & $<.001$ \\
+LMSYS writing & Adjacent S2 $-$ reference lift & +0.27 pp & [-0.01, +0.56] & .061 \\
+SC writing & Adjacent S2 $-$ reference lift & +3.35 pp & [+0.80, +6.62] & .025 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

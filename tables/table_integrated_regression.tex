@@ -1,0 +1,26 @@
+\begin{table*}[p]
+\scriptsize
+\centering
+\caption{\textbf{Integrated adjacent-turn regression combining user state, assistant scaffolding and model controls.} The outcome is whether the next user turn is constructive. Estimates are odds ratios with 95\% confidence intervals and two-sided p values from conversation-cluster robust standard errors. The primary pooled model uses dataset fixed effects; the model/source sensitivity adds recoverable assistant model or source-family fixed effects.}\label{tab:integrated_regression}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.10}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccc}
+\toprule
+Predictor & Pooled dataset FE & Pooled model/source FE & WildChat model FE \\
+\midrule
+Scaffolded support & 0.94 [0.87, 1.02], .164 & 0.93 [0.85, 1.00], .063 & 0.98 [0.89, 1.08], .689 \\
+Prior user constructive & 8.24 [7.81, 8.69], $<.001$ & 7.94 [7.53, 8.38], $<.001$ & 8.48 [7.92, 9.08], $<.001$ \\
+Prior user active & 2.47 [2.37, 2.57], $<.001$ & 2.43 [2.33, 2.53], $<.001$ & 2.69 [2.56, 2.84], $<.001$ \\
+Prior user passive & 2.15 [1.83, 2.53], $<.001$ & 2.14 [1.82, 2.52], $<.001$ & 2.36 [1.89, 2.96], $<.001$ \\
+Intentional framing & 1.37 [1.32, 1.43], $<.001$ & 1.39 [1.34, 1.45], $<.001$ & 1.37 [1.30, 1.44], $<.001$ \\
+Coding task & 1.34 [1.19, 1.50], $<.001$ & 1.34 [1.20, 1.51], $<.001$ & 1.16 [1.01, 1.34], .039 \\
+M1 feedback & 0.79 [0.73, 0.86], $<.001$ & 0.80 [0.74, 0.86], $<.001$ & 0.74 [0.67, 0.82], $<.001$ \\
+M4 explaining & 2.15 [1.99, 2.32], $<.001$ & 2.12 [1.96, 2.30], $<.001$ & 2.11 [1.92, 2.31], $<.001$ \\
+M6 questioning & 0.82 [0.72, 0.93], .002 & 0.84 [0.74, 0.96], .008 & 1.08 [0.93, 1.25], .340 \\
+\midrule
+Model/source block & Reference & LR $\chi^2_{41}=718.2$, $p<.001$ & LR $\chi^2_{13}=553.2$, $p<.001$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}
