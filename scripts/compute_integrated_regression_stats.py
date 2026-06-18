@@ -462,8 +462,8 @@ def _write_scaffolding_block_tests(
     wild: list[dict[str, str]],
 ) -> None:
     specs = [
-        ("six public-chat settings, dataset FE", pooled, True, False),
-        ("six public-chat settings, model/source FE", pooled, False, True),
+        ("six task settings, dataset FE", pooled, True, False),
+        ("six task settings, model/source FE", pooled, False, True),
         ("WildChat only, model FE", wild, False, True),
     ]
     out_rows: list[dict[str, str]] = []
@@ -529,8 +529,8 @@ def _write_prior_state_support_form_checks(
     wild: list[dict[str, str]],
 ) -> None:
     specs = [
-        ("six public-chat settings, dataset FE", pooled, True, False),
-        ("six public-chat settings, model/source FE", pooled, False, True),
+        ("six task settings, dataset FE", pooled, True, False),
+        ("six task settings, model/source FE", pooled, False, True),
         ("WildChat only, model FE", wild, False, True),
     ]
     block_rows: list[dict[str, str]] = []
@@ -646,14 +646,14 @@ def compute_integrated_logit() -> None:
     wild = _load_a2u_rows(wildchat_only=True)
     pooled_ll, pooled_n, pooled_k = _write_model_rows(
         "integrated_adjacent_turn_logit_pooled.csv",
-        "six public-chat settings, dataset fixed effects",
+        "six task settings, dataset fixed effects",
         pooled,
         include_dataset=True,
         include_model=False,
     )
     pooled_model_ll, pooled_model_n, pooled_model_k = _write_model_rows(
         "integrated_adjacent_turn_logit_pooled_model_source_fe.csv",
-        "six public-chat settings, model/source fixed effects",
+        "six task settings, model/source fixed effects",
         pooled,
         include_dataset=False,
         include_model=True,
@@ -696,7 +696,7 @@ def compute_integrated_logit() -> None:
         writer.writeheader()
         writer.writerow(
             {
-                "scope": "six public-chat settings",
+                "scope": "six task settings",
                 "comparison": "model/source fixed effects added beyond dataset fixed effects",
                 "lr_chi2": f"{pooled_model_lr:.6f}",
                 "df": str(pooled_model_df),
@@ -718,7 +718,7 @@ def compute_integrated_logit() -> None:
         )
         writer.writerow(
             {
-                "scope": "six public-chat settings",
+                "scope": "six task settings",
                 "comparison": "dataset fixed-effects baseline",
                 "lr_chi2": "0",
                 "df": "0",
@@ -810,7 +810,7 @@ def write_tex_tables() -> None:
     by_scope_state_term = {
         (r["scope"], r["prior_user_state"], r["term"]): r
         for r in state_form_strat
-        if r["scope"] == "six public-chat settings, model/source FE"
+        if r["scope"] == "six task settings, model/source FE"
     }
 
     def or_cell(r: dict[str, str]) -> str:
@@ -838,7 +838,7 @@ def write_tex_tables() -> None:
         f.write("\\midrule\n")
         for state_label in ["prior constructive", "prior active", "prior passive"]:
             for term, label in [("M1", "M1 feedback"), ("M4", "M4 explaining")]:
-                r = by_scope_state_term[("six public-chat settings, model/source FE", state_label, term)]
+                r = by_scope_state_term[("six task settings, model/source FE", state_label, term)]
                 f.write(
                     f"State-stratified model/source FE & {state_label} & {label} & {or_cell(r)} \\\\\n"
                 )
@@ -883,9 +883,9 @@ def write_report() -> None:
     contrasts = list(csv.DictReader(open(OUT / "key_percentage_lifts_significance.csv")))
     with open(OUT / "integrated_regression_report.md", "w") as f:
         f.write("# Integrated Regression and Significance Report\n\n")
-        f.write("Data scope: six main public-chat task settings: WildChat, LMSYS Chat-1M and ShareChat strict-English coding/writing. SWE-chat and ThoughtTrace are not included in the main pooled model.\n\n")
+        f.write("Data scope: six main task settings: WildChat, LMSYS Chat and ShareChat coding/writing. SWE-chat and ThoughtTrace are not included in the main pooled model.\n\n")
         f.write("Model-label check: `chat_model` is complete for WildChat. LMSYS and ShareChat production columns are empty, but the conversation identifiers retain recoverable information: LMSYS contains model name and ShareChat contains public assistant/source family. The primary pooled model uses dataset fixed effects; a sensitivity replaces them with model/source fixed effects.\n\n")
-        f.write("Claim-level consistency audit: Sections 2.1 and 2.2 are descriptive consistency claims over the six public-chat settings. Inferential checks enter where the manuscript makes contrasts or model claims: Section 2.3 uses bootstrap CIs/p values for raw scaffolded versus reference contrasts and adjusted conversation-level models; Section 2.4 reports support-form CIs and between-stratum p values in the main figure; Section 2.5 uses conversation-cluster bootstrap CIs for adjacent-turn lifts and cluster-robust adjacent-turn regressions.\n\n")
+        f.write("Claim-level consistency audit: Sections 2.1 and 2.2 are descriptive consistency claims over the six task settings. Inferential checks enter where the manuscript makes contrasts or model claims: Section 2.3 uses bootstrap CIs/p values for raw scaffolded versus reference contrasts and adjusted conversation-level models; Section 2.4 reports support-form CIs and between-stratum p values in the main figure; Section 2.5 uses conversation-cluster bootstrap CIs for adjacent-turn lifts and cluster-robust adjacent-turn regressions.\n\n")
         f.write("Integrated adjacent-turn logit outcome: whether the next user turn is constructive. Predictors include scaffolded support, prior user state, user framing, task, assistant-turn index, support means M1-M6 and dataset or model/source fixed effects. Standard errors are clustered by conversation.\n\n")
         f.write("Key pooled estimates with dataset fixed effects:\n\n")
         for term in ["scaffolded_support_S2", "prior_user_constructive", "prior_user_active", "prior_user_passive", "intentional_framing", "coding_task", "M1", "M4", "M6"]:
@@ -922,7 +922,7 @@ def write_report() -> None:
             )
         f.write("\nPooled model/source FE, state-stratified selected support forms:\n\n")
         for r in state_form_strat:
-            if r["scope"] != "six public-chat settings, model/source FE" or r["term"] not in {"M1", "M4"}:
+            if r["scope"] != "six task settings, model/source FE" or r["term"] not in {"M1", "M4"}:
                 continue
             f.write(
                 f"- {r['prior_user_state']} {r['term']}: OR {float(r['odds_ratio']):.3f}, 95% CI [{float(r['ci_low']):.3f}, {float(r['ci_high']):.3f}], p={r['p_value']}.\n"

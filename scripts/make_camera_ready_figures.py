@@ -423,7 +423,7 @@ def make_figure2() -> None:
         tick.set_fontweight("bold")
     axc.text(-0.055, 1.08, "c", transform=axc.transAxes, fontsize=14, weight="bold")
     fig.subplots_adjust(left=0.105, right=0.985, top=0.850, bottom=0.165)
-    fig.text(0.985, 0.030, "WC, WildChat; LMSYS, LMSYS Chat-1M; SC, ShareChat strict-English.", ha="right", fontsize=7.6, color=COLORS["muted"])
+    fig.text(0.985, 0.030, "WC, WildChat; LMSYS, LMSYS Chat; SC, ShareChat.", ha="right", fontsize=7.6, color=COLORS["muted"])
 
     _save(fig, "fig_engagement_ecology_compact_final")
 
@@ -552,7 +552,7 @@ def make_figure3() -> None:
         fontsize=8.2,
         handletextpad=0.3,
     )
-    fig.text(0.985, 0.030, "WC, WildChat; LMSYS, LMSYS Chat-1M; SC, ShareChat strict-English.", ha="right", fontsize=7.6, color=COLORS["muted"])
+    fig.text(0.985, 0.030, "WC, WildChat; LMSYS, LMSYS Chat; SC, ShareChat.", ha="right", fontsize=7.6, color=COLORS["muted"])
     fig.subplots_adjust(left=0.115, right=0.985, top=0.835, bottom=0.140)
 
     _save_many(fig, ["fig_support_association_compact_final_v2", "fig_support_association_wild_lmsys_with_ci"])
@@ -564,7 +564,7 @@ def make_figure4() -> None:
     settings = ["WC coding", "LMSYS coding", "SC coding", "WC writing", "LMSYS writing", "SC writing"]
     # Estimates compare scaffolded conversations containing each non-exclusive
     # support form with scaffolded conversations without that form, using the
-    # constructive ratio. Values are pooled over the six public-chat settings
+    # constructive ratio. Values are pooled over the six task settings
     # and stratified by the indicated conversational context.
     intentional_effect = np.array([14.68, 3.74, -2.77, 6.67, 0.13, -4.81])
     intentional_low = np.array([13.53, 2.81, -3.44, 6.02, -0.56, -5.56])
@@ -759,7 +759,7 @@ def make_figure4() -> None:
             ax_supply.text(j, i, f"{val:.1f}", ha="center", va="center", fontsize=7.8, color=txt_color)
     ax_supply.text(-0.055, 1.12, "c", transform=ax_supply.transAxes, fontsize=14, weight="bold")
     fig.subplots_adjust(left=0.085, right=0.985, top=0.835, bottom=0.075)
-    fig.text(0.985, 0.020, "WC, WildChat; LMSYS, LMSYS Chat-1M; SC, ShareChat strict-English. Means labels are non-exclusive.", ha="right", fontsize=7.5, color=COLORS["muted"])
+    fig.text(0.985, 0.020, "WC, WildChat; LMSYS, LMSYS Chat; SC, ShareChat. Means labels are non-exclusive.", ha="right", fontsize=7.5, color=COLORS["muted"])
     _save(fig, "fig_support_form_supply_compact_final_v2")
 
 
@@ -1061,7 +1061,7 @@ def make_figure5() -> None:
     fig.text(
         0.50,
         0.038,
-        "WC = WildChat; LMSYS = LMSYS Chat-1M; SC = ShareChat strict-English. Error bars show 95% CI where displayed; panel d reports pooled model/source FE odds ratios.",
+        "WC = WildChat; LMSYS = LMSYS Chat; SC = ShareChat. Error bars show 95% CI where displayed; panel d reports pooled model/source FE odds ratios.",
         ha="center",
         fontsize=6.8,
         color=COLORS["muted"],
