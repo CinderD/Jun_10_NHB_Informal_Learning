@@ -396,17 +396,101 @@ def _load_a2u_rows(wildchat_only: bool = False) -> list[dict[str, str]]:
     return rows
 
 
+def _load_level2_rows() -> list[dict[str, str]]:
+    rows: list[dict[str, str]] = []
+    for setting, (dataset, task, path) in LEVEL2.items():
+        for r in _read_csv(path):
+            r["_setting"] = setting
+            r["_dataset"] = dataset
+            r["_task"] = task
+            rows.append(r)
+    return rows
+
+
+def _make_constructive_context_design(
+    rows: list[dict[str, str]],
+) -> tuple[np.ndarray, np.ndarray, list[str], list[str]]:
+    names = [
+        "Intercept",
+        "intentional_framing",
+        "coding_task",
+        "length_4_6_user_turns",
+        "length_7plus_user_turns",
+        "dataset_LMSYS",
+        "dataset_ShareChat",
+    ]
+    X = np.zeros((len(rows), len(names)), dtype=float)
+    y = np.zeros(len(rows), dtype=float)
+    clusters: list[str] = []
+    name_to_idx = {name: i for i, name in enumerate(names)}
+    for i, r in enumerate(rows):
+        user_turns = _f(r, "user_turns")
+        X[i, name_to_idx["Intercept"]] = 1
+        X[i, name_to_idx["intentional_framing"]] = _f(r, "is_intentional")
+        X[i, name_to_idx["coding_task"]] = _f(r, "is_coding_topic")
+        X[i, name_to_idx["length_4_6_user_turns"]] = 1 if 4 <= user_turns <= 6 else 0
+        X[i, name_to_idx["length_7plus_user_turns"]] = 1 if user_turns >= 7 else 0
+        X[i, name_to_idx["dataset_LMSYS"]] = 1 if r["_dataset"] == "LMSYS" else 0
+        X[i, name_to_idx["dataset_ShareChat"]] = 1 if r["_dataset"] == "ShareChat" else 0
+        y[i] = _f(r, "has_Cog_C")
+        clusters.append(r["conv_id"])
+    return X, y, clusters, names
+
+
+def compute_constructive_context_logit() -> None:
+    rows = _load_level2_rows()
+    X, y, clusters, names = _make_constructive_context_design(rows)
+    beta, se, ll = _fit_logit_cluster(X, y, clusters, names)
+    label_map = {
+        "intentional_framing": "Intentional framing",
+        "coding_task": "Coding task ecology",
+        "length_4_6_user_turns": "4--6 user turns",
+        "length_7plus_user_turns": "7+ user turns",
+        "dataset_LMSYS": "LMSYS Chat",
+        "dataset_ShareChat": "ShareChat",
+    }
+    formula = "any constructive user turn ~ user framing + task ecology + length bucket + dataset fixed effects"
+    out_rows: list[dict[str, str]] = []
+    for name, b, s in zip(names, beta, se):
+        z = b / s if s > 0 else float("nan")
+        p = math.erfc(abs(z) / math.sqrt(2)) if s > 0 else float("nan")
+        out_rows.append(
+            {
+                "term": name,
+                "label": label_map.get(name, "Intercept"),
+                "coef_log_odds": f"{b:.6f}",
+                "cluster_robust_se": f"{s:.6f}",
+                "z": f"{z:.6f}",
+                "p_value": f"{p:.6g}",
+                "odds_ratio": f"{math.exp(b):.6f}",
+                "ci_low": f"{math.exp(b - 1.96 * s):.6f}",
+                "ci_high": f"{math.exp(b + 1.96 * s):.6f}",
+                "n_conversations": str(len(rows)),
+                "log_likelihood": f"{ll:.6f}",
+                "formula": formula,
+                "reference": "unintentional framing, writing task, 2--3 user turns, WildChat",
+                "se_type": "conversation-robust sandwich",
+                "notes": "Section 2.2 robustness check; estimates are associational and do not identify causal effects.",
+            }
+        )
+    with open(OUT / "constructive_context_logit.csv", "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=list(out_rows[0].keys()))
+        writer.writeheader()
+        writer.writerows(out_rows)
+
+
 def _write_model_rows(
     output_name: str,
     scope: str,
     rows: list[dict[str, str]],
     include_dataset: bool,
     include_model: bool,
+    include_support_forms: bool = True,
 ) -> tuple[float, int, int]:
     X, y, clusters, names = _make_design(
         rows,
         include_s2=True,
-        include_support_forms=True,
+        include_support_forms=include_support_forms,
         include_dataset=include_dataset,
         include_model=include_model,
     )
@@ -437,6 +521,86 @@ def _write_model_rows(
         writer.writeheader()
         writer.writerows(out_rows)
     return ll, len(rows), X.shape[1]
+
+
+SETTING_LEVEL_TERMS = [
+    ("scaffolded_support_S2", "Scaffolded support"),
+    ("prior_user_constructive", "Prior user constructive"),
+    ("prior_user_active", "Prior user active"),
+    ("prior_user_passive", "Prior user passive"),
+    ("intentional_framing", "Intentional framing"),
+    ("M1", "M1 feedback"),
+    ("M2", "M2 hinting"),
+    ("M3", "M3 instructing"),
+    ("M4", "M4 explaining"),
+    ("M5", "M5 modelling"),
+    ("M6", "M6 questioning"),
+]
+
+
+def _write_setting_level_models(rows: list[dict[str, str]]) -> None:
+    out_rows: list[dict[str, str]] = []
+    for setting in LEVEL3_A2U:
+        sub = [r for r in rows if r["_setting"] == setting]
+        specs = [
+            (
+                "broad_s2_only",
+                "Broad scaffolded-support model",
+                ["scaffolded_support_S2", "prior_user_constructive", "prior_user_active", "prior_user_passive", "intentional_framing"],
+                False,
+            ),
+            (
+                "support_form_decomposed",
+                "Support-form model",
+                ["M1", "M2", "M3", "M4", "M5", "M6"],
+                True,
+            ),
+        ]
+        for model_spec, model_label, terms, include_support_forms in specs:
+            X, y, clusters, names = _make_design(
+                sub,
+                include_s2=True,
+                include_support_forms=include_support_forms,
+                include_dataset=False,
+                include_model=True,
+            )
+            beta, se, ll = _fit_logit_cluster(X, y, clusters, names)
+            model_fe_count = sum(1 for name in names if name.startswith("model_"))
+            label_by_term = dict(SETTING_LEVEL_TERMS)
+            for term in terms:
+                if term not in names:
+                    continue
+                idx = names.index(term)
+                b = float(beta[idx])
+                s = float(se[idx])
+                z = b / s if s > 0 else float("nan")
+                p = math.erfc(abs(z) / math.sqrt(2)) if s > 0 else float("nan")
+                out_rows.append(
+                    {
+                        "setting": setting,
+                        "model_spec": model_spec,
+                        "model_label": model_label,
+                        "term": term,
+                        "label": label_by_term[term],
+                        "coef_log_odds": f"{b:.6f}",
+                        "cluster_robust_se": f"{s:.6f}",
+                        "z": f"{z:.6f}",
+                        "p_value": f"{p:.6g}",
+                        "odds_ratio": f"{math.exp(b):.6f}",
+                        "ci_low": f"{math.exp(b - 1.96 * s):.6f}",
+                        "ci_high": f"{math.exp(b + 1.96 * s):.6f}",
+                        "n_pairs": str(len(sub)),
+                        "n_conversations": str(len(set(clusters))),
+                        "model_source_fe_count": str(model_fe_count),
+                        "log_likelihood": f"{ll:.6f}",
+                        "se_type": "conversation-cluster robust sandwich",
+                        "notes": "Broad S2 is estimated without M1-M6; support-form coefficients are estimated in the decomposed model with broad S2 and co-occurring forms included.",
+                    }
+                )
+    with open(OUT / "setting_level_adjacent_turn_logit_model_source_fe.csv", "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=list(out_rows[0].keys()))
+        writer.writeheader()
+        writer.writerows(out_rows)
 
 
 def _fit_logit_for_block_test(
@@ -487,12 +651,12 @@ def _write_scaffolding_block_tests(
                 "Tests whether scaffolded-support presence adds signal before decomposing support form.",
             ),
             (
-                "support forms M1-M6 added beyond broad S2",
+                "support-form descriptors M1-M6 added within scaffolded support",
                 s2_ll,
                 s2_k,
                 full_ll,
                 full_k,
-                "Tests whether specific support forms explain additional signal beyond S2 presence.",
+                "Tests whether nested support-form descriptors add signal among scaffolded turns after the broad S2 contrast is represented.",
             ),
             (
                 "full scaffolding block S2 plus M1-M6 added after user/context controls",
@@ -644,6 +808,31 @@ def _write_prior_state_support_form_checks(
 def compute_integrated_logit() -> None:
     pooled = _load_a2u_rows(wildchat_only=False)
     wild = _load_a2u_rows(wildchat_only=True)
+    _write_setting_level_models(pooled)
+    _write_model_rows(
+        "integrated_adjacent_turn_logit_pooled_broad_s2.csv",
+        "six task settings, dataset fixed effects, broad S2 only",
+        pooled,
+        include_dataset=True,
+        include_model=False,
+        include_support_forms=False,
+    )
+    _write_model_rows(
+        "integrated_adjacent_turn_logit_pooled_model_source_fe_broad_s2.csv",
+        "six task settings, model/source fixed effects, broad S2 only",
+        pooled,
+        include_dataset=False,
+        include_model=True,
+        include_support_forms=False,
+    )
+    _write_model_rows(
+        "integrated_adjacent_turn_logit_wildchat_model_fe_broad_s2.csv",
+        "WildChat only, model fixed effects, broad S2 only",
+        wild,
+        include_dataset=False,
+        include_model=True,
+        include_support_forms=False,
+    )
     pooled_ll, pooled_n, pooled_k = _write_model_rows(
         "integrated_adjacent_turn_logit_pooled.csv",
         "six task settings, dataset fixed effects",
@@ -730,9 +919,14 @@ def compute_integrated_logit() -> None:
 
 
 def write_tex_tables() -> None:
+    context_rows = list(csv.DictReader(open(OUT / "constructive_context_logit.csv")))
+    pooled_broad = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_pooled_broad_s2.csv")))
+    pooled_model_broad = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_pooled_model_source_fe_broad_s2.csv")))
+    wild_broad = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_wildchat_model_fe_broad_s2.csv")))
     pooled = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_pooled.csv")))
     pooled_model = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_pooled_model_source_fe.csv")))
     wild = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_wildchat_model_fe.csv")))
+    setting_level = list(csv.DictReader(open(OUT / "setting_level_adjacent_turn_logit_model_source_fe.csv")))
     blocks = list(csv.DictReader(open(OUT / "integrated_model_block_tests.csv")))
     scaf_blocks = list(csv.DictReader(open(OUT / "integrated_scaffolding_block_tests.csv")))
     state_form_blocks = list(csv.DictReader(open(OUT / "prior_state_support_form_interaction_block_tests.csv")))
@@ -751,14 +945,83 @@ def write_tex_tables() -> None:
         ("M4", "M4 explaining"),
         ("M6", "M6 questioning"),
     ]
-    by_pooled = {r["term"]: r for r in pooled}
-    by_pooled_model = {r["term"]: r for r in pooled_model}
-    by_wild = {r["term"]: r for r in wild}
+    by_pooled_broad = {r["term"]: r for r in pooled_broad}
+    by_pooled_model_broad = {r["term"]: r for r in pooled_model_broad}
+    by_wild_broad = {r["term"]: r for r in wild_broad}
+    by_pooled_full = {r["term"]: r for r in pooled}
+    by_pooled_model_full = {r["term"]: r for r in pooled_model}
+    by_wild_full = {r["term"]: r for r in wild}
+    settings = ["WC coding", "LMSYS coding", "SC coding", "WC writing", "LMSYS writing", "SC writing"]
+    by_setting_term = {(r["setting"], r["term"]): r for r in setting_level}
 
     def cell(r: dict[str, str]) -> str:
         p = float(r["p_value"])
         ptxt = "$<.001$" if p < 0.001 else f"{p:.3f}".replace("0.", ".")
         return f"{float(r['odds_ratio']):.2f} [{float(r['ci_low']):.2f}, {float(r['ci_high']):.2f}], {ptxt}"
+
+    def compact_cell(r: dict[str, str]) -> str:
+        p = float(r["p_value"])
+        ptxt = "$<.001$" if p < 0.001 else f"{p:.3f}".replace("0.", ".")
+        return f"\\makecell{{{float(r['odds_ratio']):.2f} [{float(r['ci_low']):.2f}, {float(r['ci_high']):.2f}]\\\\{ptxt}}}"
+
+    def normalized_scope(scope: str) -> str:
+        return scope.replace("six public-chat settings", "six task settings")
+
+    context_path = ROOT / "tables" / "table_constructive_context_logit.tex"
+    with open(context_path, "w") as f:
+        f.write("\\begin{table*}[p]\n\\scriptsize\n\\centering\n")
+        f.write(
+            "\\caption{\\textbf{Conversation-level context model for constructive engagement.} "
+            "The outcome is whether a conversation contains at least one constructive user turn. "
+            "The logistic regression includes user framing, task ecology, conversation-length bucket and dataset fixed effects. "
+            "Cells report odds ratios with 95\\% confidence intervals and two-sided p values from conversation-robust standard errors. "
+            "The reference category is unintentional framing, writing-oriented task, 2--3 user turns and WildChat.}\\label{tab:constructive_context_logit}\n"
+        )
+        f.write("\\setlength{\\tabcolsep}{6pt}\n\\renewcommand{\\arraystretch}{1.08}\n")
+        f.write("\\resizebox{0.82\\textwidth}{!}{%\n")
+        f.write("\\begin{tabular}{lc}\n\\toprule\n")
+        f.write("Predictor & OR [95\\% CI], p value \\\\\n\\midrule\n")
+        for term in [
+            "intentional_framing",
+            "coding_task",
+            "length_4_6_user_turns",
+            "length_7plus_user_turns",
+            "dataset_LMSYS",
+            "dataset_ShareChat",
+        ]:
+            r = next(row for row in context_rows if row["term"] == term)
+            f.write(f"{r['label']} & {cell(r)} \\\\\n")
+        n = int(next(row for row in context_rows if row["term"] == "Intercept")["n_conversations"])
+        f.write("\\midrule\n")
+        f.write(f"Conversations & {n:,} \\\\\n")
+        f.write("\\bottomrule\n\\end{tabular}%\n}\n\\end{table*}\n")
+
+    setting_table_path = ROOT / "tables" / "table_setting_level_adjacent_models.tex"
+    with open(setting_table_path, "w") as f:
+        f.write("\\begin{table*}[p]\n\\tiny\n\\centering\n")
+        f.write(
+            "\\caption{\\textbf{Setting-level integrated adjacent-turn models.} "
+            "Each column reports a separate within-setting logistic regression for whether the next user turn is constructive. "
+            "The scaffolded-support row comes from a broad S2-only model. Support-form rows come from a decomposed model that includes broad S2 and co-occurring M1--M6 forms, so form coefficients compare variation within scaffolded support rather than replacing the broad S2 contrast. "
+            "All models include prior user state, intentional framing, assistant-turn index and recoverable model/source fixed effects where available. "
+            "Cells report odds ratios with 95\\% confidence intervals and two-sided p values from conversation-cluster robust standard errors.}\\label{tab:setting_level_adjacent_models}\n"
+        )
+        f.write("\\setlength{\\tabcolsep}{3pt}\n\\renewcommand{\\arraystretch}{1.12}\n")
+        f.write("\\resizebox{\\textwidth}{!}{%\n")
+        f.write("\\begin{tabular}{lcccccc}\n\\toprule\n")
+        f.write("Predictor & WC coding & LMSYS coding & SC coding & WC writing & LMSYS writing & SC writing \\\\\n\\midrule\n")
+        first_rows = {setting: next(r for r in setting_level if r["setting"] == setting) for setting in settings}
+        f.write("A2U pairs & " + " & ".join(f"{int(first_rows[s]['n_pairs']):,}" for s in settings) + " \\\\\n")
+        f.write("Conversations & " + " & ".join(f"{int(first_rows[s]['n_conversations']):,}" for s in settings) + " \\\\\n")
+        f.write("Model/source FE count & " + " & ".join(first_rows[s]["model_source_fe_count"] for s in settings) + " \\\\\n\\midrule\n")
+        for term, label in SETTING_LEVEL_TERMS:
+            f.write(
+                label
+                + " & "
+                + " & ".join(compact_cell(by_setting_term[(setting, term)]) for setting in settings)
+                + " \\\\\n"
+            )
+        f.write("\\bottomrule\n\\end{tabular}%\n}\n\\end{table*}\n")
 
     table_path = ROOT / "tables" / "table_integrated_regression.tex"
     with open(table_path, "w") as f:
@@ -766,14 +1029,22 @@ def write_tex_tables() -> None:
         f.write("\\scriptsize\n\\centering\n")
         f.write(
             "\\caption{\\textbf{Integrated adjacent-turn regression combining user state, assistant scaffolding and model controls.} "
-            "The outcome is whether the next user turn is constructive. Estimates are odds ratios with 95\\% confidence intervals and two-sided p values from conversation-cluster robust standard errors. The primary pooled model uses dataset fixed effects; the model/source sensitivity adds recoverable assistant model or source-family fixed effects.}\\label{tab:integrated_regression}\n"
+            "The outcome is whether the next user turn is constructive. The scaffolded-support row is estimated in a broad S2-only model; M1, M4 and M6 rows are estimated in a decomposed support-form model that includes broad S2 and co-occurring support forms. Estimates are odds ratios with 95\\% confidence intervals and two-sided p values from conversation-cluster robust standard errors. The primary pooled model uses dataset fixed effects; the model/source sensitivity adds recoverable assistant model or source-family fixed effects.}\\label{tab:integrated_regression}\n"
         )
         f.write("\\setlength{\\tabcolsep}{4pt}\n\\renewcommand{\\arraystretch}{1.10}\n")
         f.write("\\resizebox{\\textwidth}{!}{%\n")
         f.write("\\begin{tabular}{lccc}\n\\toprule\n")
         f.write("Predictor & Pooled dataset FE & Pooled model/source FE & WildChat model FE \\\\\n\\midrule\n")
         for term, label in wanted:
-            f.write(f"{label} & {cell(by_pooled[term])} & {cell(by_pooled_model[term])} & {cell(by_wild[term])} \\\\\n")
+            if term in {"M1", "M4", "M6"}:
+                row_pooled = by_pooled_full[term]
+                row_pooled_model = by_pooled_model_full[term]
+                row_wild = by_wild_full[term]
+            else:
+                row_pooled = by_pooled_broad[term]
+                row_pooled_model = by_pooled_model_broad[term]
+                row_wild = by_wild_broad[term]
+            f.write(f"{label} & {cell(row_pooled)} & {cell(row_pooled_model)} & {cell(row_wild)} \\\\\n")
         f.write("\\midrule\n")
         f.write(
             f"Model/source block & Reference & LR $\\chi^2_{{{pooled_block['df']}}}={float(pooled_block['lr_chi2']):.1f}$, $p<.001$ & LR $\\chi^2_{{{wild_block['df']}}}={float(wild_block['lr_chi2']):.1f}$, $p<.001$ \\\\\n"
@@ -795,22 +1066,22 @@ def write_tex_tables() -> None:
         f.write("Scope & Added feature block & LR $\\chi^2$ (df) & p value \\\\\n\\midrule\n")
         labels = {
             "broad S2 added after user/context controls": "Broad S2 after user/context controls",
-            "support forms M1-M6 added beyond broad S2": "M1--M6 forms beyond broad S2",
+            "support-form descriptors M1-M6 added within scaffolded support": "M1--M6 descriptors within S2",
             "full scaffolding block S2 plus M1-M6 added after user/context controls": "Full scaffolding block after user/context controls",
         }
         for r in scaf_blocks:
             p = float(r["p_value"])
             ptxt = "$<.001$" if p < 0.001 else f"{p:.3f}".replace("0.", ".")
             f.write(
-                f"{r['scope']} & {labels[r['comparison']]} & {float(r['lr_chi2']):.1f} ({r['df']}) & {ptxt} \\\\\n"
+                f"{normalized_scope(r['scope'])} & {labels[r['comparison']]} & {float(r['lr_chi2']):.1f} ({r['df']}) & {ptxt} \\\\\n"
             )
         f.write("\\bottomrule\n\\end{tabular}%\n}\n\\end{table*}\n")
 
     state_form_path = ROOT / "tables" / "table_prior_state_support_form_interactions.tex"
     by_scope_state_term = {
-        (r["scope"], r["prior_user_state"], r["term"]): r
+        (normalized_scope(r["scope"]), r["prior_user_state"], r["term"]): r
         for r in state_form_strat
-        if r["scope"] == "six task settings, model/source FE"
+        if normalized_scope(r["scope"]) == "six task settings, model/source FE"
     }
 
     def or_cell(r: dict[str, str]) -> str:
@@ -819,21 +1090,20 @@ def write_tex_tables() -> None:
         return f"{float(r['odds_ratio']):.2f} [{float(r['ci_low']):.2f}, {float(r['ci_high']):.2f}], {ptxt}"
 
     with open(state_form_path, "w") as f:
-        f.write("\\begin{table*}[p]\n\\scriptsize\n\\centering\n")
+        f.write("\\begin{table*}[p]\n\\small\n\\centering\n")
         f.write(
             "\\caption{\\textbf{Prior user state and support form jointly structure adjacent-turn constructive engagement.} "
             "The first panel reports likelihood-ratio tests adding prior-state $\\times$ M1--M6 interactions to the integrated adjacent-turn logistic model. "
             "The second panel reports pooled model/source fixed-effect estimates for selected support forms within each prior user state. Estimates are odds ratios with 95\\% confidence intervals and two-sided p values from conversation-cluster robust standard errors.}\\label{tab:prior_state_support_form_interactions}\n"
         )
-        f.write("\\setlength{\\tabcolsep}{4pt}\n\\renewcommand{\\arraystretch}{1.08}\n")
-        f.write("\\resizebox{\\textwidth}{!}{%\n")
-        f.write("\\begin{tabular}{llcc}\n\\toprule\n")
+        f.write("\\setlength{\\tabcolsep}{5pt}\n\\renewcommand{\\arraystretch}{1.14}\n")
+        f.write("\\begin{tabularx}{\\textwidth}{>{\\raggedright\\arraybackslash}p{0.20\\textwidth}>{\\raggedright\\arraybackslash}p{0.22\\textwidth}>{\\raggedright\\arraybackslash}p{0.23\\textwidth}>{\\raggedright\\arraybackslash}X}\n\\toprule\n")
         f.write("Panel & Scope / prior state & Term or test & Estimate \\\\\n\\midrule\n")
         for r in state_form_blocks:
             p = float(r["p_value"])
             ptxt = "$<.001$" if p < 0.001 else f"{p:.3f}".replace("0.", ".")
             f.write(
-                f"Interaction block & {r['scope']} & Prior state $\\times$ M1--M6 & LR $\\chi^2_{{{r['df']}}}={float(r['lr_chi2']):.1f}$, {ptxt} \\\\\n"
+                f"Interaction block & {normalized_scope(r['scope'])} & Prior state $\\times$ M1--M6 & LR $\\chi^2_{{{r['df']}}}={float(r['lr_chi2']):.1f}$, {ptxt} \\\\\n"
             )
         f.write("\\midrule\n")
         for state_label in ["prior constructive", "prior active", "prior passive"]:
@@ -842,7 +1112,7 @@ def write_tex_tables() -> None:
                 f.write(
                     f"State-stratified model/source FE & {state_label} & {label} & {or_cell(r)} \\\\\n"
                 )
-        f.write("\\bottomrule\n\\end{tabular}%\n}\n\\end{table*}\n")
+        f.write("\\bottomrule\n\\end{tabularx}\n\\end{table*}\n")
 
     contrasts = list(csv.DictReader(open(OUT / "key_percentage_lifts_significance.csv")))
     contrast_path = ROOT / "tables" / "table_key_contrast_significance.tex"
@@ -851,7 +1121,7 @@ def write_tex_tables() -> None:
         f.write("\\begin{table*}[p]\n\\scriptsize\n\\centering\n")
         f.write(
             "\\caption{\\textbf{Uncertainty estimates for key percentage-point contrasts.} "
-            "Constructive-ratio contrasts are conversation-bootstrap estimates weighted by user turns; adjacent-turn contrasts bootstrap conversations over assistant-to-user pairs. Percentage-point differences are the effect sizes reported in the main figures.}\\label{tab:key_contrast_significance}\n"
+            "Constructive-ratio contrasts are turn-weighted conversation-bootstrap estimates, with ratios computed as total constructive user turns divided by total user turns within scaffolded versus non-scaffolded conversation groups. Adjacent-turn contrasts bootstrap conversations over assistant-to-user pairs. Percentage-point differences are the effect sizes reported in the main figures.}\\label{tab:key_contrast_significance}\n"
         )
         f.write("\\setlength{\\tabcolsep}{5pt}\n\\renewcommand{\\arraystretch}{1.10}\n")
         f.write("\\resizebox{\\textwidth}{!}{%\n")
@@ -868,41 +1138,64 @@ def write_tex_tables() -> None:
 
 
 def write_report() -> None:
+    context_rows = list(csv.DictReader(open(OUT / "constructive_context_logit.csv")))
+    pooled_broad = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_pooled_broad_s2.csv")))
+    pooled_model_broad = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_pooled_model_source_fe_broad_s2.csv")))
+    wild_broad = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_wildchat_model_fe_broad_s2.csv")))
     pooled = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_pooled.csv")))
     pooled_model = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_pooled_model_source_fe.csv")))
     wild = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_wildchat_model_fe.csv")))
+    setting_level = list(csv.DictReader(open(OUT / "setting_level_adjacent_turn_logit_model_source_fe.csv")))
     blocks = list(csv.DictReader(open(OUT / "integrated_model_block_tests.csv")))
     scaf_blocks = list(csv.DictReader(open(OUT / "integrated_scaffolding_block_tests.csv")))
     state_form_blocks = list(csv.DictReader(open(OUT / "prior_state_support_form_interaction_block_tests.csv")))
     state_form_strat = list(csv.DictReader(open(OUT / "prior_state_stratified_support_form_logit.csv")))
     pooled_block = blocks[0]
     wild_block = blocks[1]
-    by_pooled = {r["term"]: r for r in pooled}
-    by_pooled_model = {r["term"]: r for r in pooled_model}
-    by_wild = {r["term"]: r for r in wild}
+    by_pooled_broad = {r["term"]: r for r in pooled_broad}
+    by_pooled_model_broad = {r["term"]: r for r in pooled_model_broad}
+    by_wild_broad = {r["term"]: r for r in wild_broad}
+    by_pooled_full = {r["term"]: r for r in pooled}
+    by_pooled_model_full = {r["term"]: r for r in pooled_model}
+    by_wild_full = {r["term"]: r for r in wild}
     contrasts = list(csv.DictReader(open(OUT / "key_percentage_lifts_significance.csv")))
+    def normalized_scope(scope: str) -> str:
+        return scope.replace("six public-chat settings", "six task settings")
+
     with open(OUT / "integrated_regression_report.md", "w") as f:
         f.write("# Integrated Regression and Significance Report\n\n")
         f.write("Data scope: six main task settings: WildChat, LMSYS Chat and ShareChat coding/writing. SWE-chat and ThoughtTrace are not included in the main pooled model.\n\n")
         f.write("Model-label check: `chat_model` is complete for WildChat. LMSYS and ShareChat production columns are empty, but the conversation identifiers retain recoverable information: LMSYS contains model name and ShareChat contains public assistant/source family. The primary pooled model uses dataset fixed effects; a sensitivity replaces them with model/source fixed effects.\n\n")
-        f.write("Claim-level consistency audit: Sections 2.1 and 2.2 are descriptive consistency claims over the six task settings. Inferential checks enter where the manuscript makes contrasts or model claims: Section 2.3 uses bootstrap CIs/p values for raw scaffolded versus reference contrasts and adjusted conversation-level models; Section 2.4 reports support-form CIs and between-stratum p values in the main figure; Section 2.5 uses conversation-cluster bootstrap CIs for adjacent-turn lifts and cluster-robust adjacent-turn regressions.\n\n")
-        f.write("Integrated adjacent-turn logit outcome: whether the next user turn is constructive. Predictors include scaffolded support, prior user state, user framing, task, assistant-turn index, support means M1-M6 and dataset or model/source fixed effects. Standard errors are clustered by conversation.\n\n")
-        f.write("Key pooled estimates with dataset fixed effects:\n\n")
+        f.write("Claim-level consistency audit: Sections 2.1 and 2.2 are descriptive consistency claims over the six task settings. Inferential checks enter where the manuscript makes contrasts or model claims: Section 2.3 uses bootstrap CIs/p values for turn-weighted scaffolded versus reference contrasts and adjusted conversation-level models; Section 2.4 reports support-form CIs and between-stratum FDR-adjusted q values in the main figure; Section 2.5 uses conversation-cluster bootstrap CIs for adjacent-turn lifts and cluster-robust adjacent-turn regressions.\n\n")
+        f.write("Section 2.2 conversation-level context check: a logistic regression predicting whether a conversation contains at least one constructive user turn includes user framing, task ecology, length bucket and dataset fixed effects. The model is a robustness check for systematic organization, not a causal estimate.\n\n")
+        for term in ["intentional_framing", "coding_task", "length_4_6_user_turns", "length_7plus_user_turns"]:
+            r = next(row for row in context_rows if row["term"] == term)
+            f.write(f"- {r['label']}: OR {float(r['odds_ratio']):.3f}, 95% CI [{float(r['ci_low']):.3f}, {float(r['ci_high']):.3f}], p={r['p_value']}.\n")
+        f.write("\n")
+        f.write("Integrated adjacent-turn logit outcome: whether the next user turn is constructive. Broad S2 models include scaffolded-support presence without M1-M6. Support-form decomposed models include broad S2 plus M1-M6, so M coefficients describe form-level variation within scaffolded support. Standard errors are clustered by conversation.\n\n")
+        f.write("Setting-level adjacent-turn models: separate model/source-adjusted regressions were fitted within each of the six task settings to check dataset-by-factor heterogeneity rather than relying only on pooled fixed effects. These outputs are exported to `setting_level_adjacent_turn_logit_model_source_fe.csv` and summarized in Supplementary Table C.\n\n")
+        for term in ["scaffolded_support_S2", "prior_user_constructive", "M1", "M4", "M6"]:
+            sub = [r for r in setting_level if r["term"] == term]
+            positive = sum(float(r["odds_ratio"]) > 1 for r in sub)
+            significant = sum(float(r["p_value"]) < 0.05 for r in sub)
+            f.write(f"- Setting-level {term}: OR>1 in {positive}/{len(sub)} settings; p<0.05 in {significant}/{len(sub)} settings.\n")
+        f.write("\n")
+        f.write("Key pooled estimates with dataset fixed effects. S2 and user/context rows come from broad S2 models; M rows come from support-form decomposed models:\n\n")
         for term in ["scaffolded_support_S2", "prior_user_constructive", "prior_user_active", "prior_user_passive", "intentional_framing", "coding_task", "M1", "M4", "M6"]:
-            r = by_pooled[term]
+            r = by_pooled_full[term] if term in {"M1", "M4", "M6"} else by_pooled_broad[term]
             f.write(f"- {term}: OR {float(r['odds_ratio']):.3f}, 95% CI [{float(r['ci_low']):.3f}, {float(r['ci_high']):.3f}], p={r['p_value']}.\n")
         f.write("\nPooled model/source fixed-effect sensitivity:\n\n")
         for term in ["scaffolded_support_S2", "prior_user_constructive", "prior_user_active", "prior_user_passive", "intentional_framing", "coding_task", "M1", "M4", "M6"]:
-            r = by_pooled_model[term]
+            r = by_pooled_model_full[term] if term in {"M1", "M4", "M6"} else by_pooled_model_broad[term]
             f.write(f"- {term}: OR {float(r['odds_ratio']):.3f}, 95% CI [{float(r['ci_low']):.3f}, {float(r['ci_high']):.3f}], p={r['p_value']}.\n")
         f.write("\nWildChat model-fixed-effect sensitivity:\n\n")
         for term in ["scaffolded_support_S2", "prior_user_constructive", "intentional_framing", "coding_task", "M1", "M4", "M6"]:
-            r = by_wild[term]
+            r = by_wild_full[term] if term in {"M1", "M4", "M6"} else by_wild_broad[term]
             f.write(f"- {term}: OR {float(r['odds_ratio']):.3f}, 95% CI [{float(r['ci_low']):.3f}, {float(r['ci_high']):.3f}], p={r['p_value']}.\n")
         f.write(
             f"\nModel/source fixed-effect block in the pooled data: LR chi-square({pooled_block['df']})={float(pooled_block['lr_chi2']):.1f}, p={pooled_block['p_value']}. "
             f"WildChat exact model fixed-effect block: LR chi-square({wild_block['df']})={float(wild_block['lr_chi2']):.1f}, p={wild_block['p_value']}. "
-            "Model/source labels add detectable heterogeneity. In the fully adjusted adjacent-turn model, the broad S2 indicator is not statistically distinguishable from the null after prior user state and specific support forms are included, whereas prior constructive/active state and M4 explaining remain large and statistically robust.\n\n"
+            "Model/source labels add detectable heterogeneity. Broad S2 remains positive in the broad support model, while the decomposed models show that support-form variation, especially M4 explaining, carries additional local signal.\n\n"
         )
         f.write("Consistency of key unadjusted contrasts:\n\n")
         for contrast in ["constructive_ratio_has_s2_minus_no_s2", "adjacent_next_constructive_s2_minus_s1"]:
@@ -913,12 +1206,12 @@ def write_report() -> None:
         f.write("\nNested scaffolding block tests:\n\n")
         for r in scaf_blocks:
             f.write(
-                f"- {r['scope']}; {r['comparison']}: LR chi-square({r['df']})={float(r['lr_chi2']):.1f}, p={r['p_value']}.\n"
+                f"- {normalized_scope(r['scope'])}; {r['comparison']}: LR chi-square({r['df']})={float(r['lr_chi2']):.1f}, p={r['p_value']}.\n"
             )
         f.write("\nPrior-state by support-form interaction checks:\n\n")
         for r in state_form_blocks:
             f.write(
-                f"- {r['scope']}; prior state x M1-M6 block: LR chi-square({r['df']})={float(r['lr_chi2']):.1f}, p={r['p_value']}.\n"
+                f"- {normalized_scope(r['scope'])}; prior state x M1-M6 block: LR chi-square({r['df']})={float(r['lr_chi2']):.1f}, p={r['p_value']}.\n"
             )
         f.write("\nPooled model/source FE, state-stratified selected support forms:\n\n")
         for r in state_form_strat:
@@ -931,6 +1224,7 @@ def write_report() -> None:
 
 def main() -> None:
     compute_key_contrasts()
+    compute_constructive_context_logit()
     compute_integrated_logit()
     write_tex_tables()
     write_report()

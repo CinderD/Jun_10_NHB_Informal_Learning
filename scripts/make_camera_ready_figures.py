@@ -346,10 +346,9 @@ def make_figure2() -> None:
     for i in range(len(labels)):
         axa.text(active[i] / 2, i, f"{active[i]:.1f}", ha="center", va="center", fontsize=8.0, color=COLORS["ink"])
         axa.text(active[i] + constructive[i] / 2, i, f"{constructive[i]:.1f}", ha="center", va="center", fontsize=8.0, color="white")
-        axa.text(101.7, i, f"P {passive[i]:.1f}", ha="left", va="center", fontsize=7.8, color=COLORS["muted"])
     axa.set_yticks(y, labels)
     axa.invert_yaxis()
-    axa.set_xlim(0, 111)
+    axa.set_xlim(0, 100)
     axa.set_xlabel("Share of cognitively engaged turns (%)")
     axa.set_title("Engagement composition", loc="left", pad=18)
     axa.grid(axis="x", color=COLORS["grid"], linewidth=0.8)
@@ -385,7 +384,7 @@ def make_figure2() -> None:
     intent_dumbbell(axb1, cog_unintent, cog_intent, "Cognitive", (0, 86), show_y=True)
     intent_dumbbell(axb2, con_unintent, con_intent, "Constructive", (0, 25.5), show_y=False)
     axb1.text(-0.42, 1.10, "b", transform=axb1.transAxes, fontsize=14, weight="bold")
-    axb1.text(0.00, 1.26, "Explicit learning framing", transform=axb1.transAxes, fontsize=9.0, color=COLORS["ink"], ha="left")
+    axb1.text(0.00, 1.26, "Explicit user framing", transform=axb1.transAxes, fontsize=9.0, color=COLORS["ink"], ha="left")
     axb2.legend(
         [
             Line2D([0], [0], marker="o", color="none", markerfacecolor="#2D71B8", markeredgecolor="white", markersize=5.6),
@@ -430,13 +429,55 @@ def make_figure2() -> None:
 
 def make_figure3() -> None:
     labels = ["WC coding", "LMSYS coding", "SC coding", "WC writing", "LMSYS writing", "SC writing"]
-    no_s2 = np.array([5.45, 3.89, 9.20, 1.96, 1.04, 3.20])
-    has_s2 = np.array([9.43, 5.90, 16.70, 3.22, 2.25, 5.80])
-    depth_diff = np.array([2.23, 1.43, 3.36, 3.13, 2.10, 3.39])
+    # Turn-weighted constructive user-turn ratios within conversations with
+    # versus without scaffolded support. These match Supplementary Table C6.
+    no_s2 = np.array([5.5626, 3.9565, 8.9800, 1.7372, 1.0692, 3.4391])
+    has_s2 = np.array([10.1265, 6.4673, 16.3192, 2.7293, 2.1567, 6.6385])
+    depth_diff = np.array([2.23, 1.43, 3.36, 3.13, 2.10, 3.38])
     pois = np.array([1.852, 1.626, 1.893, 1.569, 1.985, 2.491])
     logit = np.array([1.761, 1.542, 2.140, 1.437, 1.764, 1.757])
+    pois_ci = np.array(
+        [
+            [1.749, 1.961],
+            [1.535, 1.722],
+            [1.606, 2.231],
+            [1.463, 1.682],
+            [1.759, 2.240],
+            [1.971, 3.150],
+        ]
+    )
+    logit_ci = np.array(
+        [
+            [1.635, 1.896],
+            [1.438, 1.654],
+            [1.690, 2.710],
+            [1.328, 1.555],
+            [1.539, 2.022],
+            [1.280, 2.411],
+        ]
+    )
     strat_intentional = np.array([1.968, 1.665, 2.114, 1.579, 2.334, 1.857])
-    strat_unintentional = np.array([1.633, 1.600, 1.681, 1.567, 1.842, 2.261])
+    strat_unintentional = np.array([1.633, 1.600, 1.681, 1.567, 1.842, 2.235])
+    strat_intentional_ci = np.array(
+        [
+            [1.802, 2.149],
+            [1.545, 1.794],
+            [1.680, 2.660],
+            [1.427, 1.748],
+            [1.886, 2.888],
+            [1.236, 2.782],
+        ]
+    )
+    strat_unintentional_ci = np.array(
+        [
+            [1.513, 1.763],
+            [1.463, 1.751],
+            [1.328, 2.128],
+            [1.422, 1.726],
+            [1.586, 2.139],
+            [1.676, 2.979],
+        ]
+    )
 
     fig = plt.figure(figsize=(7.85, 5.65))
     gs = GridSpec(2, 2, figure=fig, width_ratios=[1.04, 1.16], height_ratios=[1.0, 0.88], wspace=0.42, hspace=0.74)
@@ -470,14 +511,34 @@ def make_figure3() -> None:
     y = np.arange(len(labels))
     axb.axvline(1.0, color=COLORS["ink"], lw=1.0)
     for i in range(len(labels)):
-        axb.plot([1.0, pois[i]], [i - 0.12, i - 0.12], color="#C9D2D9", lw=1.5, zorder=1)
-        axb.plot([1.0, logit[i]], [i + 0.12, i + 0.12], color="#C9D2D9", lw=1.5, zorder=1)
+        axb.errorbar(
+            pois[i],
+            i - 0.12,
+            xerr=np.array([[pois[i] - pois_ci[i, 0]], [pois_ci[i, 1] - pois[i]]]),
+            fmt="none",
+            ecolor=COLORS["s2"],
+            elinewidth=0.8,
+            capsize=2.0,
+            capthick=0.8,
+            zorder=2,
+        )
+        axb.errorbar(
+            logit[i],
+            i + 0.12,
+            xerr=np.array([[logit[i] - logit_ci[i, 0]], [logit_ci[i, 1] - logit[i]]]),
+            fmt="none",
+            ecolor="#5A6470",
+            elinewidth=0.8,
+            capsize=2.0,
+            capthick=0.8,
+            zorder=2,
+        )
         axb.scatter(pois[i], i - 0.12, s=48, color=COLORS["s2"], edgecolor="white", linewidth=0.7, zorder=3)
         axb.scatter(logit[i], i + 0.12, s=48, color="#5A6470", edgecolor="white", linewidth=0.7, zorder=3)
-        axb.text(max(pois[i], logit[i]) + 0.035, i, f"{pois[i]:.2f} / {logit[i]:.2f}", va="center", fontsize=7.5, color=COLORS["ink"])
+        axb.text(min(max(pois_ci[i, 1], logit_ci[i, 1]) + 0.045, 3.22), i, f"{pois[i]:.2f} / {logit[i]:.2f}", va="center", fontsize=7.5, color=COLORS["ink"])
     axb.set_yticks(y, labels)
     axb.invert_yaxis()
-    axb.set_xlim(0.94, 2.65)
+    axb.set_xlim(0.94, 3.30)
     axb.set_title("Adjusted association models", loc="left", pad=8)
     axb.set_xlabel("Association estimate")
     axb.grid(axis="x", color=COLORS["grid"], lw=0.8)
@@ -502,12 +563,32 @@ def make_figure3() -> None:
     yc = np.arange(len(labels))
     axc.axvline(1.0, color=COLORS["ink"], lw=1.0)
     for i in range(len(labels)):
-        axc.plot([1.0, strat_intentional[i]], [i - 0.12, i - 0.12], color="#C9D2D9", lw=1.5, zorder=1)
-        axc.plot([1.0, strat_unintentional[i]], [i + 0.12, i + 0.12], color="#C9D2D9", lw=1.5, zorder=1)
+        axc.errorbar(
+            strat_intentional[i],
+            i - 0.12,
+            xerr=np.array([[strat_intentional[i] - strat_intentional_ci[i, 0]], [strat_intentional_ci[i, 1] - strat_intentional[i]]]),
+            fmt="none",
+            ecolor=COLORS["blue"],
+            elinewidth=0.8,
+            capsize=2.0,
+            capthick=0.8,
+            zorder=2,
+        )
+        axc.errorbar(
+            strat_unintentional[i],
+            i + 0.12,
+            xerr=np.array([[strat_unintentional[i] - strat_unintentional_ci[i, 0]], [strat_unintentional_ci[i, 1] - strat_unintentional[i]]]),
+            fmt="none",
+            ecolor=COLORS["grey"],
+            elinewidth=0.8,
+            capsize=2.0,
+            capthick=0.8,
+            zorder=2,
+        )
         axc.scatter(strat_intentional[i], i - 0.12, s=48, color=COLORS["blue"], edgecolor="white", linewidth=0.7, zorder=3)
         axc.scatter(strat_unintentional[i], i + 0.12, s=48, color=COLORS["grey"], edgecolor="white", linewidth=0.7, zorder=3)
         axc.text(
-            max(strat_intentional[i], strat_unintentional[i]) + 0.045,
+            min(max(strat_intentional_ci[i, 1], strat_unintentional_ci[i, 1]) + 0.045, 3.22),
             i,
             f"{strat_intentional[i]:.2f} / {strat_unintentional[i]:.2f}",
             va="center",
@@ -516,7 +597,7 @@ def make_figure3() -> None:
         )
     axc.set_yticks(yc, labels)
     axc.invert_yaxis()
-    axc.set_xlim(0.94, 2.65)
+    axc.set_xlim(0.94, 3.30)
     axc.set_title("Framing-stratified association", loc="left", pad=8)
     axc.set_xlabel("Poisson RR (intentional / unintentional)")
     axc.grid(axis="x", color=COLORS["grid"], lw=0.8)
@@ -615,10 +696,24 @@ def make_figure4() -> None:
         ax.tick_params(axis="x", length=0, pad=5, labelsize=7.5)
         ax.tick_params(axis="y", labelsize=7.6)
 
-    def _p_label(p: float) -> str:
-        if p < 0.001:
-            return "p<.001"
-        return f"p={p:.3f}".replace("0.", ".")
+    def _bh_fdr(pvals: np.ndarray) -> np.ndarray:
+        pvals = np.asarray(pvals, dtype=float)
+        order = np.argsort(pvals)
+        ranked = pvals[order]
+        m = float(len(pvals))
+        adjusted_ranked = ranked * m / (np.arange(len(pvals)) + 1)
+        adjusted_ranked = np.minimum.accumulate(adjusted_ranked[::-1])[::-1]
+        adjusted = np.empty_like(adjusted_ranked)
+        adjusted[order] = np.clip(adjusted_ranked, 0, 1)
+        return adjusted
+
+    def _q_label(q: float) -> str:
+        if q < 0.001:
+            return "q<.001"
+        return f"q={q:.3f}".replace("0.", ".")
+
+    framing_q = _bh_fdr(framing_p)
+    task_q = _bh_fdr(task_p)
 
     def _draw_bracket(ax: plt.Axes, x0: float, x1: float, y: float, label: str, color: str, above: bool) -> None:
         tick = y_span * 0.010
@@ -654,7 +749,7 @@ def make_figure4() -> None:
         second_vals: np.ndarray,
         second_low: np.ndarray,
         second_high: np.ndarray,
-        pvals: np.ndarray,
+        qvals: np.ndarray,
         title: str,
     ) -> None:
         offsets = np.array([-0.17, 0.17])
@@ -700,7 +795,7 @@ def make_figure4() -> None:
                 centers[i] + offsets[0],
                 centers[i] + offsets[1],
                 y,
-                f"Δ={shown_delta:+.1f}\n{_p_label(pvals[i])}",
+                f"Δ={shown_delta:+.1f}\n{_q_label(qvals[i])}",
                 color,
                 above,
             )
@@ -718,7 +813,7 @@ def make_figure4() -> None:
         unintentional_effect,
         unintentional_low,
         unintentional_high,
-        framing_p,
+        framing_q,
         "Constructive association by user framing",
     )
     ax_framing.set_ylabel("Constructive engagement difference (pp)")
@@ -734,7 +829,7 @@ def make_figure4() -> None:
         writing_effect,
         writing_low,
         writing_high,
-        task_p,
+        task_q,
         "Constructive association by task ecology",
     )
     ax_task.set_ylabel("")
@@ -1032,19 +1127,19 @@ def make_figure5() -> None:
         )
         axd.scatter(vals, ypos, s=25, color=form_colors[label], edgecolor=COLORS["ink"], lw=0.45, zorder=4, label=label)
         for x, yv in zip(vals, ypos):
-            label_x = x - 0.08 if x < 1 else min(x + 0.12, 5.18)
+            label_x = x + 0.10 if x < 1 else min(x + 0.12, 5.18)
             axd.text(
                 label_x,
                 yv,
                 f"{x:.2f}",
                 va="center",
-                ha="right" if x < 1 else "left",
+                ha="left",
                 fontsize=7.0,
                 bbox=dict(facecolor="white", edgecolor="none", alpha=0.86, pad=0.10),
                 zorder=5,
             )
     axd.axvline(1, color=COLORS["ink"], lw=0.9)
-    axd.set_yticks(y2, form_states)
+    axd.set_yticks(y2, ["prior\nconstructive", "prior\nactive", "prior\npassive"])
     axd.invert_yaxis()
     axd.set_xlim(0.45, 5.55)
     axd.set_xticks([1, 2, 3, 4, 5])

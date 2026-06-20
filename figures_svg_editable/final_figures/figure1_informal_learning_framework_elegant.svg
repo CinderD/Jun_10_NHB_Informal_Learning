@@ -53,7 +53,7 @@
 <line x1="68" y1="825" x2="512" y2="825" stroke="#163D6B" stroke-width="2.0" stroke-linecap="round"/>
 <text x="112" y="855" font-size="20" font-weight="400" fill="#17202A" text-anchor="start">
 <tspan x="112" dy="0">Matched settings define the main</tspan>
-<tspan x="112" dy="30">task-ecology contrasts; user intent is</tspan>
+<tspan x="112" dy="30">task-ecology contrasts; user framing is</tspan>
 <tspan x="112" dy="30">analysed as a moderator.</tspan>
 </text>
 <path d="M 550 491 H 557 V 475 L 575 500 L 557 525 V 509 H 550 Z" fill="#566575" opacity="0.88"/>
