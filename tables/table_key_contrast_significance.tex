@@ -1,7 +1,7 @@
 \begin{table*}[p]
 \scriptsize
 \centering
-\caption{\textbf{Uncertainty estimates for key percentage-point contrasts.} Constructive-ratio contrasts are turn-weighted conversation-bootstrap estimates, with ratios computed as total constructive user turns divided by total user turns within scaffolded versus non-scaffolded conversation groups. Adjacent-turn contrasts bootstrap conversations over assistant-to-user pairs. Percentage-point differences are the effect sizes reported in the main figures.}\label{tab:key_contrast_significance}
+\caption{\textbf{Uncertainty estimates for key support--engagement contrasts.} Constructive-ratio contrasts are turn-weighted conversation-bootstrap estimates, with ratios computed as total constructive user turns divided by total user turns within scaffolded versus non-scaffolded conversation groups. Post-answer depth contrasts use conversation-level bootstrap resampling. Adjacent-turn contrasts bootstrap conversations over assistant-to-user pairs. Percentage-point and turn differences are the effect sizes reported in the main figures.}\label{tab:key_contrast_significance}
 \setlength{\tabcolsep}{5pt}
 \renewcommand{\arraystretch}{1.10}
 \resizebox{\textwidth}{!}{%
@@ -10,11 +10,17 @@
 Setting & Contrast & Effect & 95\% CI & p value \\
 \midrule
 WC coding & Has S2 $-$ no S2 constructive ratio & +4.56 pp & [+4.15, +4.99] & $<.001$ \\
+WC coding & Has S2 $-$ no S2 post-answer depth & +2.23 turns & [+2.11, +2.35] & $<.001$ \\
 LMSYS coding & Has S2 $-$ no S2 constructive ratio & +2.51 pp & [+2.19, +2.86] & $<.001$ \\
+LMSYS coding & Has S2 $-$ no S2 post-answer depth & +1.43 turns & [+1.33, +1.51] & $<.001$ \\
 SC coding & Has S2 $-$ no S2 constructive ratio & +7.34 pp & [+5.29, +9.27] & $<.001$ \\
+SC coding & Has S2 $-$ no S2 post-answer depth & +3.36 turns & [+2.69, +4.01] & $<.001$ \\
 WC writing & Has S2 $-$ no S2 constructive ratio & +0.99 pp & [+0.82, +1.16] & $<.001$ \\
+WC writing & Has S2 $-$ no S2 post-answer depth & +3.13 turns & [+2.96, +3.30] & $<.001$ \\
 LMSYS writing & Has S2 $-$ no S2 constructive ratio & +1.09 pp & [+0.87, +1.31] & $<.001$ \\
+LMSYS writing & Has S2 $-$ no S2 post-answer depth & +2.10 turns & [+1.91, +2.28] & $<.001$ \\
 SC writing & Has S2 $-$ no S2 constructive ratio & +3.20 pp & [+1.55, +4.89] & $<.001$ \\
+SC writing & Has S2 $-$ no S2 post-answer depth & +3.38 turns & [+1.92, +4.64] & $<.001$ \\
 WC coding & Adjacent S2 $-$ reference lift & +2.68 pp & [+2.22, +3.09] & $<.001$ \\
 LMSYS coding & Adjacent S2 $-$ reference lift & +2.01 pp & [+1.54, +2.55] & $<.001$ \\
 SC coding & Adjacent S2 $-$ reference lift & +6.21 pp & [+4.35, +8.10] & $<.001$ \\

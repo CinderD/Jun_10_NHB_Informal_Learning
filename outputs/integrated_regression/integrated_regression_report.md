@@ -62,6 +62,7 @@ Model/source fixed-effect block in the pooled data: LR chi-square(41)=718.2, p=1
 Consistency of key unadjusted contrasts:
 
 - constructive_ratio_has_s2_minus_no_s2: 6/6 settings are positive; 6/6 have p<0.05.
+- post_answer_depth_has_s2_minus_no_s2: 6/6 settings are positive; 6/6 have p<0.05.
 - adjacent_next_constructive_s2_minus_s1: 6/6 settings are positive; 5/6 have p<0.05.
 
 Nested scaffolding block tests:

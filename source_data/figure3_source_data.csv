@@ -35,9 +35,9 @@ Figure 3,c,SC coding,Poisson count ratio,unintentional,1.680661,ratio,1.32763,2.
 Figure 3,c,WC writing,Poisson count ratio,unintentional,1.56667,ratio,1.421943,1.726128,,User-framing stratified model.
 Figure 3,c,LMSYS writing,Poisson count ratio,unintentional,1.841921,ratio,1.585813,2.139391,,User-framing stratified model.
 Figure 3,c,SC writing,Poisson count ratio,unintentional,2.234555,ratio,1.675959,2.979332,,User-framing stratified model.
-Figure 3,d,WC coding,post-answer depth difference,scaffolded minus reference,2.2259,turns,,,,Conversation-level bootstrap CIs are reported in outputs/integrated_regression/key_percentage_lifts_significance.csv.
-Figure 3,d,LMSYS coding,post-answer depth difference,scaffolded minus reference,1.4286,turns,,,,Conversation-level bootstrap CIs are reported in outputs/integrated_regression/key_percentage_lifts_significance.csv.
-Figure 3,d,SC coding,post-answer depth difference,scaffolded minus reference,3.3617,turns,,,,Conversation-level bootstrap CIs are reported in outputs/integrated_regression/key_percentage_lifts_significance.csv.
-Figure 3,d,WC writing,post-answer depth difference,scaffolded minus reference,3.1268,turns,,,,Conversation-level bootstrap CIs are reported in outputs/integrated_regression/key_percentage_lifts_significance.csv.
-Figure 3,d,LMSYS writing,post-answer depth difference,scaffolded minus reference,2.0999,turns,,,,Conversation-level bootstrap CIs are reported in outputs/integrated_regression/key_percentage_lifts_significance.csv.
-Figure 3,d,SC writing,post-answer depth difference,scaffolded minus reference,3.3848,turns,,,,Conversation-level bootstrap CIs are reported in outputs/integrated_regression/key_percentage_lifts_significance.csv.
+Figure 3,d,WC coding,post-answer depth difference,scaffolded minus reference,2.2259,turns,2.1065,2.3468,1.70734e-300,Conversation-level bootstrap estimate.
+Figure 3,d,LMSYS coding,post-answer depth difference,scaffolded minus reference,1.4286,turns,1.3322,1.5128,1.79771e-200,Conversation-level bootstrap estimate.
+Figure 3,d,SC coding,post-answer depth difference,scaffolded minus reference,3.3617,turns,2.685,4.0114,3.11658e-23,Conversation-level bootstrap estimate.
+Figure 3,d,WC writing,post-answer depth difference,scaffolded minus reference,3.1268,turns,2.9593,3.3027,5.16574e-261,Conversation-level bootstrap estimate.
+Figure 3,d,LMSYS writing,post-answer depth difference,scaffolded minus reference,2.0999,turns,1.9063,2.281,1.6131e-107,Conversation-level bootstrap estimate.
+Figure 3,d,SC writing,post-answer depth difference,scaffolded minus reference,3.3848,turns,1.9213,4.6377,1.01313e-06,Conversation-level bootstrap estimate.

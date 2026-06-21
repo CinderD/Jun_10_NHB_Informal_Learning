@@ -1116,23 +1116,36 @@ def write_tex_tables() -> None:
 
     contrasts = list(csv.DictReader(open(OUT / "key_percentage_lifts_significance.csv")))
     contrast_path = ROOT / "tables" / "table_key_contrast_significance.tex"
-    compact = [r for r in contrasts if r["contrast"] in {"constructive_ratio_has_s2_minus_no_s2", "adjacent_next_constructive_s2_minus_s1"}]
+    compact_contrasts = {
+        "constructive_ratio_has_s2_minus_no_s2",
+        "post_answer_depth_has_s2_minus_no_s2",
+        "adjacent_next_constructive_s2_minus_s1",
+    }
+    compact = [r for r in contrasts if r["contrast"] in compact_contrasts]
     with open(contrast_path, "w") as f:
         f.write("\\begin{table*}[p]\n\\scriptsize\n\\centering\n")
         f.write(
-            "\\caption{\\textbf{Uncertainty estimates for key percentage-point contrasts.} "
-            "Constructive-ratio contrasts are turn-weighted conversation-bootstrap estimates, with ratios computed as total constructive user turns divided by total user turns within scaffolded versus non-scaffolded conversation groups. Adjacent-turn contrasts bootstrap conversations over assistant-to-user pairs. Percentage-point differences are the effect sizes reported in the main figures.}\\label{tab:key_contrast_significance}\n"
+            "\\caption{\\textbf{Uncertainty estimates for key support--engagement contrasts.} "
+            "Constructive-ratio contrasts are turn-weighted conversation-bootstrap estimates, with ratios computed as total constructive user turns divided by total user turns within scaffolded versus non-scaffolded conversation groups. Post-answer depth contrasts use conversation-level bootstrap resampling. Adjacent-turn contrasts bootstrap conversations over assistant-to-user pairs. Percentage-point and turn differences are the effect sizes reported in the main figures.}\\label{tab:key_contrast_significance}\n"
         )
         f.write("\\setlength{\\tabcolsep}{5pt}\n\\renewcommand{\\arraystretch}{1.10}\n")
         f.write("\\resizebox{\\textwidth}{!}{%\n")
         f.write("\\begin{tabular}{llccc}\n\\toprule\n")
         f.write("Setting & Contrast & Effect & 95\\% CI & p value \\\\\n\\midrule\n")
         for r in compact:
-            label = "Has S2 $-$ no S2 constructive ratio" if r["contrast"].startswith("constructive") else "Adjacent S2 $-$ reference lift"
+            if r["contrast"] == "constructive_ratio_has_s2_minus_no_s2":
+                label = "Has S2 $-$ no S2 constructive ratio"
+                unit = "pp"
+            elif r["contrast"] == "post_answer_depth_has_s2_minus_no_s2":
+                label = "Has S2 $-$ no S2 post-answer depth"
+                unit = "turns"
+            else:
+                label = "Adjacent S2 $-$ reference lift"
+                unit = "pp"
             p = float(r["p_value"])
             ptxt = "$<.001$" if p < 0.001 else f"{p:.3f}".replace("0.", ".")
             f.write(
-                f"{r['setting']} & {label} & {float(r['estimate']):+.2f} pp & [{float(r['ci_low']):+.2f}, {float(r['ci_high']):+.2f}] & {ptxt} \\\\\n"
+                f"{r['setting']} & {label} & {float(r['estimate']):+.2f} {unit} & [{float(r['ci_low']):+.2f}, {float(r['ci_high']):+.2f}] & {ptxt} \\\\\n"
             )
         f.write("\\bottomrule\n\\end{tabular}%\n}\n\\end{table*}\n")
 
@@ -1198,7 +1211,11 @@ def write_report() -> None:
             "Model/source labels add detectable heterogeneity. Broad S2 remains positive in the broad support model, while the decomposed models show that support-form variation, especially M4 explaining, carries additional local signal.\n\n"
         )
         f.write("Consistency of key unadjusted contrasts:\n\n")
-        for contrast in ["constructive_ratio_has_s2_minus_no_s2", "adjacent_next_constructive_s2_minus_s1"]:
+        for contrast in [
+            "constructive_ratio_has_s2_minus_no_s2",
+            "post_answer_depth_has_s2_minus_no_s2",
+            "adjacent_next_constructive_s2_minus_s1",
+        ]:
             sub = [r for r in contrasts if r["contrast"] == contrast]
             positive = sum(float(r["estimate"]) > 0 for r in sub)
             significant = sum(float(r["p_value"]) < 0.05 for r in sub)

@@ -116,6 +116,8 @@ def figure3() -> None:
     no_s2 = [5.5626, 3.9565, 8.9800, 1.7372, 1.0692, 3.4391]
     has_s2 = [10.1265, 6.4673, 16.3192, 2.7293, 2.1567, 6.6385]
     depth_diff = [2.2259, 1.4286, 3.3617, 3.1268, 2.0999, 3.3848]
+    depth_ci = [(2.1065, 2.3468), (1.3322, 1.5128), (2.6850, 4.0114), (2.9593, 3.3027), (1.9063, 2.2810), (1.9213, 4.6377)]
+    depth_p = [1.70734e-300, 1.79771e-200, 3.11658e-23, 5.16574e-261, 1.6131e-107, 1.01313e-06]
     pois = [1.852129, 1.626117, 1.892754, 1.568604, 1.985056, 2.491434]
     pois_ci = [(1.748968, 1.961375), (1.535445, 1.722144), (1.605713, 2.231107), (1.462784, 1.682078), (1.759494, 2.239534), (1.970588, 3.149944)]
     logit = [1.760538, 1.542169, 2.140210, 1.436974, 1.764222, 1.756637]
@@ -149,8 +151,8 @@ def figure3() -> None:
     for group, values, cis in [("intentional", strat_int, strat_int_ci), ("unintentional", strat_unint, strat_unint_ci)]:
         for setting, value, ci in zip(labels, values, cis):
             rows.append({"figure": "Figure 3", "panel": "c", "setting": setting, "measure": "Poisson count ratio", "group": group, "estimate": value, "unit": "ratio", "ci_low": ci[0], "ci_high": ci[1], "p_value": "", "notes": "User-framing stratified model."})
-    for setting, value in zip(labels, depth_diff):
-        rows.append({"figure": "Figure 3", "panel": "d", "setting": setting, "measure": "post-answer depth difference", "group": "scaffolded minus reference", "estimate": value, "unit": "turns", "ci_low": "", "ci_high": "", "p_value": "", "notes": "Conversation-level bootstrap CIs are reported in outputs/integrated_regression/key_percentage_lifts_significance.csv."})
+    for setting, value, ci, p_value in zip(labels, depth_diff, depth_ci, depth_p):
+        rows.append({"figure": "Figure 3", "panel": "d", "setting": setting, "measure": "post-answer depth difference", "group": "scaffolded minus reference", "estimate": value, "unit": "turns", "ci_low": ci[0], "ci_high": ci[1], "p_value": p_value, "notes": "Conversation-level bootstrap estimate."})
     write_csv(OUT / "figure3_source_data.csv", rows)
 
 
