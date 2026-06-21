@@ -437,6 +437,59 @@ def _make_constructive_context_design(
     return X, y, clusters, names
 
 
+def _make_constructive_rate_design(
+    rows: list[dict[str, str]],
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, list[str], list[str]]:
+    X, _, clusters, names = _make_constructive_context_design(rows)
+    successes = np.asarray([_f(r, "Cog_C_count") for r in rows], dtype=float)
+    trials = np.asarray([max(_f(r, "user_turns"), 1.0) for r in rows], dtype=float)
+    successes = np.minimum(successes, trials)
+    return X, successes, trials, clusters, names
+
+
+def _fit_grouped_binomial_cluster(
+    X: np.ndarray,
+    successes: np.ndarray,
+    trials: np.ndarray,
+    clusters: list[str],
+    max_iter: int = 80,
+) -> tuple[np.ndarray, np.ndarray, float]:
+    beta = np.zeros(X.shape[1])
+    y_rate = successes / trials
+    for _ in range(max_iter):
+        eta = X @ beta
+        p = np.clip(_sigmoid(eta), 1e-6, 1 - 1e-6)
+        w = trials * p * (1 - p)
+        z = eta + (y_rate - p) / (p * (1 - p))
+        xtw = X.T * w
+        h = xtw @ X
+        step_beta = np.linalg.solve(h + np.eye(h.shape[0]) * 1e-8, xtw @ z)
+        if np.max(np.abs(step_beta - beta)) < 1e-7:
+            beta = step_beta
+            break
+        beta = step_beta
+
+    p = np.clip(_sigmoid(X @ beta), 1e-6, 1 - 1e-6)
+    w = trials * p * (1 - p)
+    bread = np.linalg.inv((X.T * w) @ X + np.eye(X.shape[1]) * 1e-8)
+    scores = X * (successes - trials * p)[:, None]
+    meat = np.zeros((X.shape[1], X.shape[1]))
+    cluster_scores: dict[str, np.ndarray] = defaultdict(lambda: np.zeros(X.shape[1]))
+    for cluster, score in zip(clusters, scores):
+        cluster_scores[cluster] += score
+    for score in cluster_scores.values():
+        meat += np.outer(score, score)
+    g = len(cluster_scores)
+    n, k = X.shape
+    correction = (g / (g - 1)) * ((n - 1) / (n - k)) if g > 1 and n > k else 1.0
+    cov = bread @ meat @ bread * correction
+    se = np.sqrt(np.maximum(np.diag(cov), 0))
+    ll = float(
+        np.sum(successes * np.log(p) + (trials - successes) * np.log(1 - p))
+    )
+    return beta, se, ll
+
+
 def compute_constructive_context_logit() -> None:
     rows = _load_level2_rows()
     X, y, clusters, names = _make_constructive_context_design(rows)
@@ -477,6 +530,39 @@ def compute_constructive_context_logit() -> None:
         writer = csv.DictWriter(f, fieldnames=list(out_rows[0].keys()))
         writer.writeheader()
         writer.writerows(out_rows)
+
+    Xr, successes, trials, clusters, names = _make_constructive_rate_design(rows)
+    beta, se, ll = _fit_grouped_binomial_cluster(Xr, successes, trials, clusters)
+    formula = "constructive user-turn count out of user turns ~ user framing + task ecology + length bucket + dataset fixed effects"
+    rate_rows: list[dict[str, str]] = []
+    for name, b, s in zip(names, beta, se):
+        z = b / s if s > 0 else float("nan")
+        p = math.erfc(abs(z) / math.sqrt(2)) if s > 0 else float("nan")
+        rate_rows.append(
+            {
+                "term": name,
+                "label": label_map.get(name, "Intercept"),
+                "coef_log_odds": f"{b:.6f}",
+                "conversation_robust_se": f"{s:.6f}",
+                "z": f"{z:.6f}",
+                "p_value": f"{p:.6g}",
+                "odds_ratio": f"{math.exp(b):.6f}",
+                "ci_low": f"{math.exp(b - 1.96 * s):.6f}",
+                "ci_high": f"{math.exp(b + 1.96 * s):.6f}",
+                "n_conversations": str(len(rows)),
+                "n_user_turns": f"{int(trials.sum())}",
+                "n_constructive_turns": f"{int(successes.sum())}",
+                "log_likelihood_without_constants": f"{ll:.6f}",
+                "formula": formula,
+                "reference": "unintentional framing, writing task, 2--3 user turns, WildChat",
+                "se_type": "conversation-robust sandwich",
+                "notes": "Section 2.2 rate sensitivity; grouped-binomial model uses user turns as the denominator to reduce the mechanical opportunity effect in any-constructive outcomes.",
+            }
+        )
+    with open(OUT / "constructive_rate_context_logit.csv", "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=list(rate_rows[0].keys()))
+        writer.writeheader()
+        writer.writerows(rate_rows)
 
 
 def _write_model_rows(
@@ -920,6 +1006,7 @@ def compute_integrated_logit() -> None:
 
 def write_tex_tables() -> None:
     context_rows = list(csv.DictReader(open(OUT / "constructive_context_logit.csv")))
+    rate_context_rows = list(csv.DictReader(open(OUT / "constructive_rate_context_logit.csv")))
     pooled_broad = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_pooled_broad_s2.csv")))
     pooled_model_broad = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_pooled_model_source_fe_broad_s2.csv")))
     wild_broad = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_wildchat_model_fe_broad_s2.csv")))
@@ -994,6 +1081,37 @@ def write_tex_tables() -> None:
         n = int(next(row for row in context_rows if row["term"] == "Intercept")["n_conversations"])
         f.write("\\midrule\n")
         f.write(f"Conversations & {n:,} \\\\\n")
+        f.write("\\bottomrule\n\\end{tabular}%\n}\n\\end{table*}\n")
+
+    rate_context_path = ROOT / "tables" / "table_constructive_rate_context_logit.tex"
+    with open(rate_context_path, "w") as f:
+        f.write("\\begin{table*}[p]\n\\scriptsize\n\\centering\n")
+        f.write(
+            "\\caption{\\textbf{Conversation-level constructive-rate sensitivity model.} "
+            "The outcome is the number of constructive user turns out of total user turns in each conversation, modelled with a grouped-binomial logistic regression. "
+            "The model includes user framing, task ecology, conversation-length bucket and dataset fixed effects, using user-turn counts as denominators to reduce the mechanical opportunity effect in any-constructive-turn outcomes. "
+            "Cells report odds ratios with 95\\% confidence intervals and two-sided p values from conversation-robust standard errors. "
+            "The reference category is unintentional framing, writing-oriented task, 2--3 user turns and WildChat.}\\label{tab:constructive_rate_context_logit}\n"
+        )
+        f.write("\\setlength{\\tabcolsep}{6pt}\n\\renewcommand{\\arraystretch}{1.08}\n")
+        f.write("\\resizebox{0.86\\textwidth}{!}{%\n")
+        f.write("\\begin{tabular}{lc}\n\\toprule\n")
+        f.write("Predictor & OR [95\\% CI], p value \\\\\n\\midrule\n")
+        for term in [
+            "intentional_framing",
+            "coding_task",
+            "length_4_6_user_turns",
+            "length_7plus_user_turns",
+            "dataset_LMSYS",
+            "dataset_ShareChat",
+        ]:
+            r = next(row for row in rate_context_rows if row["term"] == term)
+            f.write(f"{r['label']} & {cell(r)} \\\\\n")
+        first = next(row for row in rate_context_rows if row["term"] == "Intercept")
+        f.write("\\midrule\n")
+        f.write(f"Conversations & {int(first['n_conversations']):,} \\\\\n")
+        f.write(f"User turns & {int(first['n_user_turns']):,} \\\\\n")
+        f.write(f"Constructive user turns & {int(first['n_constructive_turns']):,} \\\\\n")
         f.write("\\bottomrule\n\\end{tabular}%\n}\n\\end{table*}\n")
 
     setting_table_path = ROOT / "tables" / "table_setting_level_adjacent_models.tex"
@@ -1152,6 +1270,7 @@ def write_tex_tables() -> None:
 
 def write_report() -> None:
     context_rows = list(csv.DictReader(open(OUT / "constructive_context_logit.csv")))
+    rate_context_rows = list(csv.DictReader(open(OUT / "constructive_rate_context_logit.csv")))
     pooled_broad = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_pooled_broad_s2.csv")))
     pooled_model_broad = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_pooled_model_source_fe_broad_s2.csv")))
     wild_broad = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_wildchat_model_fe_broad_s2.csv")))
@@ -1183,6 +1302,11 @@ def write_report() -> None:
         f.write("Section 2.2 conversation-level context check: a logistic regression predicting whether a conversation contains at least one constructive user turn includes user framing, task ecology, length bucket and dataset fixed effects. The model is a robustness check for systematic organization, not a causal estimate.\n\n")
         for term in ["intentional_framing", "coding_task", "length_4_6_user_turns", "length_7plus_user_turns"]:
             r = next(row for row in context_rows if row["term"] == term)
+            f.write(f"- {r['label']}: OR {float(r['odds_ratio']):.3f}, 95% CI [{float(r['ci_low']):.3f}, {float(r['ci_high']):.3f}], p={r['p_value']}.\n")
+        f.write("\n")
+        f.write("Section 2.2 constructive-rate sensitivity: a grouped-binomial logistic regression models constructive user-turn count out of total user turns with the same user framing, task ecology, length bucket and dataset fixed effects. This checks whether the length pattern is only an opportunity-count artifact from the any-constructive outcome.\n\n")
+        for term in ["intentional_framing", "coding_task", "length_4_6_user_turns", "length_7plus_user_turns"]:
+            r = next(row for row in rate_context_rows if row["term"] == term)
             f.write(f"- {r['label']}: OR {float(r['odds_ratio']):.3f}, 95% CI [{float(r['ci_low']):.3f}, {float(r['ci_high']):.3f}], p={r['p_value']}.\n")
         f.write("\n")
         f.write("Integrated adjacent-turn logit outcome: whether the next user turn is constructive. Broad S2 models include scaffolded-support presence without M1-M6. Support-form decomposed models include broad S2 plus M1-M6, so M coefficients describe form-level variation within scaffolded support. Standard errors are clustered by conversation.\n\n")

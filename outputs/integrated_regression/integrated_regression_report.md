@@ -13,6 +13,13 @@ Section 2.2 conversation-level context check: a logistic regression predicting w
 - 4--6 user turns: OR 2.069, 95% CI [1.990, 2.151], p=2.1066e-293.
 - 7+ user turns: OR 3.576, 95% CI [3.417, 3.743], p=0.
 
+Section 2.2 constructive-rate sensitivity: a grouped-binomial logistic regression models constructive user-turn count out of total user turns with the same user framing, task ecology, length bucket and dataset fixed effects. This checks whether the length pattern is only an opportunity-count artifact from the any-constructive outcome.
+
+- Intentional framing: OR 2.782, 95% CI [2.682, 2.886], p=0.
+- Coding task ecology: OR 1.668, 95% CI [1.477, 1.884], p=1.62829e-16.
+- 4--6 user turns: OR 1.133, 95% CI [1.091, 1.177], p=9.84234e-11.
+- 7+ user turns: OR 1.063, 95% CI [1.014, 1.114], p=0.0107297.
+
 Integrated adjacent-turn logit outcome: whether the next user turn is constructive. Broad S2 models include scaffolded-support presence without M1-M6. Support-form decomposed models include broad S2 plus M1-M6, so M coefficients describe form-level variation within scaffolded support. Standard errors are clustered by conversation.
 
 Setting-level adjacent-turn models: separate model/source-adjusted regressions were fitted within each of the six task settings to check dataset-by-factor heterogeneity rather than relying only on pooled fixed effects. These outputs are exported to `setting_level_adjacent_turn_logit_model_source_fe.csv` and summarized in Supplementary Table C.
