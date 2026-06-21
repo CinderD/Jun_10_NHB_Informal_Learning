@@ -490,6 +490,126 @@ def _fit_grouped_binomial_cluster(
     return beta, se, ll
 
 
+FIG3_POISSON_COVARIATES = [
+    "is_intentional",
+    "is_coding_topic",
+    "total_turns",
+    "Emo_ratio",
+    "has_error",
+    "persistence_after_failure",
+    "high_persistence",
+]
+
+
+def _make_fig3_poisson_design(
+    rows: list[dict[str, str]],
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, list[str]]:
+    names = ["Intercept", "has_S2"] + FIG3_POISSON_COVARIATES
+    X = np.zeros((len(rows), len(names)), dtype=float)
+    y = np.zeros(len(rows), dtype=float)
+    offset = np.zeros(len(rows), dtype=float)
+    name_to_idx = {name: i for i, name in enumerate(names)}
+    for i, r in enumerate(rows):
+        X[i, name_to_idx["Intercept"]] = 1
+        X[i, name_to_idx["has_S2"]] = _f(r, "has_S2")
+        for covariate in FIG3_POISSON_COVARIATES:
+            X[i, name_to_idx[covariate]] = _f(r, covariate)
+        y[i] = _f(r, "Cog_C_count")
+        offset[i] = math.log(max(_f(r, "user_turns"), 1.0))
+    return X, y, offset, names
+
+
+def _fit_poisson_glm(
+    X: np.ndarray,
+    y: np.ndarray,
+    offset: np.ndarray | None = None,
+    max_iter: int = 100,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, float, float, int]:
+    if offset is None:
+        offset = np.zeros(len(y), dtype=float)
+    exposure = np.exp(offset)
+    beta = np.zeros(X.shape[1], dtype=float)
+    beta[0] = math.log(max(float(y.sum() / exposure.sum()), 1e-8))
+
+    for _ in range(max_iter):
+        eta = np.clip(offset + X @ beta, -30, 30)
+        mu = np.exp(eta)
+        gradient = X.T @ (y - mu)
+        hessian = (X.T * mu) @ X
+        step = np.linalg.solve(hessian + np.eye(hessian.shape[0]) * 1e-8, gradient)
+        beta = beta + step
+        if float(np.max(np.abs(step))) < 1e-9:
+            break
+
+    eta = np.clip(offset + X @ beta, -30, 30)
+    mu = np.exp(eta)
+    hessian = (X.T * mu) @ X
+    bread = np.linalg.inv(hessian + np.eye(hessian.shape[0]) * 1e-8)
+    model_se = np.sqrt(np.maximum(np.diag(bread), 0))
+
+    scores = X * (y - mu)[:, None]
+    meat = scores.T @ scores
+    n, k = X.shape
+    hc1_correction = n / (n - k) if n > k else 1.0
+    hc1_cov = bread @ meat @ bread * hc1_correction
+    hc1_se = np.sqrt(np.maximum(np.diag(hc1_cov), 0))
+
+    pearson = float(np.sum((y - mu) ** 2 / np.clip(mu, 1e-8, None)))
+    df_resid = n - k
+    dispersion = pearson / df_resid if df_resid > 0 else float("nan")
+    return beta, model_se, hc1_se, dispersion, pearson, df_resid
+
+
+def compute_fig3_offset_rate_sensitivity() -> None:
+    out_rows: list[dict[str, str]] = []
+    formula = (
+        "Cog_C_count ~ has_S2 + is_intentional + is_coding_topic + total_turns + "
+        "Emo_ratio + has_error + persistence_after_failure + high_persistence + offset(log(user_turns))"
+    )
+    covariates = "has_S2; " + "; ".join(FIG3_POISSON_COVARIATES)
+    for setting, (_, _, path) in LEVEL2.items():
+        rows = _read_csv(path)
+        X, y, offset, names = _make_fig3_poisson_design(rows)
+        beta, model_se, hc1_se, dispersion, pearson, df_resid = _fit_poisson_glm(X, y, offset)
+        se_specs = [
+            ("model_based", model_se),
+            ("HC1_sandwich", hc1_se),
+            ("quasi_poisson_scaled", model_se * math.sqrt(dispersion)),
+        ]
+        idx = names.index("has_S2")
+        for se_type, se_vec in se_specs:
+            b = float(beta[idx])
+            s = float(se_vec[idx])
+            z = b / s if s > 0 else float("nan")
+            p = math.erfc(abs(z) / math.sqrt(2)) if s > 0 else float("nan")
+            out_rows.append(
+                {
+                    "setting": setting,
+                    "outcome": "constructive-turn count per user turn",
+                    "formula": formula,
+                    "offset": "log(user_turns)",
+                    "term": "has_S2",
+                    "estimate_rr": f"{math.exp(b):.6f}",
+                    "ci_low": f"{math.exp(b - 1.96 * s):.6f}",
+                    "ci_high": f"{math.exp(b + 1.96 * s):.6f}",
+                    "p_value": f"{p:.6g}",
+                    "se_type": se_type,
+                    "pearson_dispersion": f"{dispersion:.4f}",
+                    "pearson_chi2": f"{pearson:.4f}",
+                    "df_resid": str(df_resid),
+                    "n_conversations": str(len(rows)),
+                    "n_user_turns": f"{int(sum(max(_f(r, 'user_turns'), 1.0) for r in rows))}",
+                    "n_constructive_turns": f"{int(sum(_f(r, 'Cog_C_count') for r in rows))}",
+                    "covariates": covariates,
+                    "notes": "Section 2.3 sensitivity; same setting-specific covariates as the primary Poisson count model, with user turns represented as the exposure offset.",
+                }
+            )
+    with open(OUT / "fig3_poisson_offset_rate_sensitivity.csv", "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=list(out_rows[0].keys()))
+        writer.writeheader()
+        writer.writerows(out_rows)
+
+
 def compute_constructive_context_logit() -> None:
     rows = _load_level2_rows()
     X, y, clusters, names = _make_constructive_context_design(rows)
@@ -1007,6 +1127,7 @@ def compute_integrated_logit() -> None:
 def write_tex_tables() -> None:
     context_rows = list(csv.DictReader(open(OUT / "constructive_context_logit.csv")))
     rate_context_rows = list(csv.DictReader(open(OUT / "constructive_rate_context_logit.csv")))
+    fig3_offset_rows = list(csv.DictReader(open(OUT / "fig3_poisson_offset_rate_sensitivity.csv")))
     pooled_broad = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_pooled_broad_s2.csv")))
     pooled_model_broad = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_pooled_model_source_fe_broad_s2.csv")))
     wild_broad = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_wildchat_model_fe_broad_s2.csv")))
@@ -1045,6 +1166,11 @@ def write_tex_tables() -> None:
         p = float(r["p_value"])
         ptxt = "$<.001$" if p < 0.001 else f"{p:.3f}".replace("0.", ".")
         return f"{float(r['odds_ratio']):.2f} [{float(r['ci_low']):.2f}, {float(r['ci_high']):.2f}], {ptxt}"
+
+    def rr_cell(r: dict[str, str]) -> str:
+        p = float(r["p_value"])
+        ptxt = "$<.001$" if p < 0.001 else f"{p:.3f}".replace("0.", ".")
+        return f"{float(r['estimate_rr']):.2f} [{float(r['ci_low']):.2f}, {float(r['ci_high']):.2f}], {ptxt}"
 
     def compact_cell(r: dict[str, str]) -> str:
         p = float(r["p_value"])
@@ -1112,6 +1238,26 @@ def write_tex_tables() -> None:
         f.write(f"Conversations & {int(first['n_conversations']):,} \\\\\n")
         f.write(f"User turns & {int(first['n_user_turns']):,} \\\\\n")
         f.write(f"Constructive user turns & {int(first['n_constructive_turns']):,} \\\\\n")
+        f.write("\\bottomrule\n\\end{tabular}%\n}\n\\end{table*}\n")
+
+    offset_rate_path = ROOT / "tables" / "table_fig3_offset_rate_sensitivity.tex"
+    with open(offset_rate_path, "w") as f:
+        f.write("\\begin{table*}[p]\n\\scriptsize\n\\centering\n")
+        f.write(
+            "\\caption{\\textbf{Offset-rate sensitivity for scaffolded-support Poisson models.} "
+            "The primary Fig.~\\ref{fig:s2_conversation_association}b Poisson model uses raw constructive-turn counts with conversation length entered as a covariate. "
+            "As a rate sensitivity, this table refits the same setting-specific mean model with \\texttt{offset(log(user\\_turns))}. "
+            "Cells report the \\texttt{has\\_S2} rate ratio with 95\\% confidence intervals and two-sided p values using quasi-Poisson scaled standard errors.}\\label{tab:fig3_offset_rate_sensitivity}\n"
+        )
+        f.write("\\setlength{\\tabcolsep}{5pt}\n\\renewcommand{\\arraystretch}{1.08}\n")
+        f.write("\\resizebox{0.92\\textwidth}{!}{%\n")
+        f.write("\\begin{tabular}{lccc}\n\\toprule\n")
+        f.write("Setting & Offset rate ratio [95\\% CI], p value & Pearson dispersion & Conversations \\\\\n\\midrule\n")
+        for setting in ["WC coding", "LMSYS coding", "SC coding", "WC writing", "LMSYS writing", "SC writing"]:
+            r = next(row for row in fig3_offset_rows if row["setting"] == setting and row["se_type"] == "quasi_poisson_scaled")
+            f.write(
+                f"{setting} & {rr_cell(r)} & {float(r['pearson_dispersion']):.2f} & {int(r['n_conversations']):,} \\\\\n"
+            )
         f.write("\\bottomrule\n\\end{tabular}%\n}\n\\end{table*}\n")
 
     setting_table_path = ROOT / "tables" / "table_setting_level_adjacent_models.tex"
@@ -1271,6 +1417,7 @@ def write_tex_tables() -> None:
 def write_report() -> None:
     context_rows = list(csv.DictReader(open(OUT / "constructive_context_logit.csv")))
     rate_context_rows = list(csv.DictReader(open(OUT / "constructive_rate_context_logit.csv")))
+    fig3_offset_rows = list(csv.DictReader(open(OUT / "fig3_poisson_offset_rate_sensitivity.csv")))
     pooled_broad = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_pooled_broad_s2.csv")))
     pooled_model_broad = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_pooled_model_source_fe_broad_s2.csv")))
     wild_broad = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_wildchat_model_fe_broad_s2.csv")))
@@ -1298,7 +1445,7 @@ def write_report() -> None:
         f.write("# Integrated Regression and Significance Report\n\n")
         f.write("Data scope: six main task settings: WildChat, LMSYS Chat and ShareChat coding/writing. SWE-chat and ThoughtTrace are not included in the main pooled model.\n\n")
         f.write("Model-label check: `chat_model` is complete for WildChat. LMSYS and ShareChat production columns are empty, but the conversation identifiers retain recoverable information: LMSYS contains model name and ShareChat contains public assistant/source family. The primary pooled model uses dataset fixed effects; a sensitivity replaces them with model/source fixed effects.\n\n")
-        f.write("Claim-level consistency audit: Sections 2.1 and 2.2 are descriptive consistency claims over the six task settings. Inferential checks enter where the manuscript makes contrasts or model claims: Section 2.3 uses bootstrap CIs/p values for turn-weighted scaffolded versus reference contrasts and adjusted conversation-level models; Section 2.4 reports support-form CIs and between-stratum FDR-adjusted q values in the main figure; Section 2.5 uses conversation-cluster bootstrap CIs for adjacent-turn lifts and cluster-robust adjacent-turn regressions.\n\n")
+        f.write("Claim-level consistency audit: Sections 2.1 and 2.2 are descriptive consistency claims over the six task settings. Inferential checks enter where the manuscript makes contrasts or model claims: Section 2.3 uses bootstrap CIs/p values for turn-weighted scaffolded versus reference contrasts, adjusted conversation-level models and an offset-rate sensitivity; Section 2.4 reports support-form CIs and between-stratum FDR-adjusted q values in the main figure; Section 2.5 uses conversation-cluster bootstrap CIs for adjacent-turn lifts and cluster-robust adjacent-turn regressions.\n\n")
         f.write("Section 2.2 conversation-level context check: a logistic regression predicting whether a conversation contains at least one constructive user turn includes user framing, task ecology, length bucket and dataset fixed effects. The model is a robustness check for systematic organization, not a causal estimate.\n\n")
         for term in ["intentional_framing", "coding_task", "length_4_6_user_turns", "length_7plus_user_turns"]:
             r = next(row for row in context_rows if row["term"] == term)
@@ -1308,6 +1455,11 @@ def write_report() -> None:
         for term in ["intentional_framing", "coding_task", "length_4_6_user_turns", "length_7plus_user_turns"]:
             r = next(row for row in rate_context_rows if row["term"] == term)
             f.write(f"- {r['label']}: OR {float(r['odds_ratio']):.3f}, 95% CI [{float(r['ci_low']):.3f}, {float(r['ci_high']):.3f}], p={r['p_value']}.\n")
+        f.write("\n")
+        f.write("Section 2.3 offset-rate sensitivity: the setting-specific Poisson model for constructive-turn counts was refitted with `offset(log(user_turns))` and quasi-Poisson scaled standard errors. This checks whether the scaffolded-support association is only a count-model specification artifact.\n\n")
+        for setting in ["WC coding", "LMSYS coding", "SC coding", "WC writing", "LMSYS writing", "SC writing"]:
+            r = next(row for row in fig3_offset_rows if row["setting"] == setting and row["se_type"] == "quasi_poisson_scaled")
+            f.write(f"- {setting}: RR {float(r['estimate_rr']):.3f}, 95% CI [{float(r['ci_low']):.3f}, {float(r['ci_high']):.3f}], p={r['p_value']}.\n")
         f.write("\n")
         f.write("Integrated adjacent-turn logit outcome: whether the next user turn is constructive. Broad S2 models include scaffolded-support presence without M1-M6. Support-form decomposed models include broad S2 plus M1-M6, so M coefficients describe form-level variation within scaffolded support. Standard errors are clustered by conversation.\n\n")
         f.write("Setting-level adjacent-turn models: separate model/source-adjusted regressions were fitted within each of the six task settings to check dataset-by-factor heterogeneity rather than relying only on pooled fixed effects. These outputs are exported to `setting_level_adjacent_turn_logit_model_source_fe.csv` and summarized in Supplementary Table C.\n\n")
@@ -1365,6 +1517,7 @@ def write_report() -> None:
 
 def main() -> None:
     compute_key_contrasts()
+    compute_fig3_offset_rate_sensitivity()
     compute_constructive_context_logit()
     compute_integrated_logit()
     write_tex_tables()

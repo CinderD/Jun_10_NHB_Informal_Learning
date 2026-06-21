@@ -4,7 +4,7 @@ Data scope: six main task settings: WildChat, LMSYS Chat and ShareChat coding/wr
 
 Model-label check: `chat_model` is complete for WildChat. LMSYS and ShareChat production columns are empty, but the conversation identifiers retain recoverable information: LMSYS contains model name and ShareChat contains public assistant/source family. The primary pooled model uses dataset fixed effects; a sensitivity replaces them with model/source fixed effects.
 
-Claim-level consistency audit: Sections 2.1 and 2.2 are descriptive consistency claims over the six task settings. Inferential checks enter where the manuscript makes contrasts or model claims: Section 2.3 uses bootstrap CIs/p values for turn-weighted scaffolded versus reference contrasts and adjusted conversation-level models; Section 2.4 reports support-form CIs and between-stratum FDR-adjusted q values in the main figure; Section 2.5 uses conversation-cluster bootstrap CIs for adjacent-turn lifts and cluster-robust adjacent-turn regressions.
+Claim-level consistency audit: Sections 2.1 and 2.2 are descriptive consistency claims over the six task settings. Inferential checks enter where the manuscript makes contrasts or model claims: Section 2.3 uses bootstrap CIs/p values for turn-weighted scaffolded versus reference contrasts, adjusted conversation-level models and an offset-rate sensitivity; Section 2.4 reports support-form CIs and between-stratum FDR-adjusted q values in the main figure; Section 2.5 uses conversation-cluster bootstrap CIs for adjacent-turn lifts and cluster-robust adjacent-turn regressions.
 
 Section 2.2 conversation-level context check: a logistic regression predicting whether a conversation contains at least one constructive user turn includes user framing, task ecology, length bucket and dataset fixed effects. The model is a robustness check for systematic organization, not a causal estimate.
 
@@ -19,6 +19,15 @@ Section 2.2 constructive-rate sensitivity: a grouped-binomial logistic regressio
 - Coding task ecology: OR 1.668, 95% CI [1.477, 1.884], p=1.62829e-16.
 - 4--6 user turns: OR 1.133, 95% CI [1.091, 1.177], p=9.84234e-11.
 - 7+ user turns: OR 1.063, 95% CI [1.014, 1.114], p=0.0107297.
+
+Section 2.3 offset-rate sensitivity: the setting-specific Poisson model for constructive-turn counts was refitted with `offset(log(user_turns))` and quasi-Poisson scaled standard errors. This checks whether the scaffolded-support association is only a count-model specification artifact.
+
+- WC coding: RR 1.570, 95% CI [1.471, 1.676], p=7.78715e-42.
+- LMSYS coding: RR 1.468, 95% CI [1.381, 1.560], p=8.27621e-35.
+- SC coding: RR 1.580, 95% CI [1.311, 1.905], p=1.5983e-06.
+- WC writing: RR 1.356, 95% CI [1.257, 1.462], p=2.68522e-15.
+- LMSYS writing: RR 1.703, 95% CI [1.497, 1.937], p=5.19063e-16.
+- SC writing: RR 1.654, 95% CI [1.274, 2.147], p=0.000154645.
 
 Integrated adjacent-turn logit outcome: whether the next user turn is constructive. Broad S2 models include scaffolded-support presence without M1-M6. Support-form decomposed models include broad S2 plus M1-M6, so M coefficients describe form-level variation within scaffolded support. Standard errors are clustered by conversation.
 
