@@ -3,12 +3,18 @@
 Supplementary information is provided below.
 
 \section*{Appendix A\quad Supporting methods}
+\setcounter{table}{0}
+\renewcommand{\thetable}{A\arabic{table}}
 
 \subsection*{A.1\quad Corpus construction and analytic settings}
 
 The analyses use six task settings formed by crossing three public conversational corpora with two task ecologies: WildChat coding, WildChat writing, LMSYS coding, LMSYS writing, ShareChat coding and ShareChat writing. Coding and writing were selected because both are common everyday LLM use cases, yet they differ in the opportunities they create for visible learning-oriented engagement. Coding conversations often contain error messages, debugging attempts, execution failures and iterative repair. Writing conversations more often involve drafting, rewriting, shortening, tone adjustment and direct editing.
 
 The analytic corpus contains 128,334 conversations and 979,974 total turns. WildChat contributes 31,878 coding conversations and 39,534 writing conversations; LMSYS contributes 31,879 coding conversations and 21,023 writing conversations; ShareChat contributes 2,481 coding conversations and 1,539 writing conversations. All reported analyses use the refreshed Level 1--4 outputs after the latest user-turn update pass and the subsequent LMSYS and ShareChat annotation runs.
+
+Supplementary Table~\ref{tab:corpus_filtering_pipeline} summarizes how raw corpus records were converted into these analytic samples. It distinguishes source or pipeline metadata from analysis variables: coding/writing task ecology comes from LLM-assisted semantic filters, user framing comes from the conversation-level \texttt{learning\_intent} annotation, and ShareChat strict-English status comes from a final conversation-level language flag applied after task filtering.
+
+\input{tables/table_corpus_filtering_pipeline}
 
 SWE-chat and ThoughtTrace were also processed with the same pipeline as feasibility and boundary checks (Supplementary Table~\ref{tab:boundary_checks})~\cite{baumann2026swechat,jin2026thoughttrace}. SWE-chat retained a usable coding sample (1,536 conversations) but only three writing conversations after filtering, so it can serve only as a coding-specific stress test rather than as part of the main coding--writing comparison. ThoughtTrace retained 56 coding and 61 writing conversations after the final task-and-language filter, but the sample remains small and scaffolded support is near-saturated, especially in coding where all conversations contain at least one scaffolded assistant turn. These properties make ThoughtTrace useful as a feasibility check but not as stable evidence for conversation-level support-association estimation.
 
