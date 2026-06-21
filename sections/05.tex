@@ -24,7 +24,7 @@ For each conversation, the pipeline retained the ordered turn sequence, role lab
 
 The codebook translates learning-science constructs into role-specific behavioural signatures. User turns are labelled for engagement. Passive engagement (\texttt{P}) marks acknowledgement, reception or minimal continuation without visible transformation. Active engagement (\texttt{A}) marks task-relevant action or follow-up, such as asking for a reformatted answer or applying supplied information. Constructive engagement (\texttt{C}) marks deeper work with ideas, such as testing an implication, revising a hypothesis, articulating a constraint, transferring a mechanism or extending an explanation. Emotional engagement is labelled separately because affective expressions were rare and not the main analytic outcome.
 
-Assistant turns are labelled for support. \texttt{S1} denotes a non-scaffolded reference response: the assistant provides the requested information or deliverable without materially structuring the user's process. \texttt{S2} denotes scaffolded support: the assistant structures, regulates, diagnoses or redirects the user's work while leaving some responsibility with the user. Scaffolded turns can also receive support-intent labels and support-means labels. Intention labels distinguish metacognitive support (\texttt{I1}), cognitive support (\texttt{I2}) and affective support (\texttt{I3}). Means labels distinguish feedback (\texttt{M1}), hinting (\texttt{M2}), instructing (\texttt{M3}), explaining (\texttt{M4}), modelling (\texttt{M5}) and questioning (\texttt{M6}). Means labels are non-mutually exclusive because a single assistant turn can both explain a mechanism and provide an example or hint. Supplementary Table~\ref{tab:support_supply} reports the support-means supply profile across the six task settings.
+Assistant turns are labelled for support. \texttt{S1} denotes a non-scaffolded reference response: the assistant provides the requested information or deliverable without materially structuring the user's process. \texttt{S2} denotes scaffolded support: the assistant structures, regulates, diagnoses or redirects the user's work while leaving some responsibility with the user. Scaffolded turns can also receive support-intent labels and support-means labels. Intention labels distinguish metacognitive support (\texttt{I1}), cognitive support (\texttt{I2}) and affective support (\texttt{I3}). Means labels distinguish feedback (\texttt{M1}), hinting (\texttt{M2}), instructing (\texttt{M3}), explaining (\texttt{M4}), modelling (\texttt{M5}) and questioning (\texttt{M6}). Means labels are non-mutually exclusive because a single assistant turn can both explain a mechanism and provide an example or hint. Supplementary Tables~\ref{tab:support_intent_summary} and \ref{tab:support_supply} report the support-intent and support-means profiles across the six task settings.
 
 \subsection*{A.3\quad LLM-assisted annotation pipeline}
 
@@ -121,6 +121,8 @@ The study analyses naturalistic conversations, so the manuscript avoids reproduc
 \input{tables/table_integrated_scaffolding_block_tests}
 
 \input{tables/table_prior_state_support_form_interactions}
+
+\input{tables/table_support_intent_summary}
 
 \input{tables/table_support_supply}
 

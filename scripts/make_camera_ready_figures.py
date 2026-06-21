@@ -976,7 +976,8 @@ def make_figure5() -> None:
     axa = fig.add_subplot(gs[0, 0])
     axs_b = [fig.add_subplot(gs[0, i]) for i in range(1, 4)]
     axc = fig.add_subplot(gs[1, 0:2])
-    axd = fig.add_subplot(gs[1, 2:4])
+    axd_m1 = fig.add_subplot(gs[1, 2])
+    axd_m4 = fig.add_subplot(gs[1, 3], sharey=axd_m1)
 
     y = np.arange(len(order))
     axa.barh(y, lift, height=0.26, color=scaf_color, edgecolor="none", zorder=2)
@@ -1109,48 +1110,53 @@ def make_figure5() -> None:
     axc.text(-0.13, 1.08, "c", transform=axc.transAxes, fontsize=13, weight="bold")
 
     y2 = np.arange(len(form_states))
-    form_offsets = {"M1 feedback": -0.09, "M4 explaining": 0.09}
-    form_colors = {"M1 feedback": ref_err, "M4 explaining": scaf_color}
-    for label, vals in form_or.items():
-        ypos = y2 + form_offsets[label]
+    form_specs = [
+        (axd_m1, "M1 feedback", ref_err, True),
+        (axd_m4, "M4 explaining", scaf_color, False),
+    ]
+    for ax, label, color, show_y in form_specs:
+        vals = form_or[label]
         ci = form_ci[label]
-        axd.errorbar(
+        ax.errorbar(
             vals,
-            ypos,
+            y2,
             xerr=np.vstack([vals - ci[:, 0], ci[:, 1] - vals]),
             fmt="none",
-            ecolor=form_colors[label],
-            elinewidth=0.75,
-            capsize=2.1,
-            capthick=0.75,
+            ecolor=color,
+            elinewidth=0.8,
+            capsize=2.2,
+            capthick=0.8,
             zorder=3,
         )
-        axd.scatter(vals, ypos, s=25, color=form_colors[label], edgecolor=COLORS["ink"], lw=0.45, zorder=4, label=label)
-        for x, yv in zip(vals, ypos):
-            label_x = x + 0.10 if x < 1 else min(x + 0.12, 5.18)
-            axd.text(
+        ax.scatter(vals, y2, s=27, color=color, edgecolor=COLORS["ink"], lw=0.45, zorder=4)
+        for x, yv in zip(vals, y2):
+            label_x = min(x + 0.13, 5.22)
+            ax.text(
                 label_x,
                 yv,
                 f"{x:.2f}",
                 va="center",
                 ha="left",
-                fontsize=7.0,
-                bbox=dict(facecolor="white", edgecolor="none", alpha=0.86, pad=0.10),
+                fontsize=7.1,
+                color=COLORS["ink"],
+                bbox=dict(facecolor="white", edgecolor="none", alpha=0.90, pad=0.12),
                 zorder=5,
             )
-    axd.axvline(1, color=COLORS["ink"], lw=0.9)
-    axd.set_yticks(y2, ["prior\nconstructive", "prior\nactive", "prior\npassive"])
-    axd.invert_yaxis()
-    axd.set_xlim(0.45, 5.55)
-    axd.set_xticks([1, 2, 3, 4, 5])
-    axd.set_xlabel("Adjusted OR for next constructive turn")
-    axd.set_title("Support-form signal by prior state", loc="left", pad=6, fontsize=9.2, fontweight="bold")
-    axd.grid(axis="x", color=COLORS["grid"], lw=0.65)
-    axd.spines[["top", "right"]].set_visible(False)
-    axd.tick_params(axis="both", labelsize=7.4)
-    axd.tick_params(axis="y", pad=1.5)
-    axd.legend(loc="upper right", frameon=False, fontsize=7.0, handletextpad=0.4)
-    axd.text(-0.10, 1.08, "d", transform=axd.transAxes, fontsize=13, weight="bold")
+        ax.axvline(1, color=COLORS["ink"], lw=0.9)
+        ax.set_xlim(0.20, 5.55)
+        ax.set_xticks([1, 3, 5])
+        ax.set_xlabel("Adjusted OR")
+        ax.set_title(label, loc="left", pad=6, fontsize=9.0, fontweight="bold")
+        ax.grid(axis="x", color=COLORS["grid"], lw=0.65)
+        ax.spines[["top", "right"]].set_visible(False)
+        ax.tick_params(axis="both", labelsize=7.3)
+        ax.tick_params(axis="y", pad=1.2)
+        if show_y:
+            ax.set_yticks(y2, ["prior\nconstructive", "prior\nactive", "prior\npassive"])
+        else:
+            ax.tick_params(axis="y", left=False, labelleft=False)
+    axd_m1.invert_yaxis()
+    axd_m1.text(-0.32, 1.08, "d", transform=axd_m1.transAxes, fontsize=13, weight="bold")
 
     fig.subplots_adjust(left=0.105, right=0.985, top=0.835, bottom=0.135)
     fig.text(
