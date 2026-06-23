@@ -31,6 +31,7 @@ COLORS = {
     "rose": "#B96B78",
     "rose_dark": "#8F4F5A",
     "grey": "#B8C4CF",
+    "ref": "#8F9BA7",
 }
 
 plt.rcParams.update(
@@ -94,7 +95,8 @@ def make_around_first_scaffolded() -> None:
     colors = [COLORS["teal"] if v >= 0 else COLORS["rose"] for v in values]
 
     fig, ax = plt.subplots(figsize=(6.35, 3.15))
-    ax.axvline(0, color=COLORS["ink"], lw=0.9, zorder=1)
+    ax.set_axisbelow(True)
+    ax.axvline(0, color=COLORS["ref"], lw=0.9, ls=(0, (2.2, 2.2)), zorder=1)
     ax.barh(y, values, height=0.34, color=colors, edgecolor="white", linewidth=0.8, zorder=2)
     ax.errorbar(
         values,
@@ -148,7 +150,8 @@ def make_intent_moderation() -> None:
     ]
 
     fig, ax = plt.subplots(figsize=(6.35, 3.35))
-    ax.axvline(1.0, color=COLORS["ink"], lw=0.9, zorder=1)
+    ax.set_axisbelow(True)
+    ax.axvline(1.0, color=COLORS["ref"], lw=0.9, ls=(0, (2.2, 2.2)), zorder=1)
     for group, dy, color, label in groups:
         vals = np.array([_float(rows[(group, s)]["estimate"]) for s in order])
         ci = np.array([[_float(rows[(group, s)]["ci_low"]), _float(rows[(group, s)]["ci_high"])] for s in order])
