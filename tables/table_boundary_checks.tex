@@ -1,60 +1,66 @@
 \begin{table*}[p]
-\scriptsize
+\footnotesize
 \centering
 \caption{\textbf{Boundary-check corpora processed with the common pipeline.} SWE-chat and ThoughtTrace were labelled and analysed with the same Level 1--4 workflow, but are not part of the main six-setting analysis because they do not provide stable coding--writing task comparisons or stable non-scaffolded reference variation. Percentages for cognitive, constructive and emotional engagement use user turns as the denominator; scaffolded-support percentages use assistant turns as the denominator.}
 \label{tab:boundary_checks}
-\setlength{\tabcolsep}{4pt}
-\renewcommand{\arraystretch}{1.12}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{llrrrrrrl}
+\setlength{\tabcolsep}{4.5pt}
+\renewcommand{\arraystretch}{1.08}
+\textit{Panel A: retained sample and descriptive rates.}
+
+\vspace{2pt}
+\begin{tabular}{@{}lrrrrrr@{}}
 \toprule
 Corpus / setting
-& \makecell{Use in\\manuscript}
 & \makecell{Conv.}
 & \makecell{User\\turns}
 & \makecell{Assistant\\turns}
 & \makecell{Scaffolded\\turns (\%)}
 & \makecell{Cognitive\\overall (\%)}
-& \makecell{Constructive\\level (\%)}
-& Boundary-check implication \\
+& \makecell{Constructive\\level (\%)} \\
 \midrule
 SWE-chat coding
-& Coding-only appendix check
 & 1,536
 & 9,506
 & 6,813
 & 19.45
 & 32.36
-& 17.96
-& Scaffolded conversations were more constructive than non-scaffolded conversations (0.173 vs. 0.133) and deeper after the first answer (+6.41 turns), but the corpus lacks a usable writing counterpart. \\
+& 17.96 \\
 SWE-chat writing
-& Excluded from inference
 & 3
 & 18
 & 14
 & 42.86
 & 22.22
-& 11.11
-& Only three conversations remained after filtering, so estimates are not interpretable. \\
+& 11.11 \\
 ThoughtTrace coding
-& Feasibility check only
 & 56
 & 251
 & 252
 & 85.71
 & 64.54
-& 9.96
-& All conversations contained scaffolded support, leaving no non-scaffolded conversation-level reference group for support-association estimates. \\
+& 9.96 \\
 ThoughtTrace writing
-& Feasibility check only
 & 61
 & 301
 & 300
 & 67.33
 & 51.16
-& 2.66
-& Scaffolded support remained very common and only two conversations lacked scaffolded support, making adjusted support contrasts unstable. \\
+& 2.66 \\
 \bottomrule
-\end{tabular}%
-}
+\end{tabular}
+
+\vspace{6pt}
+\textit{Panel B: boundary-check interpretation.}
+
+\vspace{2pt}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.16\textwidth}>{\raggedright\arraybackslash}p{0.19\textwidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+Corpus / setting & Use in manuscript & Boundary-check implication \\
+\midrule
+SWE-chat coding & Coding-only appendix check & Scaffolded conversations were more constructive than non-scaffolded conversations (0.173 vs. 0.133) and deeper after the first answer (+6.41 turns), but the corpus lacks a usable writing counterpart. \\
+SWE-chat writing & Excluded from inference & Only three conversations remained after filtering, so estimates are not interpretable. \\
+ThoughtTrace coding & Feasibility check only & All conversations contained scaffolded support, leaving no non-scaffolded conversation-level reference group for support-association estimates. \\
+ThoughtTrace writing & Feasibility check only & Scaffolded support remained very common and only two conversations lacked scaffolded support, making adjusted support contrasts unstable. \\
+\bottomrule
+\end{tabularx}
 \end{table*}

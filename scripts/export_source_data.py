@@ -145,9 +145,9 @@ def figure3() -> None:
                 }
             )
     for setting, value, ci in zip(labels, pois, pois_ci):
-        rows.append({"figure": "Figure 3", "panel": "b", "setting": setting, "measure": "Poisson count ratio", "group": "has_S2", "estimate": value, "unit": "ratio", "ci_low": ci[0], "ci_high": ci[1], "p_value": "", "notes": "Model-based 95% CI."})
+        rows.append({"figure": "Figure 3", "panel": "b", "setting": setting, "measure": "Poisson count ratio", "group": "scaffolded support", "estimate": value, "unit": "ratio", "ci_low": ci[0], "ci_high": ci[1], "p_value": "", "notes": "Model-based 95% CI."})
     for setting, value, ci in zip(labels, logit, logit_ci):
-        rows.append({"figure": "Figure 3", "panel": "b", "setting": setting, "measure": "Logit odds ratio", "group": "has_S2", "estimate": value, "unit": "odds ratio", "ci_low": ci[0], "ci_high": ci[1], "p_value": "", "notes": "Model-based 95% CI."})
+        rows.append({"figure": "Figure 3", "panel": "b", "setting": setting, "measure": "Logit odds ratio", "group": "scaffolded support", "estimate": value, "unit": "odds ratio", "ci_low": ci[0], "ci_high": ci[1], "p_value": "", "notes": "Model-based 95% CI."})
     for group, values, cis in [("intentional", strat_int, strat_int_ci), ("unintentional", strat_unint, strat_unint_ci)]:
         for setting, value, ci in zip(labels, values, cis):
             rows.append({"figure": "Figure 3", "panel": "c", "setting": setting, "measure": "Poisson count ratio", "group": group, "estimate": value, "unit": "ratio", "ci_low": ci[0], "ci_high": ci[1], "p_value": "", "notes": "User-framing stratified model."})
@@ -210,7 +210,7 @@ def figure4() -> None:
                     "ci_high": "",
                     "p_value_for_between_stratum_contrast": "",
                     "q_value_bh_fdr": "",
-                    "notes": "Means labels are non-exclusive and rows do not sum to 100%.",
+                    "notes": "Support-form labels are non-exclusive and rows do not sum to 100%.",
                 }
             )
     write_csv(OUT / "figure4_source_data.csv", rows)

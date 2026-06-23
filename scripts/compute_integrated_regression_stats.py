@@ -800,7 +800,7 @@ def _write_setting_level_models(rows: list[dict[str, str]]) -> None:
                         "model_source_fe_count": str(model_fe_count),
                         "log_likelihood": f"{ll:.6f}",
                         "se_type": "conversation-cluster robust sandwich",
-                        "notes": "Broad S2 is estimated without M1-M6; support-form coefficients are estimated in the decomposed model with broad S2 and co-occurring forms included.",
+                        "notes": "Broad scaffolded support is estimated without M1-M6; support-form coefficients are estimated in the decomposed model with broad scaffolded support and co-occurring forms included.",
                     }
                 )
     with open(OUT / "setting_level_adjacent_turn_logit_model_source_fe.csv", "w", newline="") as f:
@@ -849,7 +849,7 @@ def _write_scaffolding_block_tests(
         )
         comparisons = [
             (
-                "broad S2 added after user/context controls",
+                "broad scaffolded support added after user/context controls",
                 no_scaf_ll,
                 no_scaf_k,
                 s2_ll,
@@ -862,10 +862,10 @@ def _write_scaffolding_block_tests(
                 s2_k,
                 full_ll,
                 full_k,
-                "Tests whether nested support-form descriptors add signal among scaffolded turns after the broad S2 contrast is represented.",
+                "Tests whether nested support-form descriptors add signal among scaffolded turns after the broad scaffolded-support contrast is represented.",
             ),
             (
-                "full scaffolding block S2 plus M1-M6 added after user/context controls",
+                "full scaffolding block plus M1-M6 added after user/context controls",
                 no_scaf_ll,
                 no_scaf_k,
                 full_ll,
@@ -1017,7 +1017,7 @@ def compute_integrated_logit() -> None:
     _write_setting_level_models(pooled)
     _write_model_rows(
         "integrated_adjacent_turn_logit_pooled_broad_s2.csv",
-        "six task settings, dataset fixed effects, broad S2 only",
+        "six task settings, dataset fixed effects, broad scaffolded support only",
         pooled,
         include_dataset=True,
         include_model=False,
@@ -1025,7 +1025,7 @@ def compute_integrated_logit() -> None:
     )
     _write_model_rows(
         "integrated_adjacent_turn_logit_pooled_model_source_fe_broad_s2.csv",
-        "six task settings, model/source fixed effects, broad S2 only",
+        "six task settings, model/source fixed effects, broad scaffolded support only",
         pooled,
         include_dataset=False,
         include_model=True,
@@ -1033,7 +1033,7 @@ def compute_integrated_logit() -> None:
     )
     _write_model_rows(
         "integrated_adjacent_turn_logit_wildchat_model_fe_broad_s2.csv",
-        "WildChat only, model fixed effects, broad S2 only",
+        "WildChat only, model fixed effects, broad scaffolded support only",
         wild,
         include_dataset=False,
         include_model=True,
@@ -1247,7 +1247,7 @@ def write_tex_tables() -> None:
             "\\caption{\\textbf{Offset-rate sensitivity for scaffolded-support Poisson models.} "
             "The primary Fig.~\\ref{fig:s2_conversation_association}b Poisson model uses raw constructive-turn counts with conversation length entered as a covariate. "
             "As a rate sensitivity, this table refits the same setting-specific mean model with \\texttt{offset(log(user\\_turns))}. "
-            "Cells report the \\texttt{has\\_S2} rate ratio with 95\\% confidence intervals and two-sided p values using quasi-Poisson scaled standard errors.}\\label{tab:fig3_offset_rate_sensitivity}\n"
+            "Cells report the scaffolded-support rate ratio with 95\\% confidence intervals and two-sided p values using quasi-Poisson scaled standard errors.}\\label{tab:fig3_offset_rate_sensitivity}\n"
         )
         f.write("\\setlength{\\tabcolsep}{5pt}\n\\renewcommand{\\arraystretch}{1.08}\n")
         f.write("\\resizebox{0.92\\textwidth}{!}{%\n")
@@ -1266,7 +1266,7 @@ def write_tex_tables() -> None:
         f.write(
             "\\caption{\\textbf{Setting-level integrated adjacent-turn models.} "
             "Each column reports a separate within-setting logistic regression for whether the next user turn is constructive. "
-            "The scaffolded-support row comes from a broad S2-only model. Support-form rows come from a decomposed model that includes broad S2 and co-occurring M1--M6 forms, so form coefficients compare variation within scaffolded support rather than replacing the broad S2 contrast. "
+            "The scaffolded-support row comes from a broad scaffolded-support model. Support-form rows come from a decomposed model that includes broad scaffolded-support presence and co-occurring M1--M6 forms, so form coefficients compare variation within scaffolded support rather than replacing the broad scaffolded-support contrast. "
             "All models include prior user state, intentional framing, assistant-turn index and recoverable model/source fixed effects where available. "
             "Cells report odds ratios with 95\\% confidence intervals and two-sided p values from conversation-cluster robust standard errors.}\\label{tab:setting_level_adjacent_models}\n"
         )
@@ -1293,7 +1293,7 @@ def write_tex_tables() -> None:
         f.write("\\scriptsize\n\\centering\n")
         f.write(
             "\\caption{\\textbf{Integrated adjacent-turn regression combining user state, assistant scaffolding and model controls.} "
-            "The outcome is whether the next user turn is constructive. The scaffolded-support row is estimated in a broad S2-only model; M1, M4 and M6 rows are estimated in a decomposed support-form model that includes broad S2 and co-occurring support forms. Estimates are odds ratios with 95\\% confidence intervals and two-sided p values from conversation-cluster robust standard errors. The primary pooled model uses dataset fixed effects; the model/source sensitivity adds recoverable assistant model or source-family fixed effects.}\\label{tab:integrated_regression}\n"
+            "The outcome is whether the next user turn is constructive. The scaffolded-support row is estimated in a broad scaffolded-support model; M1, M4 and M6 rows are estimated in a decomposed support-form model that includes broad scaffolded-support presence and co-occurring support forms. Estimates are odds ratios with 95\\% confidence intervals and two-sided p values from conversation-cluster robust standard errors. The primary pooled model uses dataset fixed effects; the model/source sensitivity adds recoverable assistant model or source-family fixed effects.}\\label{tab:integrated_regression}\n"
         )
         f.write("\\setlength{\\tabcolsep}{4pt}\n\\renewcommand{\\arraystretch}{1.10}\n")
         f.write("\\resizebox{\\textwidth}{!}{%\n")
@@ -1329,9 +1329,9 @@ def write_tex_tables() -> None:
         f.write("\\begin{tabular}{llcc}\n\\toprule\n")
         f.write("Scope & Added feature block & LR $\\chi^2$ (df) & p value \\\\\n\\midrule\n")
         labels = {
-            "broad S2 added after user/context controls": "Broad S2 after user/context controls",
-            "support-form descriptors M1-M6 added within scaffolded support": "M1--M6 descriptors within S2",
-            "full scaffolding block S2 plus M1-M6 added after user/context controls": "Full scaffolding block after user/context controls",
+            "broad scaffolded support added after user/context controls": "Broad scaffolded support after user/context controls",
+            "support-form descriptors M1-M6 added within scaffolded support": "M1--M6 descriptors within scaffolded support",
+            "full scaffolding block plus M1-M6 added after user/context controls": "Full scaffolding block after user/context controls",
         }
         for r in scaf_blocks:
             p = float(r["p_value"])
@@ -1398,13 +1398,13 @@ def write_tex_tables() -> None:
         f.write("Setting & Contrast & Effect & 95\\% CI & p value \\\\\n\\midrule\n")
         for r in compact:
             if r["contrast"] == "constructive_ratio_has_s2_minus_no_s2":
-                label = "Has S2 $-$ no S2 constructive ratio"
+                label = "Scaffolded $-$ reference constructive ratio"
                 unit = "pp"
             elif r["contrast"] == "post_answer_depth_has_s2_minus_no_s2":
-                label = "Has S2 $-$ no S2 post-answer depth"
+                label = "Scaffolded $-$ reference post-answer depth"
                 unit = "turns"
             else:
-                label = "Adjacent S2 $-$ reference lift"
+                label = "Adjacent scaffolded $-$ reference lift"
                 unit = "pp"
             p = float(r["p_value"])
             ptxt = "$<.001$" if p < 0.001 else f"{p:.3f}".replace("0.", ".")
@@ -1461,7 +1461,7 @@ def write_report() -> None:
             r = next(row for row in fig3_offset_rows if row["setting"] == setting and row["se_type"] == "quasi_poisson_scaled")
             f.write(f"- {setting}: RR {float(r['estimate_rr']):.3f}, 95% CI [{float(r['ci_low']):.3f}, {float(r['ci_high']):.3f}], p={r['p_value']}.\n")
         f.write("\n")
-        f.write("Integrated adjacent-turn logit outcome: whether the next user turn is constructive. Broad S2 models include scaffolded-support presence without M1-M6. Support-form decomposed models include broad S2 plus M1-M6, so M coefficients describe form-level variation within scaffolded support. Standard errors are clustered by conversation.\n\n")
+        f.write("Integrated adjacent-turn logit outcome: whether the next user turn is constructive. Broad scaffolded-support models include scaffolded-support presence without M1-M6. Support-form decomposed models include broad scaffolded support plus M1-M6, so M coefficients describe form-level variation within scaffolded support. Standard errors are clustered by conversation.\n\n")
         f.write("Setting-level adjacent-turn models: separate model/source-adjusted regressions were fitted within each of the six task settings to check dataset-by-factor heterogeneity rather than relying only on pooled fixed effects. These outputs are exported to `setting_level_adjacent_turn_logit_model_source_fe.csv` and summarized in Supplementary Table C.\n\n")
         for term in ["scaffolded_support_S2", "prior_user_constructive", "M1", "M4", "M6"]:
             sub = [r for r in setting_level if r["term"] == term]
@@ -1469,7 +1469,7 @@ def write_report() -> None:
             significant = sum(float(r["p_value"]) < 0.05 for r in sub)
             f.write(f"- Setting-level {term}: OR>1 in {positive}/{len(sub)} settings; p<0.05 in {significant}/{len(sub)} settings.\n")
         f.write("\n")
-        f.write("Key pooled estimates with dataset fixed effects. S2 and user/context rows come from broad S2 models; M rows come from support-form decomposed models:\n\n")
+        f.write("Key pooled estimates with dataset fixed effects. Scaffolded-support and user/context rows come from broad scaffolded-support models; M rows come from support-form decomposed models:\n\n")
         for term in ["scaffolded_support_S2", "prior_user_constructive", "prior_user_active", "prior_user_passive", "intentional_framing", "coding_task", "M1", "M4", "M6"]:
             r = by_pooled_full[term] if term in {"M1", "M4", "M6"} else by_pooled_broad[term]
             f.write(f"- {term}: OR {float(r['odds_ratio']):.3f}, 95% CI [{float(r['ci_low']):.3f}, {float(r['ci_high']):.3f}], p={r['p_value']}.\n")
@@ -1484,7 +1484,7 @@ def write_report() -> None:
         f.write(
             f"\nModel/source fixed-effect block in the pooled data: LR chi-square({pooled_block['df']})={float(pooled_block['lr_chi2']):.1f}, p={pooled_block['p_value']}. "
             f"WildChat exact model fixed-effect block: LR chi-square({wild_block['df']})={float(wild_block['lr_chi2']):.1f}, p={wild_block['p_value']}. "
-            "Model/source labels add detectable heterogeneity. Broad S2 remains positive in the broad support model, while the decomposed models show that support-form variation, especially M4 explaining, carries additional local signal.\n\n"
+            "Model/source labels add detectable heterogeneity. Broad scaffolded support remains positive in the broad support model, while the decomposed models show that support-form variation, especially M4 explaining, carries additional local signal.\n\n"
         )
         f.write("Consistency of key unadjusted contrasts:\n\n")
         for contrast in [

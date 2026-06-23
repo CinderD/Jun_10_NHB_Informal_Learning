@@ -249,9 +249,9 @@ def make_figure1() -> None:
         ax.text(0.432, cy, desc, ha="left", va="center", fontsize=6.4, color=COLORS["ink"])
 
     ax.text(0.522, 0.590, "Assistant codes", fontsize=7.2, weight="bold", color=COLORS["gold"], ha="left")
-    _pill(ax, 0.522, 0.528, 0.065, 0.032, "S1 direct", fc="#F7F9FB", ec="#C7D0DA", color=COLORS["muted"], fs=5.9)
-    _pill(ax, 0.597, 0.528, 0.068, 0.032, "S2 scaffold", fc="#FFF0CE", ec="#E4B45C", color=COLORS["gold"], fs=5.7)
-    ax.text(0.522, 0.482, "S2 forms", fontsize=6.8, weight="bold", color=COLORS["gold"])
+    _pill(ax, 0.522, 0.528, 0.065, 0.032, "reference", fc="#F7F9FB", ec="#C7D0DA", color=COLORS["muted"], fs=5.9)
+    _pill(ax, 0.597, 0.528, 0.068, 0.032, "scaffold", fc="#FFF0CE", ec="#E4B45C", color=COLORS["gold"], fs=5.7)
+    ax.text(0.522, 0.482, "Support forms", fontsize=6.8, weight="bold", color=COLORS["gold"])
     for i, lab in enumerate(["M1 feedback", "M2 hint", "M3 instruct", "M4 explain", "M5 model", "M6 question"]):
         col = i % 2
         row = i // 2
@@ -283,7 +283,7 @@ def make_figure1() -> None:
     modules = [
         (0.728, 0.620, "#E7F2F7", "#BCD6E2", "Prevalence", "Engagement signatures\nacross settings.", "bars"),
         (0.728, 0.455, "#FFF0CE", "#E8C679", "Support association", "Scaffolding aligned with\nconstructive participation.", "network"),
-        (0.728, 0.290, "#F0EAF7", "#D2C6E4", "Local coupling", "S2 predicts next-turn uptake\nconditional on prior state.", "couple"),
+        (0.728, 0.290, "#F0EAF7", "#D2C6E4", "Local coupling", "Scaffolding predicts\nnext-turn engagement.", "couple"),
     ]
     for x, y, fc, ec, title, desc, icon in modules:
         _shadow_box(ax, (x, y), 0.212, 0.112, radius=0.014, face=fc, edge=ec, lw=0.7, shadow=False)
@@ -305,7 +305,7 @@ def make_figure1() -> None:
                 ax.add_patch(Circle((xx, y + 0.067), 0.010, facecolor="#F6F2FB", edgecolor=COLORS["lav"], lw=0.7))
             _arrow(ax, (xs[0] + 0.010, y + 0.067), (xs[1] - 0.010, y + 0.067), lw=0.8, ms=6, color=COLORS["lav"])
             _arrow(ax, (xs[1] + 0.010, y + 0.067), (xs[2] - 0.010, y + 0.067), lw=0.8, ms=6, color=COLORS["lav"])
-            ax.text(x + 0.019, y + 0.028, "S2 -> C", fontsize=6.1, weight="bold", color=COLORS["lav"])
+            ax.text(x + 0.019, y + 0.028, "Scaf. -> C", fontsize=6.1, weight="bold", color=COLORS["lav"])
 
     _arrow(ax, (0.322, 0.500), (0.358, 0.500), color="#A7B2BC", lw=1.2, ms=10)
     _arrow(ax, (0.668, 0.500), (0.705, 0.500), color="#A7B2BC", lw=1.2, ms=10)
@@ -340,17 +340,17 @@ def make_figure2() -> None:
     axc = fig.add_subplot(gs[1, :])
 
     y = np.arange(len(labels))
-    axa.barh(y, active, color="#9DC4D5", edgecolor="white", linewidth=0.8, height=0.60, label="Active")
-    axa.barh(y, constructive, left=active, color=COLORS["teal"], edgecolor="white", linewidth=0.8, height=0.60, label="Constructive")
-    axa.barh(y, passive, left=active + constructive, color="#D7DADF", edgecolor="white", linewidth=0.8, height=0.60, label="Passive")
+    axa.barh(y, constructive, color=COLORS["teal"], edgecolor="white", linewidth=0.8, height=0.60, label="Constructive")
+    axa.barh(y, active, left=constructive, color="#9DC4D5", edgecolor="white", linewidth=0.8, height=0.60, label="Active")
+    axa.barh(y, passive, left=constructive + active, color="#D7DADF", edgecolor="white", linewidth=0.8, height=0.60, label="Passive")
     for i in range(len(labels)):
-        axa.text(active[i] / 2, i, f"{active[i]:.1f}", ha="center", va="center", fontsize=8.0, color=COLORS["ink"])
-        axa.text(active[i] + constructive[i] / 2, i, f"{constructive[i]:.1f}", ha="center", va="center", fontsize=8.0, color="white")
+        axa.text(constructive[i] / 2, i, f"{constructive[i]:.1f}", ha="center", va="center", fontsize=8.0, color="white")
+        axa.text(constructive[i] + active[i] / 2, i, f"{active[i]:.1f}", ha="center", va="center", fontsize=8.0, color=COLORS["ink"])
     axa.set_yticks(y, labels)
     axa.invert_yaxis()
     axa.set_xlim(0, 100)
     axa.set_xlabel("Share of cognitively engaged turns (%)")
-    axa.set_title("Engagement composition", loc="left", pad=18)
+    axa.set_title("Engagement composition", loc="center", pad=18, fontsize=9.3, weight="bold")
     axa.grid(axis="x", color=COLORS["grid"], linewidth=0.8)
     axa.set_axisbelow(True)
     axa.spines[["top", "right", "left"]].set_visible(False)
@@ -358,11 +358,11 @@ def make_figure2() -> None:
     axa.tick_params(axis="y", length=0, pad=2)
 
     handles = [
-        Rectangle((0, 0), 1, 1, facecolor="#8BB8CC", edgecolor=COLORS["ink"], linewidth=0.55),
         Rectangle((0, 0), 1, 1, facecolor=COLORS["teal"], edgecolor=COLORS["ink"], linewidth=0.55),
+        Rectangle((0, 0), 1, 1, facecolor="#8BB8CC", edgecolor=COLORS["ink"], linewidth=0.55),
         Rectangle((0, 0), 1, 1, facecolor="#DADADA", edgecolor=COLORS["ink"], linewidth=0.55),
     ]
-    axa.legend(handles, ["Active", "Constructive", "Passive"], loc="upper left", bbox_to_anchor=(0.27, 1.18), ncol=3, frameon=False, handlelength=1.0, columnspacing=0.75, fontsize=7.6)
+    axa.legend(handles, ["Constructive", "Active", "Passive"], loc="upper center", bbox_to_anchor=(0.50, 1.18), ncol=3, frameon=False, handlelength=1.0, columnspacing=0.75, fontsize=7.6)
 
     def intent_dumbbell(ax, left_vals, right_vals, title, xlim, show_y=False):
         yy = np.arange(len(labels))
@@ -384,15 +384,15 @@ def make_figure2() -> None:
     intent_dumbbell(axb1, cog_unintent, cog_intent, "Cognitive", (0, 86), show_y=True)
     intent_dumbbell(axb2, con_unintent, con_intent, "Constructive", (0, 25.5), show_y=False)
     axb1.text(-0.42, 1.10, "b", transform=axb1.transAxes, fontsize=14, weight="bold")
-    axb1.text(0.00, 1.26, "Explicit user framing", transform=axb1.transAxes, fontsize=9.0, color=COLORS["ink"], ha="left")
+    axb1.text(1.08, 1.26, "Explicit user framing", transform=axb1.transAxes, fontsize=9.3, color=COLORS["ink"], ha="center", weight="bold")
     axb2.legend(
         [
             Line2D([0], [0], marker="o", color="none", markerfacecolor="#2D71B8", markeredgecolor="white", markersize=5.6),
             Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["grey"], markeredgecolor="white", markersize=5.6),
         ],
         ["Intent.", "Unintent."],
-        loc="upper right",
-        bbox_to_anchor=(1.04, 1.42),
+        loc="upper center",
+        bbox_to_anchor=(-0.10, 1.27),
         ncol=2,
         frameon=False,
         fontsize=7.3,
@@ -407,7 +407,7 @@ def make_figure2() -> None:
     axc.set_yticks(np.arange(len(labels)), labels)
     axc.set_xlabel("Conversation length", fontweight="bold", labelpad=3)
     axc.set_ylabel("Setting", labelpad=5)
-    axc.set_title("Share with >=1 constructive user turn", loc="left", pad=7)
+    axc.set_title("Conversations with ≥1 constructive turn", loc="center", pad=7, fontsize=9.3, weight="bold")
     axc.set_xticks(np.arange(-0.5, 3, 1), minor=True)
     axc.set_yticks(np.arange(-0.5, len(labels), 1), minor=True)
     axc.grid(which="minor", color="white", linewidth=1.2)
@@ -429,6 +429,10 @@ def make_figure2() -> None:
 
 def make_figure3() -> None:
     labels = ["WC coding", "LMSYS coding", "SC coding", "WC writing", "LMSYS writing", "SC writing"]
+    poisson_color = COLORS["s2"]
+    logit_color = COLORS["blue"]
+    intentional_color = COLORS["blue"]
+    unintentional_color = COLORS["grey"]
     # Turn-weighted constructive user-turn ratios within conversations with
     # versus without scaffolded support. These match Supplementary Table C6.
     no_s2 = np.array([5.5626, 3.9565, 8.9800, 1.7372, 1.0692, 3.4391])
@@ -507,6 +511,20 @@ def make_figure3() -> None:
 
     dumbbell(axa, no_s2, has_s2, labels, "Conversation-level constructive ratio", "Constructive user turns (%)", (0, 18.8))
     axa.text(-0.16, 1.06, "a", transform=axa.transAxes, fontsize=14, weight="bold")
+    axa.legend(
+        [
+            Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["s1"], markeredgecolor=COLORS["ink"], markersize=6.5),
+            Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["s2"], markeredgecolor=COLORS["ink"], markersize=6.5),
+        ],
+        ["Ref.", "Scaffolded"],
+        loc="upper center",
+        bbox_to_anchor=(0.50, 1.26),
+        ncol=2,
+        frameon=False,
+        fontsize=8.0,
+        handletextpad=0.3,
+        columnspacing=0.9,
+    )
 
     y = np.arange(len(labels))
     axb.axvline(1.0, color=COLORS["ink"], lw=1.0)
@@ -527,14 +545,14 @@ def make_figure3() -> None:
             i + 0.12,
             xerr=np.array([[logit[i] - logit_ci[i, 0]], [logit_ci[i, 1] - logit[i]]]),
             fmt="none",
-            ecolor="#5A6470",
+            ecolor=logit_color,
             elinewidth=0.8,
             capsize=2.0,
             capthick=0.8,
             zorder=2,
         )
-        axb.scatter(pois[i], i - 0.12, s=48, color=COLORS["s2"], edgecolor="white", linewidth=0.7, zorder=3)
-        axb.scatter(logit[i], i + 0.12, s=48, color="#5A6470", edgecolor="white", linewidth=0.7, zorder=3)
+        axb.scatter(pois[i], i - 0.12, s=48, color=poisson_color, edgecolor="white", linewidth=0.7, zorder=3)
+        axb.scatter(logit[i], i + 0.12, s=48, color=logit_color, edgecolor="white", linewidth=0.7, zorder=3)
         axb.text(min(max(pois_ci[i, 1], logit_ci[i, 1]) + 0.045, 3.22), i, f"{pois[i]:.2f} / {logit[i]:.2f}", va="center", fontsize=7.5, color=COLORS["ink"])
     axb.set_yticks(y, labels)
     axb.invert_yaxis()
@@ -548,16 +566,16 @@ def make_figure3() -> None:
     axb.legend(
         [
             Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["s2"], markersize=6.5),
-            Line2D([0], [0], marker="o", color="none", markerfacecolor="#5A6470", markersize=6.5),
+            Line2D([0], [0], marker="o", color="none", markerfacecolor=logit_color, markersize=6.5),
         ],
-        ["Poisson RR", "Logit OR"],
+        ["Poisson count ratio", "Logit OR"],
         frameon=False,
-        loc="upper right",
-        bbox_to_anchor=(1.0, 1.30),
+        loc="upper center",
+        bbox_to_anchor=(0.50, 1.26),
         ncol=2,
-        fontsize=7.8,
+        fontsize=8.0,
         handletextpad=0.3,
-        columnspacing=0.8,
+        columnspacing=0.9,
     )
 
     yc = np.arange(len(labels))
@@ -568,7 +586,7 @@ def make_figure3() -> None:
             i - 0.12,
             xerr=np.array([[strat_intentional[i] - strat_intentional_ci[i, 0]], [strat_intentional_ci[i, 1] - strat_intentional[i]]]),
             fmt="none",
-            ecolor=COLORS["blue"],
+            ecolor=intentional_color,
             elinewidth=0.8,
             capsize=2.0,
             capthick=0.8,
@@ -579,14 +597,14 @@ def make_figure3() -> None:
             i + 0.12,
             xerr=np.array([[strat_unintentional[i] - strat_unintentional_ci[i, 0]], [strat_unintentional_ci[i, 1] - strat_unintentional[i]]]),
             fmt="none",
-            ecolor=COLORS["grey"],
+            ecolor=unintentional_color,
             elinewidth=0.8,
             capsize=2.0,
             capthick=0.8,
             zorder=2,
         )
-        axc.scatter(strat_intentional[i], i - 0.12, s=48, color=COLORS["blue"], edgecolor="white", linewidth=0.7, zorder=3)
-        axc.scatter(strat_unintentional[i], i + 0.12, s=48, color=COLORS["grey"], edgecolor="white", linewidth=0.7, zorder=3)
+        axc.scatter(strat_intentional[i], i - 0.12, s=48, color=intentional_color, edgecolor="white", linewidth=0.7, zorder=3)
+        axc.scatter(strat_unintentional[i], i + 0.12, s=48, color=unintentional_color, edgecolor="white", linewidth=0.7, zorder=3)
         axc.text(
             min(max(strat_intentional_ci[i, 1], strat_unintentional_ci[i, 1]) + 0.045, 3.22),
             i,
@@ -599,11 +617,25 @@ def make_figure3() -> None:
     axc.invert_yaxis()
     axc.set_xlim(0.94, 3.30)
     axc.set_title("Framing-stratified association", loc="left", pad=8)
-    axc.set_xlabel("Poisson RR (intentional / unintentional)")
+    axc.set_xlabel("Poisson count ratio (intentional / unintentional)")
     axc.grid(axis="x", color=COLORS["grid"], lw=0.8)
     axc.spines[["top", "right", "left"]].set_visible(False)
     axc.tick_params(axis="y", length=0, pad=2)
     axc.text(-0.16, 1.13, "c", transform=axc.transAxes, fontsize=14, weight="bold")
+    axc.legend(
+        [
+            Line2D([0], [0], marker="o", color="none", markerfacecolor=intentional_color, markersize=6.5),
+            Line2D([0], [0], marker="o", color="none", markerfacecolor=unintentional_color, markersize=6.5),
+        ],
+        ["Intent.", "Unintent."],
+        frameon=False,
+        loc="upper right",
+        bbox_to_anchor=(1.00, 1.32),
+        ncol=2,
+        fontsize=7.8,
+        handletextpad=0.3,
+        columnspacing=0.65,
+    )
 
     y_depth = np.arange(len(labels))
     axd.axvline(0, color=COLORS["ink"], lw=0.9)
@@ -614,25 +646,12 @@ def make_figure3() -> None:
     axd.invert_yaxis()
     axd.set_xlim(0, 3.85)
     axd.set_title("Post-answer depth", loc="left", pad=8)
-    axd.set_xlabel("Has S2 - no S2 (turns)")
+    axd.set_xlabel("Scaffolded - reference (turns)")
     axd.grid(axis="x", color=COLORS["grid"], lw=0.8)
     axd.spines[["top", "right", "left"]].set_visible(False)
     axd.tick_params(axis="y", length=0, pad=2)
     axd.text(-0.12, 1.13, "d", transform=axd.transAxes, fontsize=14, weight="bold")
 
-    fig.legend(
-        [
-            Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["s1"], markeredgecolor=COLORS["ink"], markersize=6.5),
-            Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["s2"], markeredgecolor=COLORS["ink"], markersize=6.5),
-        ],
-        ["No S2", "Has S2"],
-        loc="upper left",
-        bbox_to_anchor=(0.115, 0.985),
-        ncol=2,
-        frameon=False,
-        fontsize=8.2,
-        handletextpad=0.3,
-    )
     fig.text(0.985, 0.030, "WC, WildChat; LMSYS, LMSYS Chat; SC, ShareChat.", ha="right", fontsize=7.6, color=COLORS["muted"])
     fig.subplots_adjust(left=0.115, right=0.985, top=0.835, bottom=0.140)
 
@@ -682,8 +701,9 @@ def make_figure4() -> None:
     cmap_s = LinearSegmentedColormap.from_list("supply", ["#F3F6F6", "#B8C9D2", "#2E5F7F"])
 
     centers = np.arange(len(rows))
-    ylim = (-9.4, 19.2)
+    ylim = (-9.4, 21.0)
     y_span = ylim[1] - ylim[0]
+    panel_title_kwargs = dict(loc="left", pad=10, fontsize=9.4, fontweight="bold")
 
     def _style_support_axis(ax: plt.Axes, title: str) -> None:
         ax.axhline(0, color=COLORS["ink"], linewidth=0.9, zorder=1)
@@ -691,7 +711,7 @@ def make_figure4() -> None:
         ax.set_ylim(*ylim)
         ax.set_xlim(centers[0] - 0.62, centers[-1] + 0.62)
         ax.set_xticks(centers, rows)
-        ax.set_title(title, loc="left", pad=6, fontsize=9.4, fontweight="bold")
+        ax.set_title(title, **panel_title_kwargs)
         ax.spines[["top", "right"]].set_visible(False)
         ax.tick_params(axis="x", length=0, pad=5, labelsize=7.5)
         ax.tick_params(axis="y", labelsize=7.6)
@@ -839,7 +859,7 @@ def make_figure4() -> None:
     ax_supply.imshow(data, cmap=cmap_s, norm=Normalize(0, 84), aspect="auto")
     ax_supply.set_xticks(np.arange(len(mean_cols)), mean_cols)
     ax_supply.set_yticks(np.arange(len(settings)), settings)
-    ax_supply.set_title("Supply within scaffolded assistant turns (%)", loc="left", pad=7)
+    ax_supply.set_title("Supply within scaffolded assistant turns (%)", **panel_title_kwargs)
     ax_supply.tick_params(axis="both", length=0)
     ax_supply.set_xticks(np.arange(-0.5, len(mean_cols), 1), minor=True)
     ax_supply.set_yticks(np.arange(-0.5, len(settings), 1), minor=True)
@@ -854,7 +874,7 @@ def make_figure4() -> None:
             ax_supply.text(j, i, f"{val:.1f}", ha="center", va="center", fontsize=7.8, color=txt_color)
     ax_supply.text(-0.055, 1.12, "c", transform=ax_supply.transAxes, fontsize=14, weight="bold")
     fig.subplots_adjust(left=0.085, right=0.985, top=0.835, bottom=0.075)
-    fig.text(0.985, 0.020, "WC, WildChat; LMSYS, LMSYS Chat; SC, ShareChat. Means labels are non-exclusive.", ha="right", fontsize=7.5, color=COLORS["muted"])
+    fig.text(0.985, 0.020, "WC, WildChat; LMSYS, LMSYS Chat; SC, ShareChat. Support-form labels are non-exclusive.", ha="right", fontsize=7.5, color=COLORS["muted"])
     _save(fig, "fig_support_form_supply_compact_final_v2")
 
 
@@ -969,9 +989,9 @@ def make_figure5() -> None:
         4,
         figure=fig,
         height_ratios=[1.0, 0.98],
-        width_ratios=[1.20, 0.96, 0.96, 0.96],
+        width_ratios=[1.20, 0.93, 0.93, 0.93],
         hspace=0.86,
-        wspace=0.74,
+        wspace=0.48,
     )
     axa = fig.add_subplot(gs[0, 0])
     axs_b = [fig.add_subplot(gs[0, i]) for i in range(1, 4)]
@@ -980,7 +1000,7 @@ def make_figure5() -> None:
     axd_m4 = fig.add_subplot(gs[1, 3], sharey=axd_m1)
 
     y = np.arange(len(order))
-    axa.barh(y, lift, height=0.26, color=scaf_color, edgecolor="none", zorder=2)
+    axa.barh(y, lift, height=0.30, color=scaf_color, edgecolor="none", zorder=2)
     valid_lift_ci = ~np.isnan(lift_ci).any(axis=1)
     if valid_lift_ci.any():
         axa.errorbar(
@@ -988,46 +1008,38 @@ def make_figure5() -> None:
             y[valid_lift_ci],
             xerr=np.vstack([lift[valid_lift_ci] - lift_ci[valid_lift_ci, 0], lift_ci[valid_lift_ci, 1] - lift[valid_lift_ci]]),
             fmt="none",
-            ecolor=COLORS["ink"],
-            elinewidth=0.75,
-            capsize=2.1,
-            capthick=0.75,
-            zorder=4,
+            ecolor="#0D1822",
+            elinewidth=1.10,
+            capsize=3.0,
+            capthick=1.05,
+            zorder=6,
         )
-    axa.scatter(lift, y, s=22, color=scaf_color, edgecolor=COLORS["ink"], lw=0.45, zorder=3)
+    axa.scatter(lift, y, s=26, color=scaf_color, edgecolor=COLORS["ink"], lw=0.50, zorder=7)
     for i, val in enumerate(lift):
-        if val > 1.6:
-            axa.text(
-                val - 0.14,
-                i,
-                _pp(val),
-                va="center",
-                ha="right",
-                fontsize=7.3,
-                color="white",
-                bbox=dict(facecolor=scaf_color, edgecolor="none", pad=0.15),
-                zorder=5,
-            )
-        else:
-            axa.text(
-                val + 0.18,
-                i,
-                _pp(val),
-                va="center",
-                ha="left",
-                fontsize=7.3,
-                color=COLORS["ink"],
-                bbox=dict(facecolor="white", edgecolor="none", alpha=0.88, pad=0.10),
-                zorder=5,
-            )
-    axa.axvline(0, color=COLORS["ink"], lw=0.9)
+        label_x = val + 0.18
+        label_ha = "left"
+        if val > 5.5:
+            label_x = val - 0.18
+            label_ha = "right"
+        axa.text(
+            min(label_x, 7.48),
+            i,
+            _pp(val),
+            va="center",
+            ha=label_ha,
+            fontsize=7.3,
+            color=COLORS["ink"],
+            bbox=dict(facecolor="white", edgecolor="none", alpha=0.92, pad=0.10),
+            zorder=8,
+        )
     axa.set_yticks(y, order)
     axa.invert_yaxis()
-    axa.set_xlim(-0.35, 6.90)
+    axa.set_xlim(0, 7.75)
     axa.set_xlabel("Next-turn constructive lift (pp)")
-    axa.set_title("Overall adjacent-turn\ncontrast", loc="left", pad=5, fontsize=9.2, fontweight="bold")
+    axa.set_title("Overall adjacent-turn lift", loc="left", pad=8, fontsize=8.7, fontweight="bold")
     axa.grid(axis="x", color=COLORS["grid"], lw=0.65)
     axa.spines[["top", "right"]].set_visible(False)
+    axa.spines["left"].set_linewidth(0.9)
     axa.tick_params(axis="both", labelsize=7.4)
     axa.text(-0.22, 1.08, "a", transform=axa.transAxes, fontsize=13, weight="bold")
 
@@ -1072,8 +1084,8 @@ def make_figure5() -> None:
         ax.spines[["top", "right"]].set_visible(False)
         ax.tick_params(axis="both", labelsize=7.0)
     axs_b[0].text(-0.30, 1.08, "b", transform=axs_b[0].transAxes, fontsize=13, weight="bold")
-    fig.text(0.650, 0.875, "Adjacent-turn contrast by prior user state", ha="center", fontsize=9.2, fontweight="bold", color=COLORS["ink"])
-    fig.text(0.650, 0.507, "P(next constructive turn) (%)", ha="center", fontsize=8.0)
+    fig.text(0.655, 0.895, "By prior user state", ha="center", fontsize=9.2, fontweight="bold", color=COLORS["ink"])
+    fig.text(0.655, 0.507, "P(next constructive turn) (%)", ha="center", fontsize=8.0)
 
     legend_handles = [
         Line2D([0], [0], marker="o", linestyle="None", markerfacecolor=ref_color, markeredgecolor=COLORS["ink"], markeredgewidth=0.45, markersize=5.0),
@@ -1082,12 +1094,12 @@ def make_figure5() -> None:
     fig.legend(
         legend_handles,
         ["non-scaffolded reference", "scaffolded support"],
-        loc="upper right",
-        bbox_to_anchor=(0.987, 0.977),
+        loc="upper center",
+        bbox_to_anchor=(0.770, 0.948),
         frameon=False,
         ncol=2,
         handletextpad=0.4,
-        columnspacing=0.9,
+        columnspacing=0.75,
         fontsize=7.0,
     )
 
@@ -1142,11 +1154,10 @@ def make_figure5() -> None:
                 bbox=dict(facecolor="white", edgecolor="none", alpha=0.90, pad=0.12),
                 zorder=5,
             )
-        ax.axvline(1, color=COLORS["ink"], lw=0.9)
+        ax.axvline(1, color="#AEB8C2", lw=0.75, ls=(0, (2.2, 2.2)), zorder=1)
         ax.set_xlim(0.20, 5.55)
         ax.set_xticks([1, 3, 5])
         ax.set_xlabel("Adjusted OR")
-        ax.set_title(label, loc="left", pad=6, fontsize=9.0, fontweight="bold")
         ax.grid(axis="x", color=COLORS["grid"], lw=0.65)
         ax.spines[["top", "right"]].set_visible(False)
         ax.tick_params(axis="both", labelsize=7.3)
@@ -1157,8 +1168,34 @@ def make_figure5() -> None:
             ax.tick_params(axis="y", left=False, labelleft=False)
     axd_m1.invert_yaxis()
     axd_m1.text(-0.32, 1.08, "d", transform=axd_m1.transAxes, fontsize=13, weight="bold")
+    fig.legend(
+        [
+            Line2D([0], [0], marker="o", linestyle="None", markerfacecolor=ref_err, markeredgecolor=COLORS["ink"], markeredgewidth=0.45, markersize=5.0),
+            Line2D([0], [0], marker="o", linestyle="None", markerfacecolor=scaf_color, markeredgecolor=COLORS["ink"], markeredgewidth=0.45, markersize=5.0),
+            Line2D([0, 1], [0, 0], color="#AEB8C2", lw=0.9, ls=(0, (2.2, 2.2))),
+        ],
+        ["M1 feedback", "M4 explaining", "OR=1"],
+        loc="upper center",
+        bbox_to_anchor=(0.806, 0.472),
+        frameon=False,
+        ncol=3,
+        handletextpad=0.35,
+        columnspacing=0.65,
+        fontsize=6.7,
+    )
 
     fig.subplots_adjust(left=0.105, right=0.985, top=0.835, bottom=0.135)
+    d_pos = axd_m1.get_position()
+    fig.text(
+        d_pos.x0,
+        d_pos.y1 + 0.019,
+        "Support-form signal by prior state",
+        ha="left",
+        va="bottom",
+        fontsize=9.2,
+        fontweight="bold",
+        color=COLORS["ink"],
+    )
     fig.text(
         0.50,
         0.038,

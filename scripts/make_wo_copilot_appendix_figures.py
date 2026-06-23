@@ -114,7 +114,7 @@ def make_around_first_scaffolded() -> None:
     ax.spines[["top", "right"]].set_visible(False)
     ax.tick_params(axis="x", length=0, pad=4)
     ax.text(-0.12, 1.05, "a", transform=ax.transAxes, fontsize=13, weight="bold")
-    save(fig, "ExtendedDataFigure1_around_first_S2")
+    save(fig, "ExtendedDataFigure1_around_first_scaffolded")
 
 
 def make_intent_moderation() -> None:

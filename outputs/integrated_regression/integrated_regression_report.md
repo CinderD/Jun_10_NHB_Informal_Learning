@@ -29,7 +29,7 @@ Section 2.3 offset-rate sensitivity: the setting-specific Poisson model for cons
 - LMSYS writing: RR 1.703, 95% CI [1.497, 1.937], p=5.19063e-16.
 - SC writing: RR 1.654, 95% CI [1.274, 2.147], p=0.000154645.
 
-Integrated adjacent-turn logit outcome: whether the next user turn is constructive. Broad S2 models include scaffolded-support presence without M1-M6. Support-form decomposed models include broad S2 plus M1-M6, so M coefficients describe form-level variation within scaffolded support. Standard errors are clustered by conversation.
+Integrated adjacent-turn logit outcome: whether the next user turn is constructive. Broad scaffolded-support models include scaffolded-support presence without M1-M6. Support-form decomposed models include broad scaffolded support plus M1-M6, so M coefficients describe form-level variation within scaffolded support. Standard errors are clustered by conversation.
 
 Setting-level adjacent-turn models: separate model/source-adjusted regressions were fitted within each of the six task settings to check dataset-by-factor heterogeneity rather than relying only on pooled fixed effects. These outputs are exported to `setting_level_adjacent_turn_logit_model_source_fe.csv` and summarized in Supplementary Table C.
 
@@ -39,7 +39,7 @@ Setting-level adjacent-turn models: separate model/source-adjusted regressions w
 - Setting-level M4: OR>1 in 6/6 settings; p<0.05 in 4/6 settings.
 - Setting-level M6: OR>1 in 2/6 settings; p<0.05 in 3/6 settings.
 
-Key pooled estimates with dataset fixed effects. S2 and user/context rows come from broad S2 models; M rows come from support-form decomposed models:
+Key pooled estimates with dataset fixed effects. Scaffolded-support and user/context rows come from broad scaffolded-support models; M rows come from support-form decomposed models:
 
 - scaffolded_support_S2: OR 1.496, 95% CI [1.444, 1.550], p=8.81018e-110.
 - prior_user_constructive: OR 8.899, 95% CI [8.449, 9.374], p=0.
@@ -73,7 +73,7 @@ WildChat model-fixed-effect sensitivity:
 - M4: OR 2.108, 95% CI [1.925, 2.308], p=1.9446e-58.
 - M6: OR 1.077, 95% CI [0.925, 1.253], p=0.340153.
 
-Model/source fixed-effect block in the pooled data: LR chi-square(41)=718.2, p=1.48635e-124. WildChat exact model fixed-effect block: LR chi-square(13)=553.2, p=7.04399e-110. Model/source labels add detectable heterogeneity. Broad S2 remains positive in the broad support model, while the decomposed models show that support-form variation, especially M4 explaining, carries additional local signal.
+Model/source fixed-effect block in the pooled data: LR chi-square(41)=718.2, p=1.48635e-124. WildChat exact model fixed-effect block: LR chi-square(13)=553.2, p=7.04399e-110. Model/source labels add detectable heterogeneity. Broad scaffolded support remains positive in the broad support model, while the decomposed models show that support-form variation, especially M4 explaining, carries additional local signal.
 
 Consistency of key unadjusted contrasts:
 
@@ -83,15 +83,15 @@ Consistency of key unadjusted contrasts:
 
 Nested scaffolding block tests:
 
-- six task settings, dataset FE; broad S2 added after user/context controls: LR chi-square(1)=585.0, p=3.11956e-129.
+- six task settings, dataset FE; broad scaffolded support added after user/context controls: LR chi-square(1)=585.0, p=3.11956e-129.
 - six task settings, dataset FE; support-form descriptors M1-M6 added within scaffolded support: LR chi-square(6)=895.1, p=4.21789e-190.
-- six task settings, dataset FE; full scaffolding block S2 plus M1-M6 added after user/context controls: LR chi-square(7)=1480.1, p=0.
-- six task settings, model/source FE; broad S2 added after user/context controls: LR chi-square(1)=509.5, p=7.99876e-113.
+- six task settings, dataset FE; full scaffolding block plus M1-M6 added after user/context controls: LR chi-square(7)=1480.1, p=0.
+- six task settings, model/source FE; broad scaffolded support added after user/context controls: LR chi-square(1)=509.5, p=7.99876e-113.
 - six task settings, model/source FE; support-form descriptors M1-M6 added within scaffolded support: LR chi-square(6)=827.9, p=1.42297e-175.
-- six task settings, model/source FE; full scaffolding block S2 plus M1-M6 added after user/context controls: LR chi-square(7)=1337.5, p=1.30888e-284.
-- WildChat only, model FE; broad S2 added after user/context controls: LR chi-square(1)=418.6, p=5.0317e-93.
+- six task settings, model/source FE; full scaffolding block plus M1-M6 added after user/context controls: LR chi-square(7)=1337.5, p=1.30888e-284.
+- WildChat only, model FE; broad scaffolded support added after user/context controls: LR chi-square(1)=418.6, p=5.0317e-93.
 - WildChat only, model FE; support-form descriptors M1-M6 added within scaffolded support: LR chi-square(6)=519.4, p=5.63341e-109.
-- WildChat only, model FE; full scaffolding block S2 plus M1-M6 added after user/context controls: LR chi-square(7)=937.9, p=3.08909e-198.
+- WildChat only, model FE; full scaffolding block plus M1-M6 added after user/context controls: LR chi-square(7)=937.9, p=3.08909e-198.
 
 Prior-state by support-form interaction checks:
 
