@@ -975,9 +975,9 @@ def make_figure5() -> None:
         4,
         figure=fig,
         height_ratios=[1.0, 0.98],
-        width_ratios=[1.20, 0.93, 0.93, 0.93],
+        width_ratios=[1.10, 0.93, 0.93, 0.93],
         hspace=0.86,
-        wspace=0.48,
+        wspace=0.64,
     )
     axa = fig.add_subplot(gs[0, 0])
     axs_b = [fig.add_subplot(gs[0, i]) for i in range(1, 4)]
