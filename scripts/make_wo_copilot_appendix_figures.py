@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import csv
 from pathlib import Path
 
 os.environ.setdefault("MPLCONFIGDIR", "/tmp/matplotlib-codex")
@@ -18,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 FIG_DIR = ROOT / "figures"
 SUPP_DIR = ROOT / "figures" / "supplementary"
 SVG_DIR = ROOT / "figures_svg_editable" / "final_figures"
+SOURCE_DIR = ROOT / "source_data"
 
 COLORS = {
     "ink": "#17212B",
@@ -73,84 +75,111 @@ def save_main(fig: plt.Figure, stem: str) -> None:
     plt.close(fig)
 
 
-def make_around_first_scaffolded() -> None:
-    settings = ["WildChat coding", "WildChat writing"]
-    values = np.array([1.4, -4.2])
-    ci = np.array([[0.95, 1.80], [-4.68, -3.82]])
-    x = np.arange(len(settings))
-    colors = [COLORS["teal"], COLORS["rose"]]
+def _float(value: str) -> float:
+    return float(value) if value not in {"", "nan", "None"} else np.nan
 
-    fig, ax = plt.subplots(figsize=(4.9, 2.85))
-    ax.axhline(0, color=COLORS["ink"], lw=0.9, zorder=1)
-    ax.bar(x, values, width=0.44, color=colors, edgecolor="white", linewidth=0.8, zorder=2)
+
+def make_around_first_scaffolded() -> None:
+    order = ["WC coding", "LMSYS coding", "SC coding", "WC writing", "LMSYS writing", "SC writing"]
+    rows = {}
+    with open(SOURCE_DIR / "appendix_d_source_data.csv", newline="", encoding="utf-8") as fh:
+        for row in csv.DictReader(fh):
+            if row["figure"] == "Appendix D1":
+                rows[row["setting"]] = row
+
+    settings = [s for s in order if s in rows]
+    values = np.array([_float(rows[s]["estimate"]) for s in settings])
+    ci = np.array([[_float(rows[s]["ci_low"]), _float(rows[s]["ci_high"])] for s in settings])
+    y = np.arange(len(settings))
+    colors = [COLORS["teal"] if v >= 0 else COLORS["rose"] for v in values]
+
+    fig, ax = plt.subplots(figsize=(6.35, 3.15))
+    ax.axvline(0, color=COLORS["ink"], lw=0.9, zorder=1)
+    ax.barh(y, values, height=0.34, color=colors, edgecolor="white", linewidth=0.8, zorder=2)
     ax.errorbar(
-        x,
         values,
-        yerr=np.vstack([values - ci[:, 0], ci[:, 1] - values]),
+        y,
+        xerr=np.vstack([values - ci[:, 0], ci[:, 1] - values]),
         fmt="none",
         ecolor=COLORS["ink"],
-        elinewidth=0.8,
+        elinewidth=0.85,
         capsize=2.2,
         capthick=0.8,
         zorder=4,
     )
-    for xi, val in zip(x, values):
+    for yi, val in zip(y, values):
+        label_x = val + (0.18 if val >= 0 else -0.18)
         ax.text(
-            xi,
-            val + (0.35 if val >= 0 else -0.35),
+            label_x,
+            yi,
             f"{val:+.1f} pp",
-            ha="center",
-            va="bottom" if val >= 0 else "top",
+            ha="left" if val >= 0 else "right",
+            va="center",
             fontsize=8.2,
             color=COLORS["ink"],
             bbox=dict(facecolor="white", edgecolor="none", alpha=0.86, pad=0.12),
             zorder=5,
         )
-    ax.set_xticks(x, settings)
-    ax.set_ylabel("After - before first scaffolded turn (pp)")
-    ax.set_xlabel("WildChat task setting")
-    ax.set_ylim(-5.3, 2.4)
-    ax.grid(axis="y", color=COLORS["grid"], linewidth=0.75, zorder=0)
+    ax.set_yticks(y, settings)
+    ax.invert_yaxis()
+    ax.set_xlabel("After - before first scaffolded turn (pp)")
+    ax.set_xlim(-5.3, 3.2)
+    ax.grid(axis="x", color=COLORS["grid"], linewidth=0.75, zorder=0)
     ax.spines[["top", "right"]].set_visible(False)
-    ax.tick_params(axis="x", length=0, pad=4)
+    ax.tick_params(axis="both", labelsize=8.0)
     ax.text(-0.12, 1.05, "a", transform=ax.transAxes, fontsize=13, weight="bold")
     save(fig, "ExtendedDataFigure1_around_first_scaffolded")
 
 
 def make_intent_moderation() -> None:
-    settings = ["WildChat coding", "WildChat writing"]
-    intentional = np.array([1.8, 2.9])
-    unintentional = np.array([1.5, 1.1])
-    x = np.arange(len(settings))
-    width = 0.30
+    order = ["WC coding", "LMSYS coding", "SC coding", "WC writing", "LMSYS writing", "SC writing"]
+    rows = {("intentional", s): None for s in order}
+    rows.update({("unintentional", s): None for s in order})
+    with open(SOURCE_DIR / "figure3_source_data.csv", newline="", encoding="utf-8") as fh:
+        for row in csv.DictReader(fh):
+            if row["figure"] == "Figure 3" and row["panel"] == "c" and row["measure"] == "Poisson count ratio":
+                rows[(row["group"], row["setting"])] = row
 
-    fig, ax = plt.subplots(figsize=(5.1, 3.05))
-    ax.axhline(1.0, color=COLORS["ink"], lw=0.9, zorder=1)
-    ax.bar(x - width / 2, intentional, width=width, color=COLORS["blue"], edgecolor="white", linewidth=0.8, zorder=2)
-    ax.bar(x + width / 2, unintentional, width=width, color=COLORS["grey"], edgecolor="white", linewidth=0.8, zorder=2)
-    for xi, val in zip(x - width / 2, intentional):
-        ax.text(xi, val + 0.06, f"{val:.1f}", ha="center", va="bottom", fontsize=8.0, color=COLORS["ink"])
-    for xi, val in zip(x + width / 2, unintentional):
-        ax.text(xi, val + 0.06, f"{val:.1f}", ha="center", va="bottom", fontsize=8.0, color=COLORS["ink"])
-    ax.set_xticks(x, settings)
-    ax.set_ylabel("Constructive-turn rate ratio")
-    ax.set_xlabel("WildChat task setting")
-    ax.set_ylim(0.9, 3.30)
-    ax.grid(axis="y", color=COLORS["grid"], linewidth=0.75, zorder=0)
+    y = np.arange(len(order))
+    offset = 0.12
+    groups = [
+        ("intentional", -offset, COLORS["blue"], "Intentional"),
+        ("unintentional", offset, COLORS["grey"], "Unintentional"),
+    ]
+
+    fig, ax = plt.subplots(figsize=(6.35, 3.35))
+    ax.axvline(1.0, color=COLORS["ink"], lw=0.9, zorder=1)
+    for group, dy, color, label in groups:
+        vals = np.array([_float(rows[(group, s)]["estimate"]) for s in order])
+        ci = np.array([[_float(rows[(group, s)]["ci_low"]), _float(rows[(group, s)]["ci_high"])] for s in order])
+        yy = y + dy
+        ax.errorbar(
+            vals,
+            yy,
+            xerr=np.vstack([vals - ci[:, 0], ci[:, 1] - vals]),
+            fmt="none",
+            ecolor=color,
+            elinewidth=0.85,
+            capsize=2.2,
+            capthick=0.8,
+            zorder=3,
+        )
+        ax.scatter(vals, yy, s=30, color=color, edgecolor=COLORS["ink"], lw=0.45, label=label, zorder=4)
+    ax.set_yticks(y, order)
+    ax.invert_yaxis()
+    ax.set_xlabel("Poisson count ratio for scaffolded support")
+    ax.set_xlim(0.85, 3.12)
+    ax.set_xticks([1.0, 1.5, 2.0, 2.5, 3.0])
+    ax.grid(axis="x", color=COLORS["grid"], linewidth=0.75, zorder=0)
     ax.spines[["top", "right"]].set_visible(False)
-    ax.tick_params(axis="x", length=0, pad=4)
+    ax.tick_params(axis="both", labelsize=8.0)
     ax.legend(
-        [
-            Rectangle((0, 0), 1, 1, facecolor=COLORS["blue"], edgecolor="none"),
-            Rectangle((0, 0), 1, 1, facecolor=COLORS["grey"], edgecolor="none"),
-        ],
-        ["Intentional", "Unintentional"],
         loc="upper center",
-        bbox_to_anchor=(0.58, 1.18),
+        bbox_to_anchor=(0.62, 1.16),
         frameon=False,
         ncol=2,
-        handlelength=1.0,
-        columnspacing=0.9,
+        handlelength=1.1,
+        columnspacing=1.0,
     )
     ax.text(-0.12, 1.05, "a", transform=ax.transAxes, fontsize=13, weight="bold")
     save(fig, "ExtendedDataFigure2_intent_moderates_support_effect")
@@ -287,7 +316,6 @@ def make_temporal_coupling() -> None:
 
 
 def main() -> None:
-    make_temporal_coupling()
     make_around_first_scaffolded()
     make_intent_moderation()
 
