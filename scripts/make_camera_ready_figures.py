@@ -350,19 +350,17 @@ def make_figure2() -> None:
     axa.invert_yaxis()
     axa.set_xlim(0, 100)
     axa.set_xlabel("Share of cognitively engaged turns (%)")
-    axa.set_title("Engagement composition", loc="center", pad=18, fontsize=9.3, weight="bold")
+    axa.set_title("")
     axa.grid(axis="x", color=COLORS["grid"], linewidth=0.8)
     axa.set_axisbelow(True)
     axa.spines[["top", "right", "left"]].set_visible(False)
-    axa.text(-0.17, 1.06, "a", transform=axa.transAxes, fontsize=14, weight="bold")
     axa.tick_params(axis="y", length=0, pad=2)
 
-    handles = [
+    comp_handles = [
         Rectangle((0, 0), 1, 1, facecolor=COLORS["teal"], edgecolor=COLORS["ink"], linewidth=0.55),
         Rectangle((0, 0), 1, 1, facecolor="#8BB8CC", edgecolor=COLORS["ink"], linewidth=0.55),
         Rectangle((0, 0), 1, 1, facecolor="#DADADA", edgecolor=COLORS["ink"], linewidth=0.55),
     ]
-    axa.legend(handles, ["Constructive", "Active", "Passive"], loc="upper center", bbox_to_anchor=(0.50, 1.18), ncol=3, frameon=False, handlelength=1.0, columnspacing=0.75, fontsize=7.6)
 
     def intent_dumbbell(ax, left_vals, right_vals, title, xlim, show_y=False):
         yy = np.arange(len(labels))
@@ -383,22 +381,10 @@ def make_figure2() -> None:
 
     intent_dumbbell(axb1, cog_unintent, cog_intent, "Cognitive", (0, 86), show_y=True)
     intent_dumbbell(axb2, con_unintent, con_intent, "Constructive", (0, 25.5), show_y=False)
-    axb1.text(-0.42, 1.10, "b", transform=axb1.transAxes, fontsize=14, weight="bold")
-    axb1.text(1.08, 1.26, "Explicit user framing", transform=axb1.transAxes, fontsize=9.3, color=COLORS["ink"], ha="center", weight="bold")
-    axb2.legend(
-        [
-            Line2D([0], [0], marker="o", color="none", markerfacecolor="#2D71B8", markeredgecolor="white", markersize=5.6),
-            Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["grey"], markeredgecolor="white", markersize=5.6),
-        ],
-        ["Intent.", "Unintent."],
-        loc="upper center",
-        bbox_to_anchor=(-0.10, 1.27),
-        ncol=2,
-        frameon=False,
-        fontsize=7.3,
-        handletextpad=0.2,
-        columnspacing=0.8,
-    )
+    intent_handles = [
+        Line2D([0], [0], marker="o", color="none", markerfacecolor="#2D71B8", markeredgecolor="white", markersize=5.6),
+        Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["grey"], markeredgecolor="white", markersize=5.6),
+    ]
 
     depth_matrix = np.array(list(depth.values()))
     cmap = LinearSegmentedColormap.from_list("depth", ["#F3F6F6", "#A8C8D7", "#2F5F83"])
@@ -407,7 +393,7 @@ def make_figure2() -> None:
     axc.set_yticks(np.arange(len(labels)), labels)
     axc.set_xlabel("Conversation length", fontweight="bold", labelpad=3)
     axc.set_ylabel("Setting", labelpad=5)
-    axc.set_title("Conversations with ≥1 constructive turn", loc="center", pad=7, fontsize=9.3, weight="bold")
+    axc.set_title("")
     axc.set_xticks(np.arange(-0.5, 3, 1), minor=True)
     axc.set_yticks(np.arange(-0.5, len(labels), 1), minor=True)
     axc.grid(which="minor", color="white", linewidth=1.2)
@@ -420,8 +406,21 @@ def make_figure2() -> None:
             axc.text(j, i, f"{val * 100:.1f}%", ha="center", va="center", fontsize=8.3, color="white" if val > 0.30 else COLORS["ink"])
     for tick in axc.get_xticklabels():
         tick.set_fontweight("bold")
-    axc.text(-0.055, 1.08, "c", transform=axc.transAxes, fontsize=14, weight="bold")
-    fig.subplots_adjust(left=0.105, right=0.985, top=0.850, bottom=0.165)
+    fig.subplots_adjust(left=0.105, right=0.985, top=0.805, bottom=0.165)
+    top_row_y = max(axa.get_position().y1, axb1.get_position().y1, axb2.get_position().y1) + 0.080
+    top_legend_y = top_row_y - 0.040
+    a_center = (axa.get_position().x0 + axa.get_position().x1) / 2
+    b_center = (axb1.get_position().x0 + axb2.get_position().x1) / 2
+    c_center = (axc.get_position().x0 + axc.get_position().x1) / 2
+    c_title_y = axc.get_position().y1 + 0.048
+    fig.text(axa.get_position().x0 - 0.030, top_row_y, "a", fontsize=14, weight="bold", ha="right", va="center")
+    fig.text(a_center, top_row_y, "Engagement composition", fontsize=9.3, weight="bold", ha="center", va="center", color=COLORS["ink"])
+    fig.text(axb1.get_position().x0 - 0.030, top_row_y, "b", fontsize=14, weight="bold", ha="right", va="center")
+    fig.text(b_center, top_row_y, "Explicit user framing", fontsize=9.3, weight="bold", ha="center", va="center", color=COLORS["ink"])
+    fig.text(axc.get_position().x0 - 0.020, c_title_y, "c", fontsize=14, weight="bold", ha="right", va="center")
+    fig.text(c_center, c_title_y, "Conversations with ≥1 constructive turn", fontsize=9.3, weight="bold", ha="center", va="center", color=COLORS["ink"])
+    fig.legend(comp_handles, ["Constructive", "Active", "Passive"], loc="center", bbox_to_anchor=(a_center, top_legend_y), ncol=3, frameon=False, handlelength=1.0, columnspacing=0.75, fontsize=7.6)
+    fig.legend(intent_handles, ["Intent.", "Unintent."], loc="center", bbox_to_anchor=(b_center, top_legend_y), ncol=2, frameon=False, fontsize=7.3, handletextpad=0.2, columnspacing=0.8)
     fig.text(0.985, 0.030, "WC, WildChat; LMSYS, LMSYS Chat; SC, ShareChat.", ha="right", fontsize=7.6, color=COLORS["muted"])
 
     _save(fig, "fig_engagement_ecology_compact_final")
@@ -502,29 +501,19 @@ def make_figure3() -> None:
             ax.text(right[i] + (xlim[1] - xlim[0]) * 0.04, i, diff_fmt.format((right[i] - left[i]) * scale), fontsize=8.3, ha="left", va="center", color=COLORS["ink"])
         ax.set_yticks(y, ylabels)
         ax.invert_yaxis()
+        ax.set_ylim(len(ylabels) - 0.55, -0.85)
         ax.set_xlim(*xlim)
-        ax.set_title(title, loc="left", pad=8)
+        ax.set_title("")
         ax.set_xlabel(xlabel)
         ax.grid(axis="x", color=COLORS["grid"], lw=0.8)
         ax.spines[["top", "right", "left"]].set_visible(False)
         ax.tick_params(axis="y", length=0, pad=2)
 
     dumbbell(axa, no_s2, has_s2, labels, "Conversation-level constructive ratio", "Constructive user turns (%)", (0, 18.8))
-    axa.text(-0.16, 1.06, "a", transform=axa.transAxes, fontsize=14, weight="bold")
-    axa.legend(
-        [
-            Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["s1"], markeredgecolor=COLORS["ink"], markersize=6.5),
-            Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["s2"], markeredgecolor=COLORS["ink"], markersize=6.5),
-        ],
-        ["Ref.", "Scaffolded"],
-        loc="upper center",
-        bbox_to_anchor=(0.50, 1.26),
-        ncol=2,
-        frameon=False,
-        fontsize=8.0,
-        handletextpad=0.3,
-        columnspacing=0.9,
-    )
+    a_handles = [
+        Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["s1"], markeredgecolor=COLORS["ink"], markersize=6.5),
+        Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["s2"], markeredgecolor=COLORS["ink"], markersize=6.5),
+    ]
 
     y = np.arange(len(labels))
     axb.axvline(1.0, color=COLORS["ink"], lw=1.0)
@@ -556,27 +545,17 @@ def make_figure3() -> None:
         axb.text(min(max(pois_ci[i, 1], logit_ci[i, 1]) + 0.045, 3.22), i, f"{pois[i]:.2f} / {logit[i]:.2f}", va="center", fontsize=7.5, color=COLORS["ink"])
     axb.set_yticks(y, labels)
     axb.invert_yaxis()
+    axb.set_ylim(len(labels) - 0.55, -0.85)
     axb.set_xlim(0.94, 3.30)
-    axb.set_title("Adjusted association models", loc="left", pad=8)
+    axb.set_title("")
     axb.set_xlabel("Association estimate")
     axb.grid(axis="x", color=COLORS["grid"], lw=0.8)
     axb.spines[["top", "right", "left"]].set_visible(False)
     axb.tick_params(axis="y", length=0, pad=2)
-    axb.text(-0.12, 1.06, "b", transform=axb.transAxes, fontsize=14, weight="bold")
-    axb.legend(
-        [
-            Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["s2"], markersize=6.5),
-            Line2D([0], [0], marker="o", color="none", markerfacecolor=logit_color, markersize=6.5),
-        ],
-        ["Poisson count ratio", "Logit OR"],
-        frameon=False,
-        loc="upper center",
-        bbox_to_anchor=(0.50, 1.26),
-        ncol=2,
-        fontsize=8.0,
-        handletextpad=0.3,
-        columnspacing=0.9,
-    )
+    b_handles = [
+        Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["s2"], markersize=6.5),
+        Line2D([0], [0], marker="o", color="none", markerfacecolor=logit_color, markersize=6.5),
+    ]
 
     yc = np.arange(len(labels))
     axc.axvline(1.0, color=COLORS["ink"], lw=1.0)
@@ -615,27 +594,17 @@ def make_figure3() -> None:
         )
     axc.set_yticks(yc, labels)
     axc.invert_yaxis()
+    axc.set_ylim(len(labels) - 0.55, -0.85)
     axc.set_xlim(0.94, 3.30)
-    axc.set_title("Framing-stratified association", loc="left", pad=8)
+    axc.set_title("")
     axc.set_xlabel("Poisson count ratio (intentional / unintentional)")
     axc.grid(axis="x", color=COLORS["grid"], lw=0.8)
     axc.spines[["top", "right", "left"]].set_visible(False)
     axc.tick_params(axis="y", length=0, pad=2)
-    axc.text(-0.16, 1.13, "c", transform=axc.transAxes, fontsize=14, weight="bold")
-    axc.legend(
-        [
-            Line2D([0], [0], marker="o", color="none", markerfacecolor=intentional_color, markersize=6.5),
-            Line2D([0], [0], marker="o", color="none", markerfacecolor=unintentional_color, markersize=6.5),
-        ],
-        ["Intent.", "Unintent."],
-        frameon=False,
-        loc="upper right",
-        bbox_to_anchor=(1.00, 1.32),
-        ncol=2,
-        fontsize=7.8,
-        handletextpad=0.3,
-        columnspacing=0.65,
-    )
+    c_handles = [
+        Line2D([0], [0], marker="o", color="none", markerfacecolor=intentional_color, markersize=6.5),
+        Line2D([0], [0], marker="o", color="none", markerfacecolor=unintentional_color, markersize=6.5),
+    ]
 
     y_depth = np.arange(len(labels))
     axd.axvline(0, color=COLORS["ink"], lw=0.9)
@@ -644,16 +613,33 @@ def make_figure3() -> None:
         axd.text(val + 0.08, i, f"+{val:.2f}", va="center", ha="left", fontsize=8.2, color=COLORS["ink"])
     axd.set_yticks(y_depth, labels)
     axd.invert_yaxis()
+    axd.set_ylim(len(labels) - 0.55, -0.85)
     axd.set_xlim(0, 3.85)
-    axd.set_title("Post-answer depth", loc="left", pad=8)
+    axd.set_title("")
     axd.set_xlabel("Scaffolded - reference (turns)")
     axd.grid(axis="x", color=COLORS["grid"], lw=0.8)
     axd.spines[["top", "right", "left"]].set_visible(False)
     axd.tick_params(axis="y", length=0, pad=2)
-    axd.text(-0.12, 1.13, "d", transform=axd.transAxes, fontsize=14, weight="bold")
 
     fig.text(0.985, 0.030, "WC, WildChat; LMSYS, LMSYS Chat; SC, ShareChat.", ha="right", fontsize=7.6, color=COLORS["muted"])
-    fig.subplots_adjust(left=0.115, right=0.985, top=0.835, bottom=0.140)
+    fig.subplots_adjust(left=0.115, right=0.985, top=0.790, bottom=0.140, hspace=0.86, wspace=0.42)
+    top_title_y = max(axa.get_position().y1, axb.get_position().y1) + 0.065
+    bottom_title_y = max(axc.get_position().y1, axd.get_position().y1) + 0.065
+
+    def add_panel_header(ax, label, title, y):
+        pos = ax.get_position()
+        fig.text(pos.x0 - 0.020, y, label, fontsize=14, weight="bold", ha="right", va="center")
+        fig.text((pos.x0 + pos.x1) / 2, y, title, fontsize=9.3, weight="bold", ha="center", va="center", color=COLORS["ink"])
+
+    add_panel_header(axa, "a", "Conversation-level constructive ratio", top_title_y)
+    add_panel_header(axb, "b", "Adjusted association models", top_title_y)
+    add_panel_header(axc, "c", "Framing-stratified association", bottom_title_y)
+    add_panel_header(axd, "d", "Post-answer depth", bottom_title_y)
+    top_legend_y = max(axa.get_position().y1, axb.get_position().y1) + 0.028
+    bottom_legend_y = max(axc.get_position().y1, axd.get_position().y1) + 0.028
+    fig.legend(a_handles, ["Ref.", "Scaffolded"], loc="center", bbox_to_anchor=((axa.get_position().x0 + axa.get_position().x1) / 2, top_legend_y), ncol=2, frameon=False, fontsize=8.0, handletextpad=0.3, columnspacing=0.9)
+    fig.legend(b_handles, ["Poisson count ratio", "Logit OR"], loc="center", bbox_to_anchor=((axb.get_position().x0 + axb.get_position().x1) / 2, top_legend_y), ncol=2, frameon=False, fontsize=8.0, handletextpad=0.3, columnspacing=0.9)
+    fig.legend(c_handles, ["Intent.", "Unintent."], loc="center", bbox_to_anchor=((axc.get_position().x0 + axc.get_position().x1) / 2, bottom_legend_y), ncol=2, frameon=False, fontsize=7.8, handletextpad=0.3, columnspacing=0.65)
 
     _save_many(fig, ["fig_support_association_compact_final_v2", "fig_support_association_wild_lmsys_with_ci"])
 
