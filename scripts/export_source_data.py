@@ -18,7 +18,7 @@ def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
             if key not in fieldnames:
                 fieldnames.append(key)
     with path.open("w", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 
@@ -43,14 +43,14 @@ def figure2() -> None:
         "Passive": [1.2, 1.6, 4.3, 6.9, 7.3, 14.6],
     }
     framing = {
-        ("Cognitive", "intentional"): [76.6, 74.6, 73.8, 28.2, 28.2, 46.4],
-        ("Cognitive", "unintentional"): [32.5, 23.2, 28.0, 10.5, 10.3, 24.9],
-        ("Constructive", "intentional"): [13.1, 7.6, 22.0, 5.2, 3.5, 7.2],
-        ("Constructive", "unintentional"): [5.7, 3.1, 9.2, 1.5, 1.0, 3.2],
+        ("Cognitive", "intentional"): [76.6, 72.6, 73.8, 28.2, 28.2, 46.4],
+        ("Cognitive", "unintentional"): [32.5, 25.3, 28.0, 10.5, 10.3, 24.9],
+        ("Constructive", "intentional"): [13.1, 8.0, 22.0, 5.2, 3.5, 7.2],
+        ("Constructive", "unintentional"): [5.7, 3.6, 9.2, 1.5, 1.0, 3.2],
     }
     depth = {
         "WC coding": [15.1, 28.6, 46.3],
-        "LMSYS coding": [9.5, 20.4, 34.0],
+        "LMSYS coding": [9.5, 20.5, 33.9],
         "SC coding": [27.8, 43.4, 61.3],
         "WC writing": [6.0, 9.2, 15.0],
         "LMSYS writing": [3.3, 6.3, 11.2],
@@ -113,19 +113,19 @@ def figure2() -> None:
 
 def figure3() -> None:
     labels = ["WC coding", "LMSYS coding", "SC coding", "WC writing", "LMSYS writing", "SC writing"]
-    no_s2 = [5.5626, 3.9565, 8.9800, 1.7372, 1.0692, 3.4391]
-    has_s2 = [10.1265, 6.4673, 16.3192, 2.7293, 2.1567, 6.6385]
-    depth_diff = [2.2259, 1.4286, 3.3617, 3.1268, 2.0999, 3.3848]
-    depth_ci = [(2.1065, 2.3468), (1.3322, 1.5128), (2.6850, 4.0114), (2.9593, 3.3027), (1.9063, 2.2810), (1.9213, 4.6377)]
-    depth_p = [1.70734e-300, 1.79771e-200, 3.11658e-23, 5.16574e-261, 1.6131e-107, 1.01313e-06]
-    pois = [1.852129, 1.626117, 1.892754, 1.568604, 1.985056, 2.491434]
-    pois_ci = [(1.748968, 1.961375), (1.535445, 1.722144), (1.605713, 2.231107), (1.462784, 1.682078), (1.759494, 2.239534), (1.970588, 3.149944)]
-    logit = [1.760538, 1.542169, 2.140210, 1.436974, 1.764222, 1.756637]
-    logit_ci = [(1.634771, 1.895981), (1.437962, 1.653928), (1.690000, 2.710000), (1.328000, 1.555000), (1.539000, 2.022000), (1.280000, 2.411000)]
-    strat_int = [1.967756, 1.664917, 2.113730, 1.579301, 2.333909, 1.854075]
-    strat_int_ci = [(1.801625, 2.149207), (1.545422, 1.793651), (1.679535, 2.660174), (1.427233, 1.747571), (1.886383, 2.887607), (1.235605, 2.782114)]
-    strat_unint = [1.633274, 1.600499, 1.680661, 1.566670, 1.841921, 2.234555]
-    strat_unint_ci = [(1.512785, 1.763359), (1.463000, 1.750922), (1.327630, 2.127566), (1.421943, 1.726128), (1.585813, 2.139391), (1.675959, 2.979332)]
+    no_s2 = [5.5626, 3.9665, 8.9800, 1.7372, 1.0692, 3.4391]
+    has_s2 = [10.1265, 6.4707, 16.3192, 2.7293, 2.1567, 6.6385]
+    depth_diff = [2.2259, 1.4214, 3.3617, 3.1268, 2.0999, 3.3848]
+    depth_ci = [(2.1065, 2.3468), (1.3362, 1.5160), (2.6850, 4.0114), (2.9593, 3.3027), (1.9063, 2.2810), (1.9213, 4.6377)]
+    depth_p = [1.70734e-300, 4.12801e-207, 3.11658e-23, 5.16574e-261, 1.6131e-107, 1.01313e-06]
+    pois = [1.852129, 1.621977, 1.892754, 1.568604, 1.985056, 2.491434]
+    pois_ci = [(1.748968, 1.961375), (1.531958, 1.717285), (1.605713, 2.231107), (1.462784, 1.682078), (1.759494, 2.239534), (1.970588, 3.149944)]
+    logit = [1.760538, 1.543781, 2.140210, 1.436974, 1.764222, 1.756637]
+    logit_ci = [(1.634771, 1.895981), (1.439886, 1.655173), (1.690000, 2.710000), (1.328000, 1.555000), (1.539000, 2.022000), (1.280000, 2.411000)]
+    strat_int = [1.967756, 1.671692, 2.113730, 1.579301, 2.333909, 1.854075]
+    strat_int_ci = [(1.801625, 2.149207), (1.552075, 1.800528), (1.679535, 2.660174), (1.427233, 1.747571), (1.886383, 2.887607), (1.235605, 2.782114)]
+    strat_unint = [1.633274, 1.582937, 1.680661, 1.566670, 1.841921, 2.234555]
+    strat_unint_ci = [(1.512785, 1.763359), (1.447858, 1.730617), (1.327630, 2.127566), (1.421943, 1.726128), (1.585813, 2.139391), (1.675959, 2.979332)]
     rows: list[dict[str, object]] = []
     for setting, ref, scaf in zip(labels, no_s2, has_s2):
         for group, value in [("non-scaffolded reference", ref), ("scaffolded support", scaf)]:
@@ -166,12 +166,12 @@ def figure4() -> None:
         ("b", "writing", [10.93, 3.02, -3.38, 4.30, 6.67, -0.84], [10.00, 2.36, -3.80, 3.80, 5.76, -1.27], [11.87, 3.69, -2.95, 4.80, 7.59, -0.42], [3.93e-02, 9.41e-01, 1.23e-45, 4.33e-01, 4.95e-44, 3.71e-23]),
     ]
     supply = {
-        "M1 feedback": [8.8, 4.5, 13.3, 16.6, 11.3, 24.2],
-        "M2 hinting": [14.7, 8.2, 12.7, 9.6, 10.9, 23.2],
-        "M3 instructing": [29.7, 10.4, 25.7, 59.2, 52.3, 22.9],
-        "M4 explaining": [84.0, 79.2, 81.2, 29.5, 26.9, 45.2],
-        "M5 modelling": [23.9, 18.3, 18.4, 15.0, 10.3, 23.5],
-        "M6 questioning": [6.9, 10.6, 18.6, 6.9, 13.4, 38.1],
+        "M1 feedback": [8.8, 4.4, 13.3, 16.6, 11.3, 24.2],
+        "M2 hinting": [14.7, 7.6, 12.7, 9.6, 10.9, 23.2],
+        "M3 instructing": [29.7, 9.7, 25.7, 59.2, 52.3, 22.9],
+        "M4 explaining": [84.0, 76.7, 81.2, 29.5, 26.9, 45.2],
+        "M5 modelling": [23.9, 16.5, 18.4, 15.0, 10.3, 23.5],
+        "M6 questioning": [6.9, 13.9, 18.6, 6.9, 13.4, 38.1],
     }
     q_by_panel = {"a": bh_fdr(groups[0][5]), "b": bh_fdr(groups[2][5])}
     rows: list[dict[str, object]] = []
@@ -218,16 +218,16 @@ def figure4() -> None:
 
 def figure5() -> None:
     order = ["WC coding", "LMSYS coding", "SC coding", "WC writing", "LMSYS writing", "SC writing"]
-    lift = [2.6756, 2.0136, 6.21, 1.1281, 0.2666, 3.35]
-    lift_ci = [(2.2904, 3.0607), (1.6100, 2.4200), ("", ""), (0.9487, 1.3075), (0.0200, 0.5200), ("", "")]
+    lift = [2.6756, 2.0051, 6.21, 1.1281, 0.2666, 3.35]
+    lift_ci = [(2.2904, 3.0607), (1.5400, 2.5000), ("", ""), (0.9487, 1.3075), (0.0200, 0.5200), ("", "")]
     cond = {
-        "prior constructive": {"WC coding": (26.0563, 30.0682), "LMSYS coding": (21.8174, 24.2271), "SC coding": (32.24, 36.75), "WC writing": (6.0528, 12.3195), "LMSYS writing": (11.4618, 9.0909), "SC writing": (22.91, 25.74)},
-        "prior active": {"WC coding": (9.6341, 11.7894), "LMSYS coding": (6.1475, 8.3257), "SC coding": (14.45, 17.51), "WC writing": (1.9286, 2.5838), "LMSYS writing": (2.1687, 2.0536), "SC writing": (6.24, 7.46)},
-        "prior passive": {"WC coding": (12.9630, 15.0327), "LMSYS coding": (7.1197, 13.8462), "SC coding": (9.23, 28.77), "WC writing": (2.1182, 3.5857), "LMSYS writing": (2.2831, 4.7619), "SC writing": (1.38, 9.33)},
+        "prior constructive": {"WC coding": (26.0563, 30.0682), "LMSYS coding": (21.9201, 24.1834), "SC coding": (32.24, 36.75), "WC writing": (6.0528, 12.3195), "LMSYS writing": (11.4618, 9.0909), "SC writing": (22.91, 25.74)},
+        "prior active": {"WC coding": (9.6341, 11.7894), "LMSYS coding": (6.1476, 8.3811), "SC coding": (14.45, 17.51), "WC writing": (1.9286, 2.5838), "LMSYS writing": (2.1687, 2.0536), "SC writing": (6.24, 7.46)},
+        "prior passive": {"WC coding": (12.9630, 15.0327), "LMSYS coding": (7.3482, 13.8462), "SC coding": (9.23, 28.77), "WC writing": (2.1182, 3.5857), "LMSYS writing": (2.2831, 4.7619), "SC writing": (1.38, 9.33)},
     }
     next_s2 = {
         "WC coding": [65.5, 50.7, 29.5],
-        "LMSYS coding": [40.6, 26.7, 14.9],
+        "LMSYS coding": [40.3, 26.0, 17.2],
         "SC coding": [66.3, 53.7, 43.7],
         "WC writing": [37.8, 43.2, 18.8],
         "LMSYS writing": [34.2, 31.2, 12.1],
@@ -262,6 +262,7 @@ This directory contains CSV source data for the manuscript's numeric main figure
 - `figure3_source_data.csv`: scaffolded versus reference constructive ratios, adjusted model estimates, framing-stratified estimates and post-answer depth differences.
 - `figure4_source_data.csv`: support-form constructive associations, Benjamini-Hochberg q values and support-form supply profiles.
 - `figure5_source_data.csv`: adjacent-turn lifts, prior-state conditional probabilities, reverse scaffolded-support probabilities and focal prior-state x support-form odds ratios.
+- `appendix_d_source_data.csv`: six-setting around-first-scaffold contrasts used in Supplementary Figure D1. Supplementary Figure D2 reads the framing-stratified estimates from `figure3_source_data.csv`.
 
 Figure 1 is a conceptual framework figure and has no numeric source data. Supplementary table source files are stored under `tables/`, and regression/statistical output CSV files are stored under `outputs/integrated_regression/`.
 

@@ -18,25 +18,25 @@ Figure 2,a,WC writing,Passive,cognitively engaged turns,6.9,percent,,,,Compositi
 Figure 2,a,LMSYS writing,Passive,cognitively engaged turns,7.3,percent,,,,Composition denominator is cognitively engaged user turns.
 Figure 2,a,SC writing,Passive,cognitively engaged turns,14.6,percent,,,,Composition denominator is cognitively engaged user turns.
 Figure 2,b,WC coding,Cognitive,intentional,76.6,percent of user turns,,,,Intentional versus unintentional user framing.
-Figure 2,b,LMSYS coding,Cognitive,intentional,74.6,percent of user turns,,,,Intentional versus unintentional user framing.
+Figure 2,b,LMSYS coding,Cognitive,intentional,72.6,percent of user turns,,,,Intentional versus unintentional user framing.
 Figure 2,b,SC coding,Cognitive,intentional,73.8,percent of user turns,,,,Intentional versus unintentional user framing.
 Figure 2,b,WC writing,Cognitive,intentional,28.2,percent of user turns,,,,Intentional versus unintentional user framing.
 Figure 2,b,LMSYS writing,Cognitive,intentional,28.2,percent of user turns,,,,Intentional versus unintentional user framing.
 Figure 2,b,SC writing,Cognitive,intentional,46.4,percent of user turns,,,,Intentional versus unintentional user framing.
 Figure 2,b,WC coding,Cognitive,unintentional,32.5,percent of user turns,,,,Intentional versus unintentional user framing.
-Figure 2,b,LMSYS coding,Cognitive,unintentional,23.2,percent of user turns,,,,Intentional versus unintentional user framing.
+Figure 2,b,LMSYS coding,Cognitive,unintentional,25.3,percent of user turns,,,,Intentional versus unintentional user framing.
 Figure 2,b,SC coding,Cognitive,unintentional,28.0,percent of user turns,,,,Intentional versus unintentional user framing.
 Figure 2,b,WC writing,Cognitive,unintentional,10.5,percent of user turns,,,,Intentional versus unintentional user framing.
 Figure 2,b,LMSYS writing,Cognitive,unintentional,10.3,percent of user turns,,,,Intentional versus unintentional user framing.
 Figure 2,b,SC writing,Cognitive,unintentional,24.9,percent of user turns,,,,Intentional versus unintentional user framing.
 Figure 2,b,WC coding,Constructive,intentional,13.1,percent of user turns,,,,Intentional versus unintentional user framing.
-Figure 2,b,LMSYS coding,Constructive,intentional,7.6,percent of user turns,,,,Intentional versus unintentional user framing.
+Figure 2,b,LMSYS coding,Constructive,intentional,8.0,percent of user turns,,,,Intentional versus unintentional user framing.
 Figure 2,b,SC coding,Constructive,intentional,22.0,percent of user turns,,,,Intentional versus unintentional user framing.
 Figure 2,b,WC writing,Constructive,intentional,5.2,percent of user turns,,,,Intentional versus unintentional user framing.
 Figure 2,b,LMSYS writing,Constructive,intentional,3.5,percent of user turns,,,,Intentional versus unintentional user framing.
 Figure 2,b,SC writing,Constructive,intentional,7.2,percent of user turns,,,,Intentional versus unintentional user framing.
 Figure 2,b,WC coding,Constructive,unintentional,5.7,percent of user turns,,,,Intentional versus unintentional user framing.
-Figure 2,b,LMSYS coding,Constructive,unintentional,3.1,percent of user turns,,,,Intentional versus unintentional user framing.
+Figure 2,b,LMSYS coding,Constructive,unintentional,3.6,percent of user turns,,,,Intentional versus unintentional user framing.
 Figure 2,b,SC coding,Constructive,unintentional,9.2,percent of user turns,,,,Intentional versus unintentional user framing.
 Figure 2,b,WC writing,Constructive,unintentional,1.5,percent of user turns,,,,Intentional versus unintentional user framing.
 Figure 2,b,LMSYS writing,Constructive,unintentional,1.0,percent of user turns,,,,Intentional versus unintentional user framing.
@@ -45,8 +45,8 @@ Figure 2,c,WC coding,conversation contains >=1 constructive user turn,2-3 user t
 Figure 2,c,WC coding,conversation contains >=1 constructive user turn,4-6 user turns,28.6,percent of conversations,,,,Conversation-level share by length bucket.
 Figure 2,c,WC coding,conversation contains >=1 constructive user turn,7+ user turns,46.3,percent of conversations,,,,Conversation-level share by length bucket.
 Figure 2,c,LMSYS coding,conversation contains >=1 constructive user turn,2-3 user turns,9.5,percent of conversations,,,,Conversation-level share by length bucket.
-Figure 2,c,LMSYS coding,conversation contains >=1 constructive user turn,4-6 user turns,20.4,percent of conversations,,,,Conversation-level share by length bucket.
-Figure 2,c,LMSYS coding,conversation contains >=1 constructive user turn,7+ user turns,34.0,percent of conversations,,,,Conversation-level share by length bucket.
+Figure 2,c,LMSYS coding,conversation contains >=1 constructive user turn,4-6 user turns,20.5,percent of conversations,,,,Conversation-level share by length bucket.
+Figure 2,c,LMSYS coding,conversation contains >=1 constructive user turn,7+ user turns,33.9,percent of conversations,,,,Conversation-level share by length bucket.
 Figure 2,c,SC coding,conversation contains >=1 constructive user turn,2-3 user turns,27.8,percent of conversations,,,,Conversation-level share by length bucket.
 Figure 2,c,SC coding,conversation contains >=1 constructive user turn,4-6 user turns,43.4,percent of conversations,,,,Conversation-level share by length bucket.
 Figure 2,c,SC coding,conversation contains >=1 constructive user turn,7+ user turns,61.3,percent of conversations,,,,Conversation-level share by length bucket.

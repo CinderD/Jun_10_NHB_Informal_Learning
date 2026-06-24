@@ -1,8 +1,8 @@
 figure,panel,setting,measure,group,estimate,unit,ci_low,ci_high,p_value,notes
 Figure 3,a,WC coding,turn-weighted constructive ratio,non-scaffolded reference,5.5626,percent,,,,Group ratio is total constructive user turns divided by total user turns.
 Figure 3,a,WC coding,turn-weighted constructive ratio,scaffolded support,10.1265,percent,,,,Group ratio is total constructive user turns divided by total user turns.
-Figure 3,a,LMSYS coding,turn-weighted constructive ratio,non-scaffolded reference,3.9565,percent,,,,Group ratio is total constructive user turns divided by total user turns.
-Figure 3,a,LMSYS coding,turn-weighted constructive ratio,scaffolded support,6.4673,percent,,,,Group ratio is total constructive user turns divided by total user turns.
+Figure 3,a,LMSYS coding,turn-weighted constructive ratio,non-scaffolded reference,3.9665,percent,,,,Group ratio is total constructive user turns divided by total user turns.
+Figure 3,a,LMSYS coding,turn-weighted constructive ratio,scaffolded support,6.4707,percent,,,,Group ratio is total constructive user turns divided by total user turns.
 Figure 3,a,SC coding,turn-weighted constructive ratio,non-scaffolded reference,8.98,percent,,,,Group ratio is total constructive user turns divided by total user turns.
 Figure 3,a,SC coding,turn-weighted constructive ratio,scaffolded support,16.3192,percent,,,,Group ratio is total constructive user turns divided by total user turns.
 Figure 3,a,WC writing,turn-weighted constructive ratio,non-scaffolded reference,1.7372,percent,,,,Group ratio is total constructive user turns divided by total user turns.
@@ -12,31 +12,31 @@ Figure 3,a,LMSYS writing,turn-weighted constructive ratio,scaffolded support,2.1
 Figure 3,a,SC writing,turn-weighted constructive ratio,non-scaffolded reference,3.4391,percent,,,,Group ratio is total constructive user turns divided by total user turns.
 Figure 3,a,SC writing,turn-weighted constructive ratio,scaffolded support,6.6385,percent,,,,Group ratio is total constructive user turns divided by total user turns.
 Figure 3,b,WC coding,Poisson count ratio,scaffolded support,1.852129,ratio,1.748968,1.961375,,Model-based 95% CI.
-Figure 3,b,LMSYS coding,Poisson count ratio,scaffolded support,1.626117,ratio,1.535445,1.722144,,Model-based 95% CI.
+Figure 3,b,LMSYS coding,Poisson count ratio,scaffolded support,1.621977,ratio,1.531958,1.717285,,Model-based 95% CI.
 Figure 3,b,SC coding,Poisson count ratio,scaffolded support,1.892754,ratio,1.605713,2.231107,,Model-based 95% CI.
 Figure 3,b,WC writing,Poisson count ratio,scaffolded support,1.568604,ratio,1.462784,1.682078,,Model-based 95% CI.
 Figure 3,b,LMSYS writing,Poisson count ratio,scaffolded support,1.985056,ratio,1.759494,2.239534,,Model-based 95% CI.
 Figure 3,b,SC writing,Poisson count ratio,scaffolded support,2.491434,ratio,1.970588,3.149944,,Model-based 95% CI.
 Figure 3,b,WC coding,Logit odds ratio,scaffolded support,1.760538,odds ratio,1.634771,1.895981,,Model-based 95% CI.
-Figure 3,b,LMSYS coding,Logit odds ratio,scaffolded support,1.542169,odds ratio,1.437962,1.653928,,Model-based 95% CI.
+Figure 3,b,LMSYS coding,Logit odds ratio,scaffolded support,1.543781,odds ratio,1.439886,1.655173,,Model-based 95% CI.
 Figure 3,b,SC coding,Logit odds ratio,scaffolded support,2.14021,odds ratio,1.69,2.71,,Model-based 95% CI.
 Figure 3,b,WC writing,Logit odds ratio,scaffolded support,1.436974,odds ratio,1.328,1.555,,Model-based 95% CI.
 Figure 3,b,LMSYS writing,Logit odds ratio,scaffolded support,1.764222,odds ratio,1.539,2.022,,Model-based 95% CI.
 Figure 3,b,SC writing,Logit odds ratio,scaffolded support,1.756637,odds ratio,1.28,2.411,,Model-based 95% CI.
 Figure 3,c,WC coding,Poisson count ratio,intentional,1.967756,ratio,1.801625,2.149207,,User-framing stratified model.
-Figure 3,c,LMSYS coding,Poisson count ratio,intentional,1.664917,ratio,1.545422,1.793651,,User-framing stratified model.
+Figure 3,c,LMSYS coding,Poisson count ratio,intentional,1.671692,ratio,1.552075,1.800528,,User-framing stratified model.
 Figure 3,c,SC coding,Poisson count ratio,intentional,2.11373,ratio,1.679535,2.660174,,User-framing stratified model.
 Figure 3,c,WC writing,Poisson count ratio,intentional,1.579301,ratio,1.427233,1.747571,,User-framing stratified model.
 Figure 3,c,LMSYS writing,Poisson count ratio,intentional,2.333909,ratio,1.886383,2.887607,,User-framing stratified model.
 Figure 3,c,SC writing,Poisson count ratio,intentional,1.854075,ratio,1.235605,2.782114,,User-framing stratified model.
 Figure 3,c,WC coding,Poisson count ratio,unintentional,1.633274,ratio,1.512785,1.763359,,User-framing stratified model.
-Figure 3,c,LMSYS coding,Poisson count ratio,unintentional,1.600499,ratio,1.463,1.750922,,User-framing stratified model.
+Figure 3,c,LMSYS coding,Poisson count ratio,unintentional,1.582937,ratio,1.447858,1.730617,,User-framing stratified model.
 Figure 3,c,SC coding,Poisson count ratio,unintentional,1.680661,ratio,1.32763,2.127566,,User-framing stratified model.
 Figure 3,c,WC writing,Poisson count ratio,unintentional,1.56667,ratio,1.421943,1.726128,,User-framing stratified model.
 Figure 3,c,LMSYS writing,Poisson count ratio,unintentional,1.841921,ratio,1.585813,2.139391,,User-framing stratified model.
 Figure 3,c,SC writing,Poisson count ratio,unintentional,2.234555,ratio,1.675959,2.979332,,User-framing stratified model.
 Figure 3,d,WC coding,post-answer depth difference,scaffolded minus reference,2.2259,turns,2.1065,2.3468,1.70734e-300,Conversation-level bootstrap estimate.
-Figure 3,d,LMSYS coding,post-answer depth difference,scaffolded minus reference,1.4286,turns,1.3322,1.5128,1.79771e-200,Conversation-level bootstrap estimate.
+Figure 3,d,LMSYS coding,post-answer depth difference,scaffolded minus reference,1.4214,turns,1.3362,1.516,4.12801e-207,Conversation-level bootstrap estimate.
 Figure 3,d,SC coding,post-answer depth difference,scaffolded minus reference,3.3617,turns,2.685,4.0114,3.11658e-23,Conversation-level bootstrap estimate.
 Figure 3,d,WC writing,post-answer depth difference,scaffolded minus reference,3.1268,turns,2.9593,3.3027,5.16574e-261,Conversation-level bootstrap estimate.
 Figure 3,d,LMSYS writing,post-answer depth difference,scaffolded minus reference,2.0999,turns,1.9063,2.281,1.6131e-107,Conversation-level bootstrap estimate.

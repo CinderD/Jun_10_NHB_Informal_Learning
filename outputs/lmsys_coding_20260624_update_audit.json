@@ -1,0 +1,123 @@
+{
+  "summary": {
+    "conversations": 32114,
+    "user_turns": 107065,
+    "assistant_turns": 105174,
+    "intentional_conv_pct": 41.49280687550601,
+    "scaffolded_turns_pct": 29.07087302945595,
+    "cognitive_overall_pct": 45.255685798346796,
+    "constructive_pct": 5.4387521599028625,
+    "emotional_pct": 0.9069256993415215,
+    "cognitive_composition_pct": {
+      "Constructive": 12.017831713206613,
+      "Active": 86.39919096856748,
+      "Passive": 1.5829773182259097
+    }
+  },
+  "framing": {
+    "intentional": {
+      "n": 13325,
+      "cognitive_pct": 72.61351052048727,
+      "constructive_pct": 8.0
+    },
+    "unintentional": {
+      "n": 18789,
+      "cognitive_pct": 25.30566098683679,
+      "constructive_pct": 3.5710247920536218
+    }
+  },
+  "length": {
+    "2-3 user turns": 9.537191534205673,
+    "4-6 user turns": 20.457756428369596,
+    "7+ user turns": 33.9080459770115
+  },
+  "raw": {
+    "has_constructive_ratio": 0.06470728413694495,
+    "ref_constructive_ratio": 0.039664551223934724,
+    "has_depth_mean": 5.271306072449396,
+    "ref_depth_mean": 3.8499098256629485,
+    "has_n": 17143,
+    "ref_n": 14971,
+    "constructive_diff_pp": 2.504273291301022,
+    "depth_diff": 1.4213962467864474
+  },
+  "poisson": {
+    "rr": 1.6219767388272923,
+    "ci_low": 1.531957641100406,
+    "ci_high": 1.7172854331710548,
+    "coef": 0.4836456145467945,
+    "se": 0.02913224133822169,
+    "p": 6.771053333871604e-62
+  },
+  "logit": {
+    "or": 1.5437814433006622,
+    "ci_low": 1.4398863971442761,
+    "ci_high": 1.655173039627427,
+    "coef": 0.4342348893167064,
+    "se": 0.03554626005758983,
+    "p": 2.5518545715631703e-34
+  },
+  "stratified_poisson": {
+    "intentional": {
+      "rr": 1.6716922462484072,
+      "ci_low": 1.5520753126783637,
+      "ci_high": 1.800527940454498,
+      "coef": 0.5138364344722309,
+      "se": 0.03787933044810025,
+      "p": 6.450259103000087e-42,
+      "n": 13325
+    },
+    "unintentional": {
+      "rr": 1.5829365120253822,
+      "ci_low": 1.447858163118788,
+      "ci_high": 1.7306170348244991,
+      "coef": 0.45928167398303194,
+      "se": 0.04550833595128827,
+      "p": 5.9780947718234144e-24,
+      "n": 18789
+    }
+  },
+  "support_supply": {
+    "M1": 4.358124111795358,
+    "M2": 7.555660824253908,
+    "M3": 9.668403600189484,
+    "M4": 76.6887730933207,
+    "M5": 16.475603979156798,
+    "M6": 13.922311700615822
+  },
+  "adjacent": {
+    "s2_prob_pct": 7.489341544291805,
+    "s1_prob_pct": 5.484251968503937,
+    "lift_pp": 2.005089575787868,
+    "s2_n": 21110,
+    "s1_n": 50800
+  },
+  "prior_state": {
+    "prior active": {
+      "ref_pct": 6.147578504073972,
+      "scaffolded_pct": 8.38105153565851,
+      "lift_pp": 2.2334730315845386,
+      "ref_n": 21846,
+      "scaffolded_n": 7684
+    },
+    "prior constructive": {
+      "ref_pct": 21.920135938827528,
+      "scaffolded_pct": 24.183417085427134,
+      "lift_pp": 2.2632811465996063,
+      "ref_n": 2354,
+      "scaffolded_n": 1592
+    },
+    "prior passive": {
+      "ref_pct": 7.348242811501597,
+      "scaffolded_pct": 13.846153846153847,
+      "lift_pp": 6.497911034652249,
+      "ref_n": 313,
+      "scaffolded_n": 65
+    }
+  },
+  "reverse_scaffolded": {
+    "prior active": 26.020995597697258,
+    "prior constructive": 40.34465281297516,
+    "prior passive": 17.195767195767196
+  }
+}

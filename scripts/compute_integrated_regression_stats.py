@@ -23,7 +23,7 @@ LEVEL2 = {
     "LMSYS coding": (
         "LMSYS",
         "coding",
-        "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0530_lmsys_chat_1m_replacement/user_turn_pipeline_min4/latest/coding/lmsys_coding_level2/level2_reports/level2_metrics_20260609_152938.csv",
+        "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0530_lmsys_chat_1m_replacement/user_turn_pipeline_min4/latest/coding/lmsys_coding_level2/level2_reports/level2_metrics_20260624_121538.csv",
     ),
     "SC coding": (
         "ShareChat",
@@ -38,7 +38,7 @@ LEVEL2 = {
     "LMSYS writing": (
         "LMSYS",
         "writing",
-        "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0530_lmsys_chat_1m_replacement/user_turn_pipeline_min4/latest/writing/lmsys_writing_level2/level2_reports/level2_metrics_20260609_153057.csv",
+        "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0530_lmsys_chat_1m_replacement/user_turn_pipeline_min4/latest/writing/lmsys_writing_level2/level2_reports/level2_metrics_20260624_121658.csv",
     ),
     "SC writing": (
         "ShareChat",
@@ -57,7 +57,7 @@ LEVEL3_A2U = {
     "LMSYS coding": (
         "LMSYS",
         "coding",
-        "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0530_lmsys_chat_1m_replacement/user_turn_pipeline_min4/latest/coding/lmsys_coding_level3/level3_reports/level3_a2u_pairs_20260609_153113.csv",
+        "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0530_lmsys_chat_1m_replacement/user_turn_pipeline_min4/latest/coding/lmsys_coding_level3/level3_reports/level3_a2u_pairs_20260624_121715.csv",
     ),
     "SC coding": (
         "ShareChat",
@@ -72,7 +72,7 @@ LEVEL3_A2U = {
     "LMSYS writing": (
         "LMSYS",
         "writing",
-        "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0530_lmsys_chat_1m_replacement/user_turn_pipeline_min4/latest/writing/lmsys_writing_level3/level3_reports/level3_a2u_pairs_20260609_153128.csv",
+        "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0530_lmsys_chat_1m_replacement/user_turn_pipeline_min4/latest/writing/lmsys_writing_level3/level3_reports/level3_a2u_pairs_20260624_121730.csv",
     ),
     "SC writing": (
         "ShareChat",

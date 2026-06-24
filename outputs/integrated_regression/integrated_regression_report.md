@@ -8,22 +8,22 @@ Claim-level consistency audit: Sections 2.1 and 2.2 are descriptive consistency 
 
 Section 2.2 conversation-level context check: a logistic regression predicting whether a conversation contains at least one constructive user turn includes user framing, task ecology, length bucket and dataset fixed effects. The model is a robustness check for systematic organization, not a causal estimate.
 
-- Intentional framing: OR 3.029, 95% CI [2.927, 3.134], p=0.
-- Coding task ecology: OR 1.887, 95% CI [1.713, 2.079], p=9.82466e-38.
-- 4--6 user turns: OR 2.069, 95% CI [1.990, 2.151], p=2.1066e-293.
+- Intentional framing: OR 3.028, 95% CI [2.926, 3.132], p=0.
+- Coding task ecology: OR 1.888, 95% CI [1.714, 2.080], p=7.49305e-38.
+- 4--6 user turns: OR 2.072, 95% CI [1.993, 2.154], p=2.27605e-295.
 - 7+ user turns: OR 3.576, 95% CI [3.417, 3.743], p=0.
 
 Section 2.2 constructive-rate sensitivity: a grouped-binomial logistic regression models constructive user-turn count out of total user turns with the same user framing, task ecology, length bucket and dataset fixed effects. This checks whether the length pattern is only an opportunity-count artifact from the any-constructive outcome.
 
-- Intentional framing: OR 2.782, 95% CI [2.682, 2.886], p=0.
-- Coding task ecology: OR 1.668, 95% CI [1.477, 1.884], p=1.62829e-16.
-- 4--6 user turns: OR 1.133, 95% CI [1.091, 1.177], p=9.84234e-11.
-- 7+ user turns: OR 1.063, 95% CI [1.014, 1.114], p=0.0107297.
+- Intentional framing: OR 2.779, 95% CI [2.679, 2.883], p=0.
+- Coding task ecology: OR 1.665, 95% CI [1.475, 1.880], p=1.82657e-16.
+- 4--6 user turns: OR 1.134, 95% CI [1.092, 1.178], p=6.15766e-11.
+- 7+ user turns: OR 1.063, 95% CI [1.015, 1.114], p=0.00984742.
 
 Section 2.3 offset-rate sensitivity: the setting-specific Poisson model for constructive-turn counts was refitted with `offset(log(user_turns))` and quasi-Poisson scaled standard errors. This checks whether the scaffolded-support association is only a count-model specification artifact.
 
 - WC coding: RR 1.570, 95% CI [1.471, 1.676], p=7.78715e-42.
-- LMSYS coding: RR 1.468, 95% CI [1.381, 1.560], p=8.27621e-35.
+- LMSYS coding: RR 1.465, 95% CI [1.379, 1.557], p=8.54994e-35.
 - SC coding: RR 1.580, 95% CI [1.311, 1.905], p=1.5983e-06.
 - WC writing: RR 1.356, 95% CI [1.257, 1.462], p=2.68522e-15.
 - LMSYS writing: RR 1.703, 95% CI [1.497, 1.937], p=5.19063e-16.
@@ -41,27 +41,27 @@ Setting-level adjacent-turn models: separate model/source-adjusted regressions w
 
 Key pooled estimates with dataset fixed effects. Scaffolded-support and user/context rows come from broad scaffolded-support models; M rows come from support-form decomposed models:
 
-- scaffolded_support_S2: OR 1.496, 95% CI [1.444, 1.550], p=8.81018e-110.
-- prior_user_constructive: OR 8.899, 95% CI [8.449, 9.374], p=0.
-- prior_user_active: OR 2.619, 95% CI [2.518, 2.724], p=0.
-- prior_user_passive: OR 2.066, 95% CI [1.754, 2.432], p=3.33229e-18.
-- intentional_framing: OR 1.403, 95% CI [1.348, 1.460], p=2.82583e-61.
-- coding_task: OR 1.373, 95% CI [1.223, 1.541], p=8.26508e-08.
-- M1: OR 0.793, 95% CI [0.735, 0.856], p=2.45376e-09.
-- M4: OR 2.150, 95% CI [1.990, 2.323], p=4.93845e-84.
-- M6: OR 0.817, 95% CI [0.720, 0.927], p=0.00166897.
+- scaffolded_support_S2: OR 1.495, 95% CI [1.443, 1.549], p=1.1673e-109.
+- prior_user_constructive: OR 8.904, 95% CI [8.453, 9.379], p=0.
+- prior_user_active: OR 2.618, 95% CI [2.518, 2.723], p=0.
+- prior_user_passive: OR 2.075, 95% CI [1.763, 2.443], p=1.65002e-18.
+- intentional_framing: OR 1.402, 95% CI [1.346, 1.459], p=5.02918e-61.
+- coding_task: OR 1.369, 95% CI [1.220, 1.537], p=9.78613e-08.
+- M1: OR 0.792, 95% CI [0.734, 0.855], p=2.20746e-09.
+- M4: OR 2.150, 95% CI [1.990, 2.323], p=4.73013e-84.
+- M6: OR 0.816, 95% CI [0.720, 0.926], p=0.00158038.
 
 Pooled model/source fixed-effect sensitivity:
 
-- scaffolded_support_S2: OR 1.466, 95% CI [1.415, 1.519], p=7.9874e-100.
-- prior_user_constructive: OR 8.545, 95% CI [8.108, 9.006], p=0.
-- prior_user_active: OR 2.566, 95% CI [2.467, 2.670], p=0.
-- prior_user_passive: OR 2.061, 95% CI [1.750, 2.427], p=4.36728e-18.
-- intentional_framing: OR 1.424, 95% CI [1.368, 1.482], p=1.1906e-66.
-- coding_task: OR 1.376, 95% CI [1.225, 1.546], p=7.26524e-08.
-- M1: OR 0.798, 95% CI [0.739, 0.862], p=8.46502e-09.
-- M4: OR 2.124, 95% CI [1.965, 2.296], p=5.12837e-80.
-- M6: OR 0.842, 95% CI [0.741, 0.956], p=0.00818913.
+- scaffolded_support_S2: OR 1.466, 95% CI [1.415, 1.519], p=7.29052e-100.
+- prior_user_constructive: OR 8.552, 95% CI [8.114, 9.014], p=0.
+- prior_user_active: OR 2.567, 95% CI [2.467, 2.671], p=0.
+- prior_user_passive: OR 2.071, 95% CI [1.760, 2.438], p=2.11854e-18.
+- intentional_framing: OR 1.423, 95% CI [1.367, 1.481], p=2.23372e-66.
+- coding_task: OR 1.373, 95% CI [1.223, 1.542], p=8.50092e-08.
+- M1: OR 0.797, 95% CI [0.738, 0.861], p=7.49698e-09.
+- M4: OR 2.124, 95% CI [1.965, 2.296], p=4.65553e-80.
+- M6: OR 0.841, 95% CI [0.740, 0.955], p=0.00774421.
 
 WildChat model-fixed-effect sensitivity:
 
@@ -73,7 +73,7 @@ WildChat model-fixed-effect sensitivity:
 - M4: OR 2.108, 95% CI [1.925, 2.308], p=1.9446e-58.
 - M6: OR 1.077, 95% CI [0.925, 1.253], p=0.340153.
 
-Model/source fixed-effect block in the pooled data: LR chi-square(41)=718.2, p=1.48635e-124. WildChat exact model fixed-effect block: LR chi-square(13)=553.2, p=7.04399e-110. Model/source labels add detectable heterogeneity. Broad scaffolded support remains positive in the broad support model, while the decomposed models show that support-form variation, especially M4 explaining, carries additional local signal.
+Model/source fixed-effect block in the pooled data: LR chi-square(41)=714.4, p=8.95719e-124. WildChat exact model fixed-effect block: LR chi-square(13)=553.2, p=7.04399e-110. Model/source labels add detectable heterogeneity. Broad scaffolded support remains positive in the broad support model, while the decomposed models show that support-form variation, especially M4 explaining, carries additional local signal.
 
 Consistency of key unadjusted contrasts:
 
@@ -83,27 +83,27 @@ Consistency of key unadjusted contrasts:
 
 Nested scaffolding block tests:
 
-- six task settings, dataset FE; broad scaffolded support added after user/context controls: LR chi-square(1)=585.0, p=3.11956e-129.
-- six task settings, dataset FE; support-form descriptors M1-M6 added within scaffolded support: LR chi-square(6)=895.1, p=4.21789e-190.
-- six task settings, dataset FE; full scaffolding block plus M1-M6 added after user/context controls: LR chi-square(7)=1480.1, p=0.
-- six task settings, model/source FE; broad scaffolded support added after user/context controls: LR chi-square(1)=509.5, p=7.99876e-113.
-- six task settings, model/source FE; support-form descriptors M1-M6 added within scaffolded support: LR chi-square(6)=827.9, p=1.42297e-175.
-- six task settings, model/source FE; full scaffolding block plus M1-M6 added after user/context controls: LR chi-square(7)=1337.5, p=1.30888e-284.
+- six task settings, dataset FE; broad scaffolded support added after user/context controls: LR chi-square(1)=584.6, p=3.72994e-129.
+- six task settings, dataset FE; support-form descriptors M1-M6 added within scaffolded support: LR chi-square(6)=896.7, p=1.92283e-190.
+- six task settings, dataset FE; full scaffolding block plus M1-M6 added after user/context controls: LR chi-square(7)=1481.3, p=0.
+- six task settings, model/source FE; broad scaffolded support added after user/context controls: LR chi-square(1)=509.7, p=7.24738e-113.
+- six task settings, model/source FE; support-form descriptors M1-M6 added within scaffolded support: LR chi-square(6)=829.8, p=5.52223e-176.
+- six task settings, model/source FE; full scaffolding block plus M1-M6 added after user/context controls: LR chi-square(7)=1339.6, p=4.60016e-285.
 - WildChat only, model FE; broad scaffolded support added after user/context controls: LR chi-square(1)=418.6, p=5.0317e-93.
 - WildChat only, model FE; support-form descriptors M1-M6 added within scaffolded support: LR chi-square(6)=519.4, p=5.63341e-109.
 - WildChat only, model FE; full scaffolding block plus M1-M6 added after user/context controls: LR chi-square(7)=937.9, p=3.08909e-198.
 
 Prior-state by support-form interaction checks:
 
-- six task settings, dataset FE; prior state x M1-M6 block: LR chi-square(18)=308.6, p=8.33426e-55.
-- six task settings, model/source FE; prior state x M1-M6 block: LR chi-square(18)=300.2, p=4.43565e-53.
+- six task settings, dataset FE; prior state x M1-M6 block: LR chi-square(18)=305.4, p=3.72548e-54.
+- six task settings, model/source FE; prior state x M1-M6 block: LR chi-square(18)=297.3, p=1.69029e-52.
 - WildChat only, model FE; prior state x M1-M6 block: LR chi-square(18)=186.0, p=6.27436e-30.
 
 Pooled model/source FE, state-stratified selected support forms:
 
-- prior constructive M1: OR 0.725, 95% CI [0.645, 0.815], p=6.74539e-08.
-- prior constructive M4: OR 1.722, 95% CI [1.453, 2.041], p=3.45725e-10.
-- prior active M1: OR 0.832, 95% CI [0.725, 0.954], p=0.00841487.
-- prior active M4: OR 2.121, 95% CI [1.872, 2.404], p=4.16828e-32.
-- prior passive M1: OR 2.161, 95% CI [1.157, 4.036], p=0.0156263.
-- prior passive M4: OR 2.875, 95% CI [1.547, 5.344], p=0.000835472.
+- prior constructive M1: OR 0.724, 95% CI [0.645, 0.814], p=6.2191e-08.
+- prior constructive M4: OR 1.721, 95% CI [1.452, 2.039], p=3.5963e-10.
+- prior active M1: OR 0.831, 95% CI [0.725, 0.953], p=0.00805331.
+- prior active M4: OR 2.127, 95% CI [1.877, 2.410], p=2.40933e-32.
+- prior passive M1: OR 2.164, 95% CI [1.159, 4.041], p=0.0153442.
+- prior passive M4: OR 2.880, 95% CI [1.552, 5.347], p=0.000801455.
