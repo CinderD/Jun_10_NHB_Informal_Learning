@@ -1022,12 +1022,10 @@ def make_figure5() -> None:
     axa.invert_yaxis()
     axa.set_xlim(0, 7.75)
     axa.set_xlabel("Next-turn constructive lift (pp)")
-    axa.set_title("Overall adjacent-turn lift", loc="left", pad=8, fontsize=8.7, fontweight="bold")
     axa.grid(axis="x", color=COLORS["grid"], lw=0.65)
     axa.spines[["top", "right"]].set_visible(False)
     axa.spines["left"].set_linewidth(0.9)
     axa.tick_params(axis="both", labelsize=7.4)
-    axa.text(-0.22, 1.08, "a", transform=axa.transAxes, fontsize=13, weight="bold")
 
     for ax, (title, vals) in zip(axs_b, cond.items()):
         for i, name in enumerate(keys):
@@ -1069,31 +1067,16 @@ def make_figure5() -> None:
         ax.grid(axis="x", color=COLORS["grid"], lw=0.65)
         ax.spines[["top", "right"]].set_visible(False)
         ax.tick_params(axis="both", labelsize=7.0)
-    axs_b[0].text(-0.30, 1.08, "b", transform=axs_b[0].transAxes, fontsize=13, weight="bold")
-    fig.text(0.655, 0.895, "By prior user state", ha="center", fontsize=9.2, fontweight="bold", color=COLORS["ink"])
-    fig.text(0.655, 0.507, "P(next constructive turn) (%)", ha="center", fontsize=8.0)
 
     legend_handles = [
         Line2D([0], [0], marker="o", linestyle="None", markerfacecolor=ref_color, markeredgecolor=COLORS["ink"], markeredgewidth=0.45, markersize=5.0),
         Line2D([0], [0], marker="o", linestyle="None", markerfacecolor=scaf_color, markeredgecolor=COLORS["ink"], markeredgewidth=0.45, markersize=5.0),
     ]
-    fig.legend(
-        legend_handles,
-        ["non-scaffolded reference", "scaffolded support"],
-        loc="upper center",
-        bbox_to_anchor=(0.770, 0.948),
-        frameon=False,
-        ncol=2,
-        handletextpad=0.4,
-        columnspacing=0.75,
-        fontsize=7.0,
-    )
 
     cmap = LinearSegmentedColormap.from_list("s2", ["#F4F7F6", "#A8C8BD", "#2F7C68"])
     axc.imshow(next_s2, cmap=cmap, norm=Normalize(0, 75), aspect="auto")
     axc.set_xticks(np.arange(3), ["prior\nconstructive", "prior\nactive", "prior\npassive"])
     axc.set_yticks(np.arange(len(order)), order)
-    axc.set_title("P(next assistant scaffolded | prior user state)", loc="left", pad=6, fontsize=9.2, fontweight="bold")
     axc.set_xticks(np.arange(-0.5, 3, 1), minor=True)
     axc.set_yticks(np.arange(-0.5, len(order), 1), minor=True)
     axc.grid(which="minor", color="white", linewidth=1.1)
@@ -1105,7 +1088,6 @@ def make_figure5() -> None:
         for j in range(next_s2.shape[1]):
             val = next_s2[i, j]
             axc.text(j, i, f"{val:.1f}%", ha="center", va="center", fontsize=7.6, color="white" if val > 50 else COLORS["ink"])
-    axc.text(-0.13, 1.08, "c", transform=axc.transAxes, fontsize=13, weight="bold")
 
     y2 = np.arange(len(form_states))
     form_specs = [
@@ -1140,11 +1122,13 @@ def make_figure5() -> None:
                 bbox=dict(facecolor="white", edgecolor="none", alpha=0.90, pad=0.12),
                 zorder=5,
             )
-        ax.axvline(1, color="#AEB8C2", lw=0.75, ls=(0, (2.2, 2.2)), zorder=1)
         ax.set_xlim(0.20, 5.55)
         ax.set_xticks([1, 3, 5])
         ax.set_xlabel("Adjusted OR")
-        ax.grid(axis="x", color=COLORS["grid"], lw=0.65)
+        ax.set_title(label, pad=4, fontsize=8.0, fontweight="bold", color=color)
+        ax.set_axisbelow(True)
+        ax.grid(axis="x", color=COLORS["grid"], lw=0.58, zorder=0)
+        ax.axvline(1, color="#6F7D89", lw=1.05, ls=(0, (3.0, 2.0)), zorder=2)
         ax.spines[["top", "right"]].set_visible(False)
         ax.tick_params(axis="both", labelsize=7.3)
         ax.tick_params(axis="y", pad=1.2)
@@ -1153,35 +1137,39 @@ def make_figure5() -> None:
         else:
             ax.tick_params(axis="y", left=False, labelleft=False)
     axd_m1.invert_yaxis()
-    axd_m1.text(-0.32, 1.08, "d", transform=axd_m1.transAxes, fontsize=13, weight="bold")
-    fig.legend(
-        [
-            Line2D([0], [0], marker="o", linestyle="None", markerfacecolor=ref_err, markeredgecolor=COLORS["ink"], markeredgewidth=0.45, markersize=5.0),
-            Line2D([0], [0], marker="o", linestyle="None", markerfacecolor=scaf_color, markeredgecolor=COLORS["ink"], markeredgewidth=0.45, markersize=5.0),
-            Line2D([0, 1], [0, 0], color="#AEB8C2", lw=0.9, ls=(0, (2.2, 2.2))),
-        ],
-        ["M1 feedback", "M4 explaining", "OR=1"],
-        loc="upper center",
-        bbox_to_anchor=(0.806, 0.472),
-        frameon=False,
-        ncol=3,
-        handletextpad=0.35,
-        columnspacing=0.65,
-        fontsize=6.7,
-    )
 
-    fig.subplots_adjust(left=0.105, right=0.985, top=0.835, bottom=0.135)
-    d_pos = axd_m1.get_position()
-    fig.text(
-        d_pos.x0,
-        d_pos.y1 + 0.019,
-        "Support-form signal by prior state",
-        ha="left",
-        va="bottom",
-        fontsize=9.2,
-        fontweight="bold",
-        color=COLORS["ink"],
+    fig.subplots_adjust(left=0.105, right=0.985, top=0.815, bottom=0.135)
+    top_panel_y = max(axa.get_position().y1, axs_b[0].get_position().y1)
+    top_header_y = top_panel_y + 0.044
+    bottom_header_y = max(axc.get_position().y1, axd_m1.get_position().y1) + 0.040
+
+    def _panel_header(ax, label, title, y_pos, label_dx=0.035):
+        pos = ax.get_position()
+        fig.text(pos.x0 - label_dx, y_pos, label, ha="left", va="bottom", fontsize=13, fontweight="bold", color=COLORS["ink"])
+        fig.text(pos.x0, y_pos + 0.002, title, ha="left", va="bottom", fontsize=9.2, fontweight="bold", color=COLORS["ink"])
+
+    _panel_header(axa, "a", "Overall adjacent-turn lift", top_header_y)
+    _panel_header(axs_b[0], "b", "Adjacent-turn contrast by prior user state", top_header_y, label_dx=0.042)
+    _panel_header(axc, "c", "P(next assistant scaffolded | prior user state)", bottom_header_y)
+    _panel_header(axd_m1, "d", "Support-form signal by prior state", bottom_header_y, label_dx=0.045)
+
+    b_left = axs_b[0].get_position().x0
+    b_right = axs_b[-1].get_position().x1
+    b_center = (b_left + b_right) / 2
+    b_bottom = min(ax.get_position().y0 for ax in axs_b)
+    fig.legend(
+        legend_handles,
+        ["non-scaffolded reference", "scaffolded support"],
+        loc="center",
+        bbox_to_anchor=(b_center, b_bottom - 0.102),
+        frameon=False,
+        ncol=2,
+        handletextpad=0.4,
+        columnspacing=0.75,
+        fontsize=7.0,
     )
+    fig.text(b_center, b_bottom - 0.060, "P(next constructive turn) (%)", ha="center", fontsize=8.0)
+
     fig.text(
         0.50,
         0.038,
