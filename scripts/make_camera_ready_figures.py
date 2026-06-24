@@ -17,6 +17,7 @@ from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch, Rectangl
 
 ROOT = Path(__file__).resolve().parents[1]
 FIG_DIR = ROOT / "figures"
+SUPP_FIG_DIR = FIG_DIR / "supplementary"
 SVG_DIR = ROOT / "figures_svg_editable" / "final_figures"
 
 
@@ -79,6 +80,16 @@ def _save_many(fig: plt.Figure, stems: list[str]) -> None:
         fig.savefig(FIG_DIR / f"{stem}.pdf", bbox_inches="tight", pad_inches=0.025)
         fig.savefig(svg_path, bbox_inches="tight", pad_inches=0.025)
         svg_path.write_text("\n".join(line.rstrip() for line in svg_path.read_text().splitlines()) + "\n")
+    plt.close(fig)
+
+
+def _save_supp(fig: plt.Figure, stem: str) -> None:
+    SUPP_FIG_DIR.mkdir(parents=True, exist_ok=True)
+    SVG_DIR.mkdir(parents=True, exist_ok=True)
+    svg_path = SVG_DIR / f"{stem}.svg"
+    fig.savefig(SUPP_FIG_DIR / f"{stem}.pdf", bbox_inches="tight", pad_inches=0.025)
+    fig.savefig(svg_path, bbox_inches="tight", pad_inches=0.025)
+    svg_path.write_text("\n".join(line.rstrip() for line in svg_path.read_text().splitlines()) + "\n")
     plt.close(fig)
 
 
@@ -644,10 +655,25 @@ def make_figure3() -> None:
     _save_many(fig, ["fig_support_association_compact_final_v2", "fig_support_association_wild_lmsys_with_ci"])
 
 
-def make_figure4() -> None:
-    rows = ["M1\nfeedback", "M2\nhint", "M3\ninstruct", "M4\nexplain", "M5\nmodel", "M6\nquestion"]
+def _support_supply_profile() -> tuple[list[str], list[str], np.ndarray]:
     mean_cols = ["M1", "M2", "M3", "M4", "M5", "M6"]
     settings = ["WC coding", "LMSYS coding", "SC coding", "WC writing", "LMSYS writing", "SC writing"]
+    # Rows are support forms; columns follow the six displayed task settings.
+    supply = np.array(
+        [
+            [8.8, 4.4, 13.3, 16.6, 11.3, 24.2],
+            [14.7, 7.6, 12.7, 9.6, 10.9, 23.2],
+            [29.7, 9.7, 25.7, 59.2, 52.3, 22.9],
+            [84.0, 76.7, 81.2, 29.5, 26.9, 45.2],
+            [23.9, 16.5, 18.4, 15.0, 10.3, 23.5],
+            [6.9, 13.9, 18.6, 6.9, 13.4, 38.1],
+        ]
+    )
+    return mean_cols, settings, supply
+
+
+def make_figure4() -> None:
+    rows = ["M1\nfeedback", "M2\nhint", "M3\ninstruct", "M4\nexplain", "M5\nmodel", "M6\nquestion"]
     # Estimates compare scaffolded conversations containing each non-exclusive
     # support form with scaffolded conversations without that form, using the
     # constructive ratio. Values are pooled over the six task settings
@@ -667,24 +693,11 @@ def make_figure4() -> None:
     writing_low = np.array([10.00, 2.36, -3.80, 3.80, 5.76, -1.27])
     writing_high = np.array([11.87, 3.69, -2.95, 4.80, 7.59, -0.42])
     task_p = np.array([3.93e-02, 9.41e-01, 1.23e-45, 4.33e-01, 4.95e-44, 3.71e-23])
-    # Rows are support forms; columns follow the six displayed task settings.
-    supply = np.array(
-        [
-            [8.8, 4.4, 13.3, 16.6, 11.3, 24.2],
-            [14.7, 7.6, 12.7, 9.6, 10.9, 23.2],
-            [29.7, 9.7, 25.7, 59.2, 52.3, 22.9],
-            [84.0, 76.7, 81.2, 29.5, 26.9, 45.2],
-            [23.9, 16.5, 18.4, 15.0, 10.3, 23.5],
-            [6.9, 13.9, 18.6, 6.9, 13.4, 38.1],
-        ]
-    )
 
-    fig = plt.figure(figsize=(7.45, 5.85))
-    gs = fig.add_gridspec(2, 2, height_ratios=[3.08, 1.45], hspace=0.43, wspace=0.25)
+    fig = plt.figure(figsize=(7.45, 3.55))
+    gs = fig.add_gridspec(1, 2, wspace=0.25)
     ax_framing = fig.add_subplot(gs[0, 0])
     ax_task = fig.add_subplot(gs[0, 1])
-    ax_supply = fig.add_subplot(gs[1, :])
-    cmap_s = LinearSegmentedColormap.from_list("supply", ["#F3F6F6", "#B8C9D2", "#2E5F7F"])
 
     centers = np.arange(len(rows))
     ylim = (-9.4, 21.0)
@@ -841,11 +854,20 @@ def make_figure4() -> None:
     ax_task.set_ylabel("")
     ax_task.text(-0.13, 1.12, "b", transform=ax_task.transAxes, fontsize=14, weight="bold")
 
+    fig.subplots_adjust(left=0.085, right=0.985, top=0.78, bottom=0.185)
+    fig.text(0.985, 0.040, "Support-form labels are non-exclusive; q values are Benjamini-Hochberg FDR-adjusted.", ha="right", fontsize=7.5, color=COLORS["muted"])
+    _save(fig, "fig_support_form_supply_compact_final_v2")
+
+
+def make_support_supply_supplement() -> None:
+    mean_cols, settings, supply = _support_supply_profile()
+    cmap_s = LinearSegmentedColormap.from_list("supply", ["#F3F6F6", "#B8C9D2", "#2E5F7F"])
+    fig, ax_supply = plt.subplots(figsize=(7.15, 2.85))
     data = supply.T
     ax_supply.imshow(data, cmap=cmap_s, norm=Normalize(0, 84), aspect="auto")
     ax_supply.set_xticks(np.arange(len(mean_cols)), mean_cols)
     ax_supply.set_yticks(np.arange(len(settings)), settings)
-    ax_supply.set_title("Supply within scaffolded assistant turns (%)", **panel_title_kwargs)
+    ax_supply.set_title("Support-form supply within scaffolded assistant turns (%)", loc="left", pad=8, fontsize=9.4, fontweight="bold")
     ax_supply.tick_params(axis="both", length=0)
     ax_supply.set_xticks(np.arange(-0.5, len(mean_cols), 1), minor=True)
     ax_supply.set_yticks(np.arange(-0.5, len(settings), 1), minor=True)
@@ -858,10 +880,9 @@ def make_figure4() -> None:
             val = data[i, j]
             txt_color = "white" if val > 68 else COLORS["ink"]
             ax_supply.text(j, i, f"{val:.1f}", ha="center", va="center", fontsize=7.8, color=txt_color)
-    ax_supply.text(-0.055, 1.12, "c", transform=ax_supply.transAxes, fontsize=14, weight="bold")
-    fig.subplots_adjust(left=0.085, right=0.985, top=0.835, bottom=0.075)
-    fig.text(0.985, 0.020, "WC, WildChat; LMSYS, LMSYS Chat; SC, ShareChat. Support-form labels are non-exclusive.", ha="right", fontsize=7.5, color=COLORS["muted"])
-    _save(fig, "fig_support_form_supply_compact_final_v2")
+    fig.subplots_adjust(left=0.145, right=0.985, top=0.82, bottom=0.18)
+    fig.text(0.985, 0.030, "WC, WildChat; LMSYS, LMSYS Chat; SC, ShareChat. Support-form labels are non-exclusive.", ha="right", fontsize=7.4, color=COLORS["muted"])
+    _save_supp(fig, "SupplementaryFigure_SupportSupplyProfile")
 
 
 def make_figure5() -> None:
@@ -1186,6 +1207,7 @@ def main() -> None:
     make_figure2()
     make_figure3()
     make_figure4()
+    make_support_supply_supplement()
     make_figure5()
 
 

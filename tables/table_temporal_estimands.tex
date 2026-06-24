@@ -1,19 +1,20 @@
 \begin{table*}[p]
-\scriptsize
+\tiny
 \centering
-\caption{\textbf{Temporal estimands used to characterize local support--engagement coupling.} The main temporal analyses use adjacent assistant--user or user--assistant turn pairs. Coarser before--after summaries are retained only as exploratory boundary checks because scaffolded turns are selected by task difficulty, user motivation and conversation trajectory.}
+\caption{\textbf{Temporal estimands used to characterize local support--engagement coupling.} Main temporal analyses use adjacent turn pairs and short-range event windows. Coarser before--after summaries are exploratory boundary checks because scaffolded turns are selected by task difficulty, user motivation and conversation trajectory.}
 \label{tab:temporal_estimands}
 \setlength{\tabcolsep}{4pt}
-\renewcommand{\arraystretch}{1.12}
-\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.18\textwidth}>{\raggedright\arraybackslash}p{0.26\textwidth}>{\raggedright\arraybackslash}p{0.24\textwidth}>{\raggedright\arraybackslash}X}
+\renewcommand{\arraystretch}{1.02}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.17\textwidth}>{\raggedright\arraybackslash}p{0.25\textwidth}>{\raggedright\arraybackslash}p{0.22\textwidth}>{\raggedright\arraybackslash}X}
 \toprule
 Estimand & Definition & Reported in main text & Scope \\
 \midrule
-Overall adjacent-turn lift & Difference in the probability that the next user turn is constructive after scaffolded support versus after a non-scaffolded reference response, estimated within each task setting. & Figure~\ref{fig:temporal_coupling}a & Local association between assistant support type and immediately following constructive engagement; not a randomized support effect. \\
-Prior-state adjacent contrast & Difference in next-turn constructive probability after scaffolded support versus reference response, separately for prior constructive, active and passive user states. & Figure~\ref{fig:temporal_coupling}b & Tests whether local support--engagement coupling depends on the user's immediately preceding state. \\
-Reverse state-conditioned support & Probability that the next assistant turn is scaffolded, estimated after constructive, active and passive user turns. & Figure~\ref{fig:temporal_coupling}c & Describes how assistant scaffolding supply varies with the user's current engagement state. \\
-Prior-state support-form regression & Adjacent-turn logistic regression for whether the next user turn is constructive, adding prior-state $\times$ M1--M6 support-form interactions to the integrated model. & Figure~\ref{fig:temporal_coupling}d and Supplementary Table~\ref{tab:prior_state_support_form_interactions} & Tests whether local coupling depends jointly on the user's immediately preceding engagement state and the form of scaffolded support. \\
-Around-first-scaffold contrast & Mean constructive engagement after the first scaffolded assistant turn minus mean constructive engagement before that turn, among conversations containing scaffolded support. & Supplementary Figure~\ref{fig:supp_around_first_scaffolded} & Exploratory boundary check only; the first scaffolded turn may be selected by difficulty, uncertainty or an already developing exchange. \\
+Overall adjacent-turn lift & Next-turn constructive probability after scaffolded support versus a non-scaffolded reference response, estimated within each task setting. & Figure~\ref{fig:temporal_coupling}a & Local association between support type and immediately following constructive engagement; not a randomized support effect. \\
+Prior-state adjacent contrast & Same next-turn contrast, stratified by prior constructive, active and passive user states. & Figure~\ref{fig:temporal_coupling}b & Tests whether local coupling depends on the user's immediately preceding state. \\
+Reverse state-conditioned support & Probability that the next assistant turn is scaffolded after constructive, active and passive user turns. & Figure~\ref{fig:temporal_coupling}c & Describes how scaffolding supply varies with the user's current engagement state. \\
+Prior-state support-form regression & Adjacent-turn logistic regression for next-turn constructive engagement, adding prior-state $\times$ M1--M6 interactions. & Figure~\ref{fig:temporal_coupling}d and Supplementary Table~\ref{tab:prior_state_support_form_interactions} & Tests whether local coupling depends jointly on prior user state and support form. \\
+Short-range event sequence & Event windows mark scaffolded support in the current assistant response or the preceding one to three assistant responses; a lagged logistic model enters current and lagged scaffolded-response indicators together. & Section~2.5 and Supplementary Table~\ref{tab:event_sequence_lagged_scaffolding} & Tests whether the temporal signal extends over recent responses without treating the whole conversation as cumulative exposure. \\
+Around-first-scaffold contrast & Mean constructive engagement after versus before the first scaffolded assistant turn, among conversations containing scaffolded support. & Supplementary Figure~\ref{fig:supp_around_first_scaffolded} & Exploratory boundary check only; the first scaffolded turn may be selected by difficulty or an already developing exchange. \\
 \bottomrule
 \end{tabularx}
 \end{table*}

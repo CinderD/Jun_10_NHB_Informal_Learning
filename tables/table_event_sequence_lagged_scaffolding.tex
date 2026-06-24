@@ -1,0 +1,35 @@
+\begin{table*}[p]
+\scriptsize
+\centering
+\caption{\textbf{Short-range event-sequence checks for scaffolded support.} Panel A compares the probability that the next user turn is constructive after event windows containing scaffolded support versus event windows without scaffolded support. A window of 1 contains the current assistant response only; windows of 2--4 contain the current response plus the preceding 1--3 assistant responses. Panel B reports a lagged adjacent-turn logistic model in the common risk set with three preceding assistant responses, adjusted for prior user state, user framing, task ecology, assistant-turn index and model/source fixed effects. Cells in Panel A report percentage-point differences with 95\% conversation-cluster bootstrap confidence intervals and two-sided p values. Cells in Panel B report odds ratios with 95\% confidence intervals and conversation-cluster robust p values.}\label{tab:event_sequence_lagged_scaffolding}
+\setlength{\tabcolsep}{3.5pt}
+\renewcommand{\arraystretch}{1.08}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccc}
+\toprule
+\multicolumn{5}{l}{\textit{Panel A: Event-window constructive lift}} \\
+Setting & Current response & Current + 1 prior & Current + 2 prior & Current + 3 prior \\
+\midrule
+WC coding & \makecell{+2.68 [+2.20, +3.10]\\$<.001$} & \makecell{+3.09 [+2.64, +3.50]\\$<.001$} & \makecell{+3.20 [+2.74, +3.65]\\$<.001$} & \makecell{+3.25 [+2.79, +3.71]\\$<.001$} \\
+LMSYS coding & \makecell{+2.01 [+1.51, +2.46]\\$<.001$} & \makecell{+2.42 [+1.98, +2.89]\\$<.001$} & \makecell{+2.58 [+2.12, +3.05]\\$<.001$} & \makecell{+2.66 [+2.20, +3.15]\\$<.001$} \\
+SC coding & \makecell{+6.21 [+4.42, +8.19]\\$<.001$} & \makecell{+6.39 [+4.41, +8.19]\\$<.001$} & \makecell{+6.47 [+4.41, +8.51]\\$<.001$} & \makecell{+6.60 [+4.65, +8.61]\\$<.001$} \\
+WC writing & \makecell{+1.13 [+0.87, +1.41]\\$<.001$} & \makecell{+1.03 [+0.81, +1.28]\\$<.001$} & \makecell{+1.02 [+0.81, +1.24]\\$<.001$} & \makecell{+0.99 [+0.78, +1.21]\\$<.001$} \\
+LMSYS writing & \makecell{+0.27 [+0.00, +0.55]\\.061} & \makecell{+0.46 [+0.17, +0.74]\\.001} & \makecell{+0.49 [+0.27, +0.75]\\$<.001$} & \makecell{+0.55 [+0.28, +0.82]\\$<.001$} \\
+SC writing & \makecell{+3.35 [+0.71, +6.21]\\.018} & \makecell{+3.97 [+1.61, +6.67]\\.002} & \makecell{+4.47 [+2.06, +7.06]\\$<.001$} & \makecell{+4.08 [+1.87, +6.49]\\$<.001$} \\
+\midrule
+\multicolumn{5}{l}{\textit{Panel B: Adjusted lagged event model}} \\
+Predictor or block test & Estimate & 95\% CI & p value & Sample \\
+\midrule
+Current response scaffolded & 1.10 & [1.03, 1.18] & .006 & 114,358 pairs \\
+Previous response scaffolded & 1.31 & [1.22, 1.40] & $<.001$ & 114,358 pairs \\
+Two responses earlier scaffolded & 1.29 & [1.20, 1.38] & $<.001$ & 114,358 pairs \\
+Three responses earlier scaffolded & 1.25 & [1.17, 1.34] & $<.001$ & 114,358 pairs \\
+Prior user constructive & 10.70 & [9.76, 11.73] & $<.001$ & 114,358 pairs \\
+Prior user active & 2.65 & [2.47, 2.85] & $<.001$ & 114,358 pairs \\
+Prior user passive & 2.15 & [1.74, 2.66] & $<.001$ & 114,358 pairs \\
+Lagged scaffolded-response block & \multicolumn{2}{c}{LR $\chi^2_{3}=301.0$} & $<.001$ & 29,373 conversations \\
+Current + lagged scaffolded-response block & \multicolumn{2}{c}{LR $\chi^2_{4}=470.1$} & $<.001$ & 29,373 conversations \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

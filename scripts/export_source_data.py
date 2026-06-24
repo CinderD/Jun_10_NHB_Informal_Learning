@@ -194,12 +194,15 @@ def figure4() -> None:
                     "notes": "Support forms are non-exclusive; q values are Benjamini-Hochberg adjusted within each displayed six-form family.",
                 }
             )
+    write_csv(OUT / "figure4_source_data.csv", rows)
+
+    supply_rows: list[dict[str, object]] = []
     for form, values in supply.items():
         for setting, value in zip(settings, values):
-            rows.append(
+            supply_rows.append(
                 {
-                    "figure": "Figure 4",
-                    "panel": "c",
+                    "figure": "Supplementary Figure D3",
+                    "panel": "",
                     "setting": setting,
                     "measure": "support-form supply within scaffolded assistant turns",
                     "group": "scaffolded assistant turns",
@@ -213,7 +216,7 @@ def figure4() -> None:
                     "notes": "Support-form labels are non-exclusive and rows do not sum to 100%.",
                 }
             )
-    write_csv(OUT / "figure4_source_data.csv", rows)
+    write_csv(OUT / "supplementary_support_supply_source_data.csv", supply_rows)
 
 
 def figure5() -> None:
@@ -260,9 +263,10 @@ This directory contains CSV source data for the manuscript's numeric main figure
 
 - `figure2_source_data.csv`: engagement composition, user-framing contrasts and conversation-length gradients.
 - `figure3_source_data.csv`: scaffolded versus reference constructive ratios, adjusted model estimates, framing-stratified estimates and post-answer depth differences.
-- `figure4_source_data.csv`: support-form constructive associations, Benjamini-Hochberg q values and support-form supply profiles.
+- `figure4_source_data.csv`: support-form constructive associations and Benjamini-Hochberg q values.
 - `figure5_source_data.csv`: adjacent-turn lifts, prior-state conditional probabilities, reverse scaffolded-support probabilities and focal prior-state x support-form odds ratios.
 - `appendix_d_source_data.csv`: six-setting around-first-scaffold contrasts used in Supplementary Figure D1. Supplementary Figure D2 reads the framing-stratified estimates from `figure3_source_data.csv`.
+- `supplementary_support_supply_source_data.csv`: support-form supply profiles used in Supplementary Figure D3.
 
 Figure 1 is a conceptual framework figure and has no numeric source data. Supplementary table source files are stored under `tables/`, and regression/statistical output CSV files are stored under `outputs/integrated_regression/`.
 

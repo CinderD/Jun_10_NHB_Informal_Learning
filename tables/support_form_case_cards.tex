@@ -1,0 +1,34 @@
+\begin{figure*}[p]
+\centering
+\begingroup
+\definecolor{cardborder}{HTML}{D6DEE6}
+\definecolor{cardfill}{HTML}{F8FAFB}
+\definecolor{cardaccent}{HTML}{2F5F83}
+\setlength{\fboxsep}{6pt}
+\setlength{\fboxrule}{0.6pt}
+\setlength{\tabcolsep}{8pt}
+\newcommand{\supportcard}[4]{%
+\fcolorbox{cardborder}{cardfill}{%
+\begin{minipage}[t]{0.415\textwidth}
+{\footnotesize\textcolor{cardaccent}{\textbf{#1}}}\\[-1pt]
+{\scriptsize\textit{#2}}\\[4pt]
+{\scriptsize ``#3''}\\[4pt]
+{\scriptsize\textcolor{cardaccent}{Role:} #4}
+\end{minipage}}}
+\begin{tabular}{cc}
+\supportcard{M1 feedback}{Evaluates a user's prior attempt}{Your diagnosis is close: the race is not in the callback itself, but in when the cache key is reused. Check that key before changing the loop.}{Returns the user's attempt as something to repair, revise or extend.}
+&
+\supportcard{M2 hinting}{Offers a partial cue}{Before rewriting the parser, inspect the first malformed token and compare it with the token immediately before it.}{Leaves solution work open while directing attention to a useful diagnostic path.}
+\\[10pt]
+\supportcard{M3 instructing}{Provides procedural steps}{First isolate the failing branch, then add a regression test, and only then refactor the duplicated condition.}{Organizes the user's next actions through explicit sequencing or strategy.}
+&
+\supportcard{M4 explaining}{Makes a mechanism visible}{The exception occurs because the event loop is already running; a nested call asks for a resource that cannot be acquired twice.}{Provides a rationale that can be tested, adapted or transferred.}
+\\[10pt]
+\supportcard{M5 modelling}{Shows an adaptable pattern}{A reusable structure is: validate input, normalize fields, then pass the cleaned object to the writer. You can adapt this skeleton to your case.}{Supplies an example or pattern intended for adaptation rather than only completion.}
+&
+\supportcard{M6 questioning}{Elicits a constraint or reflection}{Which constraint matters more here: preserving the author's tone or shortening the paragraph? That choice should determine the revision strategy.}{Prompts the user to specify priorities, constraints or next reasoning steps.}
+\end{tabular}
+\endgroup
+\caption{\textbf{Representative support-form cards for the six scaffolded-support forms.} Cards show de-identified, paraphrased assistant replies that illustrate the annotation decision rule for each support-form label rather than reproducing raw conversation text. Support-form labels are non-exclusive, so a single assistant turn can receive more than one form label.}
+\label{fig:supp_support_form_cards}
+\end{figure*}

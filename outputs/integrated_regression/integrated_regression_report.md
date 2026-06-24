@@ -29,6 +29,19 @@ Section 2.3 offset-rate sensitivity: the setting-specific Poisson model for cons
 - LMSYS writing: RR 1.703, 95% CI [1.497, 1.937], p=5.19063e-16.
 - SC writing: RR 1.654, 95% CI [1.274, 2.147], p=0.000154645.
 
+Section 2.5 event-sequence check: assistant-to-user events were re-expressed as recent support windows. A window of 1 contains the current assistant response; windows of 2--4 contain the current response plus the preceding 1--3 assistant responses. Window contrasts use conversation-cluster bootstrap resampling. A lagged model then includes current S2 and lagged S2 indicators simultaneously in the common risk set with three preceding assistant responses.
+
+- Event window 1: 6/6 settings are positive; 5/6 have p<0.05.
+- Event window 2: 6/6 settings are positive; 6/6 have p<0.05.
+- Event window 3: 6/6 settings are positive; 6/6 have p<0.05.
+- Event window 4: 6/6 settings are positive; 6/6 have p<0.05.
+- Lagged event model Current response scaffolded: OR 1.103, 95% CI [1.029, 1.182], p=0.00558337.
+- Lagged event model Previous response scaffolded: OR 1.308, 95% CI [1.219, 1.404], p=8.34345e-14.
+- Lagged event model Two responses earlier scaffolded: OR 1.287, 95% CI [1.201, 1.379], p=1.02003e-12.
+- Lagged event model Three responses earlier scaffolded: OR 1.250, 95% CI [1.170, 1.337], p=4.82938e-11.
+- lagged scaffolded responses added beyond current response and controls: LR chi-square(3)=301.0, p=6.1359e-65.
+- current plus lagged scaffolded response block added after controls: LR chi-square(4)=470.1, p=1.97664e-100.
+
 Integrated adjacent-turn logit outcome: whether the next user turn is constructive. Broad scaffolded-support models include scaffolded-support presence without M1-M6. Support-form decomposed models include broad scaffolded support plus M1-M6, so M coefficients describe form-level variation within scaffolded support. Standard errors are clustered by conversation.
 
 Setting-level adjacent-turn models: separate model/source-adjusted regressions were fitted within each of the six task settings to check dataset-by-factor heterogeneity rather than relying only on pooled fixed effects. These outputs are exported to `setting_level_adjacent_turn_logit_model_source_fe.csv` and summarized in Supplementary Table C.
@@ -99,11 +112,26 @@ Prior-state by support-form interaction checks:
 - six task settings, model/source FE; prior state x M1-M6 block: LR chi-square(18)=297.3, p=1.69029e-52.
 - WildChat only, model FE; prior state x M1-M6 block: LR chi-square(18)=186.0, p=6.27436e-30.
 
-Pooled model/source FE, state-stratified selected support forms:
+Pooled model/source FE, state-stratified support forms:
 
+- prior constructive scaffolded_support_S2: OR 0.938, 95% CI [0.778, 1.130], p=0.49987.
 - prior constructive M1: OR 0.724, 95% CI [0.645, 0.814], p=6.2191e-08.
+- prior constructive M2: OR 0.905, 95% CI [0.789, 1.038], p=0.154979.
+- prior constructive M3: OR 0.924, 95% CI [0.811, 1.053], p=0.235731.
 - prior constructive M4: OR 1.721, 95% CI [1.452, 2.039], p=3.5963e-10.
+- prior constructive M5: OR 0.810, 95% CI [0.705, 0.931], p=0.00305086.
+- prior constructive M6: OR 0.946, 95% CI [0.716, 1.249], p=0.694143.
+- prior active scaffolded_support_S2: OR 0.701, 95% CI [0.614, 0.801], p=1.46317e-07.
 - prior active M1: OR 0.831, 95% CI [0.725, 0.953], p=0.00805331.
+- prior active M2: OR 1.143, 95% CI [1.025, 1.274], p=0.0160466.
+- prior active M3: OR 0.983, 95% CI [0.892, 1.082], p=0.721853.
 - prior active M4: OR 2.127, 95% CI [1.877, 2.410], p=2.40933e-32.
+- prior active M5: OR 0.829, 95% CI [0.758, 0.906], p=3.43384e-05.
+- prior active M6: OR 0.751, 95% CI [0.606, 0.931], p=0.00901202.
+- prior passive scaffolded_support_S2: OR 0.700, 95% CI [0.331, 1.483], p=0.35183.
 - prior passive M1: OR 2.164, 95% CI [1.159, 4.041], p=0.0153442.
+- prior passive M2: OR 1.791, 95% CI [0.952, 3.372], p=0.0707934.
+- prior passive M3: OR 1.521, 95% CI [0.674, 3.432], p=0.312153.
 - prior passive M4: OR 2.880, 95% CI [1.552, 5.347], p=0.000801455.
+- prior passive M5: OR 0.456, 95% CI [0.201, 1.037], p=0.06116.
+- prior passive M6: OR 2.192, 95% CI [1.124, 4.274], p=0.0213349.
