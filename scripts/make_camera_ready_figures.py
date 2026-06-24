@@ -1149,7 +1149,6 @@ def make_figure5() -> None:
         fig.text(pos.x0, y_pos + 0.002, title, ha="left", va="bottom", fontsize=9.2, fontweight="bold", color=COLORS["ink"])
 
     _panel_header(axa, "a", "Overall adjacent-turn lift", top_header_y)
-    _panel_header(axs_b[0], "b", "Adjacent-turn contrast by prior user state", top_header_y, label_dx=0.042)
     _panel_header(axc, "c", "P(next assistant scaffolded | prior user state)", bottom_header_y)
     _panel_header(axd_m1, "d", "Support-form signal by prior state", bottom_header_y, label_dx=0.045)
 
@@ -1157,6 +1156,8 @@ def make_figure5() -> None:
     b_right = axs_b[-1].get_position().x1
     b_center = (b_left + b_right) / 2
     b_bottom = min(ax.get_position().y0 for ax in axs_b)
+    fig.text(b_left - 0.042, top_header_y, "b", ha="left", va="bottom", fontsize=13, fontweight="bold", color=COLORS["ink"])
+    fig.text(b_center, top_header_y + 0.002, "Adjacent-turn contrast by prior user state", ha="center", va="bottom", fontsize=9.2, fontweight="bold", color=COLORS["ink"])
     fig.legend(
         legend_handles,
         ["non-scaffolded reference", "scaffolded support"],
