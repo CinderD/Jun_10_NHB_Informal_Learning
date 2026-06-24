@@ -1191,7 +1191,7 @@ def write_tex_tables() -> None:
             "The reference category is unintentional framing, writing-oriented task, 2--3 user turns and WildChat.}\\label{tab:constructive_context_logit}\n"
         )
         f.write("\\setlength{\\tabcolsep}{6pt}\n\\renewcommand{\\arraystretch}{1.08}\n")
-        f.write("\\resizebox{0.82\\textwidth}{!}{%\n")
+        f.write("\\resizebox{0.62\\textwidth}{!}{%\n")
         f.write("\\begin{tabular}{lc}\n\\toprule\n")
         f.write("Predictor & OR [95\\% CI], p value \\\\\n\\midrule\n")
         for term in [
@@ -1220,7 +1220,7 @@ def write_tex_tables() -> None:
             "The reference category is unintentional framing, writing-oriented task, 2--3 user turns and WildChat.}\\label{tab:constructive_rate_context_logit}\n"
         )
         f.write("\\setlength{\\tabcolsep}{6pt}\n\\renewcommand{\\arraystretch}{1.08}\n")
-        f.write("\\resizebox{0.86\\textwidth}{!}{%\n")
+        f.write("\\resizebox{0.64\\textwidth}{!}{%\n")
         f.write("\\begin{tabular}{lc}\n\\toprule\n")
         f.write("Predictor & OR [95\\% CI], p value \\\\\n\\midrule\n")
         for term in [
