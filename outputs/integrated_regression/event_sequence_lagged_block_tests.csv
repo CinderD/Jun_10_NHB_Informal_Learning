@@ -1,4 +1,0 @@
-scope,comparison,lr_chi2,df,p_value,n_pairs,n_conversations,notes
-"six task settings, model/source FE, rows with three prior assistant responses",current scaffolded response added after user/context/model controls,169.112444,1,1.15617e-38,114358,29373,Likelihood-ratio test for short-range event-sequence scaffolding terms.
-"six task settings, model/source FE, rows with three prior assistant responses",lagged scaffolded responses added beyond current response and controls,300.969789,3,6.1359e-65,114358,29373,Likelihood-ratio test for short-range event-sequence scaffolding terms.
-"six task settings, model/source FE, rows with three prior assistant responses",current plus lagged scaffolded response block added after controls,470.082234,4,1.97664e-100,114358,29373,Likelihood-ratio test for short-range event-sequence scaffolding terms.

@@ -29,18 +29,24 @@ Section 2.3 offset-rate sensitivity: the setting-specific Poisson model for cons
 - LMSYS writing: RR 1.703, 95% CI [1.497, 1.937], p=5.19063e-16.
 - SC writing: RR 1.654, 95% CI [1.274, 2.147], p=0.000154645.
 
-Section 2.5 event-sequence check: assistant-to-user events were re-expressed as recent support windows. A window of 1 contains the current assistant response; windows of 2--4 contain the current response plus the preceding 1--3 assistant responses. Window contrasts use conversation-cluster bootstrap resampling. A lagged model then includes current S2 and lagged S2 indicators simultaneously in the common risk set with three preceding assistant responses.
+Section 2.5 joint event-history check: assistant-to-user events were re-expressed as recent local environments containing both user-engagement history and assistant-scaffolding history. Window models use recent constructive-user share, recent active-user share and recent scaffolded-assistant share over k=1--4 user--assistant pairs. A lag-specific model then enters current and lagged user engagement and assistant scaffolding simultaneously in the common risk set with three preceding user--assistant pairs.
 
-- Event window 1: 6/6 settings are positive; 5/6 have p<0.05.
-- Event window 2: 6/6 settings are positive; 6/6 have p<0.05.
-- Event window 3: 6/6 settings are positive; 6/6 have p<0.05.
-- Event window 4: 6/6 settings are positive; 6/6 have p<0.05.
-- Lagged event model Current response scaffolded: OR 1.103, 95% CI [1.029, 1.182], p=0.00558337.
-- Lagged event model Previous response scaffolded: OR 1.308, 95% CI [1.219, 1.404], p=8.34345e-14.
-- Lagged event model Two responses earlier scaffolded: OR 1.287, 95% CI [1.201, 1.379], p=1.02003e-12.
-- Lagged event model Three responses earlier scaffolded: OR 1.250, 95% CI [1.170, 1.337], p=4.82938e-11.
-- lagged scaffolded responses added beyond current response and controls: LR chi-square(3)=301.0, p=6.1359e-65.
-- current plus lagged scaffolded response block added after controls: LR chi-square(4)=470.1, p=1.97664e-100.
+- Window 1: user constructive share OR per +25pp=1.704; user active share OR per +25pp=1.261; assistant scaffolded share OR per +25pp=1.100; scaffolding beyond user-history LR chi-square(1)=506.5, p=3.60791e-112.
+- Window 2: user constructive share OR per +25pp=2.305; user active share OR per +25pp=1.368; assistant scaffolded share OR per +25pp=1.115; scaffolding beyond user-history LR chi-square(1)=304.4, p=3.64374e-68.
+- Window 3: user constructive share OR per +25pp=2.759; user active share OR per +25pp=1.427; assistant scaffolded share OR per +25pp=1.133; scaffolding beyond user-history LR chi-square(1)=227.1, p=2.53334e-51.
+- Window 4: user constructive share OR per +25pp=3.157; user active share OR per +25pp=1.482; assistant scaffolded share OR per +25pp=1.144; scaffolding beyond user-history LR chi-square(1)=165.2, p=8.21204e-38.
+- Joint lag model Immediate prior user turn constructive: OR 5.107, 95% CI [4.673, 5.581], p=5.40607e-284.
+- Joint lag model One user turn earlier constructive: OR 2.975, 95% CI [2.706, 3.271], p=9.89423e-113.
+- Joint lag model Two user turns earlier constructive: OR 2.513, 95% CI [2.270, 2.781], p=1.02471e-70.
+- Joint lag model Three user turns earlier constructive: OR 2.526, 95% CI [2.296, 2.780], p=1.63516e-80.
+- Joint lag model Current assistant response scaffolded: OR 1.081, 95% CI [1.007, 1.160], p=0.030316.
+- Joint lag model Previous assistant response scaffolded: OR 1.154, 95% CI [1.074, 1.240], p=9.40667e-05.
+- Joint lag model Two assistant responses earlier scaffolded: OR 1.167, 95% CI [1.087, 1.253], p=2.0289e-05.
+- Joint lag model Three assistant responses earlier scaffolded: OR 1.170, 95% CI [1.092, 1.254], p=8.11068e-06.
+- recent user-engagement history added after context/model controls: LR chi-square(8)=6720.6, p=0.
+- assistant-scaffolding history added beyond user-engagement history: LR chi-square(4)=164.2, p=1.84076e-34.
+- user-engagement history added beyond assistant-scaffolding history: LR chi-square(8)=5730.3, p=0.
+- joint recent-history block added after context/model controls: LR chi-square(12)=6884.8, p=0.
 
 Integrated adjacent-turn logit outcome: whether the next user turn is constructive. Broad scaffolded-support models include scaffolded-support presence without M1-M6. Support-form decomposed models include broad scaffolded support plus M1-M6, so M coefficients describe form-level variation within scaffolded support. Standard errors are clustered by conversation.
 

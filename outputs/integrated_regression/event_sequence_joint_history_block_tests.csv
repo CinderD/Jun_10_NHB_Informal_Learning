@@ -1,0 +1,6 @@
+scope,comparison,lr_chi2,df,p_value,n_pairs,n_conversations,notes
+"six task settings, model/source FE, rows with three prior assistant responses",recent user-engagement history added after context/model controls,6720.594068,8,0,114358,29373,Likelihood-ratio test for short-range event-history terms.
+"six task settings, model/source FE, rows with three prior assistant responses",recent assistant-scaffolding history added after context/model controls,1154.452176,4,1.19122e-248,114358,29373,Likelihood-ratio test for short-range event-history terms.
+"six task settings, model/source FE, rows with three prior assistant responses",assistant-scaffolding history added beyond user-engagement history,164.195463,4,1.84076e-34,114358,29373,Likelihood-ratio test for short-range event-history terms.
+"six task settings, model/source FE, rows with three prior assistant responses",user-engagement history added beyond assistant-scaffolding history,5730.337354,8,0,114358,29373,Likelihood-ratio test for short-range event-history terms.
+"six task settings, model/source FE, rows with three prior assistant responses",joint recent-history block added after context/model controls,6884.789530,12,0,114358,29373,Likelihood-ratio test for short-range event-history terms.

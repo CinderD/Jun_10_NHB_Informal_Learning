@@ -1011,7 +1011,7 @@ def _write_prior_state_support_form_checks(
         writer.writerows(strat_rows)
 
 
-def _add_recent_s2_lags(rows: list[dict[str, str]], max_lag: int = 3) -> list[dict[str, str]]:
+def _add_recent_history_features(rows: list[dict[str, str]], max_lag: int = 3) -> list[dict[str, str]]:
     by_conv: dict[tuple[str, str], list[dict[str, str]]] = defaultdict(list)
     for row in rows:
         by_conv[(row.get("_dataset", ""), row["conv_id"])].append(row)
@@ -1020,11 +1020,36 @@ def _add_recent_s2_lags(rows: list[dict[str, str]], max_lag: int = 3) -> list[di
     for conv_rows in by_conv.values():
         conv_rows.sort(key=lambda r: _f(r, "asst_turn_index"))
         s2_sequence = [1 if r.get("asst_Support_Type") == "S2" else 0 for r in conv_rows]
+        constructive_sequence = [
+            1 if (r.get("prev_user_Cognitive_level") or "") == "C" else 0 for r in conv_rows
+        ]
+        active_sequence = [1 if (r.get("prev_user_Cognitive_level") or "") == "A" else 0 for r in conv_rows]
         for i, row in enumerate(conv_rows):
             out = dict(row)
+            out["current_S2"] = str(s2_sequence[i])
+            out["user_current_constructive"] = str(constructive_sequence[i])
+            out["user_current_active"] = str(active_sequence[i])
             for lag in range(1, max_lag + 1):
                 out[f"lag{lag}_S2"] = str(s2_sequence[i - lag]) if i - lag >= 0 else "0"
+                out[f"user_lag{lag}_constructive"] = (
+                    str(constructive_sequence[i - lag]) if i - lag >= 0 else "0"
+                )
+                out[f"user_lag{lag}_active"] = str(active_sequence[i - lag]) if i - lag >= 0 else "0"
                 out[f"lag{lag}_available"] = "1" if i - lag >= 0 else "0"
+            for window_size in range(1, max_lag + 2):
+                start = i - window_size + 1
+                if start >= 0:
+                    out[f"window{window_size}_available"] = "1"
+                    out[f"window{window_size}_scaffolded_share"] = f"{np.mean(s2_sequence[start:i + 1]):.6f}"
+                    out[f"window{window_size}_constructive_share"] = (
+                        f"{np.mean(constructive_sequence[start:i + 1]):.6f}"
+                    )
+                    out[f"window{window_size}_active_share"] = f"{np.mean(active_sequence[start:i + 1]):.6f}"
+                else:
+                    out[f"window{window_size}_available"] = "0"
+                    out[f"window{window_size}_scaffolded_share"] = "0"
+                    out[f"window{window_size}_constructive_share"] = "0"
+                    out[f"window{window_size}_active_share"] = "0"
             lagged.append(out)
     return lagged
 
@@ -1145,66 +1170,240 @@ def _make_event_sequence_design(
     return X, y, clusters, names
 
 
-def compute_event_sequence_lag_analysis() -> None:
-    rows = _add_recent_s2_lags(_load_a2u_rows(wildchat_only=False), max_lag=3)
-    window_rows: list[dict[str, str]] = []
-    for setting in LEVEL3_A2U:
-        sub = [row for row in rows if row["_setting"] == setting]
-        for window_size in range(1, 5):
-            point, low, high, p, p_exposed, p_reference, n_exposed, n_ref, n_conv = _bootstrap_recent_window(
-                sub,
-                window_size,
-                n_boot=1000,
-                seed=20260625 + window_size,
+def _event_history_model_levels(rows: list[dict[str, str]], include_model: bool) -> list[str]:
+    if not include_model:
+        return []
+    counts = Counter(_assistant_model_key(r) for r in rows)
+    levels = sorted([m for m, c in counts.items() if m and c >= 100])
+    if not levels:
+        return []
+    ref = levels[0]
+    return [m for m in levels if m != ref]
+
+
+def _event_history_common_names(model_levels: list[str]) -> list[str]:
+    return [
+        "prior_user_emotional",
+        "prior_user_error",
+        "intentional_framing",
+        "coding_task",
+        "log_assistant_turn_index",
+    ] + [f"model_{m}" for m in model_levels]
+
+
+def _fill_event_history_common(
+    X: np.ndarray,
+    i: int,
+    row: dict[str, str],
+    name_to_idx: dict[str, int],
+) -> None:
+    X[i, name_to_idx["prior_user_emotional"]] = _f(row, "prev_user_Emotional")
+    X[i, name_to_idx["prior_user_error"]] = _f(row, "prev_user_is_error")
+    X[i, name_to_idx["intentional_framing"]] = _f(row, "is_intentional")
+    X[i, name_to_idx["coding_task"]] = _f(row, "is_coding_topic")
+    X[i, name_to_idx["log_assistant_turn_index"]] = math.log1p(_f(row, "asst_turn_index"))
+    key = f"model_{_assistant_model_key(row)}"
+    if key in name_to_idx:
+        X[i, name_to_idx[key]] = 1
+
+
+def _make_recent_history_window_design(
+    rows: list[dict[str, str]],
+    window_size: int,
+    include_user_history: bool = True,
+    include_scaffold_history: bool = True,
+    include_model: bool = True,
+) -> tuple[np.ndarray, np.ndarray, list[str], list[str]]:
+    model_levels = _event_history_model_levels(rows, include_model)
+    names = ["Intercept"]
+    if include_user_history:
+        names.extend(["recent_user_constructive_share", "recent_user_active_share"])
+    if include_scaffold_history:
+        names.append("recent_assistant_scaffolded_share")
+    names.extend(_event_history_common_names(model_levels))
+
+    X = np.zeros((len(rows), len(names)), dtype=float)
+    y = np.zeros(len(rows), dtype=float)
+    clusters: list[str] = []
+    name_to_idx = {name: i for i, name in enumerate(names)}
+    for i, row in enumerate(rows):
+        X[i, name_to_idx["Intercept"]] = 1.0
+        if include_user_history:
+            X[i, name_to_idx["recent_user_constructive_share"]] = _f(
+                row, f"window{window_size}_constructive_share"
             )
+            X[i, name_to_idx["recent_user_active_share"]] = _f(row, f"window{window_size}_active_share")
+        if include_scaffold_history:
+            X[i, name_to_idx["recent_assistant_scaffolded_share"]] = _f(
+                row, f"window{window_size}_scaffolded_share"
+            )
+        _fill_event_history_common(X, i, row, name_to_idx)
+        y[i] = _f(row, "next_user_is_C")
+        clusters.append(row["conv_id"])
+    return X, y, clusters, names
+
+
+def _make_joint_event_history_design(
+    rows: list[dict[str, str]],
+    include_user_history: bool = True,
+    include_scaffold_history: bool = True,
+    include_model: bool = True,
+) -> tuple[np.ndarray, np.ndarray, list[str], list[str]]:
+    model_levels = _event_history_model_levels(rows, include_model)
+    names = ["Intercept"]
+    if include_scaffold_history:
+        names.extend(
+            [
+                "assistant_current_scaffolded",
+                "assistant_lag1_scaffolded",
+                "assistant_lag2_scaffolded",
+                "assistant_lag3_scaffolded",
+            ]
+        )
+    if include_user_history:
+        names.extend(
+            [
+                "user_current_constructive",
+                "user_lag1_constructive",
+                "user_lag2_constructive",
+                "user_lag3_constructive",
+                "user_current_active",
+                "user_lag1_active",
+                "user_lag2_active",
+                "user_lag3_active",
+            ]
+        )
+    names.extend(_event_history_common_names(model_levels))
+
+    X = np.zeros((len(rows), len(names)), dtype=float)
+    y = np.zeros(len(rows), dtype=float)
+    clusters: list[str] = []
+    name_to_idx = {name: i for i, name in enumerate(names)}
+    for i, row in enumerate(rows):
+        X[i, name_to_idx["Intercept"]] = 1.0
+        if include_scaffold_history:
+            X[i, name_to_idx["assistant_current_scaffolded"]] = _f(row, "current_S2")
+            for lag in range(1, 4):
+                X[i, name_to_idx[f"assistant_lag{lag}_scaffolded"]] = _f(row, f"lag{lag}_S2")
+        if include_user_history:
+            X[i, name_to_idx["user_current_constructive"]] = _f(row, "user_current_constructive")
+            X[i, name_to_idx["user_current_active"]] = _f(row, "user_current_active")
+            for lag in range(1, 4):
+                X[i, name_to_idx[f"user_lag{lag}_constructive"]] = _f(
+                    row, f"user_lag{lag}_constructive"
+                )
+                X[i, name_to_idx[f"user_lag{lag}_active"]] = _f(row, f"user_lag{lag}_active")
+        _fill_event_history_common(X, i, row, name_to_idx)
+        y[i] = _f(row, "next_user_is_C")
+        clusters.append(row["conv_id"])
+    return X, y, clusters, names
+
+
+def compute_event_sequence_lag_analysis() -> None:
+    rows = _add_recent_history_features(_load_a2u_rows(wildchat_only=False), max_lag=3)
+    window_rows: list[dict[str, str]] = []
+    for window_size in range(1, 5):
+        eligible = [row for row in rows if _f(row, f"window{window_size}_available") > 0]
+        control_x, y, clusters, control_names = _make_recent_history_window_design(
+            eligible,
+            window_size,
+            include_user_history=False,
+            include_scaffold_history=False,
+            include_model=True,
+        )
+        user_x, _, _, user_names = _make_recent_history_window_design(
+            eligible,
+            window_size,
+            include_user_history=True,
+            include_scaffold_history=False,
+            include_model=True,
+        )
+        full_x, _, _, full_names = _make_recent_history_window_design(
+            eligible,
+            window_size,
+            include_user_history=True,
+            include_scaffold_history=True,
+            include_model=True,
+        )
+        _, _, control_ll = _fit_logit_cluster(control_x, y, clusters, control_names)
+        _, _, user_ll = _fit_logit_cluster(user_x, y, clusters, user_names)
+        beta, se, full_ll = _fit_logit_cluster(full_x, y, clusters, full_names)
+        coef_by_name = {name: (b, s) for name, b, s in zip(full_names, beta, se)}
+        lr_user = 2 * (user_ll - control_ll)
+        lr_scaffold_beyond_user = 2 * (full_ll - user_ll)
+        lr_full = 2 * (full_ll - control_ll)
+        n = len(eligible)
+        for term, label in [
+            ("recent_user_constructive_share", "Recent constructive-user share"),
+            ("recent_user_active_share", "Recent active-user share"),
+            ("recent_assistant_scaffolded_share", "Recent scaffolded-assistant share"),
+        ]:
+            b, s = coef_by_name[term]
+            scaled_b = b * 0.25
+            scaled_s = s * 0.25
+            z = b / s if s > 0 else float("nan")
+            p = math.erfc(abs(z) / math.sqrt(2)) if s > 0 else float("nan")
             window_rows.append(
                 {
-                    "setting": setting,
-                    "window_size_assistant_responses": str(window_size),
-                    "exposure": "any scaffolded support in current response"
-                    if window_size == 1
-                    else f"any scaffolded support in current or previous {window_size - 1} assistant responses",
-                    "estimate_pp": f"{point * 100:.6f}",
-                    "ci_low_pp": f"{low * 100:.6f}",
-                    "ci_high_pp": f"{high * 100:.6f}",
+                    "window_size_turn_pairs": str(window_size),
+                    "term": term,
+                    "label": label,
+                    "coef_log_odds_per_unit_share": f"{b:.6f}",
+                    "cluster_robust_se_per_unit_share": f"{s:.6f}",
+                    "odds_ratio_per_25pp": f"{math.exp(scaled_b):.6f}",
+                    "ci_low_per_25pp": f"{math.exp(scaled_b - 1.96 * scaled_s):.6f}",
+                    "ci_high_per_25pp": f"{math.exp(scaled_b + 1.96 * scaled_s):.6f}",
                     "p_value": f"{p:.6g}",
-                    "p_next_constructive_exposed": f"{p_exposed:.6f}",
-                    "p_next_constructive_reference": f"{p_reference:.6f}",
-                    "n_exposed_pairs": str(n_exposed),
-                    "n_reference_pairs": str(n_ref),
-                    "n_conversations": str(n_conv),
-                    "method": "conversation-cluster bootstrap over assistant-to-user event pairs",
-                    "notes": "Event-window analysis asks whether scaffolded support occurred in the current assistant response or the preceding k-1 assistant responses before the next user turn.",
+                    "n_pairs": str(n),
+                    "n_conversations": str(len(set(clusters))),
+                    "log_likelihood": f"{full_ll:.6f}",
+                    "mcfadden_r2_vs_controls": f"{1 - (full_ll / control_ll):.6f}",
+                    "lr_user_history_vs_controls": f"{lr_user:.6f}",
+                    "lr_user_history_df": str(len(user_names) - len(control_names)),
+                    "lr_user_history_p": f"{float(stats.chi2.sf(lr_user, len(user_names) - len(control_names))):.6g}",
+                    "lr_scaffold_history_beyond_user": f"{lr_scaffold_beyond_user:.6f}",
+                    "lr_scaffold_history_df": str(len(full_names) - len(user_names)),
+                    "lr_scaffold_history_p": f"{float(stats.chi2.sf(lr_scaffold_beyond_user, len(full_names) - len(user_names))):.6g}",
+                    "lr_full_history_vs_controls": f"{lr_full:.6f}",
+                    "lr_full_history_df": str(len(full_names) - len(control_names)),
+                    "lr_full_history_p": f"{float(stats.chi2.sf(lr_full, len(full_names) - len(control_names))):.6g}",
+                    "formula": "next_user_is_C ~ recent user constructive/active shares + recent assistant scaffolded share + controls + model/source fixed effects",
+                    "se_type": "conversation-cluster robust sandwich",
+                    "notes": "Odds ratios are scaled to a 25 percentage-point increase in the recent-history share. A window of k contains the current user-assistant pair plus the previous k-1 pairs.",
                 }
             )
-    with open(OUT / "event_sequence_window_lifts.csv", "w", newline="") as f:
+    with open(OUT / "event_sequence_recent_history_window_logit.csv", "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=list(window_rows[0].keys()), lineterminator="\n")
         writer.writeheader()
         writer.writerows(window_rows)
 
     eligible = [row for row in rows if _f(row, "lag3_available") > 0]
-    full_x, y, clusters, full_names = _make_event_sequence_design(
+    full_x, y, clusters, full_names = _make_joint_event_history_design(
         eligible,
-        include_current_s2=True,
-        include_lags=True,
-        include_dataset=False,
+        include_user_history=True,
+        include_scaffold_history=True,
         include_model=True,
     )
     beta, se, full_ll = _fit_logit_cluster(full_x, y, clusters, full_names)
     lagged_rows: list[dict[str, str]] = []
     label_map = {
-        "current_S2": "Current response scaffolded",
-        "lag1_S2": "Previous response scaffolded",
-        "lag2_S2": "Two responses earlier scaffolded",
-        "lag3_S2": "Three responses earlier scaffolded",
-        "prior_user_constructive": "Prior user constructive",
-        "prior_user_active": "Prior user active",
-        "prior_user_passive": "Prior user passive",
+        "assistant_current_scaffolded": "Current assistant response scaffolded",
+        "assistant_lag1_scaffolded": "Previous assistant response scaffolded",
+        "assistant_lag2_scaffolded": "Two assistant responses earlier scaffolded",
+        "assistant_lag3_scaffolded": "Three assistant responses earlier scaffolded",
+        "user_current_constructive": "Immediate prior user turn constructive",
+        "user_lag1_constructive": "One user turn earlier constructive",
+        "user_lag2_constructive": "Two user turns earlier constructive",
+        "user_lag3_constructive": "Three user turns earlier constructive",
+        "user_current_active": "Immediate prior user turn active",
+        "user_lag1_active": "One user turn earlier active",
+        "user_lag2_active": "Two user turns earlier active",
+        "user_lag3_active": "Three user turns earlier active",
         "intentional_framing": "Intentional framing",
         "coding_task": "Coding task ecology",
     }
     formula = (
-        "next_user_is_C ~ current_S2 + lag1_S2 + lag2_S2 + lag3_S2 + prior user state + "
+        "next_user_is_C ~ current/lagged assistant scaffolding + current/lagged user constructive and active states + "
         "user framing + task ecology + assistant-turn index + model/source fixed effects"
     )
     for name, b, s in zip(full_names, beta, se):
@@ -1227,50 +1426,69 @@ def compute_event_sequence_lag_analysis() -> None:
                 "log_likelihood": f"{full_ll:.6f}",
                 "formula": formula,
                 "se_type": "conversation-cluster robust sandwich",
-                "notes": "Lagged event-sequence model. Rows are restricted to assistant-to-user events with three preceding assistant responses so current and lagged terms share the same risk set.",
+                "notes": "Joint event-history model. Rows are restricted to assistant-to-user events with three preceding user-assistant pairs so current and lagged terms share the same risk set.",
             }
         )
-    with open(OUT / "event_sequence_lagged_logit.csv", "w", newline="") as f:
+    with open(OUT / "event_sequence_joint_history_logit.csv", "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=list(lagged_rows[0].keys()), lineterminator="\n")
         writer.writeheader()
         writer.writerows(lagged_rows)
 
     block_rows: list[dict[str, str]] = []
-    no_scaf_x, _, _, no_scaf_names = _make_event_sequence_design(
+    control_x, _, _, control_names = _make_joint_event_history_design(
         eligible,
-        include_current_s2=False,
-        include_lags=False,
-        include_dataset=False,
+        include_user_history=False,
+        include_scaffold_history=False,
         include_model=True,
     )
-    _, _, no_scaf_ll = _fit_logit_cluster(no_scaf_x, y, clusters, no_scaf_names)
-    current_x, _, _, current_names = _make_event_sequence_design(
+    _, _, control_ll = _fit_logit_cluster(control_x, y, clusters, control_names)
+    user_x, _, _, user_names = _make_joint_event_history_design(
         eligible,
-        include_current_s2=True,
-        include_lags=False,
-        include_dataset=False,
+        include_user_history=True,
+        include_scaffold_history=False,
         include_model=True,
     )
-    _, _, current_ll = _fit_logit_cluster(current_x, y, clusters, current_names)
+    _, _, user_ll = _fit_logit_cluster(user_x, y, clusters, user_names)
+    scaffold_x, _, _, scaffold_names = _make_joint_event_history_design(
+        eligible,
+        include_user_history=False,
+        include_scaffold_history=True,
+        include_model=True,
+    )
+    _, _, scaffold_ll = _fit_logit_cluster(scaffold_x, y, clusters, scaffold_names)
     comparisons = [
         (
-            "current scaffolded response added after user/context/model controls",
-            no_scaf_ll,
-            len(no_scaf_names),
-            current_ll,
-            len(current_names),
+            "recent user-engagement history added after context/model controls",
+            control_ll,
+            len(control_names),
+            user_ll,
+            len(user_names),
         ),
         (
-            "lagged scaffolded responses added beyond current response and controls",
-            current_ll,
-            len(current_names),
+            "recent assistant-scaffolding history added after context/model controls",
+            control_ll,
+            len(control_names),
+            scaffold_ll,
+            len(scaffold_names),
+        ),
+        (
+            "assistant-scaffolding history added beyond user-engagement history",
+            user_ll,
+            len(user_names),
             full_ll,
             len(full_names),
         ),
         (
-            "current plus lagged scaffolded response block added after controls",
-            no_scaf_ll,
-            len(no_scaf_names),
+            "user-engagement history added beyond assistant-scaffolding history",
+            scaffold_ll,
+            len(scaffold_names),
+            full_ll,
+            len(full_names),
+        ),
+        (
+            "joint recent-history block added after context/model controls",
+            control_ll,
+            len(control_names),
             full_ll,
             len(full_names),
         ),
@@ -1288,10 +1506,10 @@ def compute_event_sequence_lag_analysis() -> None:
                 "p_value": f"{p:.6g}",
                 "n_pairs": str(len(eligible)),
                 "n_conversations": str(len(set(clusters))),
-                "notes": "Likelihood-ratio test for short-range event-sequence scaffolding terms.",
+                "notes": "Likelihood-ratio test for short-range event-history terms.",
             }
         )
-    with open(OUT / "event_sequence_lagged_block_tests.csv", "w", newline="") as f:
+    with open(OUT / "event_sequence_joint_history_block_tests.csv", "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=list(block_rows[0].keys()), lineterminator="\n")
         writer.writeheader()
         writer.writerows(block_rows)
@@ -1415,9 +1633,9 @@ def write_tex_tables() -> None:
     context_rows = list(csv.DictReader(open(OUT / "constructive_context_logit.csv")))
     rate_context_rows = list(csv.DictReader(open(OUT / "constructive_rate_context_logit.csv")))
     fig3_offset_rows = list(csv.DictReader(open(OUT / "fig3_poisson_offset_rate_sensitivity.csv")))
-    event_windows = list(csv.DictReader(open(OUT / "event_sequence_window_lifts.csv")))
-    event_lagged = list(csv.DictReader(open(OUT / "event_sequence_lagged_logit.csv")))
-    event_blocks = list(csv.DictReader(open(OUT / "event_sequence_lagged_block_tests.csv")))
+    event_windows = list(csv.DictReader(open(OUT / "event_sequence_recent_history_window_logit.csv")))
+    event_lagged = list(csv.DictReader(open(OUT / "event_sequence_joint_history_logit.csv")))
+    event_blocks = list(csv.DictReader(open(OUT / "event_sequence_joint_history_block_tests.csv")))
     pooled_broad = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_pooled_broad_s2.csv")))
     pooled_model_broad = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_pooled_model_source_fe_broad_s2.csv")))
     wild_broad = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_wildchat_model_fe_broad_s2.csv")))
@@ -1565,60 +1783,121 @@ def write_tex_tables() -> None:
         f.write("\\bottomrule\n\\end{tabular}%\n}\n\\end{table*}\n")
 
     event_sequence_path = ROOT / "tables" / "table_event_sequence_lagged_scaffolding.tex"
-    event_by_setting_window = {
-        (r["setting"], r["window_size_assistant_responses"]): r for r in event_windows
-    }
+    event_by_window_term = {(r["window_size_turn_pairs"], r["term"]): r for r in event_windows}
     event_by_term = {r["term"]: r for r in event_lagged}
     event_block_by_comparison = {r["comparison"]: r for r in event_blocks}
+
+    def window_or_cell(r: dict[str, str]) -> str:
+        p = float(r["p_value"])
+        ptxt = "$<.001$" if p < 0.001 else f"{p:.3f}".replace("0.", ".")
+        return (
+            f"{float(r['odds_ratio_per_25pp']):.2f} "
+            f"[{float(r['ci_low_per_25pp']):.2f}, {float(r['ci_high_per_25pp']):.2f}], {ptxt}"
+        )
+
     with open(event_sequence_path, "w") as f:
         f.write("\\begin{table*}[p]\n\\scriptsize\n\\centering\n")
         f.write(
-            "\\caption{\\textbf{Short-range event-sequence checks for scaffolded support.} "
-            "Panel A compares the probability that the next user turn is constructive after event windows containing scaffolded support versus event windows without scaffolded support. "
-            "A window of 1 contains the current assistant response only; windows of 2--4 contain the current response plus the preceding 1--3 assistant responses. "
-            "Panel B reports a lagged adjacent-turn logistic model in the common risk set with three preceding assistant responses, adjusted for prior user state, user framing, task ecology, assistant-turn index and model/source fixed effects. "
-            "Cells in Panel A report percentage-point differences with 95\\% conversation-cluster bootstrap confidence intervals and two-sided p values. Cells in Panel B report odds ratios with 95\\% confidence intervals and conversation-cluster robust p values.}\\label{tab:event_sequence_lagged_scaffolding}\n"
+            "\\caption{\\textbf{Short-range joint event-history models for local support--engagement coupling.} "
+            "Panel A fits pooled logistic models that predict whether the next user turn is constructive from recent user-engagement shares and recent assistant-scaffolding shares over windows of one to four user--assistant pairs. "
+            "Panel B fits a lag-specific event-history model in the common risk set with three preceding user--assistant pairs, entering current and lagged user engagement and assistant scaffolding simultaneously. "
+            "Odds ratios in Panel A are scaled to a 25 percentage-point increase in the recent-history share. Odds ratios in Panel B compare indicator presence versus absence at a given lag. "
+            "C denotes constructive user engagement and A denotes active user engagement. All models adjust for user framing, task ecology, assistant-turn index and model/source fixed effects, with standard errors clustered by conversation.}\\label{tab:event_sequence_lagged_scaffolding}\n"
         )
-        f.write("\\setlength{\\tabcolsep}{3.5pt}\n\\renewcommand{\\arraystretch}{1.08}\n")
+        f.write("\\setlength{\\tabcolsep}{3.2pt}\n\\renewcommand{\\arraystretch}{1.06}\n")
+        f.write("\\resizebox{\\textwidth}{!}{%\n")
+        f.write("\\begin{tabular}{lccccc}\n\\toprule\n")
+        f.write("\\multicolumn{6}{l}{\\textit{Panel A: Recent-history window models}} \\\\\n")
+        f.write(
+            "Window & User constructive share & User active share & Assistant scaffolded share & "
+            "Scaffolding beyond user history & McFadden $R^2$ \\\\\n\\midrule\n"
+        )
+        for window_size, label in [
+            ("1", "Current pair"),
+            ("2", "Current + 1 prior"),
+            ("3", "Current + 2 prior"),
+            ("4", "Current + 3 prior"),
+        ]:
+            c = event_by_window_term[(window_size, "recent_user_constructive_share")]
+            a = event_by_window_term[(window_size, "recent_user_active_share")]
+            s = event_by_window_term[(window_size, "recent_assistant_scaffolded_share")]
+            scaffold_p = float(s["lr_scaffold_history_p"])
+            scaffold_ptxt = "$<.001$" if scaffold_p < 0.001 else f"{scaffold_p:.3f}".replace("0.", ".")
+            f.write(
+                f"{label} & {window_or_cell(c)} & {window_or_cell(a)} & {window_or_cell(s)} & "
+                f"LR $\\chi^2_{{1}}={float(s['lr_scaffold_history_beyond_user']):.1f}$, {scaffold_ptxt} & "
+                f"{float(s['mcfadden_r2_vs_controls']):.3f} \\\\\n"
+            )
+        f.write("\\bottomrule\n\\end{tabular}%\n}\n\\vspace{1.5mm}\n")
         f.write("\\resizebox{\\textwidth}{!}{%\n")
         f.write("\\begin{tabular}{lcccc}\n\\toprule\n")
-        f.write("\\multicolumn{5}{l}{\\textit{Panel A: Event-window constructive lift}} \\\\\n")
-        f.write("Setting & Current response & Current + 1 prior & Current + 2 prior & Current + 3 prior \\\\\n\\midrule\n")
-        for setting in settings:
-            f.write(
-                setting
-                + " & "
-                + " & ".join(pp_cell(event_by_setting_window[(setting, str(k))]) for k in range(1, 5))
-                + " \\\\\n"
-            )
-        f.write("\\midrule\n")
-        f.write("\\multicolumn{5}{l}{\\textit{Panel B: Adjusted lagged event model}} \\\\\n")
-        f.write("Predictor or block test & Estimate & 95\\% CI & p value & Sample \\\\\n\\midrule\n")
+        f.write("\\multicolumn{5}{l}{\\textit{Panel B: Lag-specific joint event-history model}} \\\\\n")
+        f.write("Predictor or block test & OR / statistic & 95\\% CI & p value & Sample \\\\\n\\midrule\n")
+        table_label = {
+            "user_current_constructive": "Immediate user C",
+            "user_lag1_constructive": "Lag-1 user C",
+            "user_lag2_constructive": "Lag-2 user C",
+            "user_lag3_constructive": "Lag-3 user C",
+            "user_current_active": "Immediate user A",
+            "user_lag1_active": "Lag-1 user A",
+            "user_lag2_active": "Lag-2 user A",
+            "user_lag3_active": "Lag-3 user A",
+            "assistant_current_scaffolded": "Current assistant scaffolded",
+            "assistant_lag1_scaffolded": "Lag-1 assistant scaffolded",
+            "assistant_lag2_scaffolded": "Lag-2 assistant scaffolded",
+            "assistant_lag3_scaffolded": "Lag-3 assistant scaffolded",
+        }
+        f.write("\\multicolumn{5}{l}{\\textit{User-engagement history}} \\\\\n")
         for term in [
-            "current_S2",
-            "lag1_S2",
-            "lag2_S2",
-            "lag3_S2",
-            "prior_user_constructive",
-            "prior_user_active",
-            "prior_user_passive",
+            "user_current_constructive",
+            "user_lag1_constructive",
+            "user_lag2_constructive",
+            "user_lag3_constructive",
+            "user_current_active",
+            "user_lag1_active",
+            "user_lag2_active",
+            "user_lag3_active",
         ]:
             r = event_by_term[term]
             p = float(r["p_value"])
             ptxt = "$<.001$" if p < 0.001 else f"{p:.3f}".replace("0.", ".")
             f.write(
-                f"{r['label']} & {float(r['odds_ratio']):.2f} & "
+                f"{table_label[term]} & {float(r['odds_ratio']):.2f} & "
                 f"[{float(r['ci_low']):.2f}, {float(r['ci_high']):.2f}] & {ptxt} & "
                 f"{int(r['n_pairs']):,} pairs \\\\\n"
             )
+        f.write("\\addlinespace[0.4ex]\n\\multicolumn{5}{l}{\\textit{Assistant-scaffolding history}} \\\\\n")
+        for term in [
+            "assistant_current_scaffolded",
+            "assistant_lag1_scaffolded",
+            "assistant_lag2_scaffolded",
+            "assistant_lag3_scaffolded",
+        ]:
+            r = event_by_term[term]
+            p = float(r["p_value"])
+            ptxt = "$<.001$" if p < 0.001 else f"{p:.3f}".replace("0.", ".")
+            f.write(
+                f"{table_label[term]} & {float(r['odds_ratio']):.2f} & "
+                f"[{float(r['ci_low']):.2f}, {float(r['ci_high']):.2f}] & {ptxt} & "
+                f"{int(r['n_pairs']):,} pairs \\\\\n"
+            )
+        f.write("\\addlinespace[0.4ex]\n\\multicolumn{5}{l}{\\textit{Block tests}} \\\\\n")
         for comparison, label in [
             (
-                "lagged scaffolded responses added beyond current response and controls",
-                "Lagged scaffolded-response block",
+                "recent user-engagement history added after context/model controls",
+                "User-engagement history block",
             ),
             (
-                "current plus lagged scaffolded response block added after controls",
-                "Current + lagged scaffolded-response block",
+                "assistant-scaffolding history added beyond user-engagement history",
+                "Scaffolding history beyond user history",
+            ),
+            (
+                "user-engagement history added beyond assistant-scaffolding history",
+                "User history beyond scaffolding history",
+            ),
+            (
+                "joint recent-history block added after context/model controls",
+                "Joint recent-history block",
             ),
         ]:
             r = event_block_by_comparison[comparison]
@@ -1798,9 +2077,9 @@ def write_report() -> None:
     context_rows = list(csv.DictReader(open(OUT / "constructive_context_logit.csv")))
     rate_context_rows = list(csv.DictReader(open(OUT / "constructive_rate_context_logit.csv")))
     fig3_offset_rows = list(csv.DictReader(open(OUT / "fig3_poisson_offset_rate_sensitivity.csv")))
-    event_windows = list(csv.DictReader(open(OUT / "event_sequence_window_lifts.csv")))
-    event_lagged = list(csv.DictReader(open(OUT / "event_sequence_lagged_logit.csv")))
-    event_blocks = list(csv.DictReader(open(OUT / "event_sequence_lagged_block_tests.csv")))
+    event_windows = list(csv.DictReader(open(OUT / "event_sequence_recent_history_window_logit.csv")))
+    event_lagged = list(csv.DictReader(open(OUT / "event_sequence_joint_history_logit.csv")))
+    event_blocks = list(csv.DictReader(open(OUT / "event_sequence_joint_history_block_tests.csv")))
     pooled_broad = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_pooled_broad_s2.csv")))
     pooled_model_broad = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_pooled_model_source_fe_broad_s2.csv")))
     wild_broad = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_wildchat_model_fe_broad_s2.csv")))
@@ -1844,18 +2123,35 @@ def write_report() -> None:
             r = next(row for row in fig3_offset_rows if row["setting"] == setting and row["se_type"] == "quasi_poisson_scaled")
             f.write(f"- {setting}: RR {float(r['estimate_rr']):.3f}, 95% CI [{float(r['ci_low']):.3f}, {float(r['ci_high']):.3f}], p={r['p_value']}.\n")
         f.write("\n")
-        f.write("Section 2.5 event-sequence check: assistant-to-user events were re-expressed as recent support windows. A window of 1 contains the current assistant response; windows of 2--4 contain the current response plus the preceding 1--3 assistant responses. Window contrasts use conversation-cluster bootstrap resampling. A lagged model then includes current S2 and lagged S2 indicators simultaneously in the common risk set with three preceding assistant responses.\n\n")
+        f.write("Section 2.5 joint event-history check: assistant-to-user events were re-expressed as recent local environments containing both user-engagement history and assistant-scaffolding history. Window models use recent constructive-user share, recent active-user share and recent scaffolded-assistant share over k=1--4 user--assistant pairs. A lag-specific model then enters current and lagged user engagement and assistant scaffolding simultaneously in the common risk set with three preceding user--assistant pairs.\n\n")
         for window_size in ["1", "2", "3", "4"]:
-            sub = [r for r in event_windows if r["window_size_assistant_responses"] == window_size]
-            positive = sum(float(r["estimate_pp"]) > 0 for r in sub)
-            significant = sum(float(r["p_value"]) < 0.05 for r in sub)
-            f.write(f"- Event window {window_size}: {positive}/{len(sub)} settings are positive; {significant}/{len(sub)} have p<0.05.\n")
-        for term in ["current_S2", "lag1_S2", "lag2_S2", "lag3_S2"]:
+            sub = [r for r in event_windows if r["window_size_turn_pairs"] == window_size]
+            s = next(r for r in sub if r["term"] == "recent_assistant_scaffolded_share")
+            c = next(r for r in sub if r["term"] == "recent_user_constructive_share")
+            a = next(r for r in sub if r["term"] == "recent_user_active_share")
+            f.write(
+                f"- Window {window_size}: user constructive share OR per +25pp={float(c['odds_ratio_per_25pp']):.3f}; "
+                f"user active share OR per +25pp={float(a['odds_ratio_per_25pp']):.3f}; "
+                f"assistant scaffolded share OR per +25pp={float(s['odds_ratio_per_25pp']):.3f}; "
+                f"scaffolding beyond user-history LR chi-square({s['lr_scaffold_history_df']})={float(s['lr_scaffold_history_beyond_user']):.1f}, p={s['lr_scaffold_history_p']}.\n"
+            )
+        for term in [
+            "user_current_constructive",
+            "user_lag1_constructive",
+            "user_lag2_constructive",
+            "user_lag3_constructive",
+            "assistant_current_scaffolded",
+            "assistant_lag1_scaffolded",
+            "assistant_lag2_scaffolded",
+            "assistant_lag3_scaffolded",
+        ]:
             r = next(row for row in event_lagged if row["term"] == term)
-            f.write(f"- Lagged event model {r['label']}: OR {float(r['odds_ratio']):.3f}, 95% CI [{float(r['ci_low']):.3f}, {float(r['ci_high']):.3f}], p={r['p_value']}.\n")
+            f.write(f"- Joint lag model {r['label']}: OR {float(r['odds_ratio']):.3f}, 95% CI [{float(r['ci_low']):.3f}, {float(r['ci_high']):.3f}], p={r['p_value']}.\n")
         for comparison in [
-            "lagged scaffolded responses added beyond current response and controls",
-            "current plus lagged scaffolded response block added after controls",
+            "recent user-engagement history added after context/model controls",
+            "assistant-scaffolding history added beyond user-engagement history",
+            "user-engagement history added beyond assistant-scaffolding history",
+            "joint recent-history block added after context/model controls",
         ]:
             r = next(row for row in event_blocks if row["comparison"] == comparison)
             f.write(f"- {comparison}: LR chi-square({r['df']})={float(r['lr_chi2']):.1f}, p={r['p_value']}.\n")
