@@ -1633,9 +1633,6 @@ def write_tex_tables() -> None:
     context_rows = list(csv.DictReader(open(OUT / "constructive_context_logit.csv")))
     rate_context_rows = list(csv.DictReader(open(OUT / "constructive_rate_context_logit.csv")))
     fig3_offset_rows = list(csv.DictReader(open(OUT / "fig3_poisson_offset_rate_sensitivity.csv")))
-    event_windows = list(csv.DictReader(open(OUT / "event_sequence_recent_history_window_logit.csv")))
-    event_lagged = list(csv.DictReader(open(OUT / "event_sequence_joint_history_logit.csv")))
-    event_blocks = list(csv.DictReader(open(OUT / "event_sequence_joint_history_block_tests.csv")))
     pooled_broad = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_pooled_broad_s2.csv")))
     pooled_model_broad = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_pooled_model_source_fe_broad_s2.csv")))
     wild_broad = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_wildchat_model_fe_broad_s2.csv")))
@@ -1779,133 +1776,6 @@ def write_tex_tables() -> None:
             r = next(row for row in fig3_offset_rows if row["setting"] == setting and row["se_type"] == "quasi_poisson_scaled")
             f.write(
                 f"{setting} & {rr_cell(r)} & {float(r['pearson_dispersion']):.2f} & {int(r['n_conversations']):,} \\\\\n"
-            )
-        f.write("\\bottomrule\n\\end{tabular}%\n}\n\\end{table*}\n")
-
-    event_sequence_path = ROOT / "tables" / "table_event_sequence_lagged_scaffolding.tex"
-    event_by_window_term = {(r["window_size_turn_pairs"], r["term"]): r for r in event_windows}
-    event_by_term = {r["term"]: r for r in event_lagged}
-    event_block_by_comparison = {r["comparison"]: r for r in event_blocks}
-
-    def window_or_cell(r: dict[str, str]) -> str:
-        p = float(r["p_value"])
-        ptxt = "$<.001$" if p < 0.001 else f"{p:.3f}".replace("0.", ".")
-        return (
-            f"{float(r['odds_ratio_per_25pp']):.2f} "
-            f"[{float(r['ci_low_per_25pp']):.2f}, {float(r['ci_high_per_25pp']):.2f}], {ptxt}"
-        )
-
-    with open(event_sequence_path, "w") as f:
-        f.write("\\begin{table*}[p]\n\\scriptsize\n\\centering\n")
-        f.write(
-            "\\caption{\\textbf{Short-range joint event-history models for local support--engagement coupling.} "
-            "Panel A fits pooled logistic models that predict whether the next user turn is constructive from recent user-engagement shares and recent assistant-scaffolding shares over windows of one to four user--assistant pairs. "
-            "Panel B fits a lag-specific event-history model in the common risk set with three preceding user--assistant pairs, entering current and lagged user engagement and assistant scaffolding simultaneously. "
-            "Odds ratios in Panel A are scaled to a 25 percentage-point increase in the recent-history share. Odds ratios in Panel B compare indicator presence versus absence at a given lag. "
-            "C denotes constructive user engagement and A denotes active user engagement. All models adjust for user framing, task ecology, assistant-turn index and model/source fixed effects, with standard errors clustered by conversation.}\\label{tab:event_sequence_lagged_scaffolding}\n"
-        )
-        f.write("\\setlength{\\tabcolsep}{3.2pt}\n\\renewcommand{\\arraystretch}{1.06}\n")
-        f.write("\\resizebox{\\textwidth}{!}{%\n")
-        f.write("\\begin{tabular}{lccccc}\n\\toprule\n")
-        f.write("\\multicolumn{6}{l}{\\textit{Panel A: Recent-history window models}} \\\\\n")
-        f.write(
-            "Window & User constructive share & User active share & Assistant scaffolded share & "
-            "Scaffolding beyond user history & McFadden $R^2$ \\\\\n\\midrule\n"
-        )
-        for window_size, label in [
-            ("1", "Current pair"),
-            ("2", "Current + 1 prior"),
-            ("3", "Current + 2 prior"),
-            ("4", "Current + 3 prior"),
-        ]:
-            c = event_by_window_term[(window_size, "recent_user_constructive_share")]
-            a = event_by_window_term[(window_size, "recent_user_active_share")]
-            s = event_by_window_term[(window_size, "recent_assistant_scaffolded_share")]
-            scaffold_p = float(s["lr_scaffold_history_p"])
-            scaffold_ptxt = "$<.001$" if scaffold_p < 0.001 else f"{scaffold_p:.3f}".replace("0.", ".")
-            f.write(
-                f"{label} & {window_or_cell(c)} & {window_or_cell(a)} & {window_or_cell(s)} & "
-                f"LR $\\chi^2_{{1}}={float(s['lr_scaffold_history_beyond_user']):.1f}$, {scaffold_ptxt} & "
-                f"{float(s['mcfadden_r2_vs_controls']):.3f} \\\\\n"
-            )
-        f.write("\\bottomrule\n\\end{tabular}%\n}\n\\vspace{1.5mm}\n")
-        f.write("\\resizebox{\\textwidth}{!}{%\n")
-        f.write("\\begin{tabular}{lcccc}\n\\toprule\n")
-        f.write("\\multicolumn{5}{l}{\\textit{Panel B: Lag-specific joint event-history model}} \\\\\n")
-        f.write("Predictor or block test & OR / statistic & 95\\% CI & p value & Sample \\\\\n\\midrule\n")
-        table_label = {
-            "user_current_constructive": "Immediate user C",
-            "user_lag1_constructive": "Lag-1 user C",
-            "user_lag2_constructive": "Lag-2 user C",
-            "user_lag3_constructive": "Lag-3 user C",
-            "user_current_active": "Immediate user A",
-            "user_lag1_active": "Lag-1 user A",
-            "user_lag2_active": "Lag-2 user A",
-            "user_lag3_active": "Lag-3 user A",
-            "assistant_current_scaffolded": "Current assistant scaffolded",
-            "assistant_lag1_scaffolded": "Lag-1 assistant scaffolded",
-            "assistant_lag2_scaffolded": "Lag-2 assistant scaffolded",
-            "assistant_lag3_scaffolded": "Lag-3 assistant scaffolded",
-        }
-        f.write("\\multicolumn{5}{l}{\\textit{User-engagement history}} \\\\\n")
-        for term in [
-            "user_current_constructive",
-            "user_lag1_constructive",
-            "user_lag2_constructive",
-            "user_lag3_constructive",
-            "user_current_active",
-            "user_lag1_active",
-            "user_lag2_active",
-            "user_lag3_active",
-        ]:
-            r = event_by_term[term]
-            p = float(r["p_value"])
-            ptxt = "$<.001$" if p < 0.001 else f"{p:.3f}".replace("0.", ".")
-            f.write(
-                f"{table_label[term]} & {float(r['odds_ratio']):.2f} & "
-                f"[{float(r['ci_low']):.2f}, {float(r['ci_high']):.2f}] & {ptxt} & "
-                f"{int(r['n_pairs']):,} pairs \\\\\n"
-            )
-        f.write("\\addlinespace[0.4ex]\n\\multicolumn{5}{l}{\\textit{Assistant-scaffolding history}} \\\\\n")
-        for term in [
-            "assistant_current_scaffolded",
-            "assistant_lag1_scaffolded",
-            "assistant_lag2_scaffolded",
-            "assistant_lag3_scaffolded",
-        ]:
-            r = event_by_term[term]
-            p = float(r["p_value"])
-            ptxt = "$<.001$" if p < 0.001 else f"{p:.3f}".replace("0.", ".")
-            f.write(
-                f"{table_label[term]} & {float(r['odds_ratio']):.2f} & "
-                f"[{float(r['ci_low']):.2f}, {float(r['ci_high']):.2f}] & {ptxt} & "
-                f"{int(r['n_pairs']):,} pairs \\\\\n"
-            )
-        f.write("\\addlinespace[0.4ex]\n\\multicolumn{5}{l}{\\textit{Block tests}} \\\\\n")
-        for comparison, label in [
-            (
-                "recent user-engagement history added after context/model controls",
-                "User-engagement history block",
-            ),
-            (
-                "assistant-scaffolding history added beyond user-engagement history",
-                "Scaffolding history beyond user history",
-            ),
-            (
-                "user-engagement history added beyond assistant-scaffolding history",
-                "User history beyond scaffolding history",
-            ),
-            (
-                "joint recent-history block added after context/model controls",
-                "Joint recent-history block",
-            ),
-        ]:
-            r = event_block_by_comparison[comparison]
-            p = float(r["p_value"])
-            ptxt = "$<.001$" if p < 0.001 else f"{p:.3f}".replace("0.", ".")
-            f.write(
-                f"{label} & \\multicolumn{{2}}{{c}}{{LR $\\chi^2_{{{r['df']}}}={float(r['lr_chi2']):.1f}$}} & "
-                f"{ptxt} & {int(r['n_conversations']):,} conversations \\\\\n"
             )
         f.write("\\bottomrule\n\\end{tabular}%\n}\n\\end{table*}\n")
 
@@ -2077,9 +1947,6 @@ def write_report() -> None:
     context_rows = list(csv.DictReader(open(OUT / "constructive_context_logit.csv")))
     rate_context_rows = list(csv.DictReader(open(OUT / "constructive_rate_context_logit.csv")))
     fig3_offset_rows = list(csv.DictReader(open(OUT / "fig3_poisson_offset_rate_sensitivity.csv")))
-    event_windows = list(csv.DictReader(open(OUT / "event_sequence_recent_history_window_logit.csv")))
-    event_lagged = list(csv.DictReader(open(OUT / "event_sequence_joint_history_logit.csv")))
-    event_blocks = list(csv.DictReader(open(OUT / "event_sequence_joint_history_block_tests.csv")))
     pooled_broad = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_pooled_broad_s2.csv")))
     pooled_model_broad = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_pooled_model_source_fe_broad_s2.csv")))
     wild_broad = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_wildchat_model_fe_broad_s2.csv")))
@@ -2122,39 +1989,6 @@ def write_report() -> None:
         for setting in ["WC coding", "LMSYS coding", "SC coding", "WC writing", "LMSYS writing", "SC writing"]:
             r = next(row for row in fig3_offset_rows if row["setting"] == setting and row["se_type"] == "quasi_poisson_scaled")
             f.write(f"- {setting}: RR {float(r['estimate_rr']):.3f}, 95% CI [{float(r['ci_low']):.3f}, {float(r['ci_high']):.3f}], p={r['p_value']}.\n")
-        f.write("\n")
-        f.write("Section 2.5 joint event-history check: assistant-to-user events were re-expressed as recent local environments containing both user-engagement history and assistant-scaffolding history. Window models use recent constructive-user share, recent active-user share and recent scaffolded-assistant share over k=1--4 user--assistant pairs. A lag-specific model then enters current and lagged user engagement and assistant scaffolding simultaneously in the common risk set with three preceding user--assistant pairs.\n\n")
-        for window_size in ["1", "2", "3", "4"]:
-            sub = [r for r in event_windows if r["window_size_turn_pairs"] == window_size]
-            s = next(r for r in sub if r["term"] == "recent_assistant_scaffolded_share")
-            c = next(r for r in sub if r["term"] == "recent_user_constructive_share")
-            a = next(r for r in sub if r["term"] == "recent_user_active_share")
-            f.write(
-                f"- Window {window_size}: user constructive share OR per +25pp={float(c['odds_ratio_per_25pp']):.3f}; "
-                f"user active share OR per +25pp={float(a['odds_ratio_per_25pp']):.3f}; "
-                f"assistant scaffolded share OR per +25pp={float(s['odds_ratio_per_25pp']):.3f}; "
-                f"scaffolding beyond user-history LR chi-square({s['lr_scaffold_history_df']})={float(s['lr_scaffold_history_beyond_user']):.1f}, p={s['lr_scaffold_history_p']}.\n"
-            )
-        for term in [
-            "user_current_constructive",
-            "user_lag1_constructive",
-            "user_lag2_constructive",
-            "user_lag3_constructive",
-            "assistant_current_scaffolded",
-            "assistant_lag1_scaffolded",
-            "assistant_lag2_scaffolded",
-            "assistant_lag3_scaffolded",
-        ]:
-            r = next(row for row in event_lagged if row["term"] == term)
-            f.write(f"- Joint lag model {r['label']}: OR {float(r['odds_ratio']):.3f}, 95% CI [{float(r['ci_low']):.3f}, {float(r['ci_high']):.3f}], p={r['p_value']}.\n")
-        for comparison in [
-            "recent user-engagement history added after context/model controls",
-            "assistant-scaffolding history added beyond user-engagement history",
-            "user-engagement history added beyond assistant-scaffolding history",
-            "joint recent-history block added after context/model controls",
-        ]:
-            r = next(row for row in event_blocks if row["comparison"] == comparison)
-            f.write(f"- {comparison}: LR chi-square({r['df']})={float(r['lr_chi2']):.1f}, p={r['p_value']}.\n")
         f.write("\n")
         f.write("Integrated adjacent-turn logit outcome: whether the next user turn is constructive. Broad scaffolded-support models include scaffolded-support presence without M1-M6. Support-form decomposed models include broad scaffolded support plus M1-M6, so M coefficients describe form-level variation within scaffolded support. Standard errors are clustered by conversation.\n\n")
         f.write("Setting-level adjacent-turn models: separate model/source-adjusted regressions were fitted within each of the six task settings to check dataset-by-factor heterogeneity rather than relying only on pooled fixed effects. These outputs are exported to `setting_level_adjacent_turn_logit_model_source_fe.csv` and summarized in Supplementary Table C.\n\n")
@@ -2215,7 +2049,6 @@ def main() -> None:
     compute_fig3_offset_rate_sensitivity()
     compute_constructive_context_logit()
     compute_integrated_logit()
-    compute_event_sequence_lag_analysis()
     write_tex_tables()
     write_report()
 
