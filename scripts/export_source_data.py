@@ -6,6 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "source_data"
+STATS = ROOT / "outputs" / "integrated_regression"
 
 
 def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
@@ -21,6 +22,11 @@ def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
         writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
+
+
+def read_csv(path: Path) -> list[dict[str, str]]:
+    with path.open(newline="") as f:
+        return list(csv.DictReader(f))
 
 
 def bh_fdr(pvals: list[float]) -> list[float]:
@@ -144,13 +150,24 @@ def figure3() -> None:
                     "notes": "Group ratio is total constructive user turns divided by total user turns.",
                 }
             )
+    adjusted = {
+        (r["setting"], r["model_type"]): r
+        for r in read_csv(STATS / "fig3_adjusted_model_significance.csv")
+    }
     for setting, value, ci in zip(labels, pois, pois_ci):
-        rows.append({"figure": "Figure 3", "panel": "b", "setting": setting, "measure": "Poisson count ratio", "group": "scaffolded support", "estimate": value, "unit": "ratio", "ci_low": ci[0], "ci_high": ci[1], "p_value": "", "notes": "Model-based 95% CI."})
+        r = adjusted[(setting, "Poisson RR")]
+        rows.append({"figure": "Figure 3", "panel": "b", "setting": setting, "measure": "Poisson count ratio", "group": "scaffolded support", "estimate": r["estimate"], "unit": "ratio", "ci_low": r["ci_low"], "ci_high": r["ci_high"], "p_value": r["p_value"], "notes": "Model-based 95% CI and two-sided p value."})
     for setting, value, ci in zip(labels, logit, logit_ci):
-        rows.append({"figure": "Figure 3", "panel": "b", "setting": setting, "measure": "Logit odds ratio", "group": "scaffolded support", "estimate": value, "unit": "odds ratio", "ci_low": ci[0], "ci_high": ci[1], "p_value": "", "notes": "Model-based 95% CI."})
+        r = adjusted[(setting, "Logit OR")]
+        rows.append({"figure": "Figure 3", "panel": "b", "setting": setting, "measure": "Logit odds ratio", "group": "scaffolded support", "estimate": r["estimate"], "unit": "odds ratio", "ci_low": r["ci_low"], "ci_high": r["ci_high"], "p_value": r["p_value"], "notes": "Model-based 95% CI and two-sided p value."})
+    stratified = {
+        (r["setting"], r["user_framing"]): r
+        for r in read_csv(STATS / "fig3_user_framing_stratified_poisson_significance.csv")
+    }
     for group, values, cis in [("intentional", strat_int, strat_int_ci), ("unintentional", strat_unint, strat_unint_ci)]:
         for setting, value, ci in zip(labels, values, cis):
-            rows.append({"figure": "Figure 3", "panel": "c", "setting": setting, "measure": "Poisson count ratio", "group": group, "estimate": value, "unit": "ratio", "ci_low": ci[0], "ci_high": ci[1], "p_value": "", "notes": "User-framing stratified model."})
+            r = stratified[(setting, group)]
+            rows.append({"figure": "Figure 3", "panel": "c", "setting": setting, "measure": "Poisson count ratio", "group": group, "estimate": r["estimate"], "unit": "ratio", "ci_low": r["ci_low"], "ci_high": r["ci_high"], "p_value": r["p_value"], "notes": "User-framing stratified model; model-based 95% CI and two-sided p value."})
     for setting, value, ci, p_value in zip(labels, depth_diff, depth_ci, depth_p):
         rows.append({"figure": "Figure 3", "panel": "d", "setting": setting, "measure": "post-answer depth difference", "group": "scaffolded minus reference", "estimate": value, "unit": "turns", "ci_low": ci[0], "ci_high": ci[1], "p_value": p_value, "notes": "Conversation-level bootstrap estimate."})
     write_csv(OUT / "figure3_source_data.csv", rows)
@@ -221,8 +238,11 @@ def figure4() -> None:
 
 def figure5() -> None:
     order = ["WC coding", "LMSYS coding", "SC coding", "WC writing", "LMSYS writing", "SC writing"]
-    lift = [2.6756, 2.0051, 6.21, 1.1281, 0.2666, 3.35]
-    lift_ci = [(2.2904, 3.0607), (1.5400, 2.5000), ("", ""), (0.9487, 1.3075), (0.0200, 0.5200), ("", "")]
+    adjacent = {
+        r["setting"]: r
+        for r in read_csv(STATS / "key_percentage_lifts_significance.csv")
+        if r["contrast"] == "adjacent_next_constructive_s2_minus_s1"
+    }
     cond = {
         "prior constructive": {"WC coding": (26.0563, 30.0682), "LMSYS coding": (21.9201, 24.1834), "SC coding": (32.24, 36.75), "WC writing": (6.0528, 12.3195), "LMSYS writing": (11.4618, 9.0909), "SC writing": (22.91, 25.74)},
         "prior active": {"WC coding": (9.6341, 11.7894), "LMSYS coding": (6.1476, 8.3811), "SC coding": (14.45, 17.51), "WC writing": (1.9286, 2.5838), "LMSYS writing": (2.1687, 2.0536), "SC writing": (6.24, 7.46)},
@@ -241,8 +261,9 @@ def figure5() -> None:
         "M4 explaining": [(1.7221, 1.4532, 2.0406), (2.1213, 1.8721, 2.4036), (2.8755, 1.5473, 5.3435)],
     }
     rows: list[dict[str, object]] = []
-    for setting, value, ci in zip(order, lift, lift_ci):
-        rows.append({"figure": "Figure 5", "panel": "a", "setting": setting, "measure": "next-turn constructive lift", "group": "scaffolded minus reference", "estimate": value, "unit": "percentage-point difference", "ci_low": ci[0], "ci_high": ci[1], "notes": "Conversation-cluster bootstrap CI where available."})
+    for setting in order:
+        r = adjacent[setting]
+        rows.append({"figure": "Figure 5", "panel": "a", "setting": setting, "measure": "next-turn constructive lift", "group": "scaffolded minus reference", "estimate": r["estimate"], "unit": "percentage-point difference", "ci_low": r["ci_low"], "ci_high": r["ci_high"], "p_value": r["p_value"], "n_conversations": r["n_conversations"], "notes": "Conversation-cluster bootstrap CI and two-sided p value over assistant-to-user pairs."})
     for state, vals in cond.items():
         for setting, (ref, scaf) in vals.items():
             rows.append({"figure": "Figure 5", "panel": "b", "setting": setting, "measure": "P(next constructive turn)", "group": f"{state}: non-scaffolded reference", "estimate": ref, "unit": "percent", "ci_low": "", "ci_high": "", "notes": ""})

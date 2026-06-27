@@ -1,0 +1,19 @@
+check,setting,model,ok
+fig3 panel b source vs adjusted output,WC coding,Poisson RR,True
+fig3 panel b source vs adjusted output,WC coding,Logit OR,True
+fig3 panel b source vs adjusted output,LMSYS coding,Poisson RR,True
+fig3 panel b source vs adjusted output,LMSYS coding,Logit OR,True
+fig3 panel b source vs adjusted output,SC coding,Poisson RR,True
+fig3 panel b source vs adjusted output,SC coding,Logit OR,True
+fig3 panel b source vs adjusted output,WC writing,Poisson RR,True
+fig3 panel b source vs adjusted output,WC writing,Logit OR,True
+fig3 panel b source vs adjusted output,LMSYS writing,Poisson RR,True
+fig3 panel b source vs adjusted output,LMSYS writing,Logit OR,True
+fig3 panel b source vs adjusted output,SC writing,Poisson RR,True
+fig3 panel b source vs adjusted output,SC writing,Logit OR,True
+fig5 panel a source vs key adjacent lift,WC coding,,True
+fig5 panel a source vs key adjacent lift,LMSYS coding,,True
+fig5 panel a source vs key adjacent lift,SC coding,,True
+fig5 panel a source vs key adjacent lift,WC writing,,True
+fig5 panel a source vs key adjacent lift,LMSYS writing,,True
+fig5 panel a source vs key adjacent lift,SC writing,,True

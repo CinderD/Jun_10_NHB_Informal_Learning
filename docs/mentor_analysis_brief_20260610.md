@@ -2,7 +2,7 @@
 
 Date: 2026-06-10
 
-This brief summarizes the current public-data analysis for discussion with mentors or external collaborators. It is written as a working analysis/RQ draft rather than final manuscript prose. The main writing direction should not emphasize any single dataset. The stronger framing is that the core patterns are evaluated across multiple public conversational corpora, with WildChat, LMSYS Chat-1M and ShareChat strict-English as the main reportable evidence, and SWE-chat and ThoughtTrace as boundary checks.
+This brief summarizes the current public-data analysis for discussion with mentors or external collaborators. It is written as a working analysis/RQ draft rather than final manuscript prose. The main writing direction should not emphasize any single dataset. The stronger framing is that the core patterns are evaluated across multiple public conversational corpora, with WildChat, LMSYS Chat-1M and ShareChat strict-English as the main reportable evidence.
 
 ## 1. Current Framing
 
@@ -47,10 +47,6 @@ The writing should not present the analysis as "WildChat plus LMSYS only." A cle
 | WildChat | Completed | 31,878 coding; 39,534 writing conversations | Broad public-chat anchor corpus. It shows high coding-oriented engagement and clear scaffolded-support associations. | Main evidence. |
 | LMSYS Chat-1M | Completed | 31,879 coding; 21,023 writing conversations | Broad public-chat replication corpus. It has lower scaffolded-support supply than WildChat, but still shows positive scaffolded-support associations with constructive participation. | Main evidence and cross-corpus replication. |
 | ShareChat strict-English | Completed strict-English check | 2,481 coding; 1,539 writing conversations | Smaller and more selected because conversations are shared publicly, but it provides a useful third public-chat check. Constructive engagement is higher than in WildChat/LMSYS, suggesting a more engaged public-share ecology rather than a post-processing artefact. | Report as robustness evidence, preferably in the main results or a compact robustness section rather than only as an internal note. |
-| SWE-chat | Completed pipeline check | 1,536 coding; 3 writing conversations | Useful coding-specific stress test with agentic software-engineering interactions. The writing side is essentially absent, so it cannot support the coding-versus-writing design. | Appendix or boundary-condition check only. |
-| ThoughtTrace | Completed all-LLM v3 filter, annotation and after-pipeline check | 56 coding; 61 writing conversations | Larger than the earlier v1/v2 check, but still too small and highly selected. S2 support is near-saturated in coding and very high in writing, leaving little non-scaffolded reference variation; several adjusted models show separation, non-convergence or unstable coefficients. | Internal feasibility/sanity check only, unless framed explicitly as a small specialized-corpus appendix. |
-
-The latest ThoughtTrace all-LLM v3 report is at `/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0602_thoughttrace_replacement/user_turn_pipeline_min4_all_llm_v3/latest/user_llm_dynamics/large_analysis/user_llm_report_thoughttrace_v2.md`.
 
 ## 4. Important LMSYS Interpretation Check
 
@@ -115,18 +111,7 @@ The revised main claim should not be:
 
 Scaffolding always increases overall engagement, or every corpus shows the same local temporal coupling.
 
-## 6. Boundary Checks From SWE-chat and ThoughtTrace
-
-SWE-chat and ThoughtTrace should not be blended into the main pooled analysis, but they are useful for explaining the limits of the dataset expansion.
-
-| Corpus | Useful observation | Limitation |
-| --- | --- | --- |
-| SWE-chat coding | 1,536 coding conversations; 32.36% cognitive engagement; 17.96% constructive engagement; 19.45% scaffolded assistant turns; scaffolded conversations have higher constructive ratios than non-scaffolded conversations (0.173 vs 0.133). | Only 3 writing conversations after filtering, so it cannot support coding-versus-writing comparisons. It is an agentic software-engineering corpus, not broad public chat. |
-| ThoughtTrace all-LLM v3 | 56 coding and 61 writing conversations after the updated all-LLM filter. Coding has high cognitive engagement (64.54%) and S2 turns are very frequent (85.71%). | Sample is small and scaffolded support is near-saturated, especially in coding. There is too little non-scaffolded reference variation for stable adjusted associations. |
-
-These checks can be described as corpus screening or boundary-condition analyses. They should not drive the main RQ narrative unless the paper explicitly adds a small appendix section on specialized corpora.
-
-## 7. Data-Use and Compliance Points to Clarify
+## 6. Data-Use and Compliance Points to Clarify
 
 This is not a legal opinion, but these are the analysis boundaries we can communicate clearly:
 
@@ -141,9 +126,9 @@ This is not a legal opinion, but these are the analysis boundaries we can commun
 
 The likely sensitive point is not longitudinal tracking, because the current temporal analysis is not longitudinal across users. The more important compliance question is whether aggregate analysis of public conversational logs, after filtering and paraphrased reporting, is allowed under the relevant dataset usage guidelines.
 
-## 8. Suggested Short Note to Collaborators
+## 7. Suggested Short Note to Collaborators
 
-We are revising the public-data version so that the core results are framed across three public conversational corpora rather than around a single dataset. The main reportable evidence comes from WildChat, LMSYS Chat-1M and ShareChat strict-English. SWE-chat and ThoughtTrace were processed with the same pipeline but are better treated as boundary checks because SWE-chat lacks a usable writing sample and ThoughtTrace is small with near-saturated scaffolding.
+We are revising the public-data version so that the core results are framed across three public conversational corpora rather than around a single dataset. The main reportable evidence comes from WildChat, LMSYS Chat-1M and ShareChat strict-English.
 
 The first result is that everyday LLM conversations contain observable learning-oriented engagement: across the six WildChat/LMSYS/ShareChat task settings, cognitive engagement appears in about 31.9% of user turns, while the stricter constructive form appears in about 4.9%. Constructive engagement is concentrated in intentional, coding-oriented and longer exchanges.
 
@@ -151,15 +136,13 @@ The second result is that scaffolded assistant support is associated with richer
 
 For data-use review, the key question is whether aggregate behavioural analysis of these public conversational datasets is compliant with the relevant usage guidelines. The current analysis should be easier to defend than longitudinal user analysis because it does not link conversations across users or estimate user-level trajectories; all temporal claims are confined to within-conversation ordering.
 
-## 9. Source Reports to Attach or Show
+## 8. Source Reports to Attach or Show
 
 - WildChat report: `/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0410_wildchat_userturn_pipeline/latest/user_llm_dynamics/large_analysis/user_llm_report_wildchat_v2.md`
 - LMSYS report: `/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0530_lmsys_chat_1m_replacement/user_turn_pipeline_min4/latest/user_llm_dynamics/large_analysis/user_llm_report_lmsys_v2.md`
 - ShareChat strict-English report: `/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0529_sharechat_replacement/user_turn_pipeline_min4_english_strict/latest/user_llm_dynamics/large_analysis/user_llm_report_sharechat_v2.md`
-- SWE-chat report: `/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0605_swe_chat_replacement/user_turn_pipeline_min4/latest/user_llm_dynamics/large_analysis/user_llm_report_swe_chat_v2.md`
-- ThoughtTrace all-LLM v3 report: `/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0602_thoughttrace_replacement/user_turn_pipeline_min4_all_llm_v3/latest/user_llm_dynamics/large_analysis/user_llm_report_thoughttrace_v2.md`
 
-## 10. Files Currently Relevant in the Paper Repo
+## 9. Files Currently Relevant in the Paper Repo
 
 - Main compiled PDF: `sn-article.pdf`
 - Dataset overview: `tables/table3.tex`

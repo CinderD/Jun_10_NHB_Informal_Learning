@@ -1,0 +1,19 @@
+scope,term,coef_log_odds,cluster_robust_se,z,p_value,odds_ratio,ci_low,ci_high,n_pairs,n_conversations,log_likelihood,se_type
+"six task settings, dataset fixed effects",Intercept,-4.223946,0.060183,-70.185161,0,0.014641,0.013012,0.016474,358572,127811,-62690.333176,conversation-cluster robust sandwich
+"six task settings, dataset fixed effects",scaffolded_support_S2,-0.057840,0.041230,-1.402869,0.160656,0.943801,0.870532,1.023236,358572,127811,-62690.333176,conversation-cluster robust sandwich
+"six task settings, dataset fixed effects",prior_user_constructive,2.109321,0.027107,77.814324,0,8.242643,7.816143,8.692417,358572,127811,-62690.333176,conversation-cluster robust sandwich
+"six task settings, dataset fixed effects",prior_user_active,0.902566,0.020486,44.057560,0,2.465922,2.368870,2.566950,358572,127811,-62690.333176,conversation-cluster robust sandwich
+"six task settings, dataset fixed effects",prior_user_passive,0.770396,0.083426,9.234436,2.59651e-20,2.160621,1.834698,2.544443,358572,127811,-62690.333176,conversation-cluster robust sandwich
+"six task settings, dataset fixed effects",prior_user_emotional,0.579312,0.075310,7.692333,1.44476e-14,1.784809,1.539878,2.068698,358572,127811,-62690.333176,conversation-cluster robust sandwich
+"six task settings, dataset fixed effects",prior_user_error,0.442136,0.030812,14.349529,1.07264e-46,1.556028,1.464838,1.652894,358572,127811,-62690.333176,conversation-cluster robust sandwich
+"six task settings, dataset fixed effects",intentional_framing,0.313566,0.020718,15.135268,9.47938e-52,1.368296,1.313847,1.425001,358572,127811,-62690.333176,conversation-cluster robust sandwich
+"six task settings, dataset fixed effects",coding_task,0.287403,0.058202,4.937982,7.89351e-07,1.332961,1.189254,1.494034,358572,127811,-62690.333176,conversation-cluster robust sandwich
+"six task settings, dataset fixed effects",log_assistant_turn_index,0.056470,0.011646,4.848937,1.24125e-06,1.058095,1.034217,1.082525,358572,127811,-62690.333176,conversation-cluster robust sandwich
+"six task settings, dataset fixed effects",M1,-0.232675,0.038897,-5.981755,2.20746e-09,0.792411,0.734244,0.855186,358572,127811,-62690.333176,conversation-cluster robust sandwich
+"six task settings, dataset fixed effects",M2,0.022185,0.036767,0.603397,0.546245,1.022433,0.951346,1.098832,358572,127811,-62690.333176,conversation-cluster robust sandwich
+"six task settings, dataset fixed effects",M3,-0.092589,0.032594,-2.840717,0.00450122,0.911568,0.855155,0.971702,358572,127811,-62690.333176,conversation-cluster robust sandwich
+"six task settings, dataset fixed effects",M4,0.765458,0.039406,19.425149,4.73013e-84,2.149979,1.990177,2.322614,358572,127811,-62690.333176,conversation-cluster robust sandwich
+"six task settings, dataset fixed effects",M5,-0.254382,0.034013,-7.478988,7.48969e-14,0.775395,0.725389,0.828849,358572,127811,-62690.333176,conversation-cluster robust sandwich
+"six task settings, dataset fixed effects",M6,-0.203162,0.064302,-3.159504,0.00158038,0.816146,0.719503,0.925769,358572,127811,-62690.333176,conversation-cluster robust sandwich
+"six task settings, dataset fixed effects",dataset_LMSYS,-0.128061,0.021716,-5.897028,3.70107e-09,0.879799,0.843138,0.918055,358572,127811,-62690.333176,conversation-cluster robust sandwich
+"six task settings, dataset fixed effects",dataset_ShareChat,0.736019,0.038289,19.222955,2.3783e-82,2.087608,1.936676,2.250302,358572,127811,-62690.333176,conversation-cluster robust sandwich

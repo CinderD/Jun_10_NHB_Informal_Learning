@@ -1,0 +1,17 @@
+scope,term,coef_log_odds,cluster_robust_se,z,p_value,odds_ratio,ci_low,ci_high,n_pairs,n_conversations,log_likelihood,se_type
+"WildChat only, no model fixed effects",Intercept,-4.106912,0.078722,-52.169988,0,0.016459,0.014105,0.019204,216256,71263,-38056.433523,conversation-cluster robust sandwich
+"WildChat only, no model fixed effects",scaffolded_support_S2,0.012450,0.049000,0.254076,0.799437,1.012528,0.919808,1.114594,216256,71263,-38056.433523,conversation-cluster robust sandwich
+"WildChat only, no model fixed effects",prior_user_constructive,2.182748,0.034324,63.591958,0,8.870646,8.293500,9.487956,216256,71263,-38056.433523,conversation-cluster robust sandwich
+"WildChat only, no model fixed effects",prior_user_active,1.015664,0.026316,38.595419,0,2.761197,2.622389,2.907353,216256,71263,-38056.433523,conversation-cluster robust sandwich
+"WildChat only, no model fixed effects",prior_user_passive,0.854003,0.114320,7.470316,8.00027e-14,2.349032,1.877492,2.939001,216256,71263,-38056.433523,conversation-cluster robust sandwich
+"WildChat only, no model fixed effects",prior_user_emotional,0.691248,0.097651,7.078783,1.45426e-12,1.996205,1.648478,2.417281,216256,71263,-38056.433523,conversation-cluster robust sandwich
+"WildChat only, no model fixed effects",prior_user_error,0.469117,0.036038,13.017190,9.77002e-39,1.598582,1.489562,1.715581,216256,71263,-38056.433523,conversation-cluster robust sandwich
+"WildChat only, no model fixed effects",intentional_framing,0.300963,0.026469,11.370566,5.86061e-30,1.351160,1.282851,1.423106,216256,71263,-38056.433523,conversation-cluster robust sandwich
+"WildChat only, no model fixed effects",coding_task,0.143790,0.072734,1.976929,0.0480496,1.154642,1.001232,1.331557,216256,71263,-38056.433523,conversation-cluster robust sandwich
+"WildChat only, no model fixed effects",log_assistant_turn_index,0.016753,0.014093,1.188730,0.234546,1.016894,0.989189,1.045375,216256,71263,-38056.433523,conversation-cluster robust sandwich
+"WildChat only, no model fixed effects",M1,-0.320181,0.048207,-6.641810,3.09855e-11,0.726017,0.660560,0.797961,216256,71263,-38056.433523,conversation-cluster robust sandwich
+"WildChat only, no model fixed effects",M2,0.059631,0.042266,1.410857,0.158287,1.061445,0.977057,1.153121,216256,71263,-38056.433523,conversation-cluster robust sandwich
+"WildChat only, no model fixed effects",M3,-0.091862,0.037376,-2.457780,0.0139799,0.912231,0.847793,0.981567,216256,71263,-38056.433523,conversation-cluster robust sandwich
+"WildChat only, no model fixed effects",M4,0.745125,0.045606,16.338416,5.26021e-60,2.106704,1.926563,2.303689,216256,71263,-38056.433523,conversation-cluster robust sandwich
+"WildChat only, no model fixed effects",M5,-0.238743,0.040605,-5.879698,4.11015e-09,0.787617,0.727364,0.852862,216256,71263,-38056.433523,conversation-cluster robust sandwich
+"WildChat only, no model fixed effects",M6,-0.008847,0.075726,-0.116830,0.906995,0.991192,0.854473,1.149786,216256,71263,-38056.433523,conversation-cluster robust sandwich

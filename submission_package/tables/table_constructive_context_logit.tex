@@ -1,0 +1,23 @@
+\begin{table*}[p]
+\scriptsize
+\centering
+\caption{\textbf{Conversation-level context model for constructive engagement.} The outcome is whether a conversation contains at least one constructive user turn. The logistic regression includes user framing, task ecology, conversation-length bucket and dataset fixed effects. Cells report odds ratios with 95\% confidence intervals and two-sided p values from conversation-robust standard errors. The reference category is unintentional framing, writing-oriented task, 2--3 user turns and WildChat.}\label{tab:constructive_context_logit}
+\setlength{\tabcolsep}{6pt}
+\renewcommand{\arraystretch}{1.08}
+\resizebox{0.62\textwidth}{!}{%
+\begin{tabular}{lc}
+\toprule
+Predictor & OR [95\% CI], p value \\
+\midrule
+Intentional framing & 3.03 [2.93, 3.13], $<.001$ \\
+Coding task ecology & 1.89 [1.71, 2.08], $<.001$ \\
+4--6 user turns & 2.07 [1.99, 2.15], $<.001$ \\
+7+ user turns & 3.58 [3.42, 3.74], $<.001$ \\
+LMSYS Chat & 0.70 [0.68, 0.73], $<.001$ \\
+ShareChat & 2.29 [2.12, 2.46], $<.001$ \\
+\midrule
+Conversations & 128,569 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

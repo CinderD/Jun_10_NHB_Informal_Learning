@@ -1,0 +1,25 @@
+\begin{table*}[p]
+\scriptsize
+\centering
+\caption{\textbf{Conversation-level constructive-rate sensitivity model.} The outcome is the number of constructive user turns out of total user turns in each conversation, modelled with a grouped-binomial logistic regression. The model includes user framing, task ecology, conversation-length bucket and dataset fixed effects, using user-turn counts as denominators to reduce the mechanical opportunity effect in any-constructive-turn outcomes. Cells report odds ratios with 95\% confidence intervals and two-sided p values from conversation-robust standard errors. The reference category is unintentional framing, writing-oriented task, 2--3 user turns and WildChat.}\label{tab:constructive_rate_context_logit}
+\setlength{\tabcolsep}{6pt}
+\renewcommand{\arraystretch}{1.08}
+\resizebox{0.64\textwidth}{!}{%
+\begin{tabular}{lc}
+\toprule
+Predictor & OR [95\% CI], p value \\
+\midrule
+Intentional framing & 2.78 [2.68, 2.88], $<.001$ \\
+Coding task ecology & 1.66 [1.47, 1.88], $<.001$ \\
+4--6 user turns & 1.13 [1.09, 1.18], $<.001$ \\
+7+ user turns & 1.06 [1.01, 1.11], .010 \\
+LMSYS Chat & 0.72 [0.69, 0.75], $<.001$ \\
+ShareChat & 2.30 [2.13, 2.50], $<.001$ \\
+\midrule
+Conversations & 128,569 \\
+User turns & 491,685 \\
+Constructive user turns & 24,227 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

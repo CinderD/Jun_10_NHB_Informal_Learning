@@ -1,0 +1,38 @@
+\begin{table*}[p]
+\scriptsize
+\centering
+\caption{\textbf{Analytic model families used in the main analyses.} The table summarizes descriptive and conversation-level model families. Adjusted models are interpreted as covariate-adjusted associations in naturalistic data, not as causal treatment-effect estimates.}
+\label{tab:model_specs}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.19\textwidth}>{\raggedright\arraybackslash}p{0.20\textwidth}>{\raggedright\arraybackslash}p{0.28\textwidth}>{\raggedright\arraybackslash}X}
+\toprule
+Analysis family & Unit and outcome & Main contrast or model & Scope \\
+\midrule
+Engagement prevalence & User turns and conversations; cognitive, constructive and emotional engagement indicators. & Descriptive proportions by task setting, task ecology and user framing. & Establishes where learning-oriented engagement is visible; no causal contrast is implied. \\
+Engagement composition & Cognitively engaged user turns; passive, active and constructive depth levels. & Composition of cognitive engagement within each task setting. & Motivates constructive engagement as the focal high-level outcome while preserving the broader cognitive-engagement hierarchy. \\
+Interaction depth & Conversations; at least one constructive user turn. & Probability of constructive engagement across behavioural-depth buckets. & Depth is interpreted as interactional opportunity and task development, not as a manipulated exposure. \\
+Scaffolding presence & Conversations; constructive-turn count and any constructive turn. & Setting-specific Poisson GLM for constructive-turn count with scaffolded-support presence and observed conversation-level context; no user-turn offset in the primary count model. Setting-specific logistic model for whether any constructive user turn occurs. Estimable covariates are listed in Supplementary Table~\ref{tab:setting_model_covariates}. & Adjusted estimates reduce measured compositional differences but remain associational because support is selected into by task difficulty and user state. Pearson overdispersion was checked and quasi-Poisson scaling preserved the direction of the Poisson estimates. \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+\begin{table*}[p]
+\scriptsize
+\centering
+\caption{\textbf{Additional analytic model families and robustness checks.} These analyses qualify the main associations by support form, temporal scale and available model or source metadata.}
+\label{tab:model_specs_additional}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.19\textwidth}>{\raggedright\arraybackslash}p{0.20\textwidth}>{\raggedright\arraybackslash}p{0.28\textwidth}>{\raggedright\arraybackslash}X}
+\toprule
+Analysis family & Unit and outcome & Main contrast or model & Scope \\
+\midrule
+Support-form associations & Scaffolded conversations; constructive engagement ratios. & Mean differences for conversations containing a given support-means label versus scaffolded conversations without that label, summarized by user framing and task ecology. & Descriptive because means labels are non-exclusive and can co-occur in the same assistant turn. \\
+Local temporal coupling & Adjacent assistant--user or user--assistant turn pairs; next constructive user turn or next scaffolded assistant turn. & Conditional probability contrasts around adjacent turns; detailed estimands are listed in Supplementary Table~\ref{tab:temporal_estimands}. & Interpreted as local ordering and state-dependent coupling, not as randomized support effects. \\
+Integrated adjacent-turn regression & Adjacent assistant--user turn pairs; next constructive user turn. & Logistic regression combining prior user state, scaffolded-support presence, support means, task/framing context, prior-state $\times$ support-form interactions and dataset or model/source fixed effects. & Tests whether the local coupling pattern depends jointly on user state and support form; standard errors are clustered by conversation. \\
+Coarse temporal boundary checks & Conversations containing scaffolded support; constructive engagement before and after the first scaffolded turn. & Mean after-minus-before contrast reported as an exploratory appendix check. & Not used as evidence of accumulation because the first scaffolded turn may be selected by difficulty, uncertainty or an already developing exchange. \\
+WildChat model robustness & WildChat conversations or turns; main prevalence, association and temporal outcomes. & Repetition across user-facing model snapshots or coarse model families. & Robustness summaries only; model labels are observational and may be confounded with time, user mix and task mix. \\
+\bottomrule
+\end{tabularx}
+\end{table*}

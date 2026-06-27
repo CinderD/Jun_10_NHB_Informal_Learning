@@ -1,0 +1,41 @@
+\begin{table*}[t]
+\scriptsize
+\centering
+\caption{\textbf{Domain-stratified human--human agreement for labels used in the main analyses.} Coding uses the latest three-round validation rerun over 658 task turns, 643 after deduplication; writing uses the latest writing-210 best-pipeline validation. These validation sets assess the coding and writing labelling logic and are not separately powered within each public corpus. F1, Matthews correlation coefficient (MCC) and Gwet's AC1 are reported per binary label. Coding MCC and AC1 are recomputed from the exported support and positive-count fields; writing metrics are from the exported agreement report. Rare degenerate labels with no positive cases in a validation set are omitted. Writing Active and \texttt{S1} labels are boundary-heavy and less stable; the primary Results rely on constructive engagement, scaffolded support and support-form labels, for which agreement is substantially stronger.}
+\label{tab:label_validation}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.08}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lllrrrr}
+\toprule
+Domain & Role & Label & F1 & MCC & Gwet AC1 & Support \\
+\midrule
+Coding & User & Active (\texttt{A}) & 0.75 & 0.72 & 0.87 & 315 \\
+Coding & User & Constructive (\texttt{C}) & 0.85 & 0.82 & 0.90 & 315 \\
+Coding & User & Passive (\texttt{P}) & 0.88 & 0.87 & 0.96 & 315 \\
+Coding & User & Emotional (\texttt{E}) & 0.83 & 0.82 & 0.97 & 315 \\
+Coding & Assistant & Non-scaffolded reference (\texttt{S1}) & 0.78 & 0.73 & 0.88 & 328 \\
+Coding & Assistant & Scaffolded support (\texttt{S2}) & 0.87 & 0.69 & 0.70 & 328 \\
+Coding & Assistant & Feedback (\texttt{M1}) & 0.90 & 0.89 & 0.95 & 328 \\
+Coding & Assistant & Hinting (\texttt{M2}) & 0.79 & 0.75 & 0.89 & 328 \\
+Coding & Assistant & Instructing (\texttt{M3}) & 0.81 & 0.77 & 0.92 & 328 \\
+Coding & Assistant & Explaining (\texttt{M4}) & 0.86 & 0.79 & 0.84 & 328 \\
+Coding & Assistant & Modeling (\texttt{M5}) & 0.84 & 0.79 & 0.87 & 328 \\
+Coding & Assistant & Questioning (\texttt{M6}) & 0.82 & 0.81 & 0.95 & 328 \\
+\midrule
+Writing & User & Active (\texttt{A}) & 0.38 & 0.38 & 0.69 & 90 \\
+Writing & User & Constructive (\texttt{C}) & 0.89 & 0.83 & 0.86 & 90 \\
+Writing & User & Passive (\texttt{P}) & 0.80 & 0.81 & 0.99 & 90 \\
+Writing & User & Emotional (\texttt{E}) & 0.67 & 0.65 & 0.96 & 90 \\
+Writing & Assistant & Non-scaffolded reference (\texttt{S1}) & 0.46 & 0.43 & 0.86 & 120 \\
+Writing & Assistant & Scaffolded support (\texttt{S2}) & 0.97 & 0.80 & 0.93 & 120 \\
+Writing & Assistant & Feedback (\texttt{M1}) & 0.89 & 0.80 & 0.80 & 120 \\
+Writing & Assistant & Hinting (\texttt{M2}) & 0.82 & 0.70 & 0.71 & 120 \\
+Writing & Assistant & Instructing (\texttt{M3}) & 0.71 & 0.67 & 0.86 & 120 \\
+Writing & Assistant & Explaining (\texttt{M4}) & 0.84 & 0.70 & 0.70 & 120 \\
+Writing & Assistant & Modeling (\texttt{M5}) & 0.94 & 0.91 & 0.95 & 120 \\
+Writing & Assistant & Questioning (\texttt{M6}) & 0.96 & 0.96 & 0.99 & 120 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

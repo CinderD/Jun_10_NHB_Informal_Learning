@@ -1,0 +1,21 @@
+\begin{sidewaystable}[p]
+\fontsize{7.2pt}{8.4pt}\selectfont
+\centering
+\caption{\textbf{Filtering and classifier validation audit.} The table separates corpus-construction filters from analysis labels and reports the strongest validation or audit evidence available in the current artifacts. Metrics from the writing-210 validation set are domain-level checks, not corpus-stratified validation for each public corpus.}
+\label{tab:filter_classifier_validation}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabularx}{\textheight}{>{\raggedright\arraybackslash}p{0.15\textheight}>{\raggedright\arraybackslash}p{0.24\textheight}>{\raggedright\arraybackslash}p{0.25\textheight}>{\raggedright\arraybackslash}X}
+\toprule
+Variable or filter & How it was assigned & Validation or audit evidence & Interpretation boundary \\
+\midrule
+Task ecology: coding versus writing & LLM-assisted semantic task filters selected conversations matching coding-oriented or writing-oriented use after minimum-turn screening. The filters were English-oriented and used a score threshold of 0.70 after keyword prefiltering where applicable. & The filtering ledger records retained counts and thresholds for each corpus (Supplementary Table~\ref{tab:corpus_filtering_pipeline}). In the writing-210 validation artifacts, the conversation-topic field showed high human--LLM agreement (F1=0.973, MCC=0.872, Gwet AC1=0.936; support=210), but this is a domain-level check rather than a full cross-corpus task-filter audit. & Task ecology is treated as an analytic classification of conversation content, not native dataset metadata or randomized assignment. \\
+\addlinespace
+User framing: intentional versus unintentional & Conversation-level LLM-assisted \texttt{learning\_intent} annotation marked conversations explicitly oriented toward understanding, exploration or learning versus those without explicit learning-oriented framing. & The writing-210 validation artifacts contain a learning-intent check, but the reviewed writing sample had no positive human cases for this binary label, so the high apparent agreement is not prevalence-informative. The manuscript therefore uses user framing as an observed contextual label and reports robustness with dataset fixed effects rather than claiming corpus-specific classifier accuracy. & User framing is a measured textual signal of explicit learning orientation, not a stable learner trait, motivation measure or causal exposure. \\
+\addlinespace
+Language filtering & WildChat and LMSYS Chat used English-oriented source or semantic filters. ShareChat received an additional strict-English screen after task filtering, retaining only records with final conversation-level language flag \texttt{English}. & The ShareChat strict-English audit recorded zero malformed JSON files and explicit exclusions after task filtering: 1,013 coding and 124 writing conversations were removed by the final language screen. In the writing-210 validation artifacts, language showed near-perfect agreement (F1=0.998, MCC=0.705, Gwet AC1=0.995; support=210), with MCC lower because nearly all reviewed records were English. & The term strict-English is used only for ShareChat's final post-task language screen. Mixed or non-English ShareChat records were excluded from the main analytic sample. \\
+\addlinespace
+Turn-level labels: constructive engagement and scaffolded support & Production annotation used the final codebook, parser checks and post-processing rules. Constructive engagement and scaffolded support are the primary user-side outcome and assistant-side exposure. & Domain-stratified human validation shows strong agreement for constructive engagement (coding F1=0.85; writing F1=0.89) and scaffolded support (coding F1=0.87; writing F1=0.97), with full per-label metrics in Supplementary Table~\ref{tab:label_validation}. & These labels support the main association and temporal analyses. Validation is task-domain stratified, not independently powered within every public corpus. \\
+\bottomrule
+\end{tabularx}
+\end{sidewaystable}

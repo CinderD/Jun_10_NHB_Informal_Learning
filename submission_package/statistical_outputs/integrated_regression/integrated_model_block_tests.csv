@@ -1,0 +1,4 @@
+scope,comparison,lr_chi2,df,p_value,n_pairs,notes
+six task settings,model/source fixed effects added beyond dataset fixed effects,714.356282,41,8.95719e-124,358572,WildChat uses chat_model; LMSYS model and ShareChat assistant/source family are recovered from conversation identifiers.
+WildChat only,model fixed effects added to integrated adjacent-turn logit,553.228122,13,7.04399e-110,216256,WildChat uses exact chat_model labels retained in the production outputs.
+six task settings,dataset fixed-effects baseline,0,0,,358572,Dataset fixed effects are retained as the primary pooled adjustment because ShareChat identifiers provide source family rather than exact model version.

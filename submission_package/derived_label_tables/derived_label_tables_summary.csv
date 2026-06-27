@@ -1,0 +1,7 @@
+dataset,task,setting,analysis_scope,conversations,user_turns,assistant_turns,user_to_assistant_pairs,assistant_to_user_pairs,source_artifact
+WildChat,coding,WildChat coding,main_six_setting,31878,124073,124623,124073,92322,"WildChat final production user-turn pipeline, 2026-04-11"
+WildChat,writing,WildChat writing,main_six_setting,39534,163705,164824,163705,124388,"WildChat final production user-turn pipeline, 2026-04-11"
+LMSYS Chat,coding,LMSYS coding,main_six_setting,32114,107065,105174,105130,74147,"LMSYS Chat final production user-turn pipeline, 2026-06-24"
+LMSYS Chat,writing,LMSYS writing,main_six_setting,21023,77906,76279,76271,56182,"LMSYS Chat final production user-turn pipeline, 2026-06-24"
+ShareChat,coding,ShareChat coding,main_six_setting,2481,11541,11522,11511,9062,"ShareChat strict-English final production user-turn pipeline, 2026-06-02"
+ShareChat,writing,ShareChat writing,main_six_setting,1539,7395,7363,7358,5849,"ShareChat strict-English final production user-turn pipeline, 2026-06-02"

@@ -1,0 +1,4 @@
+scope,comparison,lr_chi2,df,p_value,n_pairs,n_conversations,notes
+"six task settings, dataset FE",prior user state x support forms M1-M6 added beyond main effects,305.402181,18,3.72548e-54,358572,127811,Tests whether support-form coefficients vary by immediately preceding user engagement state.
+"six task settings, model/source FE",prior user state x support forms M1-M6 added beyond main effects,297.347751,18,1.69029e-52,358572,127811,Tests whether support-form coefficients vary by immediately preceding user engagement state.
+"WildChat only, model FE",prior user state x support forms M1-M6 added beyond main effects,185.969712,18,6.27436e-30,216256,71263,Tests whether support-form coefficients vary by immediately preceding user engagement state.

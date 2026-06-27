@@ -1,0 +1,25 @@
+\begin{table*}[t]
+\scriptsize
+\centering
+\caption{\textbf{Operational examples for turn-level labels.} Examples are de-identified and paraphrased from validation review patterns; they illustrate the decision rule rather than reproducing raw conversation text.}
+\label{tab:label_examples}
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.02}
+\begin{tabularx}{\textwidth}{p{0.14\textwidth}p{0.31\textwidth}X}
+\toprule
+Construct & Paraphrased turn & Annotation rationale \\
+\midrule
+\texttt{P} passive user engagement & ``Thanks, that makes sense.'' & Minimal uptake or acknowledgement without new reasoning, evaluation or task transformation. \\
+\texttt{A} active user engagement & ``Can you convert that answer into a command I can run in my setup?'' & Task-relevant follow-up or manipulation of supplied information, but without elaborating or testing an idea. \\
+\texttt{C} constructive user engagement & ``If the cache expires before the asynchronous callback returns, would the same race condition still happen?'' & The user tests an implication, boundary condition or transfer of the prior explanation. \\
+\texttt{S1} non-scaffolded reference & ``Here is the requested function/email draft.'' & The assistant primarily completes the requested deliverable without regulating the user's process. \\
+\texttt{S2} scaffolded support & ``First isolate the failing step; that will show whether the issue is parsing or state management.'' & The assistant structures the user's process and leaves diagnostic or revision work with the user. \\
+\texttt{M1} feedback & ``Your diagnosis is close; the bug is in the index offset, not the loop boundary.'' & Evaluative feedback on the user's prior attempt or understanding. \\
+\texttt{M2} hinting & ``Check the parser log around the first malformed token before changing the model.'' & A cue or partial path that helps the user proceed without fully resolving the task. \\
+\texttt{M3} instructing & ``First split the condition into two branches, then add a regression test.'' & Explicit steps or strategy that organizes the user's work. \\
+\texttt{M4} explaining & ``The exception occurs because the event loop is already running, so a nested call cannot acquire it.'' & A rationale or mechanism that clarifies why the issue occurs. \\
+\texttt{M5} modeling & ``A small pattern you can adapt is: validate input, normalize it, then pass it to the writer.'' & A sample approach intended to be emulated or adapted rather than merely copied. \\
+\texttt{M6} questioning & ``Which constraint matters more here: preserving tone or shortening the paragraph?'' & A question that advances problem solving or reflection. \\
+\bottomrule
+\end{tabularx}
+\end{table*}

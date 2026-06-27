@@ -1,6 +1,6 @@
 # Integrated Regression and Significance Report
 
-Data scope: six main task settings: WildChat, LMSYS Chat and ShareChat coding/writing. SWE-chat and ThoughtTrace are not included in the main pooled model.
+Data scope: six main task settings: WildChat, LMSYS Chat and ShareChat coding/writing.
 
 Model-label check: `chat_model` is complete for WildChat. LMSYS and ShareChat production columns are empty, but the conversation identifiers retain recoverable information: LMSYS contains model name and ShareChat contains public assistant/source family. The primary pooled model uses dataset fixed effects; a sensitivity replaces them with model/source fixed effects.
 

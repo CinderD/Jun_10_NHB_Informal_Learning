@@ -1,0 +1,19 @@
+setting,contrast,estimate,estimate_label,ci_low,ci_high,p_value,effect_size,method,n_conversations
+WC coding,constructive_ratio_has_s2_minus_no_s2,4.5640,percentage-point difference,4.1472,4.9872,1.82737e-99,4.5640 pp,"conversation bootstrap, weighted by user turns",31878
+WC coding,post_answer_depth_has_s2_minus_no_s2,2.2259,turn difference,2.1065,2.3468,1.70734e-300,2.2259 turns,conversation bootstrap,31878
+LMSYS coding,constructive_ratio_has_s2_minus_no_s2,2.5043,percentage-point difference,2.1913,2.8303,5.37881e-53,2.5043 pp,"conversation bootstrap, weighted by user turns",32114
+LMSYS coding,post_answer_depth_has_s2_minus_no_s2,1.4214,turn difference,1.3362,1.5160,4.12801e-207,1.4214 turns,conversation bootstrap,32114
+SC coding,constructive_ratio_has_s2_minus_no_s2,7.3392,percentage-point difference,5.2917,9.2747,1.26051e-12,7.3392 pp,"conversation bootstrap, weighted by user turns",2481
+SC coding,post_answer_depth_has_s2_minus_no_s2,3.3617,turn difference,2.6850,4.0114,3.11658e-23,3.3617 turns,conversation bootstrap,2481
+WC writing,constructive_ratio_has_s2_minus_no_s2,0.9921,percentage-point difference,0.8172,1.1630,7.04482e-30,0.9921 pp,"conversation bootstrap, weighted by user turns",39534
+WC writing,post_answer_depth_has_s2_minus_no_s2,3.1268,turn difference,2.9593,3.3027,5.16574e-261,3.1268 turns,conversation bootstrap,39534
+LMSYS writing,constructive_ratio_has_s2_minus_no_s2,1.0874,percentage-point difference,0.8671,1.3135,2.59217e-21,1.0874 pp,"conversation bootstrap, weighted by user turns",21023
+LMSYS writing,post_answer_depth_has_s2_minus_no_s2,2.0999,turn difference,1.9063,2.2810,1.6131e-107,2.0999 turns,conversation bootstrap,21023
+SC writing,constructive_ratio_has_s2_minus_no_s2,3.1994,percentage-point difference,1.5544,4.8925,0.000268478,3.1994 pp,"conversation bootstrap, weighted by user turns",1539
+SC writing,post_answer_depth_has_s2_minus_no_s2,3.3848,turn difference,1.9213,4.6377,1.01313e-06,3.3848 turns,conversation bootstrap,1539
+WC coding,adjacent_next_constructive_s2_minus_s1,2.6756,percentage-point difference,2.2211,3.0872,1.20369e-33,2.6756 pp,conversation-cluster bootstrap over A2U pairs,31809
+LMSYS coding,adjacent_next_constructive_s2_minus_s1,2.0051,percentage-point difference,1.5410,2.4977,2.0944e-16,2.0051 pp,conversation-cluster bootstrap over A2U pairs,31606
+SC coding,adjacent_next_constructive_s2_minus_s1,6.2097,percentage-point difference,4.3534,8.1034,7.13412e-11,6.2097 pp,conversation-cluster bootstrap over A2U pairs,2474
+WC writing,adjacent_next_constructive_s2_minus_s1,1.1281,percentage-point difference,0.8772,1.4115,2.58993e-16,1.1281 pp,conversation-cluster bootstrap over A2U pairs,39455
+LMSYS writing,adjacent_next_constructive_s2_minus_s1,0.2659,percentage-point difference,-0.0051,0.5556,0.0605884,0.2659 pp,conversation-cluster bootstrap over A2U pairs,20936
+SC writing,adjacent_next_constructive_s2_minus_s1,3.3472,percentage-point difference,0.8030,6.6183,0.0248877,3.3472 pp,conversation-cluster bootstrap over A2U pairs,1537

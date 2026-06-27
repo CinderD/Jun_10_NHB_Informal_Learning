@@ -1,0 +1,30 @@
+\begin{table*}[p]
+\tiny
+\centering
+\caption{\textbf{Setting-level integrated adjacent-turn models.} Each column reports a separate within-setting logistic regression for whether the next user turn is constructive. The scaffolded-support row comes from a broad scaffolded-support model. Support-form rows come from a decomposed model that includes broad scaffolded-support presence and co-occurring M1--M6 forms, so form coefficients compare variation within scaffolded support rather than replacing the broad scaffolded-support contrast. All models include prior user state, intentional framing, assistant-turn index and recoverable model/source fixed effects where available. Cells report odds ratios with 95\% confidence intervals and two-sided p values from conversation-cluster robust standard errors.}\label{tab:setting_level_adjacent_models}
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.12}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccccc}
+\toprule
+Predictor & WC coding & LMSYS coding & SC coding & WC writing & LMSYS writing & SC writing \\
+\midrule
+A2U pairs & 92,042 & 71,910 & 9,001 & 124,214 & 55,580 & 5,825 \\
+Conversations & 31,809 & 31,606 & 2,474 & 39,455 & 20,936 & 1,537 \\
+Model/source FE count & 13 & 23 & 4 & 13 & 23 & 3 \\
+\midrule
+Scaffolded support & \makecell{1.13 [1.08, 1.19]\\$<.001$} & \makecell{1.25 [1.16, 1.34]\\$<.001$} & \makecell{1.24 [1.09, 1.42]\\.001} & \makecell{1.57 [1.38, 1.78]\\$<.001$} & \makecell{1.04 [0.86, 1.26]\\.679} & \makecell{1.34 [0.98, 1.85]\\.068} \\
+Prior user constructive & \makecell{5.20 [4.84, 5.59]\\$<.001$} & \makecell{6.01 [5.43, 6.66]\\$<.001$} & \makecell{4.13 [3.46, 4.93]\\$<.001$} & \makecell{8.28 [6.73, 10.19]\\$<.001$} & \makecell{11.89 [9.10, 15.54]\\$<.001$} & \makecell{6.23 [4.43, 8.76]\\$<.001$} \\
+Prior user active & \makecell{1.67 [1.57, 1.76]\\$<.001$} & \makecell{1.58 [1.46, 1.71]\\$<.001$} & \makecell{1.56 [1.32, 1.83]\\$<.001$} & \makecell{1.91 [1.68, 2.18]\\$<.001$} & \makecell{2.18 [1.80, 2.64]\\$<.001$} & \makecell{1.47 [1.07, 2.01]\\.017} \\
+Prior user passive & \makecell{2.19 [1.65, 2.92]\\$<.001$} & \makecell{2.01 [1.38, 2.92]\\$<.001$} & \makecell{1.82 [1.25, 2.66]\\.002} & \makecell{2.49 [1.69, 3.65]\\$<.001$} & \makecell{2.32 [1.29, 4.17]\\.005} & \makecell{0.86 [0.40, 1.84]\\.703} \\
+Intentional framing & \makecell{1.57 [1.49, 1.66]\\$<.001$} & \makecell{1.46 [1.35, 1.58]\\$<.001$} & \makecell{1.57 [1.34, 1.83]\\$<.001$} & \makecell{1.02 [0.89, 1.16]\\.798} & \makecell{0.86 [0.70, 1.06]\\.150} & \makecell{1.37 [0.93, 2.02]\\.107} \\
+M1 feedback & \makecell{1.19 [1.07, 1.31]\\.001} & \makecell{1.21 [0.98, 1.50]\\.079} & \makecell{1.28 [1.03, 1.60]\\.025} & \makecell{0.69 [0.53, 0.91]\\.008} & \makecell{0.81 [0.51, 1.31]\\.397} & \makecell{1.74 [1.12, 2.71]\\.013} \\
+M2 hinting & \makecell{1.04 [0.95, 1.14]\\.429} & \makecell{0.90 [0.72, 1.11]\\.332} & \makecell{0.85 [0.65, 1.10]\\.209} & \makecell{1.52 [1.20, 1.93]\\$<.001$} & \makecell{1.63 [1.09, 2.44]\\.018} & \makecell{0.76 [0.45, 1.29]\\.314} \\
+M3 instructing & \makecell{0.89 [0.83, 0.96]\\.003} & \makecell{0.84 [0.69, 1.04]\\.103} & \makecell{0.93 [0.77, 1.13]\\.491} & \makecell{1.36 [1.04, 1.78]\\.027} & \makecell{1.06 [0.71, 1.58]\\.779} & \makecell{0.94 [0.45, 1.94]\\.860} \\
+M4 explaining & \makecell{1.21 [1.09, 1.35]\\$<.001$} & \makecell{1.36 [1.08, 1.72]\\.008} & \makecell{1.77 [1.35, 2.33]\\$<.001$} & \makecell{1.81 [1.40, 2.34]\\$<.001$} & \makecell{1.12 [0.75, 1.68]\\.570} & \makecell{1.09 [0.58, 2.06]\\.789} \\
+M5 modelling & \makecell{0.86 [0.80, 0.93]\\$<.001$} & \makecell{0.73 [0.63, 0.86]\\$<.001$} & \makecell{0.76 [0.60, 0.96]\\.021} & \makecell{0.69 [0.47, 1.01]\\.055} & \makecell{1.04 [0.64, 1.68]\\.872} & \makecell{1.57 [0.94, 2.61]\\.084} \\
+M6 questioning & \makecell{0.73 [0.62, 0.86]\\$<.001$} & \makecell{0.30 [0.21, 0.44]\\$<.001$} & \makecell{0.70 [0.54, 0.90]\\.006} & \makecell{1.13 [0.74, 1.72]\\.567} & \makecell{0.66 [0.36, 1.21]\\.179} & \makecell{1.66 [0.90, 3.08]\\.106} \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

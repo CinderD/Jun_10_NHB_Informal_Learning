@@ -29,7 +29,7 @@ LMSYS Chat
 & User framing came from the downstream \texttt{learning\_intent} annotation. The conversion log also records redaction, moderation and model/source metadata where available; these fields were retained for robustness checks rather than used as task labels. \\
 \addlinespace
 ShareChat
-& ShareChat Hugging Face release. The local Copilot-style conversion produced 129,584 conversations and 1,196,969 message rows after role mapping validation (\texttt{user}=600,222; \texttt{bot}=596,747).
+& ShareChat Hugging Face release. The local role-normalization conversion produced 129,584 conversations and 1,196,969 message rows after role mapping validation (\texttt{user}=600,222; \texttt{bot}=596,747).
 & The first screen retained 69,915 conversations with at least four message turns. After task filtering, a strict-English screen retained only conversations with final conversation-level language flag \texttt{English}; conversations flagged non-English or mixed/non-English by this final flag were excluded.
 & The same LLM-assisted semantic filters selected 3,494 coding and 1,663 writing conversations before the strict-English screen. The strict-English screen retained 2,481 of 3,494 coding conversations and 1,539 of 1,663 writing conversations.
 & 2,481 coding; 1,539 writing.
