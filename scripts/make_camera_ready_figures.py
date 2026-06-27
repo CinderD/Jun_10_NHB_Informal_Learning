@@ -980,6 +980,8 @@ def make_figure5() -> None:
     rose = "#B96B78"
     rose_err = "#8F4F5A"
     guide = "#CDD4DB"
+    feedback_color = "#A8753D"
+    explaining_color = "#4E7896"
 
     def _pp(val: float) -> str:
         return f"{val:+.1f}".replace("-", "−") + " pp"
@@ -997,7 +999,7 @@ def make_figure5() -> None:
         figure=fig,
         height_ratios=[1.0, 0.98],
         width_ratios=[1.10, 0.93, 0.93, 0.93],
-        hspace=0.86,
+        hspace=1.04,
         wspace=0.64,
     )
     axa = fig.add_subplot(gs[0, 0])
@@ -1112,8 +1114,8 @@ def make_figure5() -> None:
 
     y2 = np.arange(len(form_states))
     form_specs = [
-        (axd_m1, "M1 feedback", ref_err, True),
-        (axd_m4, "M4 explaining", scaf_color, False),
+        (axd_m1, "M1 feedback", feedback_color, True),
+        (axd_m4, "M4 explaining", explaining_color, False),
     ]
     for ax, label, color, show_y in form_specs:
         vals = form_or[label]
@@ -1183,14 +1185,14 @@ def make_figure5() -> None:
         legend_handles,
         ["non-scaffolded reference", "scaffolded support"],
         loc="center",
-        bbox_to_anchor=(b_center, b_bottom - 0.102),
+        bbox_to_anchor=(b_center, b_bottom - 0.045),
         frameon=False,
         ncol=2,
         handletextpad=0.4,
         columnspacing=0.75,
         fontsize=7.0,
     )
-    fig.text(b_center, b_bottom - 0.060, "P(next constructive turn) (%)", ha="center", fontsize=8.0)
+    fig.text(b_center, b_bottom - 0.080, "P(next constructive turn) (%)", ha="center", fontsize=8.0)
 
     fig.text(
         0.50,
