@@ -24,7 +24,7 @@ Updated `sections/02-results_updated.tex` and `sections/03-discussion.tex` to ex
 
 Primary latest coding agreement rerun:
 
-`/data/zixin/msra/shareable_project/verification/scripts/shareable_project/verification/rerun_outputs/sanity_3rounds_600plus_20260129/`
+`<local-msra-root>/shareable_project/verification/scripts/shareable_project/verification/rerun_outputs/sanity_3rounds_600plus_20260129/`
 
 Key files:
 
@@ -40,7 +40,7 @@ Bundle: `../apply/coding/final_bundle_3rounds_600plus_20251222`
 
 Tasks: 658 total, 643 after deduplication.
 
-Human--human comparison used in the manuscript: `zixin_vs_Haotian_3rounds`.
+Human--human comparison used in the manuscript: two-reviewer comparison from the three-round coding audit.
 
 Main human--human label agreement values used in `tables/table_label_validation.tex`:
 
@@ -63,17 +63,17 @@ Note: `agreement_stats.csv` directly exports F1, kappa, accuracy, support, and p
 
 Additional coding rerun checked:
 
-`/data/zixin/msra/shareable_project/verification/rerun_outputs/sanity_combined_repicked200_new400_20260129/`
+`<local-msra-root>/shareable_project/verification/rerun_outputs/sanity_combined_repicked200_new400_20260129/`
 
 This rerun combines the repicked-200 and new-400 validation directories. It has 458 total tasks and 443 after deduplication. It is consistent with the three-round rerun but is not the main manuscript source because the three-round run is the fuller latest coding validation set.
 
 Coding bundle provenance:
 
-`/data/zixin/msra/shareable_project/verification/apply/coding/final_bundle_3rounds_600plus_20251222/README.md`
+`<local-msra-root>/shareable_project/verification/apply/coding/final_bundle_3rounds_600plus_20251222/README.md`
 
 Coding prompt file:
 
-`/data/zixin/msra/shareable_project/labeling_scripts/apply/coding/v12_prompt_builders.py`
+`<local-msra-root>/shareable_project/labeling_scripts/apply/coding/v12_prompt_builders.py`
 
 Coding prompt version found in file:
 
@@ -83,7 +83,7 @@ Coding prompt version found in file:
 
 Primary latest writing agreement directory:
 
-`/data/zixin/msra/shareable_project/verification/apply/writing/verification_writing210_best_pipeline/`
+`<local-msra-root>/shareable_project/verification/apply/writing/verification_writing210_best_pipeline/`
 
 Key files:
 
@@ -99,9 +99,9 @@ Run metadata from `AGREEMENT_RUN_INFO.md`:
 
 Script: `verification/scripts/analyze_agreement_writing210_revised.py`
 
-Zixin annotations: `verification/apply/writing/agreement_writing_20260123_prompt_r17_full/annotated_zixin.json`
+First human-review annotation artifact: retained locally.
 
-Haotian annotations: `verification/apply/writing/agreement_writing_20260123_prompt_r17_full/annotated_haotian.json`
+Second human-review annotation artifact: retained locally.
 
 LLM output: `verification/apply/writing/agreement_writing_20260123_prompt_r17_full/llm_with_turn_index__best_pipeline.json`
 
@@ -119,7 +119,7 @@ The best pipeline includes these post-processing stages:
 
 `postprocess_llm_user_emotional_strict.py`
 
-Human--human comparison used in the manuscript: `zixin_vs_Haotian` using the final Haotian-confirmed writing-210 labels.
+Human--human comparison used in the manuscript: two-reviewer comparison using the final human-confirmed writing-210 labels.
 
 Main writing label validation values used in `tables/table_label_validation.tex`:
 
@@ -140,13 +140,13 @@ Main writing label validation values used in `tables/table_label_validation.tex`
 
 Internal provenance artifacts:
 
-`/data/zixin/msra/shareable_project/verification/apply/writing/agreement_writing_20260123_prompt_r17_full/post_discussion_minimal/`
+`<local-msra-root>/shareable_project/verification/apply/writing/agreement_writing_20260123_prompt_r17_full/post_discussion_minimal/`
 
-This folder retains the derived final Haotian file, the label-correction ledger and the recomputed agreement outputs. Original Zixin and Haotian exports were not overwritten. The Haotian-confirmed pass made 21 label-level updates: 9 for `C_A`, 5 for `S1`, 6 for `S2_Intent_I3` and 1 for `E`.
+This folder retains the derived final human-confirmed file, the label-correction ledger and the recomputed agreement outputs. Original reviewer exports were not overwritten. The human-confirmed pass made 21 label-level updates: 9 for `C_A`, 5 for `S1`, 6 for `S2_Intent_I3` and 1 for `E`.
 
 Writing prompt file:
 
-`/data/zixin/msra/shareable_project/labeling_scripts/apply/writing/v12_prompt_builders_writing_topic.py`
+`<local-msra-root>/shareable_project/labeling_scripts/apply/writing/v12_prompt_builders_writing_topic.py`
 
 Writing prompt version found in file:
 
@@ -154,7 +154,7 @@ Writing prompt version found in file:
 
 Model/config provenance:
 
-`/data/zixin/msra/shareable_project/verification/apply/writing/verification_writing210_best_pipeline/API_CONFIG_SUMMARY.md`
+`<local-msra-root>/shareable_project/verification/apply/writing/verification_writing210_best_pipeline/API_CONFIG_SUMMARY.md`
 
 This file documents the deployment/model configuration used for the writing validation pipeline. The manuscript/source notes should not reproduce the API key contained in that local file.
 
@@ -162,17 +162,17 @@ This file documents the deployment/model configuration used for the writing vali
 
 Final manual review directory:
 
-`/data/zixin/msra/labellingTool/public/data/user_turn_final_label_check/`
+`<local-msra-root>/labellingTool/public/data/user_turn_final_label_check/`
 
 ## User-Framing Validation Sources
 
-Final Zixin human-verified user-framing audit:
+Final human-verified user-framing audit:
 
-`/data/zixin/msra/labellingTool/public/data/user_framing_validation_450_20260628_zixin_human_verified.json`
+Local audit artifact; public source-data release includes aggregate metrics only.
 
 Metrics:
 
-`/data/zixin/msra/labellingTool/public/data/user_framing_validation_results/user_framing_validation_450_20260628_zixin_human_verified_metrics.csv`
+`source_data/validation/user_framing_validation_450_human_confirmed_metrics.csv`
 
 Sampling design:
 
@@ -195,6 +195,38 @@ Interpretation:
 
 This audit fills the earlier gap in which the writing-210 learning-intent check had no positive human cases. Because the audit intentionally oversampled production-positive cases, it validates the user-framing label boundary but should not be used to estimate population prevalence.
 
+## Assistant Production-Label Validation Sources
+
+Human-confirmed assistant-side production-label audit:
+
+`<local-msra-root>/labellingTool/public/data/assistant_production_validation_180_20260629_codex_prefilled.json`
+
+Metrics:
+
+`<local-msra-root>/labellingTool/public/data/assistant_production_validation_results/assistant_production_validation_per_label_metrics.csv`
+
+Sampling design:
+
+- 180 assistant turns.
+- 30 cases from each corpus-by-task setting.
+- Scaffolded-support and support-form positives were deliberately oversampled.
+
+Key overall metrics against production labels:
+
+| Label | F1 | MCC | Gwet AC1 |
+|---|---:|---:|---:|
+| Scaffolding | 0.912 | 0.590 | 0.791 |
+| M1 feedback | 0.938 | 0.918 | 0.945 |
+| M2 hinting | 0.909 | 0.880 | 0.930 |
+| M3 instructing | 0.717 | 0.600 | 0.715 |
+| M4 explaining | 0.883 | 0.772 | 0.747 |
+| M5 modelling | 0.724 | 0.631 | 0.642 |
+| M6 questioning | 0.691 | 0.675 | 0.873 |
+
+Interpretation:
+
+The audit validates assistant scaffolded-support and support-form label boundaries. Because it intentionally oversampled positive support labels, it should not be used to estimate population prevalence.
+
 Files:
 
 `review_wildchat_pc_final_coding_review_100_2026-03-28.json`
@@ -205,9 +237,9 @@ Each file contains 100 reviewed WildChat user-turn examples after the update pas
 
 WildChat user-turn update reports:
 
-`/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0410_wildchat_userturn_pipeline/reports/user_turn_round2_final_coding_report.json`
+`<local-msra-root>/shareable_project/investigations/level_analysis/outputs/0410_wildchat_userturn_pipeline/reports/user_turn_round2_final_coding_report.json`
 
-`/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0410_wildchat_userturn_pipeline/reports/user_turn_round2_final_writing_report.json`
+`<local-msra-root>/shareable_project/investigations/level_analysis/outputs/0410_wildchat_userturn_pipeline/reports/user_turn_round2_final_writing_report.json`
 
 Coding update pass:
 
@@ -221,15 +253,15 @@ Writing update pass:
 
 Writing disagreement CSVs are available under:
 
-`/data/zixin/msra/shareable_project/verification/apply/writing/verification_writing210_best_pipeline/agreement_revised_correct/`
+`<local-msra-root>/shareable_project/verification/apply/writing/verification_writing210_best_pipeline/agreement_revised_correct/`
 
 Subdirectories include:
 
-`zixin_vs_haotian_disagreements/`
+`human_review_pair_disagreements/`
 
-`zixin_vs_llm_disagreements/`
+`human_review_vs_llm_disagreements/`
 
-`haotian_vs_llm_disagreements/`
+`second_human_review_vs_llm_disagreements/`
 
 `llm_vs_consensus_disagreements/`
 
@@ -239,7 +271,7 @@ These files provide per-label disagreement case indices for error inspection. Th
 
 Main refreshed Level 1--4 outputs:
 
-`/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0406_latest/`
+`<local-msra-root>/shareable_project/investigations/level_analysis/outputs/0406_latest/`
 
 Key files include:
 
@@ -253,11 +285,11 @@ Key files include:
 
 Figure and table data sources for the current result figures:
 
-`/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0419_nhb_spec_figures/`
+`<local-msra-root>/shareable_project/investigations/level_analysis/outputs/0419_nhb_spec_figures/`
 
 WildChat model snapshot/family robustness outputs:
 
-`/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0420_wildchat_modeltype_figures/`
+`<local-msra-root>/shareable_project/investigations/level_analysis/outputs/0420_wildchat_modeltype_figures/`
 
 ## Figure Source Note
 

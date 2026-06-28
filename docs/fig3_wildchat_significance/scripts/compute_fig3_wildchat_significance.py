@@ -23,28 +23,28 @@ from scipy.special import expit
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT_DIR = ROOT / "outputs"
 FIG_DIR = ROOT / "figures"
+_analysis_outputs_root = os.environ.get("MSRA_ANALYSIS_OUTPUTS_ROOT")
+if not _analysis_outputs_root:
+    raise RuntimeError("Set MSRA_ANALYSIS_OUTPUTS_ROOT to the level-analysis outputs directory.")
+ANALYSIS_OUTPUTS_ROOT = Path(_analysis_outputs_root)
 
 DATA_FILES = {
-    "WC coding": Path(
-        "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/"
+    "WC coding": ANALYSIS_OUTPUTS_ROOT / (
         "0410_wildchat_userturn_pipeline/latest/coding/wildchat_coding_level2/"
         "level2_reports/level2_metrics_20260411_212300.csv"
     ),
-    "WC writing": Path(
-        "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/"
+    "WC writing": ANALYSIS_OUTPUTS_ROOT / (
         "0410_wildchat_userturn_pipeline/latest/writing/wildchat_writing_level2/"
         "level2_reports/level2_metrics_20260411_212539.csv"
     ),
 }
 
 REPORT_FILES = {
-    "WC coding": Path(
-        "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/"
+    "WC coding": ANALYSIS_OUTPUTS_ROOT / (
         "0410_wildchat_userturn_pipeline/latest/coding/wildchat_coding_level2/"
         "level2_reports/level2_report_20260411_212300.md"
     ),
-    "WC writing": Path(
-        "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/"
+    "WC writing": ANALYSIS_OUTPUTS_ROOT / (
         "0410_wildchat_userturn_pipeline/latest/writing/wildchat_writing_level2/"
         "level2_reports/level2_report_20260411_212539.md"
     ),

@@ -1,0 +1,50 @@
+item_id,dataset,corpus,task,production_label,human_label,production_is_c,human_is_c,notes
+constructive_prod_validation_003,WildChat writing,WildChat,writing,A,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_024,LMSYS Chat coding,LMSYS Chat,coding,C,A,True,False,Generic feasibility question; no user hypothesis or substantive reasoning.
+constructive_prod_validation_052,ShareChat coding,ShareChat,coding,A,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_086,WildChat writing,WildChat,writing,A,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_091,WildChat writing,WildChat,writing,A,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_104,LMSYS Chat coding,LMSYS Chat,coding,None,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_105,WildChat coding,WildChat,coding,P,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_113,ShareChat coding,ShareChat,coding,P,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_117,LMSYS Chat writing,LMSYS Chat,writing,A,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_125,ShareChat writing,ShareChat,writing,A,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_133,ShareChat coding,ShareChat,coding,A,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_135,LMSYS Chat coding,LMSYS Chat,coding,C,A,True,False,Generic technology choice/feasibility question; treated as active rather than constructive.
+constructive_prod_validation_149,ShareChat writing,ShareChat,writing,A,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_152,LMSYS Chat coding,LMSYS Chat,coding,C,A,True,False,Mostly supplies additional pasted text/context; no explicit evaluation or inference in the target turn.
+constructive_prod_validation_153,ShareChat writing,ShareChat,writing,A,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_156,LMSYS Chat writing,LMSYS Chat,writing,C,A,True,False,"Terse correction of misunderstanding; active clarification, not enough diagnostic reasoning for C."
+constructive_prod_validation_157,WildChat coding,WildChat,coding,None,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_166,LMSYS Chat coding,LMSYS Chat,coding,C,A,True,False,Generic feasibility question about feeding webpages; no concrete plan or boundary reasoning.
+constructive_prod_validation_171,LMSYS Chat coding,LMSYS Chat,coding,C,A,True,False,Generic feasibility question about using a model for chatbot creation.
+constructive_prod_validation_246,ShareChat writing,ShareChat,writing,A,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_266,ShareChat writing,ShareChat,writing,A,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_267,ShareChat coding,ShareChat,coding,A,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_294,WildChat writing,WildChat,writing,P,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_309,WildChat coding,WildChat,coding,C,A,True,False,Reports failure after a change but does not diagnose why; treated as active troubleshooting.
+constructive_prod_validation_312,LMSYS Chat writing,LMSYS Chat,writing,C,None,True,False,Complaint without substantive correction or diagnostic content.
+constructive_prod_validation_316,WildChat writing,WildChat,writing,None,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_340,LMSYS Chat writing,LMSYS Chat,writing,A,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_343,ShareChat writing,ShareChat,writing,None,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_347,LMSYS Chat writing,LMSYS Chat,writing,C,None,True,False,Prompt-injection/format request; no substantive self-revision or constructive reasoning.
+constructive_prod_validation_408,LMSYS Chat writing,LMSYS Chat,writing,A,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_420,WildChat coding,WildChat,coding,P,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_424,WildChat writing,WildChat,writing,None,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_438,LMSYS Chat coding,LMSYS Chat,coding,None,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_441,ShareChat coding,ShareChat,coding,P,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_449,WildChat writing,WildChat,writing,P,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_479,WildChat writing,WildChat,writing,A,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_480,ShareChat coding,ShareChat,coding,None,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_489,ShareChat coding,ShareChat,coding,P,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_500,LMSYS Chat coding,LMSYS Chat,coding,C,A,True,False,Simple condition-evaluation exercise; no hypothesis or diagnosis beyond answer request.
+constructive_prod_validation_513,ShareChat writing,ShareChat,writing,A,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_518,WildChat writing,WildChat,writing,P,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_528,ShareChat writing,ShareChat,writing,A,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_531,WildChat coding,WildChat,coding,P,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_537,ShareChat writing,ShareChat,writing,None,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_548,WildChat writing,WildChat,writing,P,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_555,ShareChat coding,ShareChat,coding,None,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_567,ShareChat writing,ShareChat,writing,None,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_586,WildChat writing,WildChat,writing,A,C,False,True,Manual Codex pre-review: C/non-C boundary differs from production label.
+constructive_prod_validation_596,LMSYS Chat coding,LMSYS Chat,coding,C,A,True,False,Simple technology recommendation question; no supporting reasoning or concrete constraints.

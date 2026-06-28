@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import json
+import os
 import re
 from pathlib import Path
 
@@ -9,37 +10,40 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "outputs" / "support_intent"
 OUT.mkdir(parents=True, exist_ok=True)
+ANALYSIS_OUTPUTS_ROOT = Path(
+    os.environ.get("MSRA_ANALYSIS_OUTPUTS_ROOT", ROOT / "data" / "level_analysis" / "outputs")
+)
 
 SETTINGS = {
     "WC coding": {
         "task": "coding",
-        "level2": "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0410_wildchat_userturn_pipeline/latest/coding/wildchat_coding_level2/level2_reports/level2_metrics_20260411_212300.csv",
-        "conversations": "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0410_wildchat_userturn_pipeline/user_turn_round2_final_coding/conversations",
+        "level2": ANALYSIS_OUTPUTS_ROOT / "0410_wildchat_userturn_pipeline/latest/coding/wildchat_coding_level2/level2_reports/level2_metrics_20260411_212300.csv",
+        "conversations": ANALYSIS_OUTPUTS_ROOT / "0410_wildchat_userturn_pipeline/user_turn_round2_final_coding/conversations",
     },
     "LMSYS coding": {
         "task": "coding",
-        "level2": "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0530_lmsys_chat_1m_replacement/user_turn_pipeline_min4/latest/coding/lmsys_coding_level2/level2_reports/level2_metrics_20260624_121538.csv",
-        "conversations": "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0530_lmsys_chat_1m_replacement/user_turn_pipeline_min4/user_turn_round2_final_coding/conversations",
+        "level2": ANALYSIS_OUTPUTS_ROOT / "0530_lmsys_chat_1m_replacement/user_turn_pipeline_min4/latest/coding/lmsys_coding_level2/level2_reports/level2_metrics_20260624_121538.csv",
+        "conversations": ANALYSIS_OUTPUTS_ROOT / "0530_lmsys_chat_1m_replacement/user_turn_pipeline_min4/user_turn_round2_final_coding/conversations",
     },
     "SC coding": {
         "task": "coding",
-        "level2": "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0529_sharechat_replacement/user_turn_pipeline_min4_english_strict/latest/coding/sharechat_coding_level2/level2_reports/level2_metrics_20260602_125948.csv",
-        "conversations": "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0529_sharechat_replacement/user_turn_pipeline_min4_english_strict/user_turn_round2_final_coding_english/conversations",
+        "level2": ANALYSIS_OUTPUTS_ROOT / "0529_sharechat_replacement/user_turn_pipeline_min4_english_strict/latest/coding/sharechat_coding_level2/level2_reports/level2_metrics_20260602_125948.csv",
+        "conversations": ANALYSIS_OUTPUTS_ROOT / "0529_sharechat_replacement/user_turn_pipeline_min4_english_strict/user_turn_round2_final_coding_english/conversations",
     },
     "WC writing": {
         "task": "writing",
-        "level2": "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0410_wildchat_userturn_pipeline/latest/writing/wildchat_writing_level2/level2_reports/level2_metrics_20260411_212539.csv",
-        "conversations": "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0410_wildchat_userturn_pipeline/user_turn_round2_final_writing/conversations",
+        "level2": ANALYSIS_OUTPUTS_ROOT / "0410_wildchat_userturn_pipeline/latest/writing/wildchat_writing_level2/level2_reports/level2_metrics_20260411_212539.csv",
+        "conversations": ANALYSIS_OUTPUTS_ROOT / "0410_wildchat_userturn_pipeline/user_turn_round2_final_writing/conversations",
     },
     "LMSYS writing": {
         "task": "writing",
-        "level2": "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0530_lmsys_chat_1m_replacement/user_turn_pipeline_min4/latest/writing/lmsys_writing_level2/level2_reports/level2_metrics_20260624_121658.csv",
-        "conversations": "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0530_lmsys_chat_1m_replacement/user_turn_pipeline_min4/user_turn_round2_final_writing/conversations",
+        "level2": ANALYSIS_OUTPUTS_ROOT / "0530_lmsys_chat_1m_replacement/user_turn_pipeline_min4/latest/writing/lmsys_writing_level2/level2_reports/level2_metrics_20260624_121658.csv",
+        "conversations": ANALYSIS_OUTPUTS_ROOT / "0530_lmsys_chat_1m_replacement/user_turn_pipeline_min4/user_turn_round2_final_writing/conversations",
     },
     "SC writing": {
         "task": "writing",
-        "level2": "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0529_sharechat_replacement/user_turn_pipeline_min4_english_strict/latest/writing/sharechat_writing_level2/level2_reports/level2_metrics_20260602_130002.csv",
-        "conversations": "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0529_sharechat_replacement/user_turn_pipeline_min4_english_strict/user_turn_round2_final_writing_english/conversations",
+        "level2": ANALYSIS_OUTPUTS_ROOT / "0529_sharechat_replacement/user_turn_pipeline_min4_english_strict/latest/writing/sharechat_writing_level2/level2_reports/level2_metrics_20260602_130002.csv",
+        "conversations": ANALYSIS_OUTPUTS_ROOT / "0529_sharechat_replacement/user_turn_pipeline_min4_english_strict/user_turn_round2_final_writing_english/conversations",
     },
 }
 
@@ -50,7 +54,7 @@ INTENTS = {
 }
 
 
-def _read_csv(path: str) -> list[dict[str, str]]:
+def _read_csv(path: str | Path) -> list[dict[str, str]]:
     with open(path, newline="") as f:
         return list(csv.DictReader(f))
 
@@ -87,7 +91,7 @@ def _assistant_turn_intents(message: dict) -> set[str]:
     return {intent for intent in INTENTS if _contains_intent(raw_intent, intent)}
 
 
-def _count_s2_turns(conv_dir: str) -> tuple[int, dict[str, int]]:
+def _count_s2_turns(conv_dir: str | Path) -> tuple[int, dict[str, int]]:
     s2_turns = 0
     intent_turns = {intent: 0 for intent in INTENTS}
     for path in Path(conv_dir).glob("*.json"):

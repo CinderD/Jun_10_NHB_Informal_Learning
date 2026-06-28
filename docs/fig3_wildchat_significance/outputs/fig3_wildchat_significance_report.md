@@ -1,10 +1,10 @@
 # Figure 3 WildChat Significance Report
 
 ## Data Files Used
-- WC coding: `/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0410_wildchat_userturn_pipeline/latest/coding/wildchat_coding_level2/level2_reports/level2_metrics_20260411_212300.csv`
-- WC writing: `/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0410_wildchat_userturn_pipeline/latest/writing/wildchat_writing_level2/level2_reports/level2_metrics_20260411_212539.csv`
-- WC coding production report used for formula verification: `/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0410_wildchat_userturn_pipeline/latest/coding/wildchat_coding_level2/level2_reports/level2_report_20260411_212300.md`
-- WC writing production report used for formula verification: `/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0410_wildchat_userturn_pipeline/latest/writing/wildchat_writing_level2/level2_reports/level2_report_20260411_212539.md`
+- WC coding: `<local-msra-root>/shareable_project/investigations/level_analysis/outputs/0410_wildchat_userturn_pipeline/latest/coding/wildchat_coding_level2/level2_reports/level2_metrics_20260411_212300.csv`
+- WC writing: `<local-msra-root>/shareable_project/investigations/level_analysis/outputs/0410_wildchat_userturn_pipeline/latest/writing/wildchat_writing_level2/level2_reports/level2_metrics_20260411_212539.csv`
+- WC coding production report used for formula verification: `<local-msra-root>/shareable_project/investigations/level_analysis/outputs/0410_wildchat_userturn_pipeline/latest/coding/wildchat_coding_level2/level2_reports/level2_report_20260411_212300.md`
+- WC writing production report used for formula verification: `<local-msra-root>/shareable_project/investigations/level_analysis/outputs/0410_wildchat_userturn_pipeline/latest/writing/wildchat_writing_level2/level2_reports/level2_report_20260411_212539.md`
 
 ## Filter Applied
 - Source scope: task-specific WildChat level-2 production CSVs only.

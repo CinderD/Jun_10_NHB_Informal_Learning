@@ -1,0 +1,77 @@
+item_id,dataset,task,production_support_type,production_means,human_support_type,human_means
+assistant_prod_validation_003,LMSYS Chat coding,coding,S2,M3;M5,S2,M3;M4;M5
+assistant_prod_validation_004,WildChat writing,writing,S2,M3,S1,
+assistant_prod_validation_008,ShareChat coding,coding,S2,M4;M6,S2,M4
+assistant_prod_validation_009,ShareChat coding,coding,S2,M1;M2;M3;M4;M6,S2,M1;M2;M4
+assistant_prod_validation_010,ShareChat coding,coding,S1,,S2,M1;M3;M4;M5
+assistant_prod_validation_012,LMSYS Chat coding,coding,S2,M4,S2,M2;M3;M4
+assistant_prod_validation_013,LMSYS Chat writing,writing,S2,M3,S1,
+assistant_prod_validation_016,WildChat coding,coding,S2,M4,S2,M3;M4;M5
+assistant_prod_validation_021,LMSYS Chat coding,coding,S1,,S2,M1;M3
+assistant_prod_validation_022,WildChat writing,writing,S2,M1;M4,S2,M1;M4;M5
+assistant_prod_validation_031,ShareChat coding,coding,S2,M5,S1,
+assistant_prod_validation_032,LMSYS Chat coding,coding,S2,M4,S2,M4;M5
+assistant_prod_validation_033,ShareChat coding,coding,S2,M6,S1,
+assistant_prod_validation_035,ShareChat coding,coding,S2,M4;M5,S2,M3;M4;M5
+assistant_prod_validation_041,ShareChat coding,coding,S2,M1;M2;M4;M6,S2,M1;M2;M4
+assistant_prod_validation_045,WildChat coding,coding,S2,M2;M3;M4;M5,S2,M2;M3;M4
+assistant_prod_validation_046,LMSYS Chat writing,writing,S2,M2;M6,S2,M6
+assistant_prod_validation_067,WildChat coding,coding,S1,,S2,M1;M3;M4;M5
+assistant_prod_validation_068,ShareChat writing,writing,S2,M2;M3;M6,S2,M2;M3;M4
+assistant_prod_validation_069,ShareChat writing,writing,S2,M2;M3;M4,S2,M2;M3;M4;M5
+assistant_prod_validation_070,WildChat coding,coding,S2,M1;M3;M4;M6,S2,M1;M3;M4
+assistant_prod_validation_072,LMSYS Chat coding,coding,S1,,S2,M3;M4;M5
+assistant_prod_validation_074,ShareChat coding,coding,S2,M6,S1,
+assistant_prod_validation_075,WildChat writing,writing,S2,M2;M3,S1,
+assistant_prod_validation_078,ShareChat coding,coding,S2,M1;M4,S2,M1;M4;M5
+assistant_prod_validation_079,ShareChat coding,coding,S2,M1;M4;M5;M6,S2,M1;M3;M4;M5
+assistant_prod_validation_080,ShareChat coding,coding,S2,M3,S2,M3;M4;M5
+assistant_prod_validation_081,ShareChat coding,coding,S2,M2;M3;M4;M6,S2,M2;M3;M4
+assistant_prod_validation_086,WildChat coding,coding,S2,M6,S1,
+assistant_prod_validation_087,ShareChat coding,coding,S1,,S2,M1;M3;M4;M5
+assistant_prod_validation_092,ShareChat coding,coding,S1,,S2,M4;M5
+assistant_prod_validation_094,LMSYS Chat coding,coding,S2,M1,S2,M1;M3;M4;M5
+assistant_prod_validation_097,WildChat coding,coding,S2,M2;M3;M4,S2,M2;M3;M4;M5
+assistant_prod_validation_098,WildChat writing,writing,S2,M1;M4,S2,M1;M4;M5
+assistant_prod_validation_099,WildChat coding,coding,S2,M1;M2;M6,S2,M1;M2;M4;M6
+assistant_prod_validation_103,ShareChat writing,writing,S2,M3,S2,M5
+assistant_prod_validation_105,WildChat writing,writing,S2,M3,S1,
+assistant_prod_validation_111,LMSYS Chat writing,writing,S2,M4,S2,M4;M5
+assistant_prod_validation_112,LMSYS Chat coding,coding,S2,M2;M4,S2,M3;M4;M5
+assistant_prod_validation_115,WildChat writing,writing,S2,M1;M5,S2,M1;M5;M6
+assistant_prod_validation_117,LMSYS Chat coding,coding,S2,M2;M3;M4,S2,M2;M4
+assistant_prod_validation_118,LMSYS Chat writing,writing,S2,M6,S2,M5
+assistant_prod_validation_119,WildChat coding,coding,S2,M1;M3;M4,S2,M1;M3;M4;M5
+assistant_prod_validation_121,LMSYS Chat coding,coding,S2,M2;M4,S2,M2;M4;M5
+assistant_prod_validation_122,LMSYS Chat coding,coding,S2,M6,S1,
+assistant_prod_validation_123,WildChat coding,coding,S2,M3;M6,S2,M2;M4
+assistant_prod_validation_127,ShareChat coding,coding,S2,M1;M3,S2,M1;M3;M4;M5
+assistant_prod_validation_129,LMSYS Chat coding,coding,S1,,S2,M2;M4
+assistant_prod_validation_130,LMSYS Chat coding,coding,S2,M3,S2,M2;M4
+assistant_prod_validation_132,ShareChat coding,coding,S2,M1,S2,M1;M4
+assistant_prod_validation_133,LMSYS Chat writing,writing,S2,M4;M5,S2,M1;M4;M5
+assistant_prod_validation_134,ShareChat coding,coding,S2,M1;M4,S2,M1;M4;M5
+assistant_prod_validation_135,LMSYS Chat writing,writing,S2,M3,S1,
+assistant_prod_validation_136,WildChat coding,coding,S2,M6,S1,
+assistant_prod_validation_138,LMSYS Chat coding,coding,S1,,S2,M3;M4;M5
+assistant_prod_validation_139,ShareChat coding,coding,S2,M3;M5;M2,S2,M2;M3;M4;M5
+assistant_prod_validation_140,ShareChat coding,coding,S2,M1,S2,M1;M3;M4
+assistant_prod_validation_144,LMSYS Chat coding,coding,S2,M4;M5,S2,M1;M3;M4;M5
+assistant_prod_validation_145,WildChat writing,writing,S2,M3,S2,M3;M4
+assistant_prod_validation_147,LMSYS Chat writing,writing,S2,M3,S2,M3;M4
+assistant_prod_validation_148,WildChat coding,coding,S2,M2;M3;M4,S2,M2;M3;M4;M5
+assistant_prod_validation_149,ShareChat coding,coding,S2,M3;M4,S2,M3;M4;M5
+assistant_prod_validation_150,WildChat coding,coding,S2,M2;M3;M4,S2,M2;M3;M4;M5
+assistant_prod_validation_154,LMSYS Chat coding,coding,S2,M4,S2,M3;M4;M5
+assistant_prod_validation_158,LMSYS Chat coding,coding,S2,M6,S2,M2;M4;M6
+assistant_prod_validation_159,LMSYS Chat coding,coding,S1,,S2,M3;M4;M5
+assistant_prod_validation_160,WildChat coding,coding,S1,,S2,M3;M4;M5
+assistant_prod_validation_161,LMSYS Chat writing,writing,S2,M2,S2,M2;M5
+assistant_prod_validation_166,LMSYS Chat coding,coding,S2,M6,S1,
+assistant_prod_validation_167,WildChat writing,writing,S2,M3,S1,
+assistant_prod_validation_168,WildChat coding,coding,S2,M2;M4,S2,M2;M4;M5
+assistant_prod_validation_170,LMSYS Chat writing,writing,S2,M3,S1,
+assistant_prod_validation_172,WildChat coding,coding,S2,M3;M4,S2,M3;M4;M5
+assistant_prod_validation_173,ShareChat writing,writing,S2,M3,S1,
+assistant_prod_validation_174,WildChat coding,coding,S2,M1;M3;M4,S2,M1;M3;M4;M5
+assistant_prod_validation_176,ShareChat writing,writing,S2,M3;M4;M5;M6,S2,M3;M4;M5

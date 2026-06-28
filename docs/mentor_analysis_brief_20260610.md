@@ -138,9 +138,9 @@ For data-use review, the key question is whether aggregate behavioural analysis 
 
 ## 8. Source Reports to Attach or Show
 
-- WildChat report: `/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0410_wildchat_userturn_pipeline/latest/user_llm_dynamics/large_analysis/user_llm_report_wildchat_v2.md`
-- LMSYS report: `/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0530_lmsys_chat_1m_replacement/user_turn_pipeline_min4/latest/user_llm_dynamics/large_analysis/user_llm_report_lmsys_v2.md`
-- ShareChat strict-English report: `/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0529_sharechat_replacement/user_turn_pipeline_min4_english_strict/latest/user_llm_dynamics/large_analysis/user_llm_report_sharechat_v2.md`
+- WildChat report: `<local-msra-root>/shareable_project/investigations/level_analysis/outputs/0410_wildchat_userturn_pipeline/latest/user_llm_dynamics/large_analysis/user_llm_report_wildchat_v2.md`
+- LMSYS report: `<local-msra-root>/shareable_project/investigations/level_analysis/outputs/0530_lmsys_chat_1m_replacement/user_turn_pipeline_min4/latest/user_llm_dynamics/large_analysis/user_llm_report_lmsys_v2.md`
+- ShareChat strict-English report: `<local-msra-root>/shareable_project/investigations/level_analysis/outputs/0529_sharechat_replacement/user_turn_pipeline_min4_english_strict/latest/user_llm_dynamics/large_analysis/user_llm_report_sharechat_v2.md`
 
 ## 9. Files Currently Relevant in the Paper Repo
 

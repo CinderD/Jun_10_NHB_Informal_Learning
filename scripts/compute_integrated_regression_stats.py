@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import math
+import os
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -12,38 +13,41 @@ from scipy import stats
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "outputs" / "integrated_regression"
 OUT.mkdir(parents=True, exist_ok=True)
+ANALYSIS_OUTPUTS_ROOT = Path(
+    os.environ.get("MSRA_ANALYSIS_OUTPUTS_ROOT", ROOT / "data" / "level_analysis" / "outputs")
+)
 
 
 LEVEL2 = {
     "WC coding": (
         "WildChat",
         "coding",
-        "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0410_wildchat_userturn_pipeline/latest/coding/wildchat_coding_level2/level2_reports/level2_metrics_20260411_212300.csv",
+        ANALYSIS_OUTPUTS_ROOT / "0410_wildchat_userturn_pipeline/latest/coding/wildchat_coding_level2/level2_reports/level2_metrics_20260411_212300.csv",
     ),
     "LMSYS coding": (
         "LMSYS",
         "coding",
-        "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0530_lmsys_chat_1m_replacement/user_turn_pipeline_min4/latest/coding/lmsys_coding_level2/level2_reports/level2_metrics_20260624_121538.csv",
+        ANALYSIS_OUTPUTS_ROOT / "0530_lmsys_chat_1m_replacement/user_turn_pipeline_min4/latest/coding/lmsys_coding_level2/level2_reports/level2_metrics_20260624_121538.csv",
     ),
     "SC coding": (
         "ShareChat",
         "coding",
-        "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0529_sharechat_replacement/user_turn_pipeline_min4_english_strict/latest/coding/sharechat_coding_level2/level2_reports/level2_metrics_20260602_125948.csv",
+        ANALYSIS_OUTPUTS_ROOT / "0529_sharechat_replacement/user_turn_pipeline_min4_english_strict/latest/coding/sharechat_coding_level2/level2_reports/level2_metrics_20260602_125948.csv",
     ),
     "WC writing": (
         "WildChat",
         "writing",
-        "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0410_wildchat_userturn_pipeline/latest/writing/wildchat_writing_level2/level2_reports/level2_metrics_20260411_212539.csv",
+        ANALYSIS_OUTPUTS_ROOT / "0410_wildchat_userturn_pipeline/latest/writing/wildchat_writing_level2/level2_reports/level2_metrics_20260411_212539.csv",
     ),
     "LMSYS writing": (
         "LMSYS",
         "writing",
-        "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0530_lmsys_chat_1m_replacement/user_turn_pipeline_min4/latest/writing/lmsys_writing_level2/level2_reports/level2_metrics_20260624_121658.csv",
+        ANALYSIS_OUTPUTS_ROOT / "0530_lmsys_chat_1m_replacement/user_turn_pipeline_min4/latest/writing/lmsys_writing_level2/level2_reports/level2_metrics_20260624_121658.csv",
     ),
     "SC writing": (
         "ShareChat",
         "writing",
-        "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0529_sharechat_replacement/user_turn_pipeline_min4_english_strict/latest/writing/sharechat_writing_level2/level2_reports/level2_metrics_20260602_130002.csv",
+        ANALYSIS_OUTPUTS_ROOT / "0529_sharechat_replacement/user_turn_pipeline_min4_english_strict/latest/writing/sharechat_writing_level2/level2_reports/level2_metrics_20260602_130002.csv",
     ),
 }
 
@@ -52,32 +56,32 @@ LEVEL3_A2U = {
     "WC coding": (
         "WildChat",
         "coding",
-        "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0410_wildchat_userturn_pipeline/latest/coding/wildchat_coding_level3/level3_reports/level3_a2u_pairs_20260411_212559.csv",
+        ANALYSIS_OUTPUTS_ROOT / "0410_wildchat_userturn_pipeline/latest/coding/wildchat_coding_level3/level3_reports/level3_a2u_pairs_20260411_212559.csv",
     ),
     "LMSYS coding": (
         "LMSYS",
         "coding",
-        "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0530_lmsys_chat_1m_replacement/user_turn_pipeline_min4/latest/coding/lmsys_coding_level3/level3_reports/level3_a2u_pairs_20260624_121715.csv",
+        ANALYSIS_OUTPUTS_ROOT / "0530_lmsys_chat_1m_replacement/user_turn_pipeline_min4/latest/coding/lmsys_coding_level3/level3_reports/level3_a2u_pairs_20260624_121715.csv",
     ),
     "SC coding": (
         "ShareChat",
         "coding",
-        "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0529_sharechat_replacement/user_turn_pipeline_min4_english_strict/latest/coding/sharechat_coding_level3/level3_reports/level3_a2u_pairs_20260602_130009.csv",
+        ANALYSIS_OUTPUTS_ROOT / "0529_sharechat_replacement/user_turn_pipeline_min4_english_strict/latest/coding/sharechat_coding_level3/level3_reports/level3_a2u_pairs_20260602_130009.csv",
     ),
     "WC writing": (
         "WildChat",
         "writing",
-        "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0410_wildchat_userturn_pipeline/latest/writing/wildchat_writing_level3/level3_reports/level3_a2u_pairs_20260411_212622.csv",
+        ANALYSIS_OUTPUTS_ROOT / "0410_wildchat_userturn_pipeline/latest/writing/wildchat_writing_level3/level3_reports/level3_a2u_pairs_20260411_212622.csv",
     ),
     "LMSYS writing": (
         "LMSYS",
         "writing",
-        "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0530_lmsys_chat_1m_replacement/user_turn_pipeline_min4/latest/writing/lmsys_writing_level3/level3_reports/level3_a2u_pairs_20260624_121730.csv",
+        ANALYSIS_OUTPUTS_ROOT / "0530_lmsys_chat_1m_replacement/user_turn_pipeline_min4/latest/writing/lmsys_writing_level3/level3_reports/level3_a2u_pairs_20260624_121730.csv",
     ),
     "SC writing": (
         "ShareChat",
         "writing",
-        "/data/zixin/msra/shareable_project/investigations/level_analysis/outputs/0529_sharechat_replacement/user_turn_pipeline_min4_english_strict/latest/writing/sharechat_writing_level3/level3_reports/level3_a2u_pairs_20260602_130016.csv",
+        ANALYSIS_OUTPUTS_ROOT / "0529_sharechat_replacement/user_turn_pipeline_min4_english_strict/latest/writing/sharechat_writing_level3/level3_reports/level3_a2u_pairs_20260602_130016.csv",
     ),
 }
 
@@ -92,7 +96,7 @@ def _f(row: dict[str, str], key: str, default: float = 0.0) -> float:
         return default
 
 
-def _read_csv(path: str) -> list[dict[str, str]]:
+def _read_csv(path: str | Path) -> list[dict[str, str]]:
     with open(path, newline="") as f:
         return list(csv.DictReader(f))
 
