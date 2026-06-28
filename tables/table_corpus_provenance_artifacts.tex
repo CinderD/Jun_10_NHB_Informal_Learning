@@ -1,0 +1,19 @@
+\begin{table}[p]
+\centering
+\caption{\textbf{Corpus construction provenance artifacts.} The table records the retained non-text provenance artifacts used to audit corpus construction. SHA-256 values are shown as 12-character prefixes for run scripts or manuscript-source scripts retained in the analysis archive. Raw conversation text remains governed by the original dataset releases and is not redistributed with the manuscript source.}
+\label{tab:corpus_provenance_artifacts}
+\fontsize{7.2pt}{8.3pt}\selectfont
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.12\textwidth}>{\raggedright\arraybackslash}p{0.24\textwidth}>{\raggedright\arraybackslash}p{0.35\textwidth}>{\raggedright\arraybackslash}X}
+\toprule
+Corpus & Source release and conversion unit & Selection ledger retained for this manuscript & Script/source-data provenance \\
+\midrule
+WildChat & WildChat-4.8M public release; role-ordered user/assistant messages after task filtering. & Public release $\rightarrow$ English-oriented coding/writing semantic task filters with minimum four message turns $\rightarrow$ refreshed task-filter outputs (31,879 coding; 39,534 writing) $\rightarrow$ user-turn relabel/update pass $\rightarrow$ analytic sample (31,878 coding; 39,534 writing). & WildChat relabel/update run script SHA-256 prefix \texttt{c8eecef55858}; source-data exporter \texttt{206aaae44791}; camera-ready figure script \texttt{d9ecf7118f10}. \\
+\addlinespace
+LMSYS Chat & LMSYS Chat-1M public release; one conversation record per public chat, converted to role-ordered messages. & 1,000,000 source conversations $\rightarrow$ 777,453 English conversations $\rightarrow$ 236,372 English conversations with at least four turns $\rightarrow$ semantic task filters $\rightarrow$ analytic sample (32,114 coding; 21,023 writing). & Coding filter launcher \texttt{f54c079fda08}; writing filter launcher \texttt{be970385e72e}; after-filter annotation/analysis launcher \texttt{326e11709c41}; source-data exporter \texttt{206aaae44791}. \\
+\addlinespace
+ShareChat & ShareChat Hugging Face release; public card reports 142,808 conversations and 660,293 public turns. Local conversion uses five final-language-filtered CSVs with one row per message and platform-url as the conversation key. & Five final-language-filtered CSVs (1,199,899 message rows; 129,584 platform-url conversations) $\rightarrow$ role-normalized user/bot rows (1,196,969 rows) $\rightarrow$ 69,915 conversations with at least four message turns $\rightarrow$ semantic task filters (3,494 coding; 1,663 writing) $\rightarrow$ strict-English screen $\rightarrow$ analytic sample (2,481 coding; 1,539 writing). & Coding filter launcher \texttt{f2ff9ca543b8}; writing filter launcher \texttt{2788818044e7}; after-filter annotation/analysis launcher \texttt{501e26e5a728}; source-data exporter \texttt{206aaae44791}. \\
+\bottomrule
+\end{tabularx}
+\end{table}

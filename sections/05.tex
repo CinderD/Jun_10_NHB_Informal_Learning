@@ -12,9 +12,15 @@ The analyses use six task settings formed by crossing three public conversationa
 
 The analytic corpus contains 128,569 conversations and 981,470 total turns. WildChat contributes 31,878 coding conversations and 39,534 writing conversations; LMSYS contributes 32,114 coding conversations and 21,023 writing conversations; ShareChat contributes 2,481 coding conversations and 1,539 writing conversations. All reported analyses use the refreshed Level 1--4 outputs after the latest user-turn update pass and the subsequent LMSYS and ShareChat annotation runs.
 
-Supplementary Table~\ref{tab:corpus_filtering_pipeline} summarizes how raw corpus records were converted into these analytic samples. It distinguishes source or pipeline metadata from analysis variables: coding/writing task ecology comes from LLM-assisted semantic filters, user framing comes from the conversation-level \texttt{learning\_intent} annotation, and ShareChat strict-English status comes from a final conversation-level language flag applied after task filtering.
+Supplementary Table~\ref{tab:corpus_filtering_pipeline} summarizes how raw corpus records were converted into these analytic samples. It distinguishes source or pipeline metadata from analysis variables: coding/writing task ecology comes from LLM-assisted semantic filters, user framing comes from the conversation-level \texttt{learning\_intent} annotation, and ShareChat strict-English status comes from a final conversation-level language flag applied after task filtering. Supplementary Table~\ref{tab:corpus_provenance_artifacts} records the retained provenance artifacts and script-hash prefixes used to audit the path from public source releases to the analytic samples and figure source data.
 
 \input{tables/table_corpus_filtering_pipeline}
+
+\clearpage
+
+\input{tables/table_corpus_provenance_artifacts}
+
+\clearpage
 
 \input{tables/table_filter_classifier_validation}
 
