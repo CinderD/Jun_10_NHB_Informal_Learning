@@ -418,8 +418,8 @@ def make_figure2() -> None:
     for tick in axc.get_xticklabels():
         tick.set_fontweight("bold")
     fig.subplots_adjust(left=0.105, right=0.985, top=0.805, bottom=0.165)
-    top_row_y = max(axa.get_position().y1, axb1.get_position().y1, axb2.get_position().y1) + 0.096
-    top_legend_y = top_row_y - 0.026
+    top_row_y = max(axa.get_position().y1, axb1.get_position().y1, axb2.get_position().y1) + 0.128
+    top_legend_y = top_row_y - 0.052
     a_center = (axa.get_position().x0 + axa.get_position().x1) / 2
     b_center = (axb1.get_position().x0 + axb2.get_position().x1) / 2
     c_center = (axc.get_position().x0 + axc.get_position().x1) / 2
