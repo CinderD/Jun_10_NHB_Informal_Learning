@@ -119,17 +119,17 @@ The best pipeline includes these post-processing stages:
 
 `postprocess_llm_user_emotional_strict.py`
 
-Human--human comparison used in the manuscript: `zixin_vs_Haotian`.
+Human--human comparison used in the manuscript: `zixin_vs_Haotian` using the final Haotian-confirmed writing-210 labels.
 
-Main human--human label agreement values used in `tables/table_label_validation.tex`:
+Main writing label validation values used in `tables/table_label_validation.tex`:
 
 | Label | Support | F1 | MCC | Gwet AC1 | Kappa | Accuracy |
 |---|---:|---:|---:|---:|---:|---:|
-| A | 90 | 0.375 | 0.376 | 0.686 | 0.289 | 0.778 |
+| A | 90 | 0.732 | 0.685 | 0.811 | 0.657 | 0.878 |
 | C | 90 | 0.885 | 0.827 | 0.859 | 0.826 | 0.922 |
 | P | 90 | 0.800 | 0.812 | 0.988 | 0.795 | 0.989 |
-| E | 90 | 0.667 | 0.654 | 0.963 | 0.649 | 0.967 |
-| S1 | 120 | 0.462 | 0.429 | 0.855 | 0.403 | 0.883 |
+| E | 90 | 0.800 | 0.788 | 0.975 | 0.788 | 0.978 |
+| S1 | 120 | 0.710 | 0.671 | 0.903 | 0.667 | 0.925 |
 | S2 | 120 | 0.971 | 0.796 | 0.934 | 0.795 | 0.950 |
 | M1 | 120 | 0.889 | 0.799 | 0.802 | 0.798 | 0.900 |
 | M2 | 120 | 0.820 | 0.704 | 0.708 | 0.694 | 0.850 |
@@ -137,6 +137,12 @@ Main human--human label agreement values used in `tables/table_label_validation.
 | M4 | 120 | 0.839 | 0.699 | 0.701 | 0.699 | 0.850 |
 | M5 | 120 | 0.938 | 0.915 | 0.945 | 0.915 | 0.967 |
 | M6 | 120 | 0.963 | 0.959 | 0.990 | 0.958 | 0.992 |
+
+Internal provenance artifacts:
+
+`/data/zixin/msra/shareable_project/verification/apply/writing/agreement_writing_20260123_prompt_r17_full/post_discussion_minimal/`
+
+This folder retains the derived final Haotian file, the label-correction ledger and the recomputed agreement outputs. Original Zixin and Haotian exports were not overwritten. The Haotian-confirmed pass made 21 label-level updates: 9 for `C_A`, 5 for `S1`, 6 for `S2_Intent_I3` and 1 for `E`.
 
 Writing prompt file:
 
@@ -157,6 +163,37 @@ This file documents the deployment/model configuration used for the writing vali
 Final manual review directory:
 
 `/data/zixin/msra/labellingTool/public/data/user_turn_final_label_check/`
+
+## User-Framing Validation Sources
+
+Final Zixin human-verified user-framing audit:
+
+`/data/zixin/msra/labellingTool/public/data/user_framing_validation_450_20260628_zixin_human_verified.json`
+
+Metrics:
+
+`/data/zixin/msra/labellingTool/public/data/user_framing_validation_results/user_framing_validation_450_20260628_zixin_human_verified_metrics.csv`
+
+Sampling design:
+
+- 450 first user turns.
+- 75 cases from each corpus-by-task setting: WildChat coding, WildChat writing, LMSYS Chat coding, LMSYS Chat writing, ShareChat coding and ShareChat writing.
+- Each setting was positive-oversampled: 50 production-positive intentional-framing cases and 25 production-negative cases.
+
+Key metrics against production labels:
+
+| Group | n | Intentional F1 | MCC | Gwet AC1 |
+|---|---:|---:|---:|---:|
+| Overall | 450 | 0.857 | 0.677 | 0.671 |
+| Coding | 225 | 0.924 | 0.791 | 0.820 |
+| Writing | 225 | 0.779 | 0.589 | 0.517 |
+| WildChat | 150 | 0.839 | 0.670 | 0.636 |
+| LMSYS Chat | 150 | 0.795 | 0.585 | 0.542 |
+| ShareChat | 150 | 0.928 | 0.799 | 0.828 |
+
+Interpretation:
+
+This audit fills the earlier gap in which the writing-210 learning-intent check had no positive human cases. Because the audit intentionally oversampled production-positive cases, it validates the user-framing label boundary but should not be used to estimate population prevalence.
 
 Files:
 
