@@ -1,0 +1,34 @@
+\begin{table*}[t]
+\scriptsize
+\centering
+\caption{\textbf{Annotation codebook definitions.} The table defines the labels used to translate learning-science constructs into observable turn-level signals. These labels are behavioural annotations of conversation text; they are not measures of durable learning, learner identity or instructional efficacy.}
+\label{tab:annotation_codebook_definitions}
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.08}
+\begin{tabularx}{\textwidth}{
+>{\raggedright\arraybackslash}p{0.13\textwidth}
+>{\raggedright\arraybackslash}p{0.15\textwidth}
+>{\raggedright\arraybackslash}p{0.32\textwidth}
+>{\raggedright\arraybackslash}X}
+\toprule
+Family & Label & Definition & Boundary rule \\
+\midrule
+User engagement & Passive (\texttt{P}) & Reception, acknowledgement or minimal continuation without visible transformation of the assistant response. & Includes short confirmations or requests to continue; excludes task-relevant follow-up or reasoning. \\
+User engagement & Active (\texttt{A}) & Task-relevant action, follow-up, application or manipulation of supplied information. & The user does something with the response, but does not test, revise or extend an idea. \\
+User engagement & Constructive (\texttt{C}) & Highest-depth observable user engagement: elaborating, testing, revising, transferring or extending an idea or explanation. & Requires visible user reasoning or transformation; not inferred from long text alone. \\
+User expression & Emotional (\texttt{E}) & Explicit affective expression, such as frustration, gratitude, anxiety or excitement. & Coded separately from cognitive engagement and interpreted as visible expression in the log. \\
+\midrule
+Assistant support & Scaffolding & Assistant support that structures, diagnoses, regulates or redirects the user's process while leaving cognitive or task responsibility with the user. & Distinguished from reference responses that simply provide an answer, draft or deliverable. \\
+Support intent & \texttt{I1} metacognitive & Support aimed at planning, monitoring, reflection or regulation of the user's work. & Captures the purpose of support, not its surface form. \\
+Support intent & \texttt{I2} cognitive & Support aimed at concepts, mechanisms, task knowledge or problem-solving content. & Most scaffolded support in this corpus is cognitive in purpose. \\
+Support intent & \texttt{I3} affective & Support aimed at encouragement, reassurance or affective regulation. & Used only when affective support is substantively present, not for polite tone alone. \\
+\midrule
+Support form & \texttt{M1} feedback & Evaluative information about the user's prior attempt, diagnosis or understanding. & Requires a target in the user's preceding contribution. \\
+Support form & \texttt{M2} hinting & A cue, prompt or partial path that helps the user proceed without fully resolving the task. & Leaves the next inferential or task step with the user. \\
+Support form & \texttt{M3} instructing & Explicit procedural guidance, ordered steps or strategy for doing the task. & More directive than hinting; may still count as scaffolding when it structures process. \\
+Support form & \texttt{M4} explaining & A rationale, mechanism or causal account that clarifies why something works or fails. & Requires explanatory content, not merely a restatement of an answer. \\
+Support form & \texttt{M5} modelling & A reusable pattern, worked example or demonstration intended to be adapted. & Distinguished from simply giving the final requested product. \\
+Support form & \texttt{M6} questioning & A question that advances diagnosis, reflection, planning or problem solving. & Excludes generic clarification questions that do not support the user's process. \\
+\bottomrule
+\end{tabularx}
+\end{table*}
