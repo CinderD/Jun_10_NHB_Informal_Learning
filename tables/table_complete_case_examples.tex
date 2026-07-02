@@ -22,45 +22,54 @@
 \newcommand{\referencebadge}{\casebadge{caseref}{white}{\(\cdot\) Reference}}
 \newcommand{\casekey}[1]{\textcolor{caseconstruct}{\textbf{#1}}}
 \newcommand{\supportkey}[1]{\textcolor{caseteal}{\textbf{#1}}}
+\newcommand{\caselegend}{%
+  \begingroup
+  {\scriptsize\textcolor{caseblue}{\textbf{Encoding}}\quad
+  \constructivebadge\hspace{3pt}\activebadge\hspace{3pt}\scaffoldbadge\hspace{3pt}\referencebadge}\par\vspace{2pt}
+  {\scriptsize\textcolor{caseblue}{\textbf{Codes}}\quad
+  \casecode{I2} support intent; \casecode{M} support-form labels may co-occur.}
+  \endgroup}
 
 \begin{table*}[p]
 \footnotesize
 \centering
 \caption{\textbf{Complete de-identified coding case with turn-level labels.} The illustrative transcript is derived from a retained conversation and lightly edited while preserving turn sequence, task structure and annotation decisions. Colored badges encode role, user engagement level and assistant support category.}
 \label{tab:complete_coding_case}
-\setlength{\fboxsep}{7pt}
+\setlength{\fboxsep}{5pt}
 \setlength{\fboxrule}{0.6pt}
+\begin{adjustbox}{center,max width=0.98\textwidth}
 \fcolorbox{caseborder}{casefill}{%
-\begin{minipage}{0.94\textwidth}
-\setlength{\tabcolsep}{4pt}
-\renewcommand{\arraystretch}{1.08}
+\begin{minipage}{0.955\textwidth}
+\setlength{\tabcolsep}{3.5pt}
+\renewcommand{\arraystretch}{1.18}
 \begingroup
 \setlength{\fboxsep}{3pt}
 \colorbox{caseheadfill}{%
-\begin{minipage}{0.965\linewidth}
+\begin{minipage}{0.975\linewidth}
 \textcolor{caseblue}{\textbf{Coding case}}\quad \textbf{SQL transaction handling}\\[-1pt]
 {\scriptsize WildChat coding; intentional framing; four turns. Constructive user follow-up probes a programming mechanism; scaffolded support provides explanation, procedure and modelling.}
 \end{minipage}}
 \endgroup
 \vspace{5pt}
 
-{\scriptsize \constructivebadge\quad \activebadge\quad \scaffoldbadge\quad \referencebadge\quad \casecode{I2} intent\quad \casecode{M4} form}
-\vspace{4pt}
+\caselegend
+\vspace{5pt}
 
-\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.28\linewidth}}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.115\linewidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.305\linewidth}}
 \toprule
 \textbf{Turn} & \textbf{De-identified transcript} & \textbf{Label and annotation cue} \\
 \midrule
 \userturn{U1} & ``How does \texttt{XACT\_ABORT} work in a SQL Server script? If my delete statements are inside a transaction so failed deletes should roll back, should \texttt{XACT\_ABORT} be on or off? Does it apply only to the transaction or to the whole script?'' & \constructivebadge\par The user probes a \casekey{mechanism}, asks about \casekey{scope} and links the answer to rollback behaviour. \\
-\addlinespace[3pt]
+\addlinespace[5pt]
 \assistantturn{A1} & The assistant explains that \texttt{XACT\_ABORT ON} makes many run-time errors abort and roll back the current transaction, distinguishes transaction-level rollback from statements outside the transaction and explains why the setting is commonly used for update/delete scripts. & \scaffoldbadge\quad \casecode{I2}\ \casecode{M4}\par The reply \supportkey{explains the mechanism} connecting errors, transactions and rollback. \\
-\addlinespace[3pt]
+\addlinespace[5pt]
 \userturn{U2} & ``Do I need to set \texttt{XACT\_ABORT OFF} at the end because of scope? What about using \texttt{TRY}/\texttt{CATCH} outside a transaction instead?'' & \constructivebadge\par The user extends the prior answer by comparing \casekey{scope} and an \casekey{alternative strategy}. \\
-\addlinespace[3pt]
+\addlinespace[5pt]
 \assistantturn{A2} & The assistant explains the session-scoped setting, gives a cautious cleanup pattern, contrasts \texttt{XACT\_ABORT} with \texttt{TRY}/\texttt{CATCH} and sketches a safer transaction pattern with \texttt{BEGIN TRY}, \texttt{COMMIT}, \texttt{BEGIN CATCH} and \texttt{ROLLBACK}. & \scaffoldbadge\quad \casecode{I2}\ \casecode{M3}\ \casecode{M4}\ \casecode{M5}\par The reply combines \supportkey{procedure}, \supportkey{explanation} and an adaptable model. \\
 \bottomrule
 \end{tabularx}
 \end{minipage}}
+\end{adjustbox}
 \end{table*}
 
 \begin{table*}[p]
@@ -68,41 +77,43 @@
 \centering
 \caption{\textbf{Complete de-identified writing case with turn-level labels.} The illustrative transcript is derived from a retained conversation and lightly edited while preserving turn sequence, task structure and annotation decisions. Colored badges encode role, user engagement level and assistant support category.}
 \label{tab:complete_writing_case}
-\setlength{\fboxsep}{7pt}
+\setlength{\fboxsep}{5pt}
 \setlength{\fboxrule}{0.6pt}
+\begin{adjustbox}{center,max width=0.98\textwidth}
 \fcolorbox{caseborder}{casefill}{%
-\begin{minipage}{0.94\textwidth}
-\setlength{\tabcolsep}{4pt}
-\renewcommand{\arraystretch}{1.08}
+\begin{minipage}{0.955\textwidth}
+\setlength{\tabcolsep}{3.5pt}
+\renewcommand{\arraystretch}{1.18}
 \begingroup
 \setlength{\fboxsep}{3pt}
 \colorbox{caseheadfill}{%
-\begin{minipage}{0.965\linewidth}
+\begin{minipage}{0.975\linewidth}
 \textcolor{caseblue}{\textbf{Writing case}}\quad \textbf{Formal report justification}\\[-1pt]
 {\scriptsize WildChat writing; intentional framing; six turns. The exchange moves from direct explanation use to constructive reframing, then to direct drafting under a new style constraint.}
 \end{minipage}}
 \endgroup
 \vspace{5pt}
 
-{\scriptsize \constructivebadge\quad \activebadge\quad \scaffoldbadge\quad \referencebadge\quad \casecode{I2} intent\quad \casecode{M4} form}
-\vspace{4pt}
+\caselegend
+\vspace{5pt}
 
-\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.28\linewidth}}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.115\linewidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.305\linewidth}}
 \toprule
 \textbf{Turn} & \textbf{De-identified transcript} & \textbf{Label and annotation cue} \\
 \midrule
 \userturn{U1} & ``Help me explain why a machine-learning dataset should include difficult samples and not just clean samples, so that the trained model will be more robust. Give me a more detailed explanation.'' & \activebadge\par The user requests detail but does not yet evaluate, revise or extend an idea. \\
-\addlinespace[3pt]
+\addlinespace[5pt]
 \assistantturn{A1} & The assistant gives a direct explanation: diverse and difficult samples expose the model to real-world variation, reduce dependence on overly clean patterns and improve generalization to noisier cases. & \referencebadge\par The reply supplies requested content without structuring the user's next reasoning or writing process. \\
-\addlinespace[3pt]
+\addlinespace[5pt]
 \userturn{U2} & ``Suppose I am explaining this to someone who does not believe that a model trained only on clean data generalizes worse than one trained with diverse, difficult data. Help me explain why this is the case in more detail.'' & \constructivebadge\par The user \casekey{reframes the task} around persuasion and justification, extending the explanation into a more demanding context. \\
-\addlinespace[3pt]
+\addlinespace[5pt]
 \assistantturn{A2} & The assistant explains the mechanism with an analogy and rationale: clean-only training narrows the problem space, whereas difficult examples expose edge cases, noise and variation that make the learned decision boundary less brittle. & \scaffoldbadge\quad \casecode{I2}\ \casecode{M4}\par The reply teaches the \supportkey{conceptual mechanism} behind robustness rather than merely restating the claim. \\
-\addlinespace[3pt]
+\addlinespace[5pt]
 \userturn{U3} & ``I need a different type of explanation for a formal report. I should justify the need for a diverse dataset without relying on analogies. Can you help me do that?'' & \activebadge\par The user specifies a \casekey{new writing constraint} and asks for a format shift, mainly as directive refinement. \\
-\addlinespace[3pt]
+\addlinespace[5pt]
 \assistantturn{A3} & The assistant provides a formal report-style explanation linking sample diversity to generalization, deployment variation, robustness and evaluation risk. & \referencebadge\par The reply directly supplies formal wording rather than adding process guidance or feedback on the user's own draft. \\
 \bottomrule
 \end{tabularx}
 \end{minipage}}
+\end{adjustbox}
 \end{table*}
