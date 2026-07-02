@@ -1,0 +1,51 @@
+\begin{table*}[p]
+\footnotesize
+\centering
+\caption{\textbf{Complete de-identified coding case with turn-level labels.} The illustrative transcript is derived from a retained conversation and lightly edited while preserving turn sequence, task structure and annotation decisions. User labels are \texttt{P} passive, \texttt{A} active and \texttt{C} constructive.}
+\label{tab:complete_coding_case}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.08}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.12\textwidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.27\textwidth}}
+\toprule
+\multicolumn{3}{>{\raggedright\arraybackslash}p{0.96\textwidth}}{\textbf{Case overview.} WildChat coding; intentional framing; SQL transaction handling. The exchange illustrates constructive user follow-up around a concrete programming mechanism and scaffolded assistant support through explanation, procedure and modelling.} \\
+\midrule
+\textbf{Turn} & \textbf{De-identified transcript} & \textbf{Label and annotation cue} \\
+\midrule
+\textbf{U1}\\User & ``How does \texttt{XACT\_ABORT} work in a SQL Server script? If my delete statements are inside a transaction so failed deletes should roll back, should \texttt{XACT\_ABORT} be on or off? Does it apply only to the transaction or to the whole script?'' & \textbf{\texttt{C} constructive.} The user probes a mechanism, asks about scope and links the answer to rollback behaviour. \\
+\addlinespace[2pt]
+\textbf{A1}\\Assistant & The assistant explains that \texttt{XACT\_ABORT ON} makes many run-time errors abort and roll back the current transaction, distinguishes transaction-level rollback from statements outside the transaction and explains why the setting is commonly used for update/delete scripts. & \textbf{Scaffolded support.} \texttt{I2}; \texttt{M4}. The reply explains the mechanism connecting errors, transactions and rollback. \\
+\addlinespace[2pt]
+\textbf{U2}\\User & ``Do I need to set \texttt{XACT\_ABORT OFF} at the end because of scope? What about using \texttt{TRY}/\texttt{CATCH} outside a transaction instead?'' & \textbf{\texttt{C} constructive.} The user extends the prior answer by comparing scope and an alternative error-handling strategy. \\
+\addlinespace[2pt]
+\textbf{A2}\\Assistant & The assistant explains the session-scoped setting, gives a cautious cleanup pattern, contrasts \texttt{XACT\_ABORT} with \texttt{TRY}/\texttt{CATCH} and sketches a safer transaction pattern with \texttt{BEGIN TRY}, \texttt{COMMIT}, \texttt{BEGIN CATCH} and \texttt{ROLLBACK}. & \textbf{Scaffolded support.} \texttt{I2}; \texttt{M3}, \texttt{M4}, \texttt{M5}. The reply combines procedure, explanation and an adaptable model. \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+\begin{table*}[p]
+\footnotesize
+\centering
+\caption{\textbf{Complete de-identified writing case with turn-level labels.} The illustrative transcript is derived from a retained conversation and lightly edited while preserving turn sequence, task structure and annotation decisions.}
+\label{tab:complete_writing_case}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.08}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.12\textwidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.27\textwidth}}
+\toprule
+\multicolumn{3}{>{\raggedright\arraybackslash}p{0.96\textwidth}}{\textbf{Case overview.} WildChat writing; intentional framing; formal report justification. The exchange illustrates a shift from direct explanation use to constructive reframing, followed by direct drafting support under a new style constraint.} \\
+\midrule
+\textbf{Turn} & \textbf{De-identified transcript} & \textbf{Label and annotation cue} \\
+\midrule
+\textbf{U1}\\User & ``Help me explain why a machine-learning dataset should include difficult samples and not just clean samples, so that the trained model will be more robust. Give me a more detailed explanation.'' & \textbf{\texttt{A} active.} The user requests a detailed explanation but does not yet evaluate, revise or extend an idea. \\
+\addlinespace[2pt]
+\textbf{A1}\\Assistant & The assistant gives a direct explanation: diverse and difficult samples expose the model to real-world variation, reduce dependence on overly clean patterns and improve generalization to noisier cases. & \textbf{Non-scaffolded reference.} The reply supplies the requested explanatory content without structuring the user's next reasoning or writing process. \\
+\addlinespace[2pt]
+\textbf{U2}\\User & ``Suppose I am explaining this to someone who does not believe that a model trained only on clean data generalizes worse than one trained with diverse, difficult data. Help me explain why this is the case in more detail.'' & \textbf{\texttt{C} constructive.} The user reframes the task around persuasion and justification, extending the prior explanation into a more demanding reasoning context. \\
+\addlinespace[2pt]
+\textbf{A2}\\Assistant & The assistant explains the mechanism with an analogy and rationale: clean-only training narrows the problem space, whereas difficult examples expose edge cases, noise and variation that make the learned decision boundary less brittle. & \textbf{Scaffolded support.} \texttt{I2}; \texttt{M4}. The reply teaches the conceptual mechanism behind robustness rather than merely restating the claim. \\
+\addlinespace[2pt]
+\textbf{U3}\\User & ``I need a different type of explanation for a formal report. I should justify the need for a diverse dataset without relying on analogies. Can you help me do that?'' & \textbf{\texttt{A} active.} The user specifies a new writing constraint and asks for a format shift, but the turn is mainly a directive refinement. \\
+\addlinespace[2pt]
+\textbf{A3}\\Assistant & The assistant provides a formal report-style explanation linking sample diversity to generalization, deployment variation, robustness and evaluation risk. & \textbf{Non-scaffolded reference.} The reply directly supplies the requested formal wording rather than adding process guidance or feedback on the user's own draft. \\
+\bottomrule
+\end{tabularx}
+\end{table*}
