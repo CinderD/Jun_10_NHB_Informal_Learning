@@ -1166,7 +1166,20 @@ def make_figure5() -> None:
     d1_pos = axd_m1.get_position()
     d2_pos = axd_m4.get_position()
     d_gap = d2_pos.x0 - d1_pos.x1
+    axd_m1.set_position([d1_pos.x0 + d_gap * 0.12, d1_pos.y0, d1_pos.width, d1_pos.height])
     axd_m4.set_position([d2_pos.x0 - d_gap * 0.32, d2_pos.y0, d2_pos.width, d2_pos.height])
+
+    # Keep panel b within the same footprint, but reduce internal gaps so the
+    # three prior-state plots read as one grouped panel.
+    b_positions = [ax.get_position() for ax in axs_b]
+    b_right_bound = b_positions[-1].x1
+    b_axis_width = b_positions[0].width
+    b_old_gap = b_positions[1].x0 - b_positions[0].x1
+    b_new_gap = b_old_gap * 0.72
+    b_left_bound = b_right_bound - 3 * b_axis_width - 2 * b_new_gap
+    for idx, ax in enumerate(axs_b):
+        pos = ax.get_position()
+        ax.set_position([b_left_bound + idx * (b_axis_width + b_new_gap), pos.y0, b_axis_width, pos.height])
 
     top_panel_y = max(axa.get_position().y1, axs_b[0].get_position().y1)
     top_header_y = top_panel_y + 0.044
@@ -1185,19 +1198,8 @@ def make_figure5() -> None:
     b_right = axs_b[-1].get_position().x1
     b_center = (b_left + b_right) / 2
     b_bottom = min(ax.get_position().y0 for ax in axs_b)
-    fig.text(b_left - 0.042, top_header_y, "b", ha="left", va="bottom", fontsize=13, fontweight="bold", color=COLORS["ink"])
+    fig.text(b_left - 0.030, top_header_y, "b", ha="left", va="bottom", fontsize=13, fontweight="bold", color=COLORS["ink"])
     fig.text(b_center, top_header_y + 0.002, "Adjacent-turn contrast by prior user state", ha="center", va="bottom", fontsize=9.2, fontweight="bold", color=COLORS["ink"])
-    sep_x = (axa.get_position().x1 + b_left) / 2
-    fig.add_artist(
-        Line2D(
-            [sep_x, sep_x],
-            [b_bottom - 0.012, top_panel_y + 0.008],
-            transform=fig.transFigure,
-            color="#EEF2F5",
-            lw=0.9,
-            zorder=0,
-        )
-    )
     fig.legend(
         legend_handles,
         ["non-scaffolded reference", "scaffolded support"],
