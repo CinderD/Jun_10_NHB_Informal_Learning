@@ -402,8 +402,8 @@ def make_figure2() -> None:
     axc.imshow(depth_matrix, cmap=cmap, norm=Normalize(0.03, 0.62), aspect="auto")
     axc.set_xticks(np.arange(3), ["2-3\nuser turns", "4-6\nuser turns", "7+\nuser turns"], fontsize=8.0)
     axc.set_yticks(np.arange(len(labels)), labels)
-    axc.set_xlabel("Conversation length", fontweight="bold", labelpad=3)
-    axc.set_ylabel("Setting", labelpad=5)
+    axc.set_xlabel("")
+    axc.set_ylabel("")
     axc.set_title("")
     axc.set_xticks(np.arange(-0.5, 3, 1), minor=True)
     axc.set_yticks(np.arange(-0.5, len(labels), 1), minor=True)
@@ -415,8 +415,7 @@ def make_figure2() -> None:
         for j in range(depth_matrix.shape[1]):
             val = depth_matrix[i, j]
             axc.text(j, i, f"{val * 100:.1f}%", ha="center", va="center", fontsize=8.3, color="white" if val > 0.30 else COLORS["ink"])
-    for tick in axc.get_xticklabels():
-        tick.set_fontweight("bold")
+    axc.axhline(2.5, color="white", linewidth=2.0)
     fig.subplots_adjust(left=0.105, right=0.985, top=0.805, bottom=0.165)
     top_row_y = max(axa.get_position().y1, axb1.get_position().y1, axb2.get_position().y1) + 0.128
     top_legend_y = top_row_y - 0.052
@@ -1162,6 +1161,13 @@ def make_figure5() -> None:
     axd_m1.invert_yaxis()
 
     fig.subplots_adjust(left=0.105, right=0.985, top=0.815, bottom=0.135)
+
+    # Tighten the two panel-d small multiples without changing the overall grid.
+    d1_pos = axd_m1.get_position()
+    d2_pos = axd_m4.get_position()
+    d_gap = d2_pos.x0 - d1_pos.x1
+    axd_m4.set_position([d2_pos.x0 - d_gap * 0.32, d2_pos.y0, d2_pos.width, d2_pos.height])
+
     top_panel_y = max(axa.get_position().y1, axs_b[0].get_position().y1)
     top_header_y = top_panel_y + 0.044
     bottom_header_y = max(axc.get_position().y1, axd_m1.get_position().y1) + 0.040
@@ -1181,6 +1187,17 @@ def make_figure5() -> None:
     b_bottom = min(ax.get_position().y0 for ax in axs_b)
     fig.text(b_left - 0.042, top_header_y, "b", ha="left", va="bottom", fontsize=13, fontweight="bold", color=COLORS["ink"])
     fig.text(b_center, top_header_y + 0.002, "Adjacent-turn contrast by prior user state", ha="center", va="bottom", fontsize=9.2, fontweight="bold", color=COLORS["ink"])
+    sep_x = (axa.get_position().x1 + b_left) / 2
+    fig.add_artist(
+        Line2D(
+            [sep_x, sep_x],
+            [b_bottom - 0.012, top_panel_y + 0.008],
+            transform=fig.transFigure,
+            color="#EEF2F5",
+            lw=0.9,
+            zorder=0,
+        )
+    )
     fig.legend(
         legend_handles,
         ["non-scaffolded reference", "scaffolded support"],
