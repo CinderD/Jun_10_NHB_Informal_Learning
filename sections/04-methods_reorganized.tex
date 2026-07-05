@@ -138,6 +138,9 @@ Tables~\ref{tab:model_specs}--\ref{tab:temporal_estimands}.
 
 % Human verification is reported in layers. Human--human agreement assesses whether trained reviewers could apply the codebook consistently. Human--LLM production-label checks compare final or post-processed production labels with human-confirmed labels. Targeted post-production audits check whether narrow rule-based reviews reduced known residual false positives. Agreement is summarized with per-label F1, Matthews correlation coefficient and Gwet's AC1 because the labels are sparse, prevalence-imbalanced and sometimes non-mutually exclusive~\cite{matthews1975comparison,gwet2008computing}. The consolidated production-label audits indicate acceptable or better reliability across the labels used for the main claims: intentional framing reached F1=0.857, constructive-versus-non-constructive user engagement reached F1=0.922, broad scaffolded support reached F1=0.912 and support-form labels ranged from F1=0.691 to 0.938. Supplementary Tables~\ref{tab:label_validation} and \ref{tab:production_label_validation} report the complete validation metrics and audit designs.
 
+\iffalse
+Archived previous Methods 4.4 version before redundancy reduction.
+
 \subsection{Annotation workflow and validation}
 
 The source corpora do not contain native labels for learning-oriented engagement, assistant scaffolding, support intent or support form. We therefore constructed these labels through an iterative annotation workflow that combined theory-grounded
@@ -161,10 +164,8 @@ Because sampling was conducted at the conversation level but label quotas were d
 turns for testing label boundaries.
 
 Prompt templates and schemas were revised against observed disagreement patterns, schema failures and boundary errors. After these revisions, a balanced 200-turn human validation check, with 100 coding and 100 writing examples, was used to test the refreshed user-turn label boundaries and identify remaining recurring false-positive patterns. The resulting updates were incorporated into the frozen codebook--schema--parser--post-processing workflow used for final analysis labels.
-WildChat labels reflect the targeted update pass applied after validation; LMSYS Chat and ShareChat were then processed with the same refreshed workflow. Production labelling used the same construct definitions, prompt versions, schema checks and
+After the WildChat production labelling pass, we also reviewed 100-turn post-labelling samples from each WildChat task setting, with 50 user turns and 50 assistant turns per task drawn from the completed labelled pools under the observed production-label distribution. WildChat labels reflect the targeted update pass applied after validation; LMSYS Chat and ShareChat were then processed with the same refreshed workflow. Production labelling used the same construct definitions, prompt versions, schema checks and
 post-processing logic across corpora.
-
-
 
 \paragraph{Validation design.}
 Validation evidence was mapped to the stage of the workflow it evaluated. The first layer assessed codebook operability through human--human agreement. This layer tested whether trained reviewers could apply the finalized construct definitions after coding codebook development and writing-domain adaptation. The coding codebook-operability check combined three validation rounds covering 658 task turns. The writing-domain validation used 210 reviewed conversations after the coding-derived codebook had been adapted with writing-specific decision rules and few-shot examples. Human--human agreement for this layer is reported in
@@ -177,8 +178,6 @@ scaffolded cases, and support-form labels were treated as non-exclusive. Product
 The third layer consisted of targeted post-production checks for recurring boundary cases identified during validation and prompt calibration. A final user-turn check reviewed 100 coding and 100 writing examples after the prompt and boundary-rule
 updates. After the whole process, the WildChat analytic sample contained 31,878 coding conversations and 39,534 writing conversations. LMSYS Chat and ShareChat were processed with the same refreshed workflow. Supplementary Section~A.4 reports the post-update checks and sampling details, and Supplementary Table~\ref{tab:filter_classifier_validation} summarizes validation and audit evidence for task ecology, language filtering, user framing and turn-level labels.
 
-
-
 \paragraph{Agreement metrics.}
 Agreement is summarized with per-label F1, Matthews correlation coefficient and Gwet's AC1 because the labels are sparse, prevalence-imbalanced and sometimes multi-label~\cite{matthews1975comparison,gwet2008computing}. We report agreement separately for the two main validation layers. Supplementary
 Table~\ref{tab:label_validation} reports human--human codebook agreement, which evaluates whether trained reviewers could apply the operational definitions consistently
@@ -187,6 +186,15 @@ post-processing.
 
 The consolidated production-label audits support the labels used for the main claims. Intentional user framing reached F1=0.857; constructive-versus-non-constructive user
 engagement reached F1=0.922; broad scaffolded support reached F1=0.912; and support-form labels ranged from F1=0.691 to 0.938. The audit samples intentionally enriched positive and boundary-relevant cases to stress-test classification boundaries; prevalence estimates are computed from the full production labels reported in the Results~\ref{sec:results}.
+\fi
+
+\subsection{Annotation workflow and validation}
+
+The source corpora do not contain native labels for learning-oriented engagement, assistant scaffolding, support intent or support form. We therefore constructed these labels through an iterative workflow that combined theory-grounded codebook development, independent human review, prompt calibration, parser checks, targeted post-processing and production-scale LLM-assisted labelling~\cite{gilardi2023chatgpt,ziems2024can}. The codebook was derived from engagement theory, the ICAP framework and scaffolding theory~\cite{fredricks2004school,chi2014icap,wood1976role,van2010scaffolding,quintana2018scaffolding,reiser2004scaffolding}. It was developed first in coding-oriented conversations, where errors and repair attempts provided dense boundary cases, and then adapted to writing-oriented conversations with writing-specific decision rules and examples. Human reviewers independently labelled overlapping validation cases, discussed disagreements and produced human-confirmed labels for validation analyses.
+
+After the codebook, prompt templates and structured output schemas stabilized, the frozen annotation workflow was applied to the analytic corpora. The workflow used schema and parser checks, documented post-processing rules for recurring boundary errors and retained annotation metadata for provider, deployment family, API version, prompt version, retry policy and parser checks. WildChat labels reflect the targeted update pass applied after validation, including post-labelling WildChat review samples drawn from completed labelled pools; LMSYS Chat and ShareChat were then processed with the same refreshed workflow. Operational definitions, examples, complete de-identified cases and reproducibility details are provided in Supplementary Tables~\ref{tab:annotation_codebook_definitions}--\ref{tab:complete_writing_case} and Supplementary Sections A.3--A.4.
+
+Validation evidence is reported in three layers. Human--human agreement assesses codebook operability; production-label audits compare final LLM-assisted labels with human-confirmed labels; and post-update audits check recurring residual boundary errors. Agreement is summarized with per-label F1, Matthews correlation coefficient and Gwet's AC1 because the labels are sparse, prevalence-imbalanced and sometimes multi-label~\cite{matthews1975comparison,gwet2008computing}. The consolidated production-label audits support the labels used for the main claims: intentional user framing reached F1=0.857, constructive-versus-non-constructive user engagement reached F1=0.922, broad scaffolded support reached F1=0.912 and support-form labels ranged from F1=0.691 to 0.938. Full sampling designs, review-round sizes, post-labelling checks and per-label metrics are reported in Supplementary Section A.4 and Supplementary Tables~\ref{tab:label_validation}--\ref{tab:wildchat_post_labelling_review}. Prevalence estimates in the Results are computed from the full production labels.
 
 
 % \subsection{Statistical analyses}

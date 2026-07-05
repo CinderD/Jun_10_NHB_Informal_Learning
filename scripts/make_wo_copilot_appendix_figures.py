@@ -4,7 +4,7 @@ import os
 import csv
 from pathlib import Path
 
-os.environ.setdefault("MPLCONFIGDIR", "/tmp/matplotlib-codex")
+os.environ.setdefault("MPLCONFIGDIR", "/tmp/matplotlib-cache")
 
 import matplotlib
 

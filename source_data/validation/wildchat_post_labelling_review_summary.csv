@@ -1,0 +1,14 @@
+sample,task,role,n_turns,production_label,count,notes
+wildchat_post_labelling_review_100,coding,user,50,Active,24,Post-labelling WildChat review sample drawn from completed labelled pool under observed production-label distribution.
+wildchat_post_labelling_review_100,coding,user,50,Passive,16,Post-labelling WildChat review sample drawn from completed labelled pool under observed production-label distribution.
+wildchat_post_labelling_review_100,coding,user,50,Constructive,6,Post-labelling WildChat review sample drawn from completed labelled pool under observed production-label distribution.
+wildchat_post_labelling_review_100,coding,user,50,No engagement,4,Post-labelling WildChat review sample drawn from completed labelled pool under observed production-label distribution.
+wildchat_post_labelling_review_100,coding,assistant,50,Reference response,32,Post-labelling WildChat review sample drawn from completed labelled pool under observed production-label distribution.
+wildchat_post_labelling_review_100,coding,assistant,50,Scaffolded support,17,Post-labelling WildChat review sample drawn from completed labelled pool under observed production-label distribution.
+wildchat_post_labelling_review_100,coding,assistant,50,No support label,1,Post-labelling WildChat review sample drawn from completed labelled pool under observed production-label distribution.
+wildchat_post_labelling_review_100,writing,user,50,Active,25,Post-labelling WildChat review sample drawn from completed labelled pool under observed production-label distribution.
+wildchat_post_labelling_review_100,writing,user,50,Passive,2,Post-labelling WildChat review sample drawn from completed labelled pool under observed production-label distribution.
+wildchat_post_labelling_review_100,writing,user,50,Constructive,2,Post-labelling WildChat review sample drawn from completed labelled pool under observed production-label distribution.
+wildchat_post_labelling_review_100,writing,user,50,No engagement,21,Post-labelling WildChat review sample drawn from completed labelled pool under observed production-label distribution.
+wildchat_post_labelling_review_100,writing,assistant,50,Reference response,46,Post-labelling WildChat review sample drawn from completed labelled pool under observed production-label distribution.
+wildchat_post_labelling_review_100,writing,assistant,50,Scaffolded support,4,Post-labelling WildChat review sample drawn from completed labelled pool under observed production-label distribution.
