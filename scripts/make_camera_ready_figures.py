@@ -501,14 +501,17 @@ def make_figure3() -> None:
 
     def dumbbell(ax, left, right, ylabels, title, xlabel, xlim, diff_fmt="{:+.1f}", scale=1, value_fmt="{:.1f}"):
         y = np.arange(len(ylabels))
+        x_range = xlim[1] - xlim[0]
         for i in range(len(ylabels)):
             ax.plot([left[i], right[i]], [i, i], color="#B9C2CB", lw=2.4, zorder=1)
             ax.scatter(left[i], i, s=58, color=COLORS["s1"], edgecolor="white", linewidth=0.8, zorder=3)
             ax.scatter(right[i], i, s=58, color=COLORS["s2"], edgecolor="white", linewidth=0.8, zorder=3)
             left_label_y = i + 0.27 if i < len(ylabels) - 1 else i - 0.27
-            ax.text(left[i], left_label_y, value_fmt.format(left[i]), fontsize=7.3, ha="center", va="center", color=COLORS["muted"])
-            ax.text(right[i], i - 0.27, value_fmt.format(right[i]), fontsize=7.3, ha="center", va="center", color=COLORS["ink"])
-            ax.text(right[i] + (xlim[1] - xlim[0]) * 0.04, i, diff_fmt.format((right[i] - left[i]) * scale), fontsize=8.3, ha="left", va="center", color=COLORS["ink"])
+            value_box = dict(facecolor="white", edgecolor="none", alpha=0.88, pad=0.08)
+            ax.text(left[i], left_label_y, value_fmt.format(left[i]), fontsize=7.0, ha="center", va="center", color=COLORS["muted"], bbox=value_box, zorder=4)
+            ax.text(right[i], i - 0.30, value_fmt.format(right[i]), fontsize=7.0, ha="center", va="center", color=COLORS["ink"], bbox=value_box, zorder=4)
+            diff_x = min(right[i] + x_range * 0.055, xlim[1] - 0.38)
+            ax.text(diff_x, i, diff_fmt.format((right[i] - left[i]) * scale), fontsize=8.1, ha="left", va="center", color=COLORS["ink"], bbox=dict(facecolor="white", edgecolor="none", alpha=0.94, pad=0.10), zorder=5)
         ax.set_yticks(y, ylabels)
         ax.invert_yaxis()
         ax.set_ylim(len(ylabels) - 0.55, -0.85)
@@ -519,7 +522,7 @@ def make_figure3() -> None:
         ax.spines[["top", "right", "left"]].set_visible(False)
         ax.tick_params(axis="y", length=0, pad=2)
 
-    dumbbell(axa, no_s2, has_s2, labels, "Conversation-level constructive ratio", "Constructive user turns (%)", (0, 18.8))
+    dumbbell(axa, no_s2, has_s2, labels, "Conversation-level constructive ratio", "Constructive user turns (%)", (0, 19.6))
     a_handles = [
         Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["s1"], markeredgecolor=COLORS["ink"], markersize=6.5),
         Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["s2"], markeredgecolor=COLORS["ink"], markersize=6.5),
@@ -1008,7 +1011,7 @@ def make_figure5() -> None:
     axd_m4 = fig.add_subplot(gs[1, 3], sharey=axd_m1)
 
     y = np.arange(len(order))
-    axa.barh(y, lift, height=0.30, color=scaf_color, edgecolor="none", zorder=2)
+    axa.barh(y, lift, height=0.18, color=scaf_color, alpha=0.52, edgecolor="none", zorder=2)
     valid_lift_ci = ~np.isnan(lift_ci).any(axis=1)
     if valid_lift_ci.any():
         axa.errorbar(
@@ -1017,12 +1020,12 @@ def make_figure5() -> None:
             xerr=np.vstack([lift[valid_lift_ci] - lift_ci[valid_lift_ci, 0], lift_ci[valid_lift_ci, 1] - lift[valid_lift_ci]]),
             fmt="none",
             ecolor=COLORS["ink"],
-            elinewidth=0.90,
-            capsize=2.4,
-            capthick=0.90,
+            elinewidth=1.15,
+            capsize=3.0,
+            capthick=1.10,
             zorder=6,
         )
-    axa.scatter(lift, y, s=58, color=scaf_color, edgecolor="white", lw=0.8, zorder=7)
+    axa.scatter(lift, y, s=74, color=scaf_color, edgecolor="white", lw=1.05, zorder=7)
     for i, val in enumerate(lift):
         label_x = val + 0.18
         label_ha = "left"
