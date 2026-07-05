@@ -10,7 +10,21 @@ Supplementary information is organized to support reproducibility and interpreta
 
 The main Methods summarize the three public corpora and six task settings. This section provides the auditable selection ledger behind those settings. The analyses use WildChat coding, WildChat writing, LMSYS Chat coding, LMSYS Chat writing, ShareChat coding and ShareChat writing. The analytic corpus contains 128,569 conversations and 981,470 total turns. WildChat contributes 31,878 coding conversations and 39,534 writing conversations; LMSYS Chat contributes 32,114 coding conversations and 21,023 writing conversations; ShareChat contributes 2,481 coding conversations and 1,539 writing conversations.
 
-Corpus construction followed a common sequence: source records were converted to role-ordered user--assistant conversations; conversations were screened for English-oriented content and at least four message turns; coding and writing task ecologies were assigned with LLM-assisted semantic filters; and retained conversations were processed by the shared annotation workflow. ShareChat required an additional strict-English screen after task filtering. Public dataset-card turns, raw CSV message rows and role-normalized analysis turns are not identical counting units, so the ShareChat ledger reports platform-url conversations and role-labelled message rows before deriving user and assistant turns. Supplementary Table~\ref{tab:corpus_provenance_artifacts} records the raw-to-analysis selection ledger and retained provenance artifacts for each corpus. Supplementary Table~\ref{tab:filter_classifier_validation} separates corpus-construction filters from analysis labels and reports validation or audit evidence for task ecology, user framing, language filtering and turn-level annotation.
+Corpus construction followed a common sequence: source records were converted to role-ordered user--assistant conversations; conversations were screened for English-oriented content and at least four message turns; coding and writing task ecologies were assigned with LLM-assisted semantic filters; and retained conversations were processed by the shared annotation workflow. ShareChat required an additional strict-English screen after task filtering. Public dataset-card turns, raw CSV message rows and role-normalized analysis turns are not identical counting units, so the ShareChat ledger reports platform-url conversations and role-labelled message rows before deriving user and assistant turns. 
+
+% Supplementary Table~\ref{tab:corpus_provenance_artifacts} records the raw-to-analysis selection ledger and retained provenance artifacts for each corpus. Supplementary Table~\ref{tab:filter_classifier_validation} separates corpus-construction filters from analysis labels and reports validation or audit evidence for task ecology, user framing, language filtering and turn-level annotation.
+
+  \input{tables/table_corpus_filtering_pipeline}
+
+  \clearpage
+  
+ Supplementary Table~\ref{tab:corpus_filtering_pipeline} gives the raw-to-
+  final filtering ledger for each corpus. Supplementary
+  Table~\ref{tab:corpus_provenance_artifacts} records the retained provenance
+  artifacts and script-hash prefixes. Supplementary
+  Table~\ref{tab:filter_classifier_validation} separates corpus-construction
+  filters from analysis labels and reports validation or audit evidence for
+  task ecology, user framing, language filtering and turn-level annotation.
 
 \input{tables/table_corpus_provenance_artifacts}
 
