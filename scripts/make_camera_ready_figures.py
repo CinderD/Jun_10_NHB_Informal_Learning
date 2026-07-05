@@ -1016,13 +1016,13 @@ def make_figure5() -> None:
             y[valid_lift_ci],
             xerr=np.vstack([lift[valid_lift_ci] - lift_ci[valid_lift_ci, 0], lift_ci[valid_lift_ci, 1] - lift[valid_lift_ci]]),
             fmt="none",
-            ecolor="#0D1822",
-            elinewidth=1.10,
-            capsize=3.0,
-            capthick=1.05,
+            ecolor=COLORS["ink"],
+            elinewidth=0.90,
+            capsize=2.4,
+            capthick=0.90,
             zorder=6,
         )
-    axa.scatter(lift, y, s=26, color=scaf_color, edgecolor=COLORS["ink"], lw=0.50, zorder=7)
+    axa.scatter(lift, y, s=58, color=scaf_color, edgecolor="white", lw=0.8, zorder=7)
     for i, val in enumerate(lift):
         label_x = val + 0.18
         label_ha = "left"
