@@ -17,9 +17,9 @@ Corpus
 WildChat
 & Public WildChat-4.8M release. Raw conversations are obtained from the original release rather than redistributed with the manuscript. The retained analysis archive records the refreshed task-filter outputs, user-turn relabel/update logs and downstream source-data exports used for this manuscript version.
 & Retained task-filter outputs have at least four message turns. The task filters were English-oriented semantic filters; source language metadata were retained for analysis but were not used as an additional strict post-hoc exclusion in the main WildChat sample.
-& LLM-assisted semantic task filters labelled conversations as \texttt{coding\_english} or \texttt{writing\_english} with score threshold $\geq .70$ after keyword prefiltering. The retained filter outputs contain 31,879 coding conversations and 39,534 writing conversations; all retained records had task-filter scores above threshold.
+& LLM-assisted semantic task filters labelled conversations as \texttt{coding\_english} or \texttt{writing\_english} with score threshold $\geq .70$ after keyword prefiltering. The final analytic outputs contain 31,878 coding conversations and 39,534 writing conversations after excluding one coding record with missing \texttt{learning\_intent}; all retained analytic records had task-filter scores above threshold.
 & 31,878 coding; 39,534 writing.
-& User framing came from the conversation-level \texttt{learning\_intent} annotation (\texttt{INTENTIONAL} versus \texttt{UNINTENTIONAL}), not from native metadata. The final WildChat user-turn update pass scanned 31,879 coding and 39,534 writing conversations; one coding conversation with missing \texttt{learning\_intent} was omitted from Level 2 and downstream analyses. \\
+& User framing came from the conversation-level \texttt{learning\_intent} annotation (\texttt{INTENTIONAL} versus \texttt{UNINTENTIONAL}), not from native metadata. The final WildChat user-turn update pass produced 31,878 coding and 39,534 writing analytic conversations after omitting the coding record with missing \texttt{learning\_intent} from Level 2 and downstream analyses. \\
 \addlinespace
 LMSYS Chat
 & LMSYS Chat-1M source release: 1,000,000 conversations.
