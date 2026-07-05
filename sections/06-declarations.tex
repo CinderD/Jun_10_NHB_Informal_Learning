@@ -2,11 +2,11 @@
 
 This study analyses public human--LLM conversation corpora released by their original data providers: WildChat, LMSYS Chat-1M and ShareChat. Readers should obtain the raw public conversation data from the original releases and comply with the corresponding dataset licences, terms of use and redistribution restrictions. The manuscript does not redistribute verbatim raw conversation logs, user identifiers or linked user histories. The Supplementary includes two complete de-identified illustrative transcripts derived from retained conversations and lightly edited to preserve turn sequence, task structure and annotation decisions while reducing privacy and licence risk.
 
-Derived data sufficient to verify the reported aggregate figures, tables and statistical summaries are archived on Zenodo at \url{https://doi.org/10.5281/zenodo.20995946}. The same release is also available in the GitHub repository at \url{https://github.com/CinderD/Informal-learning-in-everyday-human-LLM-interaction} (tag \texttt{v0.1.0}, commit \texttt{31e10cfea930}). The release includes the numeric values underlying the main figures, de-identified conversation-level and adjacent-turn analytic labels without raw message text, table source files, confidence intervals, p values, false-discovery-rate q values, model-output summaries, provenance documentation and SHA-256 checksums. Any request for additional derived label files that are not included in the public release is assessed against the original dataset licences and privacy constraints.
+Derived data sufficient to verify the reported aggregate figures, tables and statistical summaries are archived on Zenodo at \url{https://doi.org/10.5281/zenodo.20995946}. The same release is also available in the GitHub repository at \url{https://github.com/CinderD/Informal-learning-in-everyday-human-LLM-interaction} (tag \texttt{v0.1.1}, commit \texttt{51ad48c}). The release includes the numeric values underlying the main figures, de-identified conversation-level and adjacent-turn analytic labels without raw message text, table source files, confidence intervals, p values, false-discovery-rate q values, model-output summaries, provenance documentation and SHA-256 checksums. Any request for additional derived label files that are not included in the public release is assessed against the original dataset licences and privacy constraints.
 
 \section*{Code availability}
 
-Custom code used to export source data and de-identified label tables, compute statistical analyses and generate figures and tables is archived with the derived-data release on Zenodo at \url{https://doi.org/10.5281/zenodo.20995946} and is also available in the GitHub repository at \url{https://github.com/CinderD/Informal-learning-in-everyday-human-LLM-interaction} (tag \texttt{v0.1.0}, commit \texttt{31e10cfea930}). The repository excludes API keys, raw message text and files that cannot be redistributed under the original corpus terms. The archived release also includes annotation prompt templates, output schemas, parser checks, post-processing scripts and production manifests, excluding API keys and raw message text. Reproducing the full annotation pipeline from raw conversations requires user-provided API credentials and access to the raw public corpora from their original sources.
+Custom code used to export source data and de-identified label tables, compute statistical analyses and generate figures and tables is archived with the derived-data release on Zenodo at \url{https://doi.org/10.5281/zenodo.20995946} and is also available in the GitHub repository at \url{https://github.com/CinderD/Informal-learning-in-everyday-human-LLM-interaction} (tag \texttt{v0.1.1}, commit \texttt{51ad48c}). The repository excludes API keys, raw message text and files that cannot be redistributed under the original corpus terms. The archived release also includes annotation prompt templates, output schemas, parser checks, post-processing scripts and production manifests, excluding API keys and raw message text. Reproducing the full annotation pipeline from raw conversations requires user-provided API credentials and access to the raw public corpora from their original sources.
 
 \section*{Ethics statement}
 
@@ -18,20 +18,34 @@ H.L. and X.X. are employees of Microsoft Research Asia. The remaining authors de
 
 \section*{Author contributions}
 
-Author contributions are organized using the CRediT taxonomy. The contribution categories for this study are conceptualization, study design, data curation, annotation pipeline development, validation, statistical analysis, figure generation, writing of the original draft, manuscript review and editing, supervision and funding acquisition. Author initials and final role allocation: [to be added after the author list and order are confirmed]. All listed authors will approve the submitted version and will be accountable for their contributions.
+% Author contributions are organized using the CRediT taxonomy. The contribution categories for this study are conceptualization, study design, data curation, annotation pipeline development, validation, statistical analysis, figure generation, writing of the original draft, manuscript review and editing, supervision and funding acquisition. Author initials and final role allocation: [to be added after the author list and order are confirmed]. All listed authors will approve the submitted version and will be accountable for their contributions.
+
+Z.C., H.L. and Z.X. conceived the project. H.L., X.X. and H.Q. secured funding for the project. Z.C. and H.L. collected the data. Z.C. and H.L. managed the data processing and analysis process. Z.C. and H.L. prepared the analysis of the results. Z.C. drafted the manuscript. All authors contributed to the interpretation of the results and edited and revised the manuscript. H.L. and X.X. supervised the project.
+
+% T.H., J.H.-O., D.S. and L.S. conceived the project. X.X., D.S. and L.S. secured funding for the project. T.H., Y.J. and L.S. collected the data. H.L. and L.S. managed
+% the creativity evaluation process. T.H. prepared the result analysis and plotting and
+% drafted the manuscript. All authors contributed to the interpretation of the results
+% and edited and revised the manuscript. D.S. and L.S. supervised the project.
+
+\section*{Corresponding authors}
+Correspondence to Haotian Li.
+
 
 \section*{Acknowledgements and funding}
 
-Acknowledgements and funding information, including grant numbers where applicable: [to be added]. Funders had no role in study design, data collection, analysis, interpretation, manuscript preparation or publication decisions unless stated otherwise.
+TBD.
+
+% Acknowledgements and funding information, including grant numbers where applicable: [to be added]. Funders had no role in study design, data collection, analysis, interpretation, manuscript preparation or publication decisions unless stated otherwise.
 
 \section*{LLM use statement}
 
-Large language models were objects of study and were also used as annotation and writing-assistance tools. Production labels were generated with LLM-assisted workflows and checked through parser rules, targeted update scripts and human validation. The authors also used LLM-based tools to assist with code drafting, debugging, workflow organization and language editing. No LLM or AI tool is listed as an author, and the authors take responsibility for the final manuscript, analyses and interpretation. Additional details are provided in Methods.
+Large language models were objects of study and were also used as annotation and writing-assistance tools. Production labels were generated with LLM-assisted workflows and checked through parser rules, targeted update scripts and human validation. The authors also used LLM-based tools to assist with code drafting, debugging, workflow organization and language editing. No LLM or AI tool is listed as an author, and the authors take responsibility for the final manuscript, analyses and interpretation. 
 
 \section*{Reporting summary and editorial policy checklist}
 
 A Nature Portfolio Reporting Summary and the journal-required editorial policy checklist have been prepared as separate submission files. The manuscript and supplementary information report the observational design, sampling and filtering rules, annotation workflow, human validation evidence, statistical model specifications, bootstrap procedures, multiple-comparison handling and data/code availability statements needed to assess reproducibility.
 
 \section*{Figure source data}
+To be updated.
 
-Source data for the numeric main figures are provided in \texttt{source\_data/figure2\_source\_data.csv}, \texttt{source\_data/figure3\_source\_data.csv}, \texttt{source\_data/figure4\_source\_data.csv} and \texttt{source\_data/figure5\_source\_data.csv}. Figure~1 is a conceptual framework figure and has no numeric source data. Supplementary table and regression source files are provided in \texttt{tables/} and \texttt{outputs/integrated\_regression/}.
+% Source data for the numeric main figures are provided in \texttt{source\_data/figure2\_source\_data.csv}, \texttt{source\_data/figure3\_source\_data.csv}, \texttt{source\_data/figure4\_source\_data.csv} and \texttt{source\_data/figure5\_source\_data.csv}. Figure~1 is a conceptual framework figure and has no numeric source data. Supplementary table and regression source files are provided in \texttt{tables/} and \texttt{outputs/integrated\_regression/}.
