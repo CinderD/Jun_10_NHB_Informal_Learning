@@ -1,0 +1,174 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2172" height="724" viewBox="0 0 2172 724">
+  <defs>
+    <style><![CDATA[
+      .txt { font-family: Inter, 'Source Sans 3', Arial, sans-serif; font-feature-settings: 'kern' 1; }
+      .title { font-family: Inter, 'Source Sans 3', Arial, sans-serif; font-weight: 750; }
+      .body { font-family: Inter, 'Source Sans 3', Arial, sans-serif; font-weight: 560; }
+      .small { font-family: Inter, 'Source Sans 3', Arial, sans-serif; font-weight: 560; }
+      .cap { stroke-linecap: round; stroke-linejoin: round; }
+    ]]></style>
+    <linearGradient id="gBlue" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2A65C6"/><stop offset="1" stop-color="#8DB0E7"/></linearGradient>
+    <linearGradient id="gGreen" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#118A62"/><stop offset="1" stop-color="#8FD2BA"/></linearGradient>
+    <linearGradient id="gOlive" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4C6B35"/><stop offset="1" stop-color="#A7B995"/></linearGradient>
+    <linearGradient id="gOrange" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#EA6E17"/><stop offset="1" stop-color="#F7B884"/></linearGradient>
+    <linearGradient id="gCoral" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E34C42"/><stop offset="1" stop-color="#F5A69E"/></linearGradient>
+    <linearGradient id="gPurple" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#64308D"/><stop offset="1" stop-color="#B89AD0"/></linearGradient>
+    <linearGradient id="gRed" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#C5252E"/><stop offset="1" stop-color="#E79796"/></linearGradient>
+    <marker id="arrowHead" markerWidth="12" markerHeight="12" refX="8" refY="6" orient="auto"><path d="M0,0 L10,6 L0,12 z" fill="#263D5B"/></marker>
+  </defs>
+
+<rect x="2.0" y="2.0" width="2168.0" height="720.0" rx="20" fill="#FFFFFF" stroke="#CAD7EA" stroke-width="1.2" opacity="0.95"/>
+<circle cx="147.0" cy="54" r="30" fill="url(#gBlue)"/>
+<text class="txt title" text-anchor="middle" font-size="43" fill="#FFFFFF" font-weight="750"><tspan x="147.0" y="70.0">1</tspan></text>
+<rect x="30.0" y="92.0" width="234.0" height="380.0" rx="13" fill="#FFFFFF" stroke="#1E65C9" stroke-width="1.25" opacity="0.55"/>
+<g id="Icon_step_1"><g class="cap" fill="none" stroke="#1E65C9" stroke-width="3.186">
+      <path d="M 116.3 130.2 H 162.3 L 182.4 151.4 V 219.8 H 116.3 Z"/>
+      <path d="M 162.3 130.2 V 151.4 H 182.4"/>
+      <line x1="132.8" y1="166.7" x2="162.3" y2="166.7"/>
+      <line x1="132.8" y1="182.1" x2="168.2" y2="182.1"/>
+      <line x1="132.8" y1="197.4" x2="168.2" y2="197.4"/>
+    </g></g>
+<text class="txt title" text-anchor="middle" font-size="26" fill="#1E65C9" font-weight="730"><tspan x="147.0" y="304.0">Raw long source</tspan></text>
+<text class="txt body" text-anchor="middle" font-size="22" fill="#1C2637" font-weight="560"><tspan x="147.0" y="387.0">Public long-form</tspan><tspan x="147.0" y="414.5">documents</tspan></text>
+<line x1="276.0" y1="226.0" x2="297.0" y2="226.0" stroke="#263D5B" stroke-width="2.3" opacity="0.88" marker-end="url(#arrowHead)"/>
+<circle cx="406.0" cy="54" r="30" fill="url(#gGreen)"/>
+<text class="txt title" text-anchor="middle" font-size="43" fill="#FFFFFF" font-weight="750"><tspan x="406.0" y="70.0">2</tspan></text>
+<rect x="289.0" y="92.0" width="234.0" height="380.0" rx="13" fill="#FFFFFF" stroke="#31A879" stroke-width="1.25" opacity="0.55"/>
+<g id="Icon_step_2"><g class="cap" fill="none" stroke="#31A879" stroke-width="3.186">
+      <rect x="375.3" y="137.2" width="51.9" height="70.8" rx="7.1"/>
+      <rect x="396.6" y="153.8" width="51.9" height="70.8" rx="7.1" opacity="0.88"/>
+      <rect x="415.4" y="172.6" width="51.9" height="70.8" rx="7.1" stroke-dasharray="8 7" opacity="0.88"/>
+    </g></g>
+<text class="txt title" text-anchor="middle" font-size="26" fill="#31A879" font-weight="730"><tspan x="406.0" y="304.0">Overlapping</tspan><tspan x="406.0" y="334.7">windows</tspan></text>
+<text class="txt body" text-anchor="middle" font-size="22" fill="#1C2637" font-weight="560"><tspan x="406.0" y="387.0">Segment into</tspan><tspan x="406.0" y="414.5">overlapping windows</tspan></text>
+<line x1="535.0" y1="226.0" x2="556.0" y2="226.0" stroke="#263D5B" stroke-width="2.3" opacity="0.88" marker-end="url(#arrowHead)"/>
+<circle cx="665.0" cy="54" r="30" fill="url(#gOlive)"/>
+<text class="txt title" text-anchor="middle" font-size="43" fill="#FFFFFF" font-weight="750"><tspan x="665.0" y="70.0">3</tspan></text>
+<rect x="548.0" y="92.0" width="234.0" height="380.0" rx="13" fill="#FFFFFF" stroke="#718B5E" stroke-width="1.25" opacity="0.55"/>
+<g id="Icon_step_3"><g class="cap" fill="none" stroke="#718B5E" stroke-width="3.186">
+      <rect x="632.0" y="137.2" width="73.2" height="87.3" rx="8.3"/>
+      <circle cx="644.9" cy="158.5" r="7.1" fill="#718B5E" opacity="0.95"/><line x1="662.6" y1="158.5" x2="692.1" y2="158.5"/><circle cx="644.9" cy="177.4" r="7.1" fill="#718B5E" opacity="0.95"/><line x1="662.6" y1="177.4" x2="692.1" y2="177.4"/><circle cx="644.9" cy="196.2" r="7.1" fill="#718B5E" opacity="0.95"/><line x1="662.6" y1="196.2" x2="692.1" y2="196.2"/>
+    </g></g>
+<text class="txt title" text-anchor="middle" font-size="26" fill="#718B5E" font-weight="730"><tspan x="665.0" y="304.0">Local evidence</tspan><tspan x="665.0" y="334.7">records</tspan></text>
+<text class="txt body" text-anchor="middle" font-size="22" fill="#1C2637" font-weight="560"><tspan x="665.0" y="387.0">Extract entities,</tspan><tspan x="665.0" y="414.5">events, quotations</tspan></text>
+<line x1="794.0" y1="226.0" x2="815.0" y2="226.0" stroke="#263D5B" stroke-width="2.3" opacity="0.88" marker-end="url(#arrowHead)"/>
+<circle cx="924.0" cy="54" r="30" fill="url(#gOrange)"/>
+<text class="txt title" text-anchor="middle" font-size="43" fill="#FFFFFF" font-weight="750"><tspan x="924.0" y="70.0">4</tspan></text>
+<rect x="807.0" y="92.0" width="234.0" height="380.0" rx="13" fill="#FFFFFF" stroke="#F28A4B" stroke-width="1.25" opacity="0.55"/>
+<g id="Icon_step_4"><g class="cap" fill="none" stroke="#F28A4B" stroke-width="3.186"><line x1="898.0" y1="203.3" x2="914.6" y2="172.6"/><line x1="914.6" y1="172.6" x2="933.4" y2="189.2"/><line x1="914.6" y1="172.6" x2="950.0" y2="144.3"/><line x1="950.0" y1="144.3" x2="964.1" y2="184.4"/><circle cx="898.0" cy="203.3" r="8.3" fill="#FFFFFF"/><circle cx="914.6" cy="172.6" r="8.3" fill="#FFFFFF"/><circle cx="933.4" cy="189.2" r="8.3" fill="#FFFFFF"/><circle cx="950.0" cy="144.3" r="8.3" fill="#FFFFFF"/><circle cx="964.1" cy="184.4" r="8.3" fill="#FFFFFF"/></g></g>
+<text class="txt title" text-anchor="middle" font-size="26" fill="#F28A4B" font-weight="730"><tspan x="924.0" y="304.0">Typed source</tspan><tspan x="924.0" y="334.7">graph</tspan></text>
+<text class="txt body" text-anchor="middle" font-size="22" fill="#1C2637" font-weight="560"><tspan x="924.0" y="387.0">Integrate records</tspan><tspan x="924.0" y="414.5">into a typed graph</tspan></text>
+<line x1="1053.0" y1="226.0" x2="1074.0" y2="226.0" stroke="#263D5B" stroke-width="2.3" opacity="0.88" marker-end="url(#arrowHead)"/>
+<circle cx="1183.0" cy="54" r="30" fill="url(#gCoral)"/>
+<text class="txt title" text-anchor="middle" font-size="43" fill="#FFFFFF" font-weight="750"><tspan x="1183.0" y="70.0">5</tspan></text>
+<rect x="1066.0" y="92.0" width="234.0" height="380.0" rx="13" fill="#FFFFFF" stroke="#EC706D" stroke-width="1.25" opacity="0.55"/>
+<g id="Icon_step_5"><g class="cap" fill="none" stroke="#EC706D" stroke-width="3.186">
+      <circle cx="1180.6" cy="165.6" r="37.8"/>
+      <line x1="1206.6" y1="193.9" x2="1231.4" y2="219.8"/>
+      <circle cx="1168.8" cy="166.7" r="5.7" fill="#FFFFFF"/>
+      <circle cx="1188.9" cy="153.8" r="5.7" fill="#FFFFFF"/>
+      <circle cx="1191.3" cy="180.9" r="5.7" fill="#FFFFFF"/>
+      <line x1="1173.6" y1="164.4" x2="1184.2" y2="157.3"/>
+      <line x1="1173.6" y1="169.1" x2="1186.5" y2="178.5"/>
+    </g></g>
+<text class="txt title" text-anchor="middle" font-size="26" fill="#EC706D" font-weight="730"><tspan x="1183.0" y="304.0">Geometry-specific</tspan><tspan x="1183.0" y="334.7">trail mining</tspan></text>
+<text class="txt body" text-anchor="middle" font-size="22" fill="#1C2637" font-weight="560"><tspan x="1183.0" y="387.0">Mine candidate trails</tspan><tspan x="1183.0" y="414.5">in seven geometries</tspan></text>
+<line x1="1312.0" y1="226.0" x2="1333.0" y2="226.0" stroke="#263D5B" stroke-width="2.3" opacity="0.88" marker-end="url(#arrowHead)"/>
+<circle cx="1442.0" cy="54" r="30" fill="url(#gPurple)"/>
+<text class="txt title" text-anchor="middle" font-size="43" fill="#FFFFFF" font-weight="750"><tspan x="1442.0" y="70.0">6</tspan></text>
+<rect x="1325.0" y="92.0" width="234.0" height="380.0" rx="13" fill="#FFFFFF" stroke="#8057A7" stroke-width="1.25" opacity="0.55"/>
+<g id="Icon_step_6"><g class="cap" fill="none" stroke="#8057A7" stroke-width="3.186">
+      <path d="M 1413.7 134.9 H 1457.3 L 1475.0 153.8 V 210.4 H 1413.7 Z"/>
+      <path d="M 1457.3 134.9 V 153.8 H 1475.0"/>
+      <line x1="1429.0" y1="165.6" x2="1457.3" y2="165.6"/>
+      <line x1="1429.0" y1="182.1" x2="1455.0" y2="182.1"/>
+      <path d="M 1462.1 208.0 L 1489.2 177.4 L 1476.2 165.6 L 1449.1 196.2 Z"/>
+      <line x1="1453.8" y1="196.2" x2="1463.2" y2="206.9"/>
+    </g></g>
+<text class="txt title" text-anchor="middle" font-size="26" fill="#8057A7" font-weight="730"><tspan x="1442.0" y="304.0">Question, answer,</tspan><tspan x="1442.0" y="334.7">rubric writing</tspan></text>
+<text class="txt body" text-anchor="middle" font-size="22" fill="#1C2637" font-weight="560"><tspan x="1442.0" y="387.0">Write only after a</tspan><tspan x="1442.0" y="414.5">grounded trail exists</tspan></text>
+<line x1="1571.0" y1="226.0" x2="1592.0" y2="226.0" stroke="#263D5B" stroke-width="2.3" opacity="0.88" marker-end="url(#arrowHead)"/>
+<circle cx="1701.0" cy="54" r="30" fill="url(#gRed)"/>
+<text class="txt title" text-anchor="middle" font-size="43" fill="#FFFFFF" font-weight="750"><tspan x="1701.0" y="70.0">7</tspan></text>
+<rect x="1584.0" y="92.0" width="234.0" height="380.0" rx="13" fill="#FFFFFF" stroke="#DB6262" stroke-width="1.25" opacity="0.55"/>
+<g id="Icon_step_7"><g class="cap" fill="none" stroke="#DB6262" stroke-width="3.304">
+      <path d="M 1701.0 130.2 C 1715.2 144.3 1734.0 143.1 1743.5 149.0 V 180.9 C 1741.1 205.7 1717.5 218.7 1701.0 226.9 C 1684.5 218.7 1660.9 205.7 1658.5 180.9 V 149.0 C 1668.0 143.1 1686.8 144.3 1701.0 130.2 Z"/>
+      <path d="M 1682.1 180.9 L 1697.5 196.2 L 1724.6 162.0" stroke-width="6.5"/>
+    </g></g>
+<text class="txt title" text-anchor="middle" font-size="26" fill="#DB6262" font-weight="730"><tspan x="1701.0" y="304.0">Validity gates</tspan></text>
+<text class="txt body" text-anchor="middle" font-size="22" fill="#1C2637" font-weight="560"><tspan x="1701.0" y="387.0">Grounding, necessity,</tspan><tspan x="1701.0" y="414.5">shortcuts, answerability,</tspan><tspan x="1701.0" y="442.0">audit</tspan></text>
+<line x1="1830.0" y1="226.0" x2="1851.0" y2="226.0" stroke="#263D5B" stroke-width="2.3" opacity="0.88" marker-end="url(#arrowHead)"/>
+<circle cx="1960.0" cy="54" r="30" fill="url(#gBlue)"/>
+<text class="txt title" text-anchor="middle" font-size="43" fill="#FFFFFF" font-weight="750"><tspan x="1960.0" y="70.0">8</tspan></text>
+<rect x="1843.0" y="92.0" width="234.0" height="380.0" rx="13" fill="#FFFFFF" stroke="#1E65C9" stroke-width="1.25" opacity="0.55"/>
+<g id="Icon_step_8"><g class="cap" fill="none" stroke="#1E65C9" stroke-width="3.4219999999999997">
+      <rect x="1930.5" y="167.9" width="63.7" height="56.6" rx="10.6"/>
+      <path d="M 1942.3 167.9 V 151.4 C 1942.3 130.2 1982.4 130.2 1982.4 151.4 V 167.9"/>
+      <circle cx="1962.4" cy="195.1" r="7.1" fill="#1E65C9"/>
+      <line x1="1962.4" y1="201.0" x2="1962.4" y2="212.8"/>
+    </g></g>
+<text class="txt title" text-anchor="middle" font-size="26" fill="#1E65C9" font-weight="730"><tspan x="1960.0" y="304.0">Release</tspan></text>
+<text class="txt body" text-anchor="middle" font-size="22" fill="#1C2637" font-weight="560"><tspan x="1960.0" y="387.0">Released tasks;</tspan><tspan x="1960.0" y="414.5">metadata withheld</tspan><tspan x="1960.0" y="442.0">from model</tspan></text>
+<line x1="115.0" y1="512.0" x2="845.0" y2="512.0" stroke="#6F8DB6" stroke-width="1.8" opacity="0.9" stroke-dasharray="8 8"/>
+<line x1="1260.0" y1="512.0" x2="2058.0" y2="512.0" stroke="#6F8DB6" stroke-width="1.8" opacity="0.9" stroke-dasharray="8 8"/>
+<text class="txt title" text-anchor="middle" font-size="34" fill="#1C2637" font-weight="720"><tspan x="1086.0" y="526.0">Evaluation boundary</tspan></text>
+<rect x="90.0" y="548.0" width="550.0" height="128.0" rx="13" fill="#FFFFFF" stroke="#4E83D8" stroke-width="1.25" opacity="0.6"/>
+<text class="txt title" text-anchor="middle" font-size="28" fill="#1E65C9" font-weight="700"><tspan x="330.0" y="584.0">Model sees</tspan></text>
+<g class="cap" fill="none" stroke="#1E65C9" stroke-width="1.176">
+      <path d="M 469.0 573.0 C 476.6 561.2 493.4 561.2 501.0 573.0 C 493.4 584.8 476.6 584.8 469.0 573.0 Z"/>
+      <circle cx="485.0" cy="573.0" r="5.0"/>
+    </g>
+<rect x="108.0" y="608.0" width="250.0" height="52.0" rx="7" fill="#FFFFFF" stroke="#4E83D8" stroke-width="1.1" opacity="0.45"/>
+<g class="cap" fill="none" stroke="#1E65C9" stroke-width="1.1340000000000001">
+      <path d="M 132.1 618.0 H 148.5 L 155.6 625.6 V 650.0 H 132.1 Z"/>
+      <path d="M 148.5 618.0 V 625.6 H 155.6"/>
+      <line x1="138.0" y1="631.1" x2="148.5" y2="631.1"/>
+      <line x1="138.0" y1="636.5" x2="150.6" y2="636.5"/>
+      <line x1="138.0" y1="642.0" x2="150.6" y2="642.0"/>
+    </g>
+<text class="txt body" text-anchor="start" font-size="22" fill="#1C2637" font-weight="560"><tspan x="190.0" y="642.0">Full source</tspan></text>
+<rect x="376.0" y="608.0" width="250.0" height="52.0" rx="7" fill="#FFFFFF" stroke="#4E83D8" stroke-width="1.1" opacity="0.45"/>
+<g class="cap" fill="none" stroke="#1E65C9" stroke-width="2.4"><circle cx="412" cy="634" r="21"/><text class="txt" x="412" y="644" text-anchor="middle" font-size="31" font-weight="600" fill="#1E65C9">?</text></g>
+<text class="txt body" text-anchor="start" font-size="22" fill="#1C2637" font-weight="560"><tspan x="458.0" y="642.0">Public question</tspan></text>
+<rect x="650.0" y="548.0" width="1425.0" height="128.0" rx="13" fill="#FFFFFF" stroke="#DB6262" stroke-width="1.25" opacity="0.45"/>
+<text class="txt title" text-anchor="middle" font-size="28" fill="#DB6262" font-weight="700"><tspan x="1337.5" y="584.0">Hidden for evaluation</tspan></text>
+<g class="cap" fill="none" stroke="#DB6262" stroke-width="1.176">
+      <path d="M 1561.5 573.0 C 1569.1 561.2 1585.9 561.2 1593.5 573.0 C 1585.9 584.8 1569.1 584.8 1561.5 573.0 Z"/>
+      <circle cx="1577.5" cy="573.0" r="5.0"/>
+    </g><line class="cap" x1="1562.4" y1="588.1" x2="1592.6" y2="557.9" stroke="#DB6262" stroke-width="1.1"/>
+<rect x="670.0" y="606.0" width="225.0" height="55.0" rx="7" fill="#FFFFFF" stroke="#DB6262" stroke-width="1.05" opacity="0.45"/>
+<path class="cap" d="M 700.0 621.2 V 648.4 L 708.0 642.0 L 716.0 648.4 V 621.2 Z" fill="none" stroke="#DB6262" stroke-width="1.2000000000000002"/>
+<text class="txt body" text-anchor="start" font-size="21" fill="#1C2637" font-weight="560"><tspan x="748.0" y="642.0">Evidence spans</tspan></text>
+<rect x="907.0" y="606.0" width="190.0" height="55.0" rx="7" fill="#FFFFFF" stroke="#DB6262" stroke-width="1.05" opacity="0.45"/>
+<g class="cap" fill="none" stroke="#DB6262" stroke-width="1.2800000000000002">
+      <line x1="939.4" y1="621.2" x2="935.8" y2="647.6"/>
+      <line x1="950.2" y1="621.2" x2="946.6" y2="647.6"/>
+      <line x1="932.2" y1="629.6" x2="956.2" y2="629.6"/>
+      <line x1="930.6" y1="639.2" x2="954.6" y2="639.2"/>
+    </g>
+<text class="txt body" text-anchor="start" font-size="21" fill="#1C2637" font-weight="560"><tspan x="985.0" y="642.0">Clue count</tspan></text>
+<rect x="1109.0" y="606.0" width="205.0" height="55.0" rx="7" fill="#FFFFFF" stroke="#DB6262" stroke-width="1.05" opacity="0.45"/>
+<g class="cap" fill="none" stroke="#DB6262" stroke-width="1.2000000000000002"><line x1="1137.0" y1="638.0" x2="1147.0" y2="628.0"/><line x1="1147.0" y1="628.0" x2="1157.0" y2="642.0"/><line x1="1137.0" y1="638.0" x2="1157.0" y2="642.0"/><circle cx="1137.0" cy="638.0" r="2.4" fill="#FFFFFF"/><circle cx="1147.0" cy="628.0" r="2.4" fill="#FFFFFF"/><circle cx="1157.0" cy="642.0" r="2.4" fill="#FFFFFF"/></g>
+<text class="txt body" text-anchor="start" font-size="21" fill="#1C2637" font-weight="560"><tspan x="1187.0" y="642.0">Graph path</tspan></text>
+<rect x="1326.0" y="606.0" width="260.0" height="55.0" rx="7" fill="#FFFFFF" stroke="#DB6262" stroke-width="1.05" opacity="0.45"/>
+<g class="cap" fill="none" stroke="#DB6262" stroke-width="1.2000000000000002">
+      <circle cx="1364.0" cy="634.0" r="12.0"/>
+      <text class="txt" x="1364.0" y="638.0" text-anchor="middle" font-size="15.2" font-weight="650" fill="#DB6262">A</text>
+    </g>
+<text class="txt body" text-anchor="start" font-size="21" fill="#1C2637" font-weight="560"><tspan x="1404.0" y="642.0">Reference answer</tspan></text>
+<rect x="1598.0" y="606.0" width="170.0" height="55.0" rx="7" fill="#FFFFFF" stroke="#DB6262" stroke-width="1.05" opacity="0.45"/>
+<g class="cap" fill="none" stroke="#DB6262" stroke-width="1.2000000000000002">
+      <line x1="1625.6" y1="622.8" x2="1625.6" y2="646.0"/>
+      <line x1="1632.0" y1="626.0" x2="1647.2" y2="626.0"/>
+      <line x1="1632.0" y1="634.0" x2="1647.2" y2="634.0"/>
+      <line x1="1632.0" y1="642.0" x2="1647.2" y2="642.0"/>
+    </g>
+<text class="txt body" text-anchor="start" font-size="21" fill="#1C2637" font-weight="560"><tspan x="1676.0" y="642.0">Rubric</tspan></text>
+<rect x="1780.0" y="606.0" width="240.0" height="55.0" rx="7" fill="#FFFFFF" stroke="#DB6262" stroke-width="1.05" opacity="0.45"/>
+<g class="cap" fill="none" stroke="#DB6262" stroke-width="1.2000000000000002">
+      <rect x="1810.0" y="622.0" width="16.8" height="24.8" rx="0.8"/>
+      <line x1="1814.8" y1="629.2" x2="1822.4" y2="629.2"/>
+      <line x1="1814.8" y1="635.6" x2="1822.4" y2="635.6"/>
+    </g>
+<text class="txt body" text-anchor="start" font-size="21" fill="#1C2637" font-weight="560"><tspan x="1858.0" y="642.0">Validation notes</tspan></text>
+</svg>
