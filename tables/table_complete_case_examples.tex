@@ -50,7 +50,7 @@
   {\scriptsize\textcolor{caseblue}{\textbf{Legend}}\quad
   \constructivebadge\hspace{3pt}\activebadge\hspace{3pt}\scaffoldbadge\hspace{3pt}\referencebadge}\par\vspace{1pt}
   {\scriptsize\textcolor{caseblue}{\textbf{Assistant codes}}\quad
-  \casecode{I2} cognitive support intent; \casecode{M1--M6} non-exclusive support forms.}
+  \casecode{I1/I2} support intent; \casecode{M1--M6} support forms (non-exclusive).}
   \endgroup}
 
 \clearpage
@@ -61,40 +61,36 @@
 \setlength{\tabcolsep}{3pt}
 \renewcommand{\arraystretch}{1.18}
 \begin{longtable}{>{\raggedright\arraybackslash}p{0.11\textwidth}>{\raggedright\arraybackslash}p{0.58\textwidth}>{\raggedright\arraybackslash}p{0.25\textwidth}}
-\caption{\textbf{De-identified coding case with turn-level labels.} A retained WildChat coding conversation, lightly formatted for readability. Badges encode role, user engagement and assistant support labels.}
+\caption{\textbf{De-identified coding case excerpt with turn-level labels.} A retained WildChat coding conversation, lightly excerpted and formatted for readability. Badges encode role, user engagement and assistant support labels.}
 \label{tab:complete_coding_case}\\
-\multicolumn{3}{p{0.96\textwidth}}{\caseheader{Coding case}{SQL transaction handling}
+\multicolumn{3}{p{0.96\textwidth}}{\caseheader{Coding case}{wxWidgets menu debugging}
 {WildChat coding}
-{Intentional}
-{4 turns}
-{Constructive follow-up tests transaction scope; scaffolded replies explain the mechanism and provide procedural modelling.}}\\[5pt]
+{Unintentional}
+{4-turn excerpt}
+{Feedback and instructions diagnose a likely cause; a follow-up troubleshooting response uses checks and a request for context to continue debugging.}}\\[5pt]
 \multicolumn{3}{p{0.96\textwidth}}{\caselegend}\\[5pt]
 \toprule
 \textbf{Turn} & \textbf{De-identified raw transcript} & \textbf{Label and annotation cue} \\
 \midrule
 \endfirsthead
-\caption[]{\textbf{Complete de-identified coding case with raw transcript and turn-level labels} (continued).}\\
+\caption[]{\textbf{De-identified coding case excerpt with raw transcript and turn-level labels} (continued).}\\
 \toprule
 \textbf{Turn} & \textbf{De-identified raw transcript} & \textbf{Label and annotation cue} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-\userturn{U1} & ``how does \texttt{XACT\_ABORT} work for a sql server script? if I have a script that does some select queries and some delete queries (the delete queries are inside a `sql transaction' -- I did this so that if some delete queries fail, the successful ones won't get committed), do I need to set \texttt{XACT\_ABORT} on or off? does \texttt{XACT\_ABORT} only apply to the sql transaction or all of the script? if it applies to just a sql transaction, how do I specify which sql transaction to turn it on for? do the deletes need a sql transaction in the first place?'' & \constructivebadge\par The user probes a \casekey{mechanism}, asks about \casekey{scope} and links the answer to rollback behaviour. \\
+\userturn{U1} & ``I have this C++ wxWidgets code to popup a menu but can't make it to work, I got an error that can't popup a \texttt{NULL} menu. How can I do this correctly? ... \texttt{hamburgerMenu = new wxMenu();} ... \texttt{PopupMenu(hamburgerMenu, pos);}'' & \activebadge\par The user asks for help debugging a specific popup-menu error. \\
 \addlinespace[4pt]
-\assistantturn{A1} & ``\texttt{XACT\_ABORT} is a SQL Server setting that, when set to ON, automatically rolls back the current transaction if a run-time error occurs. It works at the transaction level and not for individual statements inside the transaction. If there is an error within the transaction, it will rollback the entire transaction and won't affect any statement outside the transaction.'' & \scaffoldbadge\quad \casecode{I2}\ \casecode{M4}\par The reply \supportkey{explains the mechanism} connecting errors, transactions and rollback. \\
+\assistantturn{A1} & ``Based on the code you provided, it seems that the variable \texttt{bpButtonHamburger} is not assigned to an actual \texttt{wxBitmapButton} object. Therefore, when the \texttt{OnHamburgerClick} function is called, \texttt{bpButtonHamburger} is \texttt{NULL}, which leads to the error you're experiencing.'' & \scaffoldbadge\quad \casecode{I2}\ \casecode{M1}\ \casecode{M3}\ \casecode{M4}\par The reply gives \supportkey{feedback} on the likely fault, \supportkey{instructs} what to change and explains why the handler matters. \\
 \addlinespace[3pt]
-\casecontinued{A1 cont.} & ``In your case, since you are using transactions for your \texttt{DELETE} queries, you can use \texttt{XACT\_ABORT} to ensure that your transaction is rolled back if any of the \texttt{DELETE} queries fail. You don't need to turn it on and off for individual transactions. Instead, it will affect all transactions in the current session. To enable it, simply add \texttt{SET XACT\_ABORT ON;} at the beginning of your script: \texttt{SET XACT\_ABORT ON;} \texttt{BEGIN TRANSACTION;} -- Your \texttt{SELECT} and \texttt{DELETE} queries go here -- \texttt{COMMIT TRANSACTION;}'' & \casecontinued{Same assistant response; code block formatted inline.} \\
-\addlinespace[3pt]
-\casecontinued{A1 cont.} & ``You don't need to specify it for each transaction; once you set it to ON, it will apply to all transactions until you explicitly set it to OFF. Regarding your question about using transactions for \texttt{DELETE} statements, it depends on your requirements. If you want to ensure the consistency of your data and only commit the changes when all the \texttt{DELETE} queries are successful, then using a transaction is a good approach. However, if it's not necessary for all the \texttt{DELETE} queries to be successful for the script to be considered successful, you can skip using transactions. But note that without transactions, any successful \texttt{DELETE} queries will be committed immediately and cannot be rolled back if a later query fails. In summary, if you want to make sure that all the \texttt{DELETE} queries inside a transaction are successful for the changes to be committed, you should use a transaction and set \texttt{XACT\_ABORT} to ON.'' & \casecontinued{The response remains explanatory rather than merely providing a direct command.} \\
+\casecontinued{A1 cont.} & ``To fix this issue, make sure you initialize \texttt{bpButtonHamburger} with a valid \texttt{wxBitmapButton} instance ... note that the event type in \texttt{OnHamburgerClick} has changed from \texttt{wxContextMenuEvent} to \texttt{wxCommandEvent}, as it is more appropriate for handling button click events.'' & \casecontinued{Same scaffolded response; instruction and explanation continued.} \\
 \addlinespace[4pt]
-\userturn{U2} & ``do I need to set \texttt{XACT\_ABORT} to OFF at the end off the script or will it not matter due to scope? what about using a try/catch outside a transaction instead of \texttt{XACT\_ABORT}?'' & \constructivebadge\par The user extends the prior answer by comparing \casekey{scope} and an \casekey{alternative strategy}. \\
+\userturn{U2} & ``No I forgot to add that part but the button was already correctly initialized'' & \activebadge\par The user provides task-relevant clarification that redirects the debugging path. \\
 \addlinespace[4pt]
-\assistantturn{A2} & ``If you set \texttt{XACT\_ABORT} to ON at the beginning of your script and want to revert it to the previous setting when your script finishes, you can add \texttt{SET XACT\_ABORT OFF;} at the end of your script. However, in most cases, it's sufficient to set it to ON if required, and you don't need to revert it at the end, as the setting will only apply to your current session, and other sessions will have their own separate settings. If you're concerned about preserving the original setting, you can store the current setting in a variable and restore it at the end of the script: \texttt{DECLARE @original\_xact\_abort\_setting AS VARCHAR(3);} \texttt{SELECT @original\_xact\_abort\_setting = CONVERT(VARCHAR(3), @@OPTIONS \& 16384);} \texttt{SET XACT\_ABORT ON;} -- Your queries and transactions go here -- \texttt{IF @original\_xact\_abort\_setting = '0' SET XACT\_ABORT OFF;}'' & \scaffoldbadge\quad \casecode{I2}\ \casecode{M3}\ \casecode{M4}\ \casecode{M5}\par The reply combines \supportkey{procedure}, \supportkey{explanation} and an adaptable model. \\
+\assistantturn{A2} & ``If the \texttt{bpButtonHamburger} button is already correctly initialized and you're still getting the error that the menu is \texttt{NULL}, there may be some other issue causing the problem. Here are some things you can check: make sure the \texttt{hamburgerMenu} object is not being destroyed; verify that \texttt{OnHamburgerClick} is being called; double-check the button ID and event handler; check for conflicting handlers.'' & \scaffoldbadge\quad \casecode{I1}\ \casecode{M2}\ \casecode{M6}\par The reply gives diagnostic cues and uses \supportkey{questioning/request for context} to continue troubleshooting. \\
 \addlinespace[3pt]
-\casecontinued{A2 cont.} & ``As for using TRY/CATCH blocks outside a transaction, you can use them to handle errors and roll back changes without using \texttt{XACT\_ABORT}. You can start a transaction inside the TRY block and use the CATCH block to handle errors and roll back the transaction if needed. Here's an example: \texttt{BEGIN TRY} \texttt{BEGIN TRANSACTION;} -- Your \texttt{SELECT} and \texttt{DELETE} queries go here -- \texttt{COMMIT TRANSACTION;} \texttt{END TRY} \texttt{BEGIN CATCH} \texttt{IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;} -- Handle the error (e.g., log the error, display a message) -- \texttt{END CATCH;}'' & \casecontinued{Same assistant response; procedural model continued.} \\
-\addlinespace[3pt]
-\casecontinued{A2 cont.} & ``With this approach, you don't need to set \texttt{XACT\_ABORT}. If an error occurs during the transaction, the script will automatically jump to the CATCH block, and any active transactions will be rolled back. So, using TRY/CATCH is a good alternative to using \texttt{XACT\_ABORT}. It ultimately depends on your preference and the structure of your script.'' & \casecontinued{The response closes by comparing alternatives, matching the user's follow-up question.} \\
+\casecontinued{A2 cont.} & ``If none of these suggestions help, please provide more context or the complete code so we can further investigate the issue and provide a solution.'' & \casecontinued{Same scaffolded response; questioning/request for context continued.} \\
 \end{longtable}
 \endgroup
 
@@ -106,53 +102,33 @@
 \setlength{\tabcolsep}{3pt}
 \renewcommand{\arraystretch}{1.18}
 \begin{longtable}{>{\raggedright\arraybackslash}p{0.11\textwidth}>{\raggedright\arraybackslash}p{0.58\textwidth}>{\raggedright\arraybackslash}p{0.25\textwidth}}
-\caption{\textbf{De-identified writing case with turn-level labels.} A retained WildChat writing conversation, lightly formatted for readability. Badges encode role, user engagement and assistant support labels.}
+\caption{\textbf{De-identified writing case excerpt with turn-level labels.} A retained WildChat writing conversation, lightly excerpted and formatted for readability. Badges encode role, user engagement and assistant support labels.}
 \label{tab:complete_writing_case}\\
-\multicolumn{3}{p{0.96\textwidth}}{\caseheader{Writing case}{Formal report justification}
+\multicolumn{3}{p{0.96\textwidth}}{\caseheader{Writing case}{Grammar feedback and explanation}
 {WildChat writing}
 {Intentional}
-{6 turns}
-{The exchange moves from explanation use to constructive reframing, then to direct drafting under a new style constraint.}}\\[5pt]
+{4-turn excerpt}
+{The excerpt separates brief correctness feedback from a later explanation of why the sentence works.}}\\[5pt]
 \multicolumn{3}{p{0.96\textwidth}}{\caselegend}\\[5pt]
 \toprule
 \textbf{Turn} & \textbf{De-identified raw transcript} & \textbf{Label and annotation cue} \\
 \midrule
 \endfirsthead
-\caption[]{\textbf{Complete de-identified writing case with raw transcript and turn-level labels} (continued).}\\
+\caption[]{\textbf{De-identified writing case excerpt with raw transcript and turn-level labels} (continued).}\\
 \toprule
 \textbf{Turn} & \textbf{De-identified raw transcript} & \textbf{Label and annotation cue} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-\userturn{U1} & ``Help me explain why dataset for machine learning should include `difficult' samples and not just `clean' samples, so that the trained model will be more robust. Give me a more detailed explanation'' & \activebadge\par The user requests elaboration but does not yet evaluate, revise or extend an idea. \\
+\userturn{U1} & ``Correct my grammar if I'm wrong: `Is there still the new car smell after the car wash?' '' & \constructivebadge\par The user supplies their own sentence and asks for grammar correction. \\
 \addlinespace[4pt]
-\assistantturn{A1} & ``Incorporating difficult samples in a dataset for machine learning is essential for training a more robust model. Here are some more detailed explanations as to why: 1. Diversity in data: It is crucial for a model to understand various aspects of the data it will be working with, especially when it comes to real-world applications. Including difficult samples in the dataset ensures that the model is exposed to varied instances, increasing its ability to generalize to different scenarios. This diversity helps the model to deal with complex, previously unseen situations effectively.'' & \referencebadge\par The reply supplies requested content without structuring the user's next reasoning or writing process. \\
-\addlinespace[3pt]
-\casecontinued{A1 cont.} & ``2. Model generalization: Including challenging samples in the training set forces the model to learn from a diverse range of data points, which reduces the risk of overfitting. Overfitting occurs when the model starts learning noise from the data instead of actual patterns, leading to high performance on the training set but poor performance on new, unseen data. Difficult samples help develop a model that is better at generalizing across various situations and is less sensitive to small fluctuations in input data.'' & \casecontinued{Same assistant response; direct explanation continued.} \\
-\addlinespace[3pt]
-\casecontinued{A1 cont.} & ``3. Real-world scenarios: In many practical applications, the collected data is often noisy, and sometimes even outliers are present in the dataset. Including difficult samples in the training dataset simulates a real-world scenario, enabling the model to learn how to deal with imperfect data. A model trained only on clean data may fail to deliver accurate results when confronted with noisy or ambiguous information from unanticipated situations.'' & \casecontinued{The response remains content provision rather than scaffolded guidance.} \\
-\addlinespace[3pt]
-\casecontinued{A1 cont.} & ``4. Improved decision boundaries: Including difficult samples in the dataset guides the model in finding more accurate decision boundaries between different classes or data clusters. When trained with just clean data, the decision boundaries may become overly simplified, leading to weaknesses in generalizing to new scenarios. Difficult samples drive the model to identify more precise and complex decision boundaries, which can effectively separate and classify even ambiguous instances.'' & \casecontinued{Direct explanation continued.} \\
-\addlinespace[3pt]
-\casecontinued{A1 cont.} & ``5. Model adaptability: A model trained with difficult samples tends to be more adaptable to different environments and application domains. For instance, when dealing with noisy environments, a model that has been exposed to `difficult' data can better recognize patterns, whereas a model that has been trained using only clean data may perform poorly. In summary, incorporating difficult samples in a machine learning dataset is crucial for building a more robust and adaptable model. It improves the model's ability to generalize to new situations, simulates real-world scenarios, and pushes the model to learn more accurate decision boundaries that bridge the gap between clean and noisy data. This ultimately leads to better performance and higher reliability in practical applications.'' & \casecontinued{Same assistant response concluded.} \\
+\assistantturn{A1} & ``Your grammar is correct!'' & \scaffoldbadge\quad \casecode{I1}\ \casecode{M1}\par The reply gives concise \supportkey{correctness feedback} on the user's own sentence. \\
 \addlinespace[4pt]
-\userturn{U2} & ``So, let's say I talk to someone who doesn't understand this, and they don't believe an assertion that model that has been trained using only clean data generalizes significantly worse that a model that has been using diverse, `difficult' data. Help me to explain why is this the case in more detail.'' & \constructivebadge\par The user \casekey{reframes the task} around persuasion and justification, extending the explanation into a more demanding context. \\
+\userturn{U2} & ``Sounds kinda wrong to me, but I think it's correct. Can u explain to me why it is correct?'' & \activebadge\par The user asks for clarification of the prior feedback rather than proposing a new revision. \\
 \addlinespace[4pt]
-\assistantturn{A2} & ``Explaining this concept to someone who doesn't understand the importance of diverse data in machine learning can be approached using an analogy or a simplification of the core idea. Here's a detailed explanation to help convey the importance of using difficult data alongside clean data: Consider the process of learning a new language. If you only study the most straightforward and formal sentences from a textbook, you may be able to understand and produce simple, properly constructed sentences. However, when you encounter native speakers who use slangs, idiomatic expressions, or even make grammatical errors, you may struggle to comprehend these variations because they do not match what you have learned. Similarly, a model trained on only clean data effectively `understands' a restricted version of the problem space.'' & \scaffoldbadge\quad \casecode{I2}\ \casecode{M4}\par The reply teaches the \supportkey{conceptual mechanism} behind robustness rather than merely restating the claim. \\
+\assistantturn{A2} & ``Yes, I can explain why it is correct. The sentence is a question which begins with the helping verb `is' followed by the subject `there' and then the predicate `still the new car smell.' The phrase `after the car wash' is a prepositional phrase that modifies the predicate.'' & \scaffoldbadge\quad \casecode{I2}\ \casecode{M1}\ \casecode{M4}\par The reply confirms the feedback and \supportkey{explains the grammatical structure}. \\
 \addlinespace[3pt]
-\casecontinued{A2 cont.} & ``When a model is trained exclusively on clean data, it tends to be highly sensitive to the specific patterns found in that dataset. If the model encounters noisy or ambiguous data, it is more likely to misinterpret or fail to recognize the underlying patterns due to lack of exposure to such variations during the training process. In contrast, when the model is trained on diverse and difficult data, it develops a deeper understanding of various data aspects, making it more effective at adapting to new, unknown situations.'' & \casecontinued{Same scaffolded explanation continued.} \\
-\addlinespace[3pt]
-\casecontinued{A2 cont.} & ``Additionally, when a model is trained exclusively on clean data, it is prone to overfitting, as it tailors its parameters too closely to the noiseless data. When faced with real-world, complex data, the model would struggle to adapt, as it has not learned the nuances and variations typically found in real-world data. In essence, just as your language understanding will drastically improve by exposing yourself to different accents, dialects, and colloquialisms, a model's performance will be better when trained on diverse and difficult data compared to only clean samples. This diversity in data ensures that the model gets a comprehensive understanding of the problem space and is more capable of generalizing to unseen or noisy data, ultimately making it a more robust machine learning model.'' & \casecontinued{The response sustains the conceptual mechanism requested by the user.} \\
-\addlinespace[4pt]
-\userturn{U3} & ``Ok. But I need a different type of explanation. I am writing a formal report that will involve me justifying why I need a diverse dataset, and it would be wise to explain this concept without resorting to analogies. Can you help me do that?'' & \activebadge\par The user specifies a \casekey{new writing constraint} and asks for a format shift, mainly as directive refinement. \\
-\addlinespace[4pt]
-\assistantturn{A3} & ``Certainly! Here's a formal explanation justifying the need for a diverse dataset in machine learning: In machine learning, a model's ability to generalize to unseen data depends on its ability to learn meaningful and comprehensive patterns from the training data. Utilizing only clean data can limit the model's exposure to variations and nuances commonly present in real-world data. In contrast, incorporating diverse and difficult samples in the training dataset enhances the model's understanding of the problem space and its capability to perform well on new and complex data.'' & \referencebadge\par The reply directly supplies formal wording rather than adding process guidance or feedback on the user's own draft. \\
-\addlinespace[3pt]
-\casecontinued{A3 cont.} & ``There are several key points to emphasize when justifying the need for diverse datasets in a formal report: 1. Variability and complexity: Real-world data typically contains variability and complexity not present in sanitized, clean datasets. Ensuring that this variability and complexity is represented in the training data will result in a model better suited to address real-world tasks effectively. 2. Robustness: A model trained on diverse data will develop a robustness to noise, handling inconsistencies and variations in data more effectively. This enhanced robustness will benefit the model's performance and reliability when deployed in real-world applications.'' & \casecontinued{Same direct drafting response continued.} \\
-\addlinespace[3pt]
-\casecontinued{A3 cont.} & ``3. Overfitting reduction: A model trained on diverse and difficult samples is less prone to overfitting, as it is forced to learn patterns that generalize well across various instances. Overfitting occurs when the model captures noise in the data rather than the underlying patterns, resulting in poor performance on unseen data. 4. Decision boundaries: Including difficult samples in the training dataset helps the model identify more accurate decision boundaries between different classes or clusters. This allows the model to better classify and separate ambiguous or noisy instances, ultimately contributing to improved performance.'' & \casecontinued{Direct drafting response continued.} \\
-\addlinespace[3pt]
-\casecontinued{A3 cont.} & ``5. Transferability: A model trained on diverse data is more transferable across different domains and environments. By learning a wider range of data patterns and characteristics, the model is better equipped to handle variations in input data and consequently can be more suitable for various applications. In summary, using a diverse dataset that includes difficult samples is essential for training a more robust and adaptable machine learning model. This helps the model to effectively generalize to previously unseen data, by improving decision boundaries, reducing overfitting, and enhancing transferability across domains, ultimately leading to superior performance in practical applications. Incorporating diverse data in the training set is thus crucial to ensure the model's success in real-world scenarios.'' & \casecontinued{The assistant provides the requested formal content rather than a new scaffolded process.} \\
+\casecontinued{A2 cont.} & ``The sentence is questioning if the new car smell is still present after the car has been washed. So, in summary, your original sentence is grammatically correct.'' & \casecontinued{Same assistant response; explanation and feedback continued.} \\
 \end{longtable}
 \endgroup

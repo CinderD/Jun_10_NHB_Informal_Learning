@@ -1,7 +1,7 @@
 \begin{table*}[p]
 \scriptsize
 \centering
-\caption{\textbf{Offset-rate sensitivity for scaffolded-support Poisson models.} The primary Fig.~\ref{fig:s2_conversation_association}b Poisson model uses raw constructive-turn counts with conversation length entered as a covariate. As a rate sensitivity, this table refits the same setting-specific mean model with \texttt{offset(log(user\_turns))}. Cells report the scaffolded-support rate ratio with 95\% confidence intervals and two-sided p values using quasi-Poisson scaled standard errors.}\label{tab:fig3_offset_rate_sensitivity}
+\caption{\textbf{Offset-rate sensitivity for scaffolded-support Poisson models.} The scaffolded-support association remains positive and statistically distinguishable from zero in all six settings when user turns are represented as an exposure offset. The primary Fig.~\ref{fig:s2_conversation_association}b model uses raw constructive-turn counts with conversation length entered as a covariate; this sensitivity refits the same setting-specific mean model with \texttt{offset(log(user\_turns))}.}\label{tab:fig3_offset_rate_sensitivity}
 \setlength{\tabcolsep}{5pt}
 \renewcommand{\arraystretch}{1.08}
 \resizebox{0.92\textwidth}{!}{%

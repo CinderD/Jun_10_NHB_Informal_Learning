@@ -1,18 +1,35 @@
 \begin{table*}[p]
 \scriptsize
 \centering
-\caption{\textbf{Setting-specific covariate sets for the Section~2.3 adjusted models.} Each model was fitted separately within the six task settings. Task ecology is therefore fixed within a setting and is not interpreted as a within-setting coefficient. The table lists the estimable covariates used to adjust the scaffolded-support association; pooled context models use task ecology separately as shown in Supplementary Tables~\ref{tab:constructive_context_logit} and \ref{tab:constructive_rate_context_logit}.}
+\caption{\textbf{Covariates used in the Section~2.3 adjusted support-association models.} Models were fitted separately within each of the six task settings. In all rows, the focal predictor is whether the conversation contains at least one scaffolded assistant turn.}
 \label{tab:setting_model_covariates}
-\setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.12}
-\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.28\textwidth}>{\raggedright\arraybackslash}p{0.22\textwidth}>{\raggedright\arraybackslash}X}
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.10}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.20\textwidth}>{\raggedright\arraybackslash}p{0.21\textwidth}>{\raggedright\arraybackslash}p{0.31\textwidth}>{\raggedright\arraybackslash}X}
 \toprule
-Settings & Primary Poisson count model & Logistic any-constructive model & Sensitivities and notes \\
+Model & Outcome & Adjustment variables & Reported estimand or check \\
 \midrule
-WC coding; LMSYS coding; SC coding; WC writing; LMSYS writing; SC writing
-& Scaffolded-support presence; user framing; total turns; emotional-expression ratio; observable error marker; persistence-after-failure marker; high-persistence marker.
-& Scaffolded-support presence; user framing; total turns.
-& The offset-rate sensitivity used the same Poisson mean model but represented user turns with an exposure offset. User-framing stratified Poisson models omitted user framing because it was fixed within stratum. Error and persistence markers are most interpretable in coding-oriented contexts but are retained as observed conversation-level context when present. \\
+Primary Poisson count model
+& Constructive user-turn count per conversation.
+& User framing; total turns; emotional-expression ratio; observable error marker; persistence-after-failure marker; high-persistence marker.
+& Poisson count ratio in Fig.~\ref{fig:s2_conversation_association}b; conversation length enters as total turns, not as an offset. \\
+\addlinespace
+Companion logistic model
+& Whether the conversation contains at least one constructive user turn.
+& User framing; total turns.
+& Logistic odds ratio in Fig.~\ref{fig:s2_conversation_association}b. \\
+\addlinespace
+User-framing-stratified Poisson model
+& Constructive user-turn count within intentional or unintentional conversations.
+& Total turns; emotional-expression ratio; observable error marker; persistence-after-failure marker; high-persistence marker.
+& Same count model after stratifying by framing; user framing is omitted because it is fixed within stratum. \\
+\addlinespace
+Offset-rate sensitivity
+& Constructive user-turn count per conversation with \texttt{log(user turns)} as an exposure offset.
+& Same observed context as the primary Poisson model, with user turns represented as an offset rather than as an ordinary length covariate.
+& Checks whether the scaffolded-support association persists when modelling a constructive-turn rate. \\
 \bottomrule
 \end{tabularx}
+\vspace{2pt}
+\parbox{0.94\textwidth}{\footnotesize \textit{Note.} Task ecology is fixed within each setting because the models are fitted separately for WC coding, LMSYS coding, SC coding, WC writing, LMSYS writing and SC writing. Task ecology is used only in pooled context models such as Supplementary Table~\ref{tab:constructive_rate_context_logit}. Error and persistence markers are most interpretable in coding-oriented contexts but are retained as observed conversation-level context when present.}
 \end{table*}
