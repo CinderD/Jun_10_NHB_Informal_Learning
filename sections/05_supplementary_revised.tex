@@ -1,6 +1,6 @@
 \clearpage
 \section*{Supplementary information}
-Supplementary information is organized to support reproducibility and interpretation. Appendix A records the corpus ledger, annotation ontology, production workflow, validation evidence, denominator rules and model specifications. Appendix B reports robustness checks and interpretive boundaries. Appendices C and D contain the supporting tables and figures referenced from the main text and Appendix A--B.
+Supplementary information is organized to support reproducibility and interpretation. Appendix A records the corpus ledger, annotation ontology, corpus-scale annotation workflow, validation evidence and model specifications. Appendix B records the reporting boundary. Appendices C and D contain the supporting tables and figures referenced from the main text and Appendix A--B.
 
 \providecommand{\appcomment}[1]{\par\noindent\textcolor{orange!85!black}{\textbf{Comment addressed:} #1}\par}
 \providecommand{\apporig}[1]{\par\noindent\textcolor{red}{\textbf{Original:} #1}\par}
@@ -12,36 +12,48 @@ Supplementary information is organized to support reproducibility and interpreta
 
 \subsection*{A.1\quad Corpus provenance and filtering ledger}
 
-\paragraph{Analytic settings.}
-The main Methods summarize the three public corpora and six task settings. This section provides the auditable selection ledger behind those settings. The analyses use WildChat coding, WildChat writing, LMSYS Chat coding, LMSYS Chat writing, ShareChat coding and ShareChat writing. The analytic corpus contains 128,569 conversations and 981,470 total turns. WildChat contributes 31,878 coding conversations and 39,534 writing conversations; LMSYS Chat contributes 32,114 coding conversations and 21,023 writing conversations; ShareChat contributes 2,481 coding conversations and 1,539 writing conversations.
+\paragraph{Scope of this appendix.}
+The main Methods define the public corpora, task settings, filtering sequence and final analytic sample. This appendix provides the auditable implementation records behind those statements: corpus-specific filtering counts, source counting units, retained metadata fields and validation evidence for filters and labels.
 
-\paragraph{Filtering sequence.}
-Corpus construction followed a common sequence: source records were converted to role-ordered user--assistant conversations; conversations were screened for English-oriented content and at least four message turns; coding and writing task ecologies were assigned with LLM-assisted semantic filters; and retained conversations were processed by the shared annotation workflow. ShareChat required an additional strict-English screen after task filtering. Public dataset-card turns, raw CSV message rows and role-normalized analysis turns are not identical counting units, so the ShareChat ledger reports platform-url conversations and role-labelled message rows before deriving user and assistant turns. 
+\paragraph{Filtering ledger and source units.}
+Supplementary Table~\ref{tab:corpus_filtering_pipeline} reports the raw-to-final filtering ledger for each corpus, including source records, eligibility screens, task-filtering steps and final analytic samples. Supplementary Table~\ref{tab:corpus_provenance_artifacts} records public source links, source counting units and retained metadata used during conversion. These details are separated because public dataset-card turns, raw message rows and analysis turns are not identical counting units; for ShareChat, the ledger therefore reports platform-url conversations and message rows before deriving user and assistant turns.
 
-% Supplementary Table~\ref{tab:corpus_provenance_artifacts} records the raw-to-analysis selection ledger and retained provenance artifacts for each corpus. Supplementary Table~\ref{tab:filter_classifier_validation} separates corpus-construction filters from analysis labels and reports validation or audit evidence for task ecology, user framing, language filtering and turn-level annotation.
+\input{tables/table_corpus_filtering_pipeline}
 
-  \input{tables/table_corpus_filtering_pipeline}
-
-  \clearpage
+\clearpage
   
- Supplementary Table~\ref{tab:corpus_filtering_pipeline} gives the raw-to-
-  final filtering ledger for each corpus. Supplementary
-  Table~\ref{tab:corpus_provenance_artifacts} records the retained provenance
-  artifacts and script-hash prefixes. Supplementary
-  Table~\ref{tab:filter_classifier_validation} separates corpus-construction
-  filters from analysis labels and reports validation or audit evidence for
-  task ecology, user framing, language filtering and turn-level annotation.
-
 \input{tables/table_corpus_provenance_artifacts}
 
 \clearpage
+
+\paragraph{Filter and label validation map.}
+Supplementary Table~\ref{tab:filter_classifier_validation} maps each non-native filter or analytic label to its assignment procedure, supporting validation evidence and interpretation boundary. It is an index to the filtering ledger and validation tables, not a second sample-count table.
 
 \input{tables/table_filter_classifier_validation}
 
 \clearpage
 
-\paragraph{Retained metadata.}
-For each retained conversation, the pipeline stored the ordered turn sequence, role labels, available topic and language metadata, learning-intent indicators and model/source metadata where available. Model metadata are used only for robustness checks because model assignment in naturalistic public conversations is observational and may reflect time, user population, task mix and logging context.
+\paragraph{Retained metadata fields.}
+\begin{center}
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.10}
+\begin{tabularx}{0.96\textwidth}{>{\raggedright\arraybackslash}p{0.24\textwidth}>{\raggedright\arraybackslash}p{0.38\textwidth}>{\raggedright\arraybackslash}X}
+\toprule
+Metadata group & Retained fields & Linked record \\
+\midrule
+Internal ordering & Conversation identifier, turn identifier, role label and turn order. & Conversation-level and adjacent-turn analysis units. \\
+\addlinespace
+Corpus and task fields & Corpus name, task setting, task-filter outputs and available language/topic fields. & Filtering ledger and validation map in Supplementary Tables~\ref{tab:corpus_filtering_pipeline}--\ref{tab:filter_classifier_validation}. \\
+\addlinespace
+Turn-level labels & User engagement labels, scaffolded-support labels, support-intent labels and support-form labels. & Codebook definitions and label audits in Supplementary Tables~\ref{tab:annotation_codebook_definitions}, \ref{tab:label_validation} and \ref{tab:production_label_validation}. \\
+\addlinespace
+Conversation context & User-framing label and derived conversation-level summaries such as turn counts. & Contextual analyses of user framing, task ecology and interaction depth. \\
+\addlinespace
+Model or source metadata & User-facing model snapshot, recovered model name, platform or assistant-family field where available. & Descriptive and robustness checks only; model/source labels are observational metadata. \\
+\bottomrule
+\end{tabularx}
+\end{center}
 
 \subsection*{A.2\quad Annotation ontology and operational examples}
 
@@ -52,174 +64,82 @@ The Methods summarize the role-specific constructs used in the analysis. This se
 
 \clearpage
 
-\subsection*{A.3\quad Production annotation workflow}
+\subsection*{A.3\quad Corpus-scale annotation implementation}
 
-\paragraph{Workflow stages.}
-The Methods summarize the annotation workflow. This section records the implementation details needed to reproduce production labelling. The production workflow had three stages. First, the authors developed a theory-grounded codebook and prompt templates on validation examples and disagreement cases. This stage identified recurring failure modes, including over-labelling brief acknowledgements as active engagement, treating any long assistant answer as scaffolding, collapsing directive instructions into scaffolding without checking whether responsibility remained with the user and over-labelling sparse support forms. Second, parser checks enforced the expected schema, normalized label variants and flagged missing or malformed outputs. Third, production-scale annotation applied the frozen schema to the six analytic settings, followed by narrowly specified rule-based corrections for known boundary errors.
+The Methods describe the annotation workflow at a conceptual level. This subsection reports only implementation details needed for reproducibility: prompt functions, model families, structured-output constraints, parser checks, retry policy and boundary-rule processing. Supplementary Table~\ref{tab:prompt_template_summary} summarizes the functional prompt templates, and Supplementary Table~\ref{tab:annotation_implementation_controls} records the operational controls used during corpus-scale annotation.
 
-\paragraph{Model deployments and prompts.}
-Production annotation used Azure OpenAI chat-completions deployments from the GPT-5.1 family for turn-level user and assistant labels, with GPT-5.1-chat used for the final writing-oriented calls. LLM-assisted semantic filtering used GPT-4o-family deployments. The released analysis code and archived annotation metadata retain the full prompt templates, functional prompt role, schema, deployment family, API version, retry settings and parser checks. In the manuscript and supplement we refer to prompt function rather than internal prompt-path names, because those path names are run-management identifiers rather than scientific constructs.
+\input{tables/table_prompt_template_summary}
 
-\paragraph{Response constraints.}
-The production calls used structured JSON outputs where supported. The final writing calls used JSON-object or JSON-schema response constraints, 60-second request timeouts, maximum completion budgets of 300 tokens for conversation-level labels and 350 tokens for turn-level labels and did not pass an explicit temperature parameter. The final coding-from-filtered-conversation runner likewise did not pass an explicit temperature parameter. English-language checks used temperature 0.0 and semantic task checks used temperature 0.1.
+\input{tables/table_annotation_implementation_controls}
 
-\paragraph{Retry policy.}
-Retry policies were specified in code: coding runs used up to five attempts with exponential backoff for rate limits and fixed-delay retry for other transient failures; writing runs used up to six attempts, disabled SDK-level retries, used exponential backoff with jitter for rate limits, timeouts and server errors and fell back from JSON-schema response format to JSON-object format if unsupported. Content-filter blocks returned empty analyses and were logged rather than silently imputed.
+\clearpage
 
-\paragraph{Post-processing scope.}
-Post-processing was part of the predefined production annotation workflow, not an after-the-fact statistical adjustment. We use the term for two transparent operations. Schema-level processing normalized output variants and recovered fields that were present in the model explanation but missing from the structured JSON when the mapping was unambiguous.
+\subsection*{A.4\quad Human validation and corpus-scale label reliability}
 
-\paragraph{Boundary corrections.}
-\appcomment{Specify the boundary rules more concretely and remove operational credential language that is not useful for the paper.}
-\apporig{Boundary-rule processing corrected recurring, narrow false-positive patterns identified during validation, especially cases where brief user acknowledgements were labelled as Active or Constructive, generic emotional tone was labelled as Emotional or direct answer delivery was labelled as scaffolded support. Coding outputs did not use a broad post-processing chain in the final filtered-conversation runner, but WildChat user turns underwent the targeted user-turn review described in Section A.4. Writing outputs used the retained production chain for assistant scaffolding recovery, support-detail filling and strict user Active, Constructive and Emotional boundary filtering. API keys and service endpoints are intentionally not reproduced in the manuscript.}
-\apprev{Boundary-rule processing corrected recurring, narrow false-positive patterns identified during validation. User-turn rules demoted brief acknowledgements, generic acceptance or administrative follow-ups from Active or Constructive when the turn did not add a new constraint, test, revision, diagnosis or substantive extension; they also removed Emotional labels when the only affective content was formulaic politeness. Assistant-turn rules removed scaffolded-support labels from direct answer delivery when the response did not leave a meaningful role for user testing, diagnosis, choice or revision, and recovered support-form fields only when the explanation text and structured label made the mapping unambiguous. Coding outputs did not use a broad post-processing chain in the final filtered-conversation runner, but WildChat user turns underwent the targeted user-turn review described in Section A.4. Writing outputs used the retained production chain for assistant scaffolding recovery, support-detail filling and strict user Active, Constructive and Emotional boundary filtering.}
+\paragraph{Validation design.}
+Human review served two measurement roles. First, human--human agreement assessed whether trained reviewers could apply the finalized codebook consistently. The coding codebook check combined three validation rounds covering 658 task turns, with 643 turns after deduplication; the writing check used 210 reviewed conversations. Supplementary Table~\ref{tab:label_validation} reports the per-label metrics for this codebook-operability layer. Second, human--LLM audits compared final LLM-assisted corpus-scale labels with human-confirmed labels after item-level review. These audits covered user framing, user engagement and assistant support across the six corpus-by-task settings and are reported in Supplementary Table~\ref{tab:production_label_validation}.
 
-\subsection*{A.4\quad Human validation and production-label reliability}
+\paragraph{Agreement metrics.}
+Agreement is reported with per-label F1, Matthews correlation coefficient (MCC) and Gwet's AC1 because the labels are sparse, prevalence-imbalanced and sometimes multi-label~\cite{matthews1975comparison,gwet2008computing}. In the human--human codebook checks, the focal labels used in the main analyses showed acceptable or better agreement: Constructive user engagement reached F1=0.85 in coding and F1=0.89 in writing, and scaffolded support reached F1=0.87 in coding and F1=0.97 in writing (Supplementary Table~\ref{tab:label_validation}). Complete per-label F1, MCC, Gwet AC1 and support values are reported in Supplementary Table~\ref{tab:label_validation}.
 
-\paragraph{Review purpose.}
-The Methods summarize the three validation layers. This section gives the sampling designs, review roles and production-label metrics behind those layers. Human review was used during codebook development, prompt iteration and final validation. Two trained human reviewers with human--AI interaction and LLM-interaction research backgrounds reviewed validation cases. The purpose of human review changed over the development cycle: early review identified codebook boundary problems and prompt failure modes, whereas the final validation tables report agreement after the codebook, parser checks and production workflow had been stabilized. The final agreement metrics should therefore be read as evidence for the frozen workflow, not as a claim that high agreement was achieved at the start of development.
+\paragraph{Corpus-scale label audits.}
+The consolidated human--LLM audits were stratified across the six corpus-by-task settings. The user-framing audit reviewed 450 first user turns, with 75 cases from each setting. Intentional-framing agreement reached F1=0.857, MCC=0.677 and Gwet AC1=0.671. The user-engagement audit reviewed 600 user turns, with 100 cases per setting; the constructive-versus-non-constructive distinction reached F1=0.922, MCC=0.840 and Gwet AC1=0.837. The assistant-side audit reviewed 180 assistant turns, with 30 cases per setting; scaffolded-support agreement reached F1=0.912, MCC=0.590 and Gwet AC1=0.791, and support-form F1 values ranged from 0.691 to 0.938 across M1--M6. Supplementary Table~\ref{tab:production_label_validation} reports the corresponding precision, recall, accuracy and positive-count fields.
 
-\paragraph{Validation layers.}
-Validation evidence is reported in three layers. First, human--human agreement assesses whether trained reviewers could apply the codebook consistently; Supplementary Table~\ref{tab:label_validation} reports this codebook-operability layer. Second, production-label checks compare final or post-processed LLM-assisted production labels with human-confirmed labels; Supplementary Table~\ref{tab:production_label_validation} consolidates these human--LLM agreement checks. Third, targeted post-production audits test whether narrow rule-based reviews reduced known residual false positives after prompt and parser development. Coding validation combined three review rounds, with 658 task turns and 643 turns after deduplication. Writing validation used 210 reviewed conversations with final human-reviewed labels. Because many labels are sparse or prevalence-imbalanced, agreement is reported with per-label F1, Matthews correlation coefficient and Gwet's AC1 rather than with a single global agreement statistic.
+\paragraph{Post-labelling WildChat review sample.}
+After the WildChat corpus-scale labelling pass, an additional label-composition check reviewed 100 labelled turns from WildChat coding and 100 labelled turns from WildChat writing, split into 50 user turns and 50 assistant turns per task. Supplementary Table~\ref{tab:wildchat_post_labelling_review} reports the observed corpus-scale label composition of these samples.
 
-\paragraph{Post-labelling samples.}
-After the WildChat production labelling pass, we reviewed two post-labelling WildChat samples: 100 labelled turns from WildChat coding and 100 labelled turns from WildChat writing, each split into 50 user turns and 50 assistant turns. Supplementary Table~\ref{tab:wildchat_post_labelling_review} reports the production-label composition of these samples.
+\clearpage
 
-\paragraph{Targeted user-turn review.}
-The final user-turn check contained 100 coding examples and 100 writing examples reviewed after the targeted user-turn review. These examples were used to identify residual false positives and calibrate narrow rule-based corrections, especially for Active and Passive user-turn labels. The final WildChat user-turn review scanned 31,878 coding conversations and 39,534 writing conversations, applying 1,815 coding corrections and 21 writing corrections. LMSYS Chat and ShareChat were then processed with the same refreshed annotation workflow, construct definitions and post-processing logic. The main manuscript reports the labels produced by these final production runs.
+\subsection*{A.5\quad Statistical estimands and model specifications}
 
-\paragraph{User-framing audit.}
-Because user framing carries an important contextual role, the consolidated production-label audit includes a human-verified check for the conversation-level learning-intent label. This audit sampled 450 first user turns, with 75 cases from each corpus-by-task setting and with production-positive cases deliberately oversampled. Overall intentional-framing agreement with the production label was F1=0.857, MCC=0.677 and Gwet AC1=0.671; task-stratified F1 was 0.924 for coding and 0.779 for writing. This audit validates the label boundary for user framing but is not used to estimate population prevalence because of the positive-oversampled design.
+\paragraph{Notation.}
+Supplementary Tables~\ref{tab:model_specs}--\ref{tab:temporal_estimands} summarize the analysis families. Let $i$ index conversations, $s$ task settings, $j$ adjacent assistant--user turn pairs and $g$ user-framing strata. $C_i$ is the count of Constructive user turns, $Y_i$ indicates whether conversation $i$ contains at least one Constructive user turn, $S_i$ indicates at least one scaffolded assistant turn in the conversation and $X_i$ denotes the setting-specific conversation-level covariates listed in Supplementary Table~\ref{tab:setting_model_covariates}. GLM specifications follow standard Poisson and logistic forms~\cite{mccullagh1989generalized,agresti2013categorical}.
 
-\paragraph{User-engagement audit.}
-For user engagement production labels, the consolidated audit includes a 600-case check across the six corpus-by-task settings, with 100 user turns per setting and production constructive cases deliberately oversampled. The final labels were human-confirmed after item-level review. Against these human-confirmed labels, the production constructive-versus-non-constructive distinction had F1=0.922, MCC=0.840 and Gwet AC1=0.837. One-vs-rest metrics for the four user engagement levels were also high: F1=0.922 for constructive, 0.883 for active, 0.941 for passive and 0.930 for none (Supplementary Table~\ref{tab:production_label_validation}). Because the sample is positive-oversampled, it validates label boundaries and production-label reliability rather than estimating population prevalence.
+\paragraph{Conversation-level models.}
+The adjusted count model in Section~2.3 is fitted separately within each setting:
+\begin{align*}
+C_i \mid S_i, X_i &\sim \operatorname{Poisson}(\mu_i),\\
+\log(\mu_i) &= \alpha_s + \beta_s S_i + \gamma_s^\top X_i .
+\end{align*}
+The reported Poisson count ratio is $\exp(\beta_s)$. The companion binary model is
+\begin{align*}
+\operatorname{logit}\{\Pr(Y_i=1 \mid S_i, X_i)\}
+  = \alpha_s + \beta_s S_i + \gamma_s^\top X_i ,
+\end{align*}
+with $\exp(\beta_s)$ reported as the odds ratio. The user-framing stratified count model uses
+\begin{align*}
+\log(\mu_i) = \alpha_{s,g} + \beta_{s,g} S_i + \gamma_{s,g}^{\top} X_i^{(-g)},
+\end{align*}
+where $X_i^{(-g)}$ omits user framing because the model is fitted within stratum $g$.
 
-\paragraph{Assistant-support audit.}
-For assistant production labels, the consolidated audit includes a 180-case check across the six corpus-by-task settings, with 30 assistant turns per setting and scaffolded-support and support-form positives deliberately oversampled. The final labels were human-confirmed after item-level review. Broad scaffolded-support agreement was F1=0.912, MCC=0.590 and Gwet AC1=0.791. Support-form one-vs-rest F1 ranged from 0.691 to 0.938 across M1--M6 (Supplementary Table~\ref{tab:production_label_validation}). Because the sample is positive-oversampled, it validates assistant-label boundaries rather than estimating support-form prevalence.
+\paragraph{Rate and context checks.}
+The Section~2.2 constructive-rate sensitivity is a grouped-binomial logistic model:
+\begin{align*}
+C_i &\sim \operatorname{Binomial}(T_i,\pi_i),\\
+\operatorname{logit}(\pi_i) &=
+\alpha + \delta_1 F_i + \delta_2 Q_i + \delta_3 L_i + \delta_4 D_i ,
+\end{align*}
+where $T_i$ is the number of user turns, $F_i$ user framing, $Q_i$ task ecology, $L_i$ conversation-length bucket and $D_i$ dataset fixed effects. The Section~2.3 offset-rate sensitivity uses the same Poisson mean model as above with
+\begin{align*}
+\log(\mu_i) = \log(T_i) + \alpha_s + \beta_s S_i + \gamma_s^\top X_i .
+\end{align*}
+Supplementary Tables~\ref{tab:fig3_offset_rate_sensitivity}--\ref{tab:constructive_rate_context_logit} report the estimates.
 
-\paragraph{Cross-corpus reliability.}
-The validation evidence for turn-level engagement and support labels is therefore layered: human--human agreement supports codebook operability, targeted production audits directly check final user engagement and assistant scaffolding/support-form production labels across all six settings and post-update audits check known residual errors. Cross-corpus use of the labels is supported by applying the same schema, parser checks and post-processing rules to all three corpora and by reporting setting-level robustness checks in the Results and Supplementary Tables.
+\paragraph{Adjacent-turn models.}
+Let $Z_{ij}$ indicate whether the next user turn after assistant turn $j$ is Constructive, $U_{ij}$ encode the immediately preceding user state, $A_{ij}$ encode scaffolded support at assistant turn $j$, $M_{ij}$ encode support-form labels M1--M6 and $R_{ij}$ denote task, framing, turn-position and fixed-effect controls. The integrated adjacent-turn model is
+\begin{align*}
+\operatorname{logit}\{\Pr(Z_{ij}=1)\}
+  = \alpha + \theta^\top U_{ij} + \beta A_{ij}
+  + \phi^\top M_{ij} + \eta^\top (U_{ij}\times M_{ij}) + \rho^\top R_{ij}.
+\end{align*}
+The broad scaffolded-support model omits $M_{ij}$ and $U_{ij}\times M_{ij}$; model/source sensitivity checks replace dataset fixed effects in $R_{ij}$ with recoverable model or source-family indicators.
 
-\subsection*{A.5\quad Analysis variables and denominator rules}
+\paragraph{Uncertainty and multiplicity.}
+Percentage-point contrasts use 1,000 conversation-level bootstrap resamples. Adjacent-turn contrasts use 1,000 conversation-cluster bootstrap resamples. Adjusted conversation-level GLMs use model-based standard errors; adjacent-turn regressions use conversation-cluster robust standard errors. Support-form bracket tests use Benjamini--Hochberg false-discovery-rate adjustment within each six-form comparison family~\cite{benjamini1995controlling}.
 
-\paragraph{User-side measures.}
-\appcomment{Make the denominator rules operational and point readers to the exact tables where each derived measure is used.}
-\apporig{This section defines how turn labels become the quantities plotted or modelled in the Results. At the turn level, the focal user-side outcome is a binary indicator for constructive engagement. At the conversation level, we use both the count of constructive user turns and an indicator for whether at least one constructive user turn occurs. Constructive ratios divide constructive user turns by total user turns; group-level constructive-ratio contrasts are turn-weighted ratios computed from total constructive user turns over total user turns within each group. Cognitive engagement ratios include passive, active and constructive cognitive engagement. Unless otherwise noted, constructive ratios use all user turns in the corresponding conversation or group as the denominator.}
-\apprev{Turn labels were converted into three user-side analysis variables. First, the turn-level constructive indicator equals 1 when a user turn is labelled Constructive and 0 otherwise; this is the outcome for adjacent-turn models and constructive-rate sensitivity checks. Second, the conversation-level constructive count is the number of Constructive user turns in a conversation; this is the outcome for the Poisson count models. Third, the any-constructive indicator equals 1 when a conversation contains at least one Constructive user turn; this is the outcome for the companion logistic models and the interaction-depth descriptive summaries. Constructive ratios divide Constructive user turns by all user turns in the relevant conversation or group, including the first user turn. Cognitive-engagement ratios combine Passive, Active and Constructive user turns following the ICAP hierarchy. The derived variables used in each model are listed in Supplementary Tables~\ref{tab:model_specs}, \ref{tab:setting_model_covariates}, \ref{tab:temporal_estimands}, \ref{tab:key_contrast_significance} and \ref{tab:fig3_offset_rate_sensitivity}.}
+\section*{Appendix B\quad Reporting boundary}
 
-\paragraph{Assistant-side measures.}
-\appcomment{Clarify what the assistant-side variables mean instead of using abstract exposure language.}
-\apporig{At the assistant side, scaffolding is operationalized as scaffolded support. Conversation-level scaffolding presence indicates whether a conversation contains at least one scaffolded assistant turn. Support-form analyses condition on conversations or turns with scaffolded support and then compare the presence versus absence of each support-form label. These comparisons are descriptive because support-form labels can co-occur and because conversations are not randomly assigned to receive a support form.}
-\apprev{The assistant-side scaffolded-support variable is a turn-level label. A conversation is coded as containing scaffolded support when at least one assistant turn in that conversation has this label. Support-form supply percentages use scaffolded assistant turns as the denominator. Support-form association contrasts compare scaffolded conversations containing at least one instance of a given support form with scaffolded conversations that contain scaffolded support but not that form. Because support-form labels are non-exclusive and naturally selected by the interaction, these contrasts are descriptive form-pattern comparisons rather than mutually exclusive treatment contrasts.}
-
-\paragraph{Depth measures.}
-\appcomment{Remove the outdated failure-persistence description and keep only depth measures used by the current manuscript.}
-\apporig{Behavioural depth is computed from turn counts and turn ordering. Post-answer depth counts turns after the first assistant response. Persistence after failure is analysed only for coding-oriented conversations because debugging failures, error messages and failed-execution contexts are more directly observable in coding than in writing.}
-\apprev{Behavioural depth is computed from turn counts and within-conversation ordering. Post-answer depth counts the number of user and assistant turns after the first assistant response. Around-first-scaffold summaries compare constructive engagement before versus after the first scaffolded assistant turn only among conversations that contain scaffolded support; these summaries are reported as exploratory boundary checks rather than as treatment-effect estimates.}
-
-\subsection*{A.6\quad Statistical estimands and model specifications}
-
-\paragraph{Model-output map.}
-\appcomment{Clarify what this subsection is for and avoid an abstract ``estimand map'' label.}
-\apporig{The Methods summarize the main model families and interpretation boundaries. This section maps each inferential quantity in the Results to its denominator, bootstrap unit, model formula, exposure specification and sensitivity checks. Descriptive prevalence analyses report proportions within the six task settings. Context analyses compare user framing, task ecology and depth groups. Conversation-level support associations use Poisson generalized linear models for constructive-turn counts and logistic models for binary constructive-engagement outcomes. Adjacent-turn analyses use assistant-to-user and user-to-assistant turn pairs to estimate conditional probabilities at the next-turn scale. Supplementary Tables~\ref{tab:model_specs}, \ref{tab:setting_model_covariates} and \ref{tab:temporal_estimands} provide the compact estimand map.}
-\apprev{The Methods summarize the main statistical models. This subsection records the implementation details needed to reproduce each reported quantity: denominator, analysis unit, model formula, bootstrap or standard-error convention and sensitivity check. Descriptive prevalence analyses report proportions within the six task settings. Context analyses compare user framing, task ecology and depth groups. Conversation-level support analyses use Poisson generalized linear models for constructive-turn counts and logistic models for binary constructive-engagement outcomes. Adjacent-turn analyses use assistant-to-user and user-to-assistant turn pairs to estimate next-turn conditional probabilities. Supplementary Tables~\ref{tab:model_specs}, \ref{tab:setting_model_covariates} and \ref{tab:temporal_estimands} provide the compact model-output map.}
-
-\paragraph{Primary count model.}
-For the Section~2.3 adjusted conversation-level models, the Poisson outcome is the raw count of constructive user turns in a conversation, not a rate. The primary model does not include a user-turn offset. Conversation length is adjusted directly through total turns, so the exponentiated Poisson coefficient should be read as a multiplicative association with expected constructive-turn count conditional on observed conversation length and other covariates. The generic setting-specific mean model is $\mathbb{E}(C_i)=\exp(\alpha_s+\beta_s S_i+\gamma_s^\top X_i)$, where $C_i$ is constructive-turn count, $S_i$ is scaffolded-support presence and $X_i$ contains the observed conversation-level context listed in Supplementary Table~\ref{tab:setting_model_covariates}.
-
-\paragraph{Companion models.}
-The companion logistic model predicts whether a conversation contains any constructive user turn using scaffolded-support presence and the available setting-specific context. The user-framing stratified Poisson models use the same Poisson specification after stratifying by framing and omitting user framing from the covariate set.
-
-\paragraph{Covariates and uncertainty.}
-Covariates are included when they correspond to observed compositional differences at the analysis level. Depending on the analysis, these include user framing, task indicators in pooled models, turn counts, emotional ratios, error-related variables and turn index. Percentage-point contrasts are reported as effect sizes. Confidence intervals and p values for these contrasts use 1,000 conversation-level bootstrap resamples; adjacent-turn contrasts use 1,000 conversation-cluster bootstrap resamples rather than individual turn-pair resampling to account for repeated pairs within conversations. The adjusted Poisson and logistic estimates in Fig.~\ref{fig:s2_conversation_association} use model-based standard errors.
-
-\paragraph{Model-specification sensitivity.}
-Poisson overdispersion was checked with the Pearson $\chi^2$ statistic divided by residual degrees of freedom. Dispersion ranged from 1.16 to 2.06 across the six task settings; scaling the Poisson standard errors with a quasi-Poisson dispersion adjustment preserved positive scaffolded-support associations and statistical distinguishability in every setting. To check exposure specification, we also refitted the same setting-specific Poisson mean model with user turns represented as the exposure offset; Supplementary Table~\ref{tab:fig3_offset_rate_sensitivity} reports quasi-Poisson scaled rate ratios. Negative-binomial models were not used as the primary specification; the sensitivity analyses focus on variance misspecification and exposure specification under the same mean model rather than changing the main estimand. Support-form bracket tests use Benjamini--Hochberg false-discovery-rate adjustment within each six-form comparison family.
-
-\paragraph{Constructive-rate sensitivity.}
-The Section~2.2 constructive-rate sensitivity uses a grouped-binomial logistic model at the conversation level. The numerator is the number of constructive user turns and the denominator is total user turns in the conversation. The predictors match the any-constructive context model: user framing, task ecology, length bucket and dataset fixed effects. Standard errors use a conversation-robust sandwich estimator. This sensitivity is included because any-constructive-turn outcomes partly reflect the number of turns available for observing at least one constructive turn.
-
-\paragraph{Integrated adjacent-turn models.}
-The integrated adjacent-turn regression combines three feature groups in one logistic model: user state before the assistant turn, assistant scaffolding features and adjacent-turn context. The pooled specification includes dataset fixed effects. A model/source sensitivity uses exact WildChat model labels, LMSYS Chat model names recovered from conversation identifiers and ShareChat assistant/source families recovered from conversation identifiers. These adjusted estimates are interpreted as measured-covariate-adjusted associations. They do not remove unobserved user motivation, prior expertise, task difficulty or time-varying conversational state.
-
-\subsection*{A.7\quad Turn-sequence analyses and scope}
-
-\paragraph{Adjacent-turn scale.}
-\appcomment{Retitle this subsection as a concrete turn-sequence implementation note.}
-\apporig{The temporal appendix clarifies the scale of the temporal claim. The logs identify within-conversation ordering, but they do not randomize assistant support or observe durable learning outcomes. We therefore distinguish adjacent-turn estimands from coarser within-conversation summaries. The adjacent-turn analyses ask whether the immediately following user turn is more likely to be constructive after scaffolded support than after a non-scaffolded reference response, whether that contrast depends on the prior user state and whether support-form signals differ across prior user states. The reverse adjacent-turn analysis asks whether the assistant is more likely to provide scaffolded support after constructive, active or passive user turns.}
-\apprev{The turn-sequence analyses use only within-conversation order. They do not randomize assistant support and do not observe durable learning outcomes. The adjacent-turn analyses ask whether the next user turn is more likely to be Constructive after scaffolded support than after a non-scaffolded reference response, whether that contrast differs by the immediately prior user state and whether selected support-form signals differ across prior states. The reverse adjacent-turn analysis asks whether the next assistant turn is more likely to contain scaffolded support after Constructive, Active or Passive user turns.}
-
-\paragraph{Coarser before--after summaries.}
-\appcomment{Make clear that this is a limited robustness check rather than a separate substantive analysis.}
-\apporig{Coarser before--after summaries ask a different question: whether constructive engagement is higher after the first scaffolded assistant turn than before it. These are retained only as exploratory boundary checks, not as treatment-effect or accumulation estimates. The first scaffolded turn may occur precisely because the user is struggling, because a difficult task has emerged or because the exchange is already developing. The main temporal claim is therefore scale-specific: the clearest evidence concerns adjacent-turn, state- and form-conditioned coupling rather than a demonstrated global trajectory or cumulative learning gain.}
-\apprev{Coarser before--after summaries ask whether constructive engagement is higher after the first scaffolded assistant turn than before it. They are retained only as exploratory boundary checks, because the first scaffolded turn may be selected by user difficulty, task complexity or an already developing exchange. The main temporal evidence therefore comes from adjacent-turn and prior-state analyses, not from a claim of cumulative learning gain.}
-
-\section*{Appendix B\quad Robustness and reporting checks}
-
-\subsection*{B.1\quad Cross-dataset consistency}
-
-\paragraph{Six-setting checks.}
-\appcomment{Make Appendix B a compact implementation and robustness index rather than a second narrative Results section.}
-\apporig{The primary robustness checks are cross-dataset checks, not WildChat-only checks. Whenever an estimand can be computed from the shared annotation schema, it is reported across all six WildChat, LMSYS Chat and ShareChat task settings. These six-setting checks include the main prevalence summaries, constructive-ratio contrasts, post-answer depth contrasts, adjacent-turn lifts, support-form supply profiles and setting-level adjacent-turn regressions (Supplementary Tables~\ref{tab:key_contrast_significance}, \ref{tab:setting_level_adjacent_models} and \ref{tab:support_supply}; Supplementary Figures~\ref{fig:supp_around_first_scaffolded}--\ref{fig:supp_support_supply}).}
-\apprev{Cross-dataset checks are reported for all quantities that can be computed from the shared annotation schema. These checks cover the six WildChat, LMSYS Chat and ShareChat task settings and include prevalence summaries, constructive-ratio contrasts, post-answer depth contrasts, adjacent-turn lifts, support-form supply profiles and setting-level adjacent-turn regressions. The main outputs are Supplementary Tables~\ref{tab:key_contrast_significance}, \ref{tab:setting_level_adjacent_models} and \ref{tab:support_supply} and Supplementary Figures~\ref{fig:supp_around_first_scaffolded}--\ref{fig:supp_support_supply}.}
-
-\paragraph{Descriptive checks.}
-\appcomment{Remove the stray semicolon and replace the interpretive paragraph with a concrete table/figure map.}
-\apporig{The Results claims are checked at the level appropriate to each estimand. Section~2.1 is a descriptive prevalence claim: cognitive engagement, constructive engagement and scaffolded support were observable in all six settings, with constructive engagement consistently the highest-level and less frequent user-side signal. Section~2.2 is primarily descriptive: user framing, task ecology and interaction depth organize where constructive engagement appears, with the same directional depth gradient across settings.}
-\apprev{Descriptive claims are supported by the corpus-level and setting-level summaries rather than by additional inferential tests. Table~\ref{tab:corpus_filtering_pipeline} reports the analytic sample, Table~1 reports the main prevalence quantities, Fig.~2 reports engagement composition, user-framing contrasts and interaction-depth summaries and Table~\ref{tab:constructive_context_logit} reports the companion context model for any constructive engagement.}
-
-\paragraph{Inferential checks.}
-\appcomment{Keep only the implementation map for uncertainty estimates.}
-\apporig{Formal uncertainty estimates are reported where the claim involves a contrast or model coefficient. Section~2.3 uses conversation-level bootstrap confidence intervals and p values for turn-weighted scaffolded versus non-scaffolded constructive-ratio contrasts, adjusted Poisson/logistic model estimates and an offset-rate Poisson sensitivity. Section~2.4 reports support-form confidence intervals and between-stratum FDR-adjusted q values. Section~2.5 reports conversation-cluster bootstrap confidence intervals for adjacent-turn lifts and cluster-robust regression estimates for the integrated adjacent-turn models.}
-\apprev{Formal uncertainty estimates are reported for contrasts and model coefficients. Table~\ref{tab:key_contrast_significance} reports bootstrap confidence intervals and p values for constructive-ratio, depth and adjacent-turn contrasts. Tables~\ref{tab:model_specs}, \ref{tab:setting_model_covariates} and \ref{tab:fig3_offset_rate_sensitivity} report the conversation-level model specifications and offset-rate sensitivity. Fig.~4 reports support-form confidence intervals and FDR-adjusted q values, with source values in the released figure data. Tables~\ref{tab:setting_level_adjacent_models}, \ref{tab:integrated_regression}, \ref{tab:integrated_scaffolding_block_tests} and \ref{tab:prior_state_support_form_interactions} report adjacent-turn regression checks.}
-
-\paragraph{Directional consistency.}
-\appcomment{State the exact setting-level exceptions rather than using overbroad consistency language.}
-\apporig{The main percentage-point contrasts were directionally consistent across the six settings. Constructive-ratio contrasts comparing conversations with versus without scaffolded support were positive and statistically distinguishable from zero in all six settings, with effect sizes ranging from +0.99 to +7.34 percentage points. Adjacent-turn constructive lifts were also positive in all six settings, with five of six contrasts statistically distinguishable from zero; LMSYS writing was positive but weaker (+0.27 percentage points, 95\% CI -0.01 to +0.56, $p=.061$). Supplementary Table~\ref{tab:key_contrast_significance} reports these effect sizes, confidence intervals and p values.}
-\apprev{The main percentage-point contrasts were directionally consistent across the six settings, but not every adjusted coefficient was statistically distinguishable from the null. Constructive-ratio contrasts comparing conversations with versus without scaffolded support were positive and statistically distinguishable from zero in all six settings, with effect sizes ranging from +0.99 to +7.34 percentage points. Adjacent-turn constructive lifts were positive in all six settings, with five of six contrasts statistically distinguishable from zero; LMSYS writing was positive but weaker (+0.27 percentage points, 95\% CI -0.01 to +0.56, $p=.061$). In the setting-level adjusted adjacent-turn models, broad scaffolded-support coefficients were weaker in LMSYS writing and ShareChat writing, while the pooled scaffolding block and selected support-form coefficients remained informative (Supplementary Tables~\ref{tab:key_contrast_significance}, \ref{tab:setting_level_adjacent_models} and \ref{tab:integrated_scaffolding_block_tests}).}
-
-\subsection*{B.2\quad Model/source robustness}
-
-\paragraph{WildChat model-snapshot checks.}
-The only robustness displays restricted to WildChat are the model-snapshot figures in Supplementary Figures~\ref{fig:supp_model_prevalence}--\ref{fig:supp_model_family}. They are restricted to WildChat because WildChat exposes user-facing model metadata with sufficient coverage for repeated within-corpus snapshot plots. LMSYS Chat and ShareChat are still included in the cross-dataset and model/source-adjusted analyses, but they do not provide directly comparable model-snapshot structure for the same visual repetition. The WildChat model-snapshot analyses preserved the main directional patterns reported in the main text: coding generally showed higher cognitive engagement than writing; intentionality gaps were visible across most user-facing models; scaffolded conversations were generally more constructive; and adjacent-turn contrasts were more interpretable than coarser within-conversation contrasts.
-
-\paragraph{Integrated adjacent-turn regressions.}
-Integrated adjacent-turn regressions were used as robustness checks rather than as the primary narrative claim. These models predicted whether the next user turn was constructive after combining user-state features, assistant-support features and adjacent-turn context. Because model metadata differ by corpus, we report both within-setting models and pooled specifications. The within-setting models show the dataset-by-task pattern directly, with recoverable model/source fixed effects added separately inside each setting (Supplementary Table~\ref{tab:setting_level_adjacent_models}). The pooled specification includes dataset fixed effects; a sensitivity replaces these with exact WildChat model labels, LMSYS model names recovered from conversation identifiers and ShareChat assistant/source families recovered from conversation identifiers.
-
-\paragraph{Scaffolding block tests.}
-This is interpreted as model/source adjustment rather than as a causal comparison among model versions. Model/source heterogeneity was detectable, but broad scaffolded support still improved prediction after user-state, context and model/source controls (LR $\chi^2_1=509.7$, $p<.001$). Because M1--M6 are support forms nested within scaffolded support rather than independent covariates, we interpret the decomposed models as asking which forms carry additional signal among scaffolded turns, not as a test of scaffolded support after removing its own components.
-
-\paragraph{Support-form decomposition.}
-Adding M1--M6 descriptors within scaffolded support improved fit (LR $\chi^2_6=829.8$, $p<.001$), and the full scaffolding block remained strongly informative after controls (LR $\chi^2_7=1339.6$, $p<.001$; Supplementary Table~\ref{tab:integrated_scaffolding_block_tests}). Adding prior-state $\times$ support-form interactions also improved fit (pooled model/source fixed effects: LR $\chi^2_{18}=297.3$, $p<.001$; Supplementary Table~\ref{tab:prior_state_support_form_interactions}). Fully decomposed coefficients clarify the source of this form-level signal: prior user state is the largest predictor of immediate constructive follow-up, and M4 explaining is the most stable positive support-form coefficient (Supplementary Table~\ref{tab:integrated_regression}). M1 feedback illustrates the scale distinction: it is a strong conversation-level marker in Fig.~\ref{fig:support_form_supply}, but its decomposed adjacent-turn coefficient is state-contingent and not a uniform positive local signal after prior state and co-occurring support forms are controlled.
-
-\paragraph{Interpretive boundary.}
-All model/source checks are used as robustness analyses rather than model-causal comparisons. Model labels are not experimentally assigned. They may be confounded with calendar time, user population, task mix, interface changes and logging context. For this reason, the manuscript does not claim that a specific model family caused the observed engagement differences.
-
-\subsection*{B.3\quad Label uncertainty}
-
-\paragraph{Primary labels.}
-\appcomment{Keep label-uncertainty text as an implementation boundary, not as an extended defensive argument.}
-\apporig{The label scheme intentionally separates top-level constructs from finer support forms. Top-level labels such as constructive engagement and scaffolded support have clear behavioural anchors and the strongest validation evidence; they support the main prevalence, association and temporal claims. Finer support-form labels are interpreted as aggregate form-pattern signals rather than isolated item-level judgments. This is why the main claims rely most heavily on constructive engagement, scaffolded support presence, support-form patterns that are consistent across settings and temporal contrasts that can be expressed with simple conditional probabilities.}
-\apprev{The annotation scheme separates high-level labels from finer support forms. The main analyses rely on the labels with the clearest behavioural anchors and validation evidence: Constructive user engagement, scaffolded support and aggregate support-form patterns. Finer support-form labels are used as setting-level or pooled form-pattern measures rather than as definitive judgments about a single ambiguous turn.}
-
-\paragraph{Cautious labels.}
-\appcomment{Remove unnecessary defensive wording and make clear which labels are descriptive.}
-\apporig{Labels with lower prevalence or more ambiguous boundaries are treated more cautiously. Visible emotional expression is reported descriptively because it was rare. Active engagement helps describe the engagement ecology, but the central outcome is constructive engagement. Support-form labels M1--M6 can co-occur and are not interpreted as mutually exclusive exposures. The human--human and human--LLM validation tables therefore support the use of the schema at the aggregate level, while the manuscript avoids claims that depend on adjudicating a single ambiguous turn in isolation.}
-\apprev{Visible emotional expression is reported only as a descriptive prevalence measure because it is rare. Active engagement is used to describe the engagement ecology and prior-state context, while the central outcome is Constructive engagement. Support-form labels M1--M6 can co-occur and are interpreted as non-exclusive descriptors of scaffolded assistant turns.}
-
-\subsection*{B.4\quad Selection into support}
-
-\paragraph{Selection risk.}
-\appcomment{Shorten this section and make it a necessary analysis boundary rather than a broad disclaimer.}
-\apporig{The most important threat to causal interpretation is selection into support. More complex tasks, more motivated users, better-specified questions or already-developing exchanges may both elicit scaffolded support and produce constructive follow-up. This possibility is part of the interactional process that the paper studies. The empirical question is therefore whether scaffolded support remains associated with constructive participation after observed context and immediate prior user state are taken into account, not whether support was randomly assigned.}
-\apprev{Selection into support is the main reason the analyses are interpreted as observational associations. More complex tasks, clearer user attempts or already-developing exchanges may both elicit scaffolded support and produce constructive follow-up. The adjusted and adjacent-turn models therefore ask whether associations remain after observed context and prior user state are accounted for; they do not estimate randomized support effects.}
-
-\paragraph{Adjusted interpretation.}
-\appcomment{Avoid a second discussion-style conclusion; point readers to the implemented checks.}
-\apporig{Conversation-level adjusted models reduce measured compositional differences but cannot remove unobserved selection. Adjacent-turn analyses narrow the temporal window and condition on the immediately preceding user state, which helps distinguish a broad conversation-level association from a state-conditioned coupling pattern. Reverse adjacent-turn summaries also show that user state predicts subsequent assistant scaffolding, consistent with a coupled process rather than a one-directional exposure. The safest interpretation is therefore state-dependent coupling between assistant support and user engagement, not a claim that scaffolded support alone caused learning.}
-\apprev{The implemented checks are the conversation-level covariate-adjusted models, offset-rate sensitivity, adjacent-turn contrasts stratified by prior user state, reverse adjacent-turn summaries and integrated adjacent-turn regressions. These checks are reported in Supplementary Tables~\ref{tab:key_contrast_significance}, \ref{tab:fig3_offset_rate_sensitivity}, \ref{tab:setting_level_adjacent_models}, \ref{tab:integrated_regression} and \ref{tab:prior_state_support_form_interactions}.}
-
-\subsection*{B.5\quad Privacy-preserving reporting}
+\subsection*{B.1\quad Privacy-preserving reporting}
 
 \paragraph{Reporting boundary.}
 \appcomment{Discuss privacy handling beyond the decision not to redistribute raw logs.}
@@ -286,21 +206,21 @@ Supplementary Figures~\ref{fig:supp_model_prevalence}--\ref{fig:supp_model_famil
 \begin{figure*}[!htbp]
 \centering
 \includegraphics[width=0.90\textwidth]{figures/supplementary/ExtendedDataFigure1_around_first_scaffolded.pdf}
-\caption{\textbf{Coarse around-first-scaffold contrasts are exploratory boundary checks across the six task settings.} Bars show the difference in constructive engagement after versus before the first scaffolded assistant turn within conversations containing scaffolded support. Error bars show 95\% conversation-bootstrap confidence intervals. These before--after contrasts are not used as treatment-effect or accumulation estimates because the first scaffolded turn may be selected by difficulty, uncertainty or an already developing exchange.}
+\caption{\textbf{Coarse around-first-scaffold summaries across the six task settings.} Bars show the difference in constructive engagement after versus before the first scaffolded assistant turn within conversations containing scaffolded support. Error bars show 95\% conversation-bootstrap confidence intervals.}
 \label{fig:supp_around_first_scaffolded}
 \end{figure*}
 
 \begin{figure*}[p]
 \centering
 \includegraphics[width=0.92\textwidth]{figures/supplementary/ExtendedDataFigure2_intent_moderates_support_effect.pdf}
-\caption{\textbf{Scaffolded-support associations by user framing across the six task settings.} Stratified Poisson count-ratio estimates compare the association between scaffolded-support presence and constructive participation in intentional versus unintentional conversations. Error bars show 95\% model-based confidence intervals. The figure is interpreted as descriptive moderation rather than evidence that framing causally changes support effectiveness, because user framing, task complexity and persistence are not randomly assigned.}
+\caption{\textbf{Scaffolded-support associations by user framing across the six task settings.} Stratified Poisson count-ratio estimates summarize scaffolded-support presence and constructive participation in intentional and unintentional conversations. Error bars show 95\% model-based confidence intervals.}
 \label{fig:supp_intent_moderation}
 \end{figure*}
 
 \begin{figure*}[p]
 \centering
 \includegraphics[width=0.92\textwidth]{figures/supplementary/SupplementaryFigure_SupportSupplyProfile.pdf}
-\caption{\textbf{Support-form supply within scaffolded assistant turns across the six task settings.} Cells report the percentage of scaffolded assistant turns containing each non-exclusive support-form label. Rows do not sum to 100\% because a single scaffolded turn can contain multiple support forms. The figure provides task-context background for the support-form association contrasts in Fig.~\ref{fig:support_form_supply}.}
+\caption{\textbf{Support-form supply within scaffolded assistant turns across the six task settings.} Cells report the percentage of scaffolded assistant turns containing each non-exclusive support-form label. Rows do not sum to 100\% because a single scaffolded turn can contain multiple support forms.}
 \label{fig:supp_support_supply}
 \end{figure*}
 
@@ -309,34 +229,34 @@ Supplementary Figures~\ref{fig:supp_model_prevalence}--\ref{fig:supp_model_famil
 \begin{figure*}[p]
 \centering
 \includegraphics[width=\textwidth]{figures/supplementary/SupplementaryFigure_Model1_prevalence_profile.pdf}
-\caption{\textbf{WildChat model-snapshot prevalence profiles preserve the main domain contrast.} Across user-facing WildChat model snapshots, coding-oriented conversations generally show higher cognitive engagement and higher assistant scaffolding rates than writing-oriented conversations. This is a WildChat-only model-snapshot check; cross-dataset prevalence and association checks are reported separately across all six settings. The model labels are observational and may reflect time, user mix and traffic composition, so the figure is not a model-causal comparison.}
+\caption{\textbf{WildChat model-snapshot prevalence profiles.} The figure reports cognitive engagement, constructive engagement and scaffolded-support prevalence by user-facing WildChat model snapshot and task setting.}
 \label{fig:supp_model_prevalence}
 \end{figure*}
 
 \begin{figure*}[p]
 \centering
 \includegraphics[width=\textwidth]{figures/supplementary/SupplementaryFigure_Model2_intent_gaps.pdf}
-\caption{\textbf{Intentionality gaps are visible across WildChat model snapshots.} The figure reports model-specific differences between intentional and unintentional conversations in cognitive and constructive engagement, separately for WildChat coding and writing. It complements the six-setting user-framing analyses by checking whether the WildChat pattern is concentrated in a particular model snapshot.}
+\caption{\textbf{User-framing gaps across WildChat model snapshots.} The figure reports model-specific differences between intentional and unintentional conversations in cognitive and constructive engagement, separately for WildChat coding and writing.}
 \label{fig:supp_model_intent}
 \end{figure*}
 
 \begin{figure*}[p]
 \centering
 \includegraphics[width=\textwidth]{figures/supplementary/SupplementaryFigure_Model3_conversation_association.pdf}
-\caption{\textbf{Conversation-level support associations are broadly positive across WildChat model snapshots.} The figure repeats major conversation-level analyses by user-facing WildChat model snapshot, including constructive participation, adjusted support associations and exploratory coarse before--after contrasts around the first scaffolded assistant turn. It is a within-WildChat robustness check; cross-dataset scaffolded-support contrasts are reported across all six settings in the supporting tables and main figures.}
+\caption{\textbf{Conversation-level support associations by WildChat model snapshot.} The figure reports constructive participation, adjusted support associations and coarse before--after summaries around the first scaffolded assistant turn by user-facing WildChat model snapshot.}
 \label{fig:supp_model_conversation}
 \end{figure*}
 
 \begin{figure*}[p]
 \centering
 \includegraphics[width=\textwidth]{figures/supplementary/SupplementaryFigure_Model4_local_temporal.pdf}
-\caption{\textbf{Local temporal signals vary across WildChat model snapshots.} The figure reports adjacent-turn constructive lifts and emotion-to-support responsiveness by WildChat model snapshot. Adjacent-turn constructive lifts are often positive, especially in coding-oriented conversations, but the magnitude varies across snapshots; emotion-to-support responsiveness is more heterogeneous and is treated as exploratory.}
+\caption{\textbf{Adjacent-turn summaries by WildChat model snapshot.} The figure reports adjacent-turn constructive lifts and emotion-to-support responsiveness by user-facing WildChat model snapshot.}
 \label{fig:supp_model_temporal}
 \end{figure*}
 
 \begin{figure*}[p]
 \centering
 \includegraphics[width=0.96\textwidth]{figures/supplementary/SupplementaryFigure_Model5_family_summary.pdf}
-\caption{\textbf{Coarse WildChat model-family aggregation preserves the main directional patterns.} WildChat model snapshots are grouped into coarse model families to summarize cognitive engagement prevalence, adjusted support associations and adjacent-turn constructive lift. Coding remains higher than writing across families, and the support-association and adjacent-turn lift patterns remain directionally consistent on average.}
+\caption{\textbf{WildChat model-family summary.} WildChat model snapshots are grouped into coarse model families to summarize cognitive engagement prevalence, adjusted support associations and adjacent-turn constructive lift.}
 \label{fig:supp_model_family}
 \end{figure*}

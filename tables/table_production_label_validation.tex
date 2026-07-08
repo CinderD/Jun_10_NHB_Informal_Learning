@@ -1,14 +1,14 @@
 \begin{table*}[t]
 \scriptsize
 \centering
-\caption{\textbf{Consolidated human--LLM production-label agreement.} User-framing audit sampled 450 first user turns across the six corpus-by-task settings, with production-positive intentional-framing cases deliberately oversampled. User engagement audit sampled 600 user turns, with 100 cases per setting and production constructive cases deliberately oversampled. Assistant audit sampled 180 assistant turns, with 30 cases per setting and scaffolded-support and support-form positives deliberately oversampled. Final human labels were confirmed after item-level review. Metrics compare final LLM-assisted production labels with human-confirmed labels using one-vs-rest binary coding for each label. Because the samples are positive-oversampled, these metrics validate label boundaries rather than estimating population prevalence.}
+\caption{\textbf{Consolidated human--LLM corpus-scale label agreement.} The audits compare final LLM-assisted corpus-scale labels with human-confirmed labels using one-vs-rest binary coding for each label. User-framing, user-engagement and assistant-support audits were stratified across the six corpus-by-task settings, with 450 first user turns, 600 user turns and 180 assistant turns reviewed, respectively. Final human labels were confirmed after item-level review. The table reports audit size, LLM-positive counts, human-positive counts, precision, recall, F1, MCC, Gwet AC1 and accuracy.}
 \label{tab:production_label_validation}
 \setlength{\tabcolsep}{4pt}
 \renewcommand{\arraystretch}{1.08}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lllrrrrrrrr}
 \toprule
-Role & Label & Audit N & Prod. + & Human + & Precision & Recall & F1 & MCC & Gwet AC1 & Accuracy \\
+Role & Label & Audit N & LLM label + & Human + & Precision & Recall & F1 & MCC & Gwet AC1 & Accuracy \\
 \midrule
 \multicolumn{11}{l}{\textit{Conversation-level framing}} \\
 Conversation & Intentional framing & 450 & 300 & 239 & 0.770 & 0.967 & 0.857 & 0.677 & 0.671 & 0.829 \\

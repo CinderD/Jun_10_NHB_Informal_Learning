@@ -1,0 +1,23 @@
+\begin{table}[!htbp]
+\centering
+\scriptsize
+\caption{\textbf{Corpus-scale annotation implementation controls.} The table records the operational controls used when applying the annotation workflow to the analytic corpora. Exact prompt text, schemas, prompt versions, deployment identifiers, API versions and run manifests are archived with the reproducibility code.}
+\label{tab:annotation_implementation_controls}
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.24\textwidth}>{\raggedright\arraybackslash}X}
+\toprule
+Component & Implementation detail \\
+\midrule
+Model deployments & Turn-level user and assistant labels used Azure OpenAI chat-completions deployments from the GPT-5.1 family; final writing-oriented calls used GPT-5.1-chat; LLM-assisted semantic filters used GPT-4o-family deployments. \\
+\addlinespace
+Structured outputs & JSON outputs were used where supported. Final writing calls used JSON-object or JSON-schema constraints, 60-second request timeouts and maximum completion budgets of 300 tokens for conversation-level labels and 350 tokens for turn-level labels. Final coding and writing annotation calls did not pass an explicit temperature parameter; English checks used temperature 0.0 and semantic topic checks used temperature 0.1. \\
+\addlinespace
+Parser checks & Parser checks enforced required fields, normalized label variants, flagged malformed outputs and recovered missing fields only when the model explanation and structured output made the mapping unambiguous. \\
+\addlinespace
+Retry and failure handling & Coding runs used up to five attempts with exponential backoff for rate limits and fixed-delay retry for other transient failures. Writing runs used up to six attempts, disabled SDK-level retries, used exponential backoff with jitter and fell back from JSON-schema response format to JSON-object format when needed. Content-filter blocks returned empty analyses and were logged rather than imputed. \\
+\addlinespace
+Boundary-rule processing & User-turn rules demoted brief acknowledgements, generic acceptance or administrative follow-ups when no new constraint, test, revision, diagnosis or substantive extension was present, and removed Emotional labels for formulaic politeness. Assistant-turn rules cleared support-form labels when a turn was not scaffolded, removed scaffolded-support labels from complete answers labelled as scaffolding only because they were long or task-relevant and recovered missing support-form fields only when one mapping was unambiguous. \\
+\bottomrule
+\end{tabularx}
+\end{table}

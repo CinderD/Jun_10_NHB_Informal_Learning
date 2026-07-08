@@ -26,24 +26,31 @@
 \newcommand{\casekey}[1]{\textcolor{caseconstruct}{\textbf{#1}}}
 \newcommand{\supportkey}[1]{\textcolor{caseteal}{\textbf{#1}}}
 \newcommand{\casechip}[1]{\casebadge{casechipfill}{caseblue}{#1}}
-\newcommand{\caseheader}[4]{%
+\newcommand{\casefield}[2]{%
+  {\scriptsize\textcolor{casenote}{\textbf{#1}}}\par
+  {\scriptsize #2}}
+\newcommand{\caseheader}[6]{%
   \begingroup
-  \setlength{\fboxsep}{5pt}%
+  \setlength{\fboxsep}{4.5pt}%
   \colorbox{caseheadfill}{%
   \begin{minipage}{0.965\linewidth}
   {\small\textcolor{caseblue}{\textbf{#1}}\quad \textbf{#2}}\par
-  \vspace{3pt}
-  #3\par
-  \vspace{3pt}
-  {\scriptsize\textcolor{casenote}{\textbf{Annotation focus:} #4}}
+  \vspace{4pt}
+  \renewcommand{\arraystretch}{1.04}
+  \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}X@{}}
+  \casefield{Setting}{#3} &
+  \casefield{Framing}{#4} &
+  \casefield{Length}{#5} &
+  \casefield{Annotation focus}{#6}
+  \end{tabularx}
   \end{minipage}}%
   \endgroup}
 \newcommand{\caselegend}{%
   \begingroup
-  {\scriptsize\textcolor{caseblue}{\textbf{Encoding}}\quad
-  \constructivebadge\hspace{3pt}\activebadge\hspace{3pt}\scaffoldbadge\hspace{3pt}\referencebadge}\par\vspace{2pt}
-  {\scriptsize\textcolor{caseblue}{\textbf{Codes}}\quad
-  \casecode{I2} support intent; \casecode{M} support-form labels may co-occur.}
+  {\scriptsize\textcolor{caseblue}{\textbf{Legend}}\quad
+  \constructivebadge\hspace{3pt}\activebadge\hspace{3pt}\scaffoldbadge\hspace{3pt}\referencebadge}\par\vspace{1pt}
+  {\scriptsize\textcolor{caseblue}{\textbf{Assistant codes}}\quad
+  \casecode{I2} cognitive support intent; \casecode{M1--M6} non-exclusive support forms.}
   \endgroup}
 
 \clearpage
@@ -54,11 +61,13 @@
 \setlength{\tabcolsep}{3pt}
 \renewcommand{\arraystretch}{1.18}
 \begin{longtable}{>{\raggedright\arraybackslash}p{0.11\textwidth}>{\raggedright\arraybackslash}p{0.58\textwidth}>{\raggedright\arraybackslash}p{0.25\textwidth}}
-\caption{\textbf{Complete de-identified coding case with raw transcript and turn-level labels.} The transcript is from a retained WildChat coding conversation; line breaks and Markdown code blocks are lightly formatted for readability while preserving the original turn sequence and wording. Colored badges encode role, user engagement level and assistant support category.}
+\caption{\textbf{De-identified coding case with turn-level labels.} A retained WildChat coding conversation, lightly formatted for readability. Badges encode role, user engagement and assistant support labels.}
 \label{tab:complete_coding_case}\\
 \multicolumn{3}{p{0.96\textwidth}}{\caseheader{Coding case}{SQL transaction handling}
-{\casechip{WildChat coding}\hspace{2pt}\casechip{intentional framing}\hspace{2pt}\casechip{4 turns}}
-{Constructive follow-up probes a programming mechanism; scaffolded support combines explanation, procedure and modelling.}}\\[5pt]
+{WildChat coding}
+{Intentional}
+{4 turns}
+{Constructive follow-up tests transaction scope; scaffolded replies explain the mechanism and provide procedural modelling.}}\\[5pt]
 \multicolumn{3}{p{0.96\textwidth}}{\caselegend}\\[5pt]
 \toprule
 \textbf{Turn} & \textbf{De-identified raw transcript} & \textbf{Label and annotation cue} \\
@@ -97,11 +106,13 @@
 \setlength{\tabcolsep}{3pt}
 \renewcommand{\arraystretch}{1.18}
 \begin{longtable}{>{\raggedright\arraybackslash}p{0.11\textwidth}>{\raggedright\arraybackslash}p{0.58\textwidth}>{\raggedright\arraybackslash}p{0.25\textwidth}}
-\caption{\textbf{Complete de-identified writing case with raw transcript and turn-level labels.} The transcript is from a retained WildChat writing conversation; line breaks and list formatting are lightly formatted for readability while preserving the original turn sequence and wording. Colored badges encode role, user engagement level and assistant support category.}
+\caption{\textbf{De-identified writing case with turn-level labels.} A retained WildChat writing conversation, lightly formatted for readability. Badges encode role, user engagement and assistant support labels.}
 \label{tab:complete_writing_case}\\
 \multicolumn{3}{p{0.96\textwidth}}{\caseheader{Writing case}{Formal report justification}
-{\casechip{WildChat writing}\hspace{2pt}\casechip{intentional framing}\hspace{2pt}\casechip{6 turns}}
-{The exchange shifts from direct explanation use to constructive reframing, then to direct drafting under a new style constraint.}}\\[5pt]
+{WildChat writing}
+{Intentional}
+{6 turns}
+{The exchange moves from explanation use to constructive reframing, then to direct drafting under a new style constraint.}}\\[5pt]
 \multicolumn{3}{p{0.96\textwidth}}{\caselegend}\\[5pt]
 \toprule
 \textbf{Turn} & \textbf{De-identified raw transcript} & \textbf{Label and annotation cue} \\

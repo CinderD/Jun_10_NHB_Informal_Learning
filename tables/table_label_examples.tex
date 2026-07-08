@@ -14,10 +14,10 @@ Construct & Paraphrased turn & Annotation rationale \\
 \texttt{C} constructive user engagement & ``If the cache expires before the asynchronous callback returns, would the same race condition still happen?'' & The user tests an implication, boundary condition or transfer of the prior explanation. \\
 Scaffolding & ``First isolate the failing step; that will show whether the issue is parsing or state management.'' & The assistant structures the user's process and leaves diagnostic or revision work with the user. \\
 \texttt{M1} feedback & ``Your diagnosis is close; the bug is in the index offset, not the loop boundary.'' & Evaluative feedback on the user's prior attempt or understanding. \\
-\texttt{M2} hinting & ``Check the parser log around the first malformed token before changing the model.'' & A cue or partial path that helps the user proceed without fully resolving the task. \\
-\texttt{M3} instructing & ``First split the condition into two branches, then add a regression test.'' & Explicit steps or strategy that organizes the user's work. \\
+\texttt{M2} hinting & ``Before changing the model, look at whether the malformed token first appears before or after parsing.'' & A targeted cue points the user toward the next diagnostic distinction, but does not give the full procedure or fix. \\
+\texttt{M3} instructing & ``Run the failing case, print the parser output, add a guard for empty fields, then rerun the test.'' & Explicit ordered steps tell the user what actions to take and in what sequence. \\
 \texttt{M4} explaining & ``The exception occurs because the event loop is already running, so a nested call cannot acquire it.'' & A rationale or mechanism that clarifies why the issue occurs. \\
-\texttt{M5} modelling & ``A small pattern you can adapt is: validate input, normalize it, then pass it to the writer.'' & A sample approach intended to be emulated or adapted rather than merely copied. \\
+\texttt{M5} modelling & ``For this report section, use the pattern: claim, evidence, implication; for example, this delay matters because X, which means Y for the team.'' & A concrete template or worked example demonstrates a reusable form the user can adapt. \\
 \texttt{M6} questioning & ``Which constraint matters more here: preserving tone or shortening the paragraph?'' & A question that advances problem solving or reflection. \\
 \bottomrule
 \end{tabularx}
