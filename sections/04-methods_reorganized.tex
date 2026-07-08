@@ -35,7 +35,7 @@ environment. The claims are therefore about observable behavioural signatures an
 
 We constructed the analytic corpus from three public human--LLM conversation releases: WildChat-4.8M~\cite{allenai2025wildchat48m,zhao2024wildchat}, LMSYS Chat-1M~\cite{zheng2023lmsyschat1m} and ShareChat~\cite{yan2025sharechat}. For each source, we converted the public records into role-ordered conversation records with user and assistant turns. We then applied corpus-specific language and minimum-turn screens to retain conversations within the English-oriented analysis scope and with at least four message turns.
 
-Coding- and writing-oriented conversations were identified with LLM-assisted semantic task filters, as detailed in Supplementary Section~A.1 and Supplementary Table~\ref{tab:filter_classifier_validation}. Retained conversations were then processed with the shared annotation pipeline for conversation-level user framing and turn-level labels for user engagement, scaffolded support, support intent and support form; the codebook, workflow and validation details are reported in Supplementary Sections~A.2--A.4.
+Coding- and writing-oriented conversations were identified with LLM-assisted semantic task filters, as detailed in \hyperref[supp:a1]{Supplementary Section A.1} and Supplementary Table~\ref{tab:filter_classifier_validation}. Retained conversations were then processed with the shared annotation pipeline for conversation-level user framing and turn-level labels for user engagement, scaffolded support, support intent and support form; the codebook, workflow and validation details are reported in \hyperref[supp:a2]{Supplementary Sections A.2--A.4}.
 
 
 
@@ -108,7 +108,7 @@ Operational definitions, plain-language examples and validation metrics are prov
 
 Constructive engagement is the focal user-side measure in the main analyses because it identifies where generated output becomes material for the user's own reasoning,
 testing and revision. We represent it as a turn-level \texttt{C} indicator, a conversation-level count, an indicator for at least one constructive user turn and a
-constructive-turn ratio. The corresponding statistical estimands and model specifications are provided in Supplementary Section~A.5.
+constructive-turn ratio. The corresponding statistical estimands and model specifications are provided in \hyperref[supp:a5]{Supplementary Section A.5}.
 
 % \subsubsection{Assistant support}
 
@@ -126,7 +126,7 @@ The intent labels describe the broad purpose of support, whereas the form labels
 Support-form analyses condition on scaffolded turns and compare scaffolded conversations containing each support-form label with scaffolded conversations that do not contain that label. Because support-form labels are multi-label descriptors, these contrasts trace how particular forms of scaffolding pattern with constructive participation within the broader scaffolded-support ecology.
 
 Operational definitions and plain-language examples are provided in Supplementary Tables~\ref{tab:annotation_codebook_definitions} and \ref{tab:label_examples}; de-identified case excerpts are provided in Supplementary Tables~\ref{tab:complete_coding_case}--\ref{tab:complete_writing_case}.
-Aggregate support-intent and support-form profiles are reported in Supplementary Tables~\ref{tab:support_intent_summary}, \ref{tab:support_intent_form_crosswalk} and \ref{tab:support_supply}. Validation metrics for scaffolded support and support-form labels are reported in Supplementary Tables~\ref{tab:label_validation} and \ref{tab:production_label_validation}. The corresponding statistical estimands and model specifications are provided in Supplementary Section~A.5.
+Aggregate support-intent and support-form profiles are reported in Supplementary Tables~\ref{tab:support_intent_summary}, \ref{tab:support_intent_form_crosswalk} and \ref{tab:support_supply}. Validation metrics for scaffolded support and support-form labels are reported in Supplementary Tables~\ref{tab:label_validation} and \ref{tab:production_label_validation}. The corresponding statistical estimands and model specifications are provided in \hyperref[supp:a5]{Supplementary Section A.5}.
 
 
 % \subsection{Annotation workflow and validation}
@@ -194,13 +194,13 @@ The codebook was derived from engagement theory, the ICAP framework and scaffold
 Human reviewers independently labelled overlapping validation cases, discussed disagreements and produced human-confirmed labels for validation analyses.
 
 \paragraph{Corpus-scale labelling.}
-After the codebook, prompt templates and structured output schemas stabilized, the frozen annotation workflow was applied to the analytic corpora. The workflow used schema and parser checks, documented post-processing rules for recurring boundary errors and retained annotation metadata for provider, deployment family, API version, prompt version, retry policy and parser checks. WildChat labels reflect the targeted update pass applied after validation, including post-labelling WildChat review samples drawn from completed labelled pools; LMSYS Chat and ShareChat were then processed with the same workflow. Operational definitions, examples, de-identified case excerpts and reproducibility details are provided in Supplementary Tables~\ref{tab:annotation_codebook_definitions}--\ref{tab:complete_writing_case} and Supplementary Sections A.3--A.4.
+After the codebook, prompt templates and structured output schemas stabilized, the frozen annotation workflow was applied to the analytic corpora. The workflow used schema and parser checks, documented post-processing rules for recurring boundary errors and retained annotation metadata for provider, deployment family, API version, prompt version, retry policy and parser checks. WildChat labels reflect the targeted update pass applied after validation, including post-labelling WildChat review samples drawn from completed labelled pools; LMSYS Chat and ShareChat were then processed with the same workflow. Operational definitions, examples, de-identified case excerpts and reproducibility details are provided in Supplementary Tables~\ref{tab:annotation_codebook_definitions}--\ref{tab:complete_writing_case} and \hyperref[supp:a3]{Supplementary Sections A.3--A.4}.
 
 \paragraph{Human validation.}
 Human validation is reported in three layers. Human--human agreement assesses codebook operability; corpus-scale label audits compare final LLM-assisted labels with human-confirmed labels; and post-update audits check recurring residual boundary errors.
 Agreement is summarized with per-label F1, Matthews correlation coefficient and Gwet's AC1 because the labels are sparse, prevalence-imbalanced and sometimes multi-label~\cite{matthews1975comparison,gwet2008computing}.
 Overall, the validation checks supported the focal labels used for the main claims, including intentional user framing, constructive engagement, scaffolded support and support-form labels.
-Full sampling designs, review-round sizes, post-labelling checks and per-label metrics are reported in Supplementary Section A.4 and Supplementary Tables~\ref{tab:label_validation}--\ref{tab:wildchat_post_labelling_review}. These tables distinguish codebook-operability checks from LLM-assisted label agreement.
+Full sampling designs, review-round sizes, post-labelling checks and per-label metrics are reported in \hyperref[supp:a4]{Supplementary Section A.4} and Supplementary Tables~\ref{tab:label_validation}--\ref{tab:wildchat_post_labelling_review}. These tables distinguish codebook-operability checks from LLM-assisted label agreement.
 Prevalence estimates in the Results are computed from the full corpus-scale labels.
 
 
@@ -223,7 +223,7 @@ Contextual analyses compared observed user framing, task ecology and interaction
 \paragraph{Conversation-level support associations.}
 Conversation-level support analyses compared conversations containing at least one scaffolded assistant turn with reference conversations without scaffolded support (Section~2.3).
 Constructive-ratio contrasts used turn-weighted ratios within each comparison group, defined as total constructive user turns divided by total user turns, with uncertainty estimated from 1,000 conversation-level bootstrap resamples. Covariate-adjusted models reported in Section~2.3 used setting-specific Poisson generalized linear models for raw constructive-turn counts and companion logistic models for whether a conversation contained at least one constructive user turn~\cite{mccullagh1989generalized,agresti2013categorical}.
-The primary Poisson model included conversation length as a covariate; offset-rate and quasi-Poisson sensitivities are reported in Supplementary Section~A.5 and Supplementary Table~\ref{tab:fig3_offset_rate_sensitivity}.
+The primary Poisson model included conversation length as a covariate; offset-rate and quasi-Poisson sensitivities are reported in \hyperref[supp:a5]{Supplementary Section A.5} and Supplementary Table~\ref{tab:fig3_offset_rate_sensitivity}.
 The resulting estimates are interpreted as covariate-adjusted associations in naturalistic conversation logs.
 
 \paragraph{Support-form analyses.}
@@ -236,7 +236,7 @@ We compared the probability that the next user turn was constructive after scaff
 
 Integrated adjacent-turn regressions combined prior user-state features, assistant-scaffolding features, support-form descriptors and adjacent-turn context in one logistic model predicting whether the next user turn was constructive. These models included task and framing variables, turn position and dataset fixed effects.
 As a robustness check, we refit the integrated adjacent-turn model in records with recoverable assistant-model or source-platform metadata to test whether the patterns were explained by observed model or source differences. These metadata controls were not used as primary covariates across all analyses because their availability and meaning differ across the public corpora.
-Standard errors were clustered by conversation. We report broad scaffolded-support models separately from support-form decompositions because support-form labels are descriptors nested within scaffolded support. Nested likelihood-ratio block tests first add broad scaffolded-support presence and then test whether support-form descriptors add signal within scaffolded support. Supplementary Section~A.5 and Supplementary Table~\ref{tab:setting_model_covariates} give the model specifications, covariate sets and sensitivity checks.
+Standard errors were clustered by conversation. We report broad scaffolded-support models separately from support-form decompositions because support-form labels are descriptors nested within scaffolded support. Nested likelihood-ratio block tests first add broad scaffolded-support presence and then test whether support-form descriptors add signal within scaffolded support. \hyperref[supp:a5]{Supplementary Section A.5} and Supplementary Table~\ref{tab:setting_model_covariates} give the model specifications, covariate sets and sensitivity checks.
 
 % \subsection{LLM use and reporting boundaries}
 
@@ -251,7 +251,7 @@ Standard errors were clustered by conversation. We report broad scaffolded-suppo
 
 Large language models were used in four roles. First, LLMs were the systems under investigation: the data are public human--LLM conversations from WildChat, LMSYS Chat and ShareChat. Available model/source identifiers were retained as observational metadata for descriptive and robustness analyses, not as randomized model comparisons.
 
-Second, LLMs were used as measurement tools for coding-versus-writing filtering, English-oriented filtering and corpus-scale annotation of user framing, engagement, scaffolding, support intent and support form. These calls used fixed prompts, schema/parser checks, retry logic, post-processing rules and human validation; deployment names, API versions, prompt versions and operational details are reported in Supplementary Section~A.3.
+Second, LLMs were used as measurement tools for coding-versus-writing filtering, English-oriented filtering and corpus-scale annotation of user framing, engagement, scaffolding, support intent and support form. These calls used fixed prompts, schema/parser checks, retry logic, post-processing rules and human validation; deployment names, API versions, prompt versions and operational details are reported in \hyperref[supp:a3]{Supplementary Section A.3}.
 Third, LLMs were used during annotation development to test prompts and inspect boundary cases against human-reviewed examples; pilot outputs were not used as corpus-scale labels or prevalence estimates. Fourth, LLM-based tools assisted with code drafting, debugging, workflow organization and language editing, but not as substitutes for human validation, audit-label adjudication, statistical decisions or result interpretation.
 
 % All analyses are aggregate turn- or conversation-level analyses. Model/source labels are observational descriptors, so model-related comparisons are interpreted as robustness analyses rather than causal effects.

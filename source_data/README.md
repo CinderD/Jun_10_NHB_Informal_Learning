@@ -7,6 +7,7 @@ This directory contains CSV source data for the manuscript's numeric main figure
 - `figure4_source_data.csv`: support-form constructive associations and Benjamini-Hochberg q values.
 - `figure5_source_data.csv`: adjacent-turn lifts, prior-state conditional probabilities, reverse scaffolded-support probabilities and focal prior-state x support-form odds ratios.
 - `supplementary_support_supply_source_data.csv`: support-form supply profiles used in Supplementary Figure D1.
+- `wildchat_model_family_robustness_source_data.csv`: WildChat model-family summaries and model-snapshot background points used in Supplementary Figure D2.
 - `validation/`: human-confirmed validation metrics for user-framing, user-engagement and assistant scaffolding/support-form production-label audits. These files contain aggregate metrics and mismatch metadata, not raw conversation text.
 
 Figure 1 is a conceptual framework figure and has no numeric source data. Supplementary table source files are stored under `tables/`, and regression/statistical output CSV files are stored under `outputs/integrated_regression/`.
