@@ -343,12 +343,12 @@ def make_figure2() -> None:
     }
 
     fig = plt.figure(figsize=(7.85, 4.62))
-    gs = GridSpec(2, 2, figure=fig, height_ratios=[1.22, 0.74], width_ratios=[1.12, 1.18], hspace=0.78, wspace=0.42)
+    gs = GridSpec(2, 2, figure=fig, height_ratios=[1.22, 0.66], width_ratios=[1.12, 1.18], hspace=0.88, wspace=0.42)
     axa = fig.add_subplot(gs[0, 0])
     gs_b = gs[0, 1].subgridspec(1, 2, wspace=0.28)
     axb1 = fig.add_subplot(gs_b[0, 0])
     axb2 = fig.add_subplot(gs_b[0, 1])
-    gs_c = gs[1, :].subgridspec(1, 2, wspace=0.14)
+    gs_c = gs[1, :].subgridspec(1, 2, wspace=0.30)
     axc1 = fig.add_subplot(gs_c[0, 0])
     axc2 = fig.add_subplot(gs_c[0, 1])
 
@@ -404,10 +404,10 @@ def make_figure2() -> None:
     def compact_depth_heatmap(ax, settings, title):
         matrix = np.array([depth[setting] for _, setting in settings]) * 100
         ax.imshow(matrix, cmap=depth_cmap, norm=Normalize(0, 64), aspect="auto")
-        ax.set_title(title, fontsize=8.5, weight="bold", pad=5, color=COLORS["ink"])
+        ax.set_title(title, fontsize=8.5, weight="bold", pad=4, color=COLORS["ink"])
         ax.set_xticks(np.arange(3), ["2-3", "4-6", "7+"], fontsize=7.7)
         ax.set_yticks(np.arange(len(settings)), [dataset for dataset, _ in settings], fontsize=7.7)
-        ax.set_xlabel("User turns in conversation", fontsize=7.5)
+        ax.set_xlabel("User turns in conversation", fontsize=7.3)
         ax.set_xticks(np.arange(-0.5, 3, 1), minor=True)
         ax.set_yticks(np.arange(-0.5, len(settings), 1), minor=True)
         ax.grid(which="minor", color="white", linewidth=1.4)
@@ -417,7 +417,7 @@ def make_figure2() -> None:
         for i in range(matrix.shape[0]):
             for j in range(matrix.shape[1]):
                 val = matrix[i, j]
-                ax.text(j, i, f"{val:.1f}", ha="center", va="center", fontsize=7.9, color="white" if val > 34 else COLORS["ink"])
+                ax.text(j, i, f"{val:.1f}", ha="center", va="center", fontsize=7.6, color="white" if val > 34 else COLORS["ink"])
 
     compact_depth_heatmap(
         axc1,
@@ -431,6 +431,12 @@ def make_figure2() -> None:
     )
 
     fig.subplots_adjust(left=0.105, right=0.985, top=0.805, bottom=0.165)
+    c1_pos = axc1.get_position()
+    c2_pos = axc2.get_position()
+    c_target_h = c1_pos.height * 0.86
+    c_y0 = c1_pos.y0 + (c1_pos.height - c_target_h) * 0.28
+    axc1.set_position([axa.get_position().x0, c_y0, axa.get_position().width, c_target_h])
+    axc2.set_position([axb1.get_position().x0, c_y0, axb2.get_position().x1 - axb1.get_position().x0, c_target_h])
     top_row_y = max(axa.get_position().y1, axb1.get_position().y1, axb2.get_position().y1) + 0.128
     top_legend_y = top_row_y - 0.052
     a_center = (axa.get_position().x0 + axa.get_position().x1) / 2
