@@ -348,9 +348,7 @@ def make_figure2() -> None:
     gs_b = gs[0, 1].subgridspec(1, 2, wspace=0.28)
     axb1 = fig.add_subplot(gs_b[0, 0])
     axb2 = fig.add_subplot(gs_b[0, 1])
-    gs_c = gs[1, :].subgridspec(1, 2, wspace=0.22)
-    axc1 = fig.add_subplot(gs_c[0, 0])
-    axc2 = fig.add_subplot(gs_c[0, 1], sharey=axc1)
+    axc = fig.add_subplot(gs[1, :])
 
     y = np.arange(len(labels))
     axa.barh(y, constructive, color=COLORS["teal"], edgecolor="white", linewidth=0.8, height=0.60, label="Constructive")
@@ -399,56 +397,38 @@ def make_figure2() -> None:
         Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["grey"], markeredgecolor="white", markersize=5.6),
     ]
 
-    length_x = np.arange(3)
-    length_labels = ["2-3", "4-6", "7+"]
-    dataset_styles = {
-        "WC": (COLORS["blue"], "o"),
-        "LMSYS": ("#7FA6BA", "s"),
-        "SC": (COLORS["teal"], "D"),
-    }
-
-    def depth_lines(ax, settings, title, show_ylabel=False, label_offsets=None):
-        label_offsets = label_offsets or {}
-        for dataset, setting in settings:
-            color, marker = dataset_styles[dataset]
-            vals = np.array(depth[setting]) * 100
-            ax.plot(length_x, vals, color=color, lw=1.65, alpha=0.92, zorder=2)
-            ax.scatter(length_x, vals, s=35, marker=marker, color=color, edgecolor="white", linewidth=0.7, zorder=3)
-            ax.text(2.08, vals[-1] + label_offsets.get(dataset, 0.0), dataset, ha="left", va="center", fontsize=7.2, color=color, weight="bold")
-        ax.set_title(title, fontsize=8.5, weight="bold", pad=5, color=COLORS["ink"])
-        ax.set_xlim(-0.10, 2.40)
-        ax.set_ylim(0, 66)
-        ax.set_xticks(length_x, length_labels)
-        ax.set_yticks([0, 20, 40, 60])
-        ax.set_xlabel("User turns in conversation", fontsize=7.5)
-        if show_ylabel:
-            ax.set_ylabel("Conversations (%)", fontsize=7.5)
-        else:
-            ax.tick_params(axis="y", labelleft=False)
-        ax.grid(axis="y", color=COLORS["grid"], linewidth=0.75)
-        ax.spines[["top", "right"]].set_visible(False)
-        ax.spines["left"].set_color(COLORS["line"])
-        ax.spines["bottom"].set_color(COLORS["line"])
-        ax.tick_params(axis="both", length=0, labelsize=7.6, pad=2)
-
-    depth_lines(axc1, [("WC", "WC coding"), ("LMSYS", "LMSYS coding"), ("SC", "SC coding")], "Coding-oriented", show_ylabel=True)
-    depth_lines(
-        axc2,
-        [("WC", "WC writing"), ("LMSYS", "LMSYS writing"), ("SC", "SC writing")],
-        "Writing-oriented",
-        show_ylabel=False,
-        label_offsets={"WC": 1.8, "LMSYS": -1.8, "SC": 0.6},
-    )
+    bucket_styles = [
+        ("2-3 user turns", "#BFC7D5", "o", 0.18),
+        ("4-6 user turns", "#86AEC7", "s", 0.00),
+        ("7+ user turns", COLORS["blue"], "D", -0.18),
+    ]
+    y_c = np.arange(len(labels))
+    for row, setting in enumerate(labels):
+        axc.hlines(row, 0, 64, color="#F0F3F5", linewidth=0.8, zorder=0)
+        vals = np.array(depth[setting]) * 100
+        for val, (_, color, marker, offset) in zip(vals, bucket_styles):
+            axc.scatter(val, row + offset, s=42, marker=marker, color=color, edgecolor="white", linewidth=0.75, zorder=3)
+    axc.axhline(2.5, color=COLORS["line"], linewidth=0.9, zorder=1)
+    axc.set_yticks(y_c, labels)
+    axc.invert_yaxis()
+    axc.set_xlim(0, 66)
+    axc.set_xticks([0, 20, 40, 60])
+    axc.set_xlabel("Share of conversations (%)", fontsize=7.8)
+    axc.grid(axis="x", color=COLORS["grid"], linewidth=0.75)
+    axc.spines[["top", "right", "left"]].set_visible(False)
+    axc.spines["bottom"].set_color(COLORS["line"])
+    axc.tick_params(axis="y", length=0, pad=2, labelsize=8.0)
+    axc.tick_params(axis="x", length=0, labelsize=7.6, pad=2)
 
     fig.subplots_adjust(left=0.105, right=0.985, top=0.805, bottom=0.165)
     top_row_y = max(axa.get_position().y1, axb1.get_position().y1, axb2.get_position().y1) + 0.128
     top_legend_y = top_row_y - 0.052
     a_center = (axa.get_position().x0 + axa.get_position().x1) / 2
     b_center = (axb1.get_position().x0 + axb2.get_position().x1) / 2
-    c_left = axc1.get_position().x0
-    c_right = axc2.get_position().x1
+    c_left = axc.get_position().x0
+    c_right = axc.get_position().x1
     c_center = (c_left + c_right) / 2
-    c_title_y = max(axc1.get_position().y1, axc2.get_position().y1) + 0.048
+    c_title_y = axc.get_position().y1 + 0.064
     fig.text(axa.get_position().x0 - 0.030, top_row_y, "a", fontsize=14, weight="bold", ha="right", va="center")
     fig.text(a_center, top_row_y, "Engagement composition", fontsize=9.3, weight="bold", ha="center", va="center", color=COLORS["ink"])
     fig.text(axb1.get_position().x0 - 0.030, top_row_y, "b", fontsize=14, weight="bold", ha="right", va="center")
@@ -457,6 +437,11 @@ def make_figure2() -> None:
     fig.text(c_center, c_title_y, "Conversations with ≥1 constructive turn", fontsize=9.3, weight="bold", ha="center", va="center", color=COLORS["ink"])
     fig.legend(comp_handles, ["Constructive", "Active", "Passive"], loc="center", bbox_to_anchor=(a_center, top_legend_y), ncol=3, frameon=False, handlelength=1.0, columnspacing=0.75, fontsize=7.6)
     fig.legend(intent_handles, ["Intent.", "Unintent."], loc="center", bbox_to_anchor=(b_center, top_legend_y), ncol=2, frameon=False, fontsize=7.3, handletextpad=0.2, columnspacing=0.8)
+    depth_handles = [
+        Line2D([0], [0], marker=marker, linestyle="None", markerfacecolor=color, markeredgecolor="white", markersize=5.8)
+        for _, color, marker, _ in bucket_styles
+    ]
+    fig.legend(depth_handles, [label for label, _, _, _ in bucket_styles], loc="center", bbox_to_anchor=(c_center, axc.get_position().y1 + 0.026), ncol=3, frameon=False, fontsize=7.3, handletextpad=0.25, columnspacing=0.8)
     fig.text(0.985, 0.030, "WC, WildChat; LMSYS, LMSYS Chat; SC, ShareChat.", ha="right", fontsize=7.6, color=COLORS["muted"])
 
     _save(fig, "fig_engagement_ecology_compact_final")
