@@ -342,13 +342,15 @@ def make_figure2() -> None:
         "SC writing": [0.076, 0.182, 0.313],
     }
 
-    fig = plt.figure(figsize=(7.85, 4.95))
-    gs = GridSpec(2, 2, figure=fig, height_ratios=[1.22, 0.76], width_ratios=[1.12, 1.18], hspace=0.74, wspace=0.42)
+    fig = plt.figure(figsize=(7.85, 4.62))
+    gs = GridSpec(2, 2, figure=fig, height_ratios=[1.22, 0.74], width_ratios=[1.12, 1.18], hspace=0.78, wspace=0.42)
     axa = fig.add_subplot(gs[0, 0])
     gs_b = gs[0, 1].subgridspec(1, 2, wspace=0.28)
     axb1 = fig.add_subplot(gs_b[0, 0])
     axb2 = fig.add_subplot(gs_b[0, 1])
-    axc = fig.add_subplot(gs[1, :])
+    gs_c = gs[1, :].subgridspec(1, 2, wspace=0.22)
+    axc1 = fig.add_subplot(gs_c[0, 0])
+    axc2 = fig.add_subplot(gs_c[0, 1], sharey=axc1)
 
     y = np.arange(len(labels))
     axa.barh(y, constructive, color=COLORS["teal"], edgecolor="white", linewidth=0.8, height=0.60, label="Constructive")
@@ -397,37 +399,61 @@ def make_figure2() -> None:
         Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["grey"], markeredgecolor="white", markersize=5.6),
     ]
 
-    depth_matrix = np.array(list(depth.values()))
-    cmap = LinearSegmentedColormap.from_list("depth", ["#F3F6F6", "#A8C8D7", "#2F5F83"])
-    axc.imshow(depth_matrix, cmap=cmap, norm=Normalize(0.03, 0.62), aspect="auto")
-    axc.set_xticks(np.arange(3), ["2-3\nuser turns", "4-6\nuser turns", "7+\nuser turns"], fontsize=8.0)
-    axc.set_yticks(np.arange(len(labels)), labels)
-    axc.set_xlabel("")
-    axc.set_ylabel("")
-    axc.set_title("")
-    axc.set_xticks(np.arange(-0.5, 3, 1), minor=True)
-    axc.set_yticks(np.arange(-0.5, len(labels), 1), minor=True)
-    axc.grid(which="minor", color="white", linewidth=1.2)
-    axc.tick_params(axis="both", which="both", length=0)
-    for sp in axc.spines.values():
-        sp.set_visible(False)
-    for i in range(depth_matrix.shape[0]):
-        for j in range(depth_matrix.shape[1]):
-            val = depth_matrix[i, j]
-            axc.text(j, i, f"{val * 100:.1f}%", ha="center", va="center", fontsize=8.3, color="white" if val > 0.30 else COLORS["ink"])
-    axc.axhline(2.5, color="white", linewidth=2.0)
+    length_x = np.arange(3)
+    length_labels = ["2-3", "4-6", "7+"]
+    dataset_styles = {
+        "WC": (COLORS["blue"], "o"),
+        "LMSYS": ("#7FA6BA", "s"),
+        "SC": (COLORS["teal"], "D"),
+    }
+
+    def depth_lines(ax, settings, title, show_ylabel=False, label_offsets=None):
+        label_offsets = label_offsets or {}
+        for dataset, setting in settings:
+            color, marker = dataset_styles[dataset]
+            vals = np.array(depth[setting]) * 100
+            ax.plot(length_x, vals, color=color, lw=1.65, alpha=0.92, zorder=2)
+            ax.scatter(length_x, vals, s=35, marker=marker, color=color, edgecolor="white", linewidth=0.7, zorder=3)
+            ax.text(2.08, vals[-1] + label_offsets.get(dataset, 0.0), dataset, ha="left", va="center", fontsize=7.2, color=color, weight="bold")
+        ax.set_title(title, fontsize=8.5, weight="bold", pad=5, color=COLORS["ink"])
+        ax.set_xlim(-0.10, 2.40)
+        ax.set_ylim(0, 66)
+        ax.set_xticks(length_x, length_labels)
+        ax.set_yticks([0, 20, 40, 60])
+        ax.set_xlabel("User turns in conversation", fontsize=7.5)
+        if show_ylabel:
+            ax.set_ylabel("Conversations (%)", fontsize=7.5)
+        else:
+            ax.tick_params(axis="y", labelleft=False)
+        ax.grid(axis="y", color=COLORS["grid"], linewidth=0.75)
+        ax.spines[["top", "right"]].set_visible(False)
+        ax.spines["left"].set_color(COLORS["line"])
+        ax.spines["bottom"].set_color(COLORS["line"])
+        ax.tick_params(axis="both", length=0, labelsize=7.6, pad=2)
+
+    depth_lines(axc1, [("WC", "WC coding"), ("LMSYS", "LMSYS coding"), ("SC", "SC coding")], "Coding-oriented", show_ylabel=True)
+    depth_lines(
+        axc2,
+        [("WC", "WC writing"), ("LMSYS", "LMSYS writing"), ("SC", "SC writing")],
+        "Writing-oriented",
+        show_ylabel=False,
+        label_offsets={"WC": 1.8, "LMSYS": -1.8, "SC": 0.6},
+    )
+
     fig.subplots_adjust(left=0.105, right=0.985, top=0.805, bottom=0.165)
     top_row_y = max(axa.get_position().y1, axb1.get_position().y1, axb2.get_position().y1) + 0.128
     top_legend_y = top_row_y - 0.052
     a_center = (axa.get_position().x0 + axa.get_position().x1) / 2
     b_center = (axb1.get_position().x0 + axb2.get_position().x1) / 2
-    c_center = (axc.get_position().x0 + axc.get_position().x1) / 2
-    c_title_y = axc.get_position().y1 + 0.048
+    c_left = axc1.get_position().x0
+    c_right = axc2.get_position().x1
+    c_center = (c_left + c_right) / 2
+    c_title_y = max(axc1.get_position().y1, axc2.get_position().y1) + 0.048
     fig.text(axa.get_position().x0 - 0.030, top_row_y, "a", fontsize=14, weight="bold", ha="right", va="center")
     fig.text(a_center, top_row_y, "Engagement composition", fontsize=9.3, weight="bold", ha="center", va="center", color=COLORS["ink"])
     fig.text(axb1.get_position().x0 - 0.030, top_row_y, "b", fontsize=14, weight="bold", ha="right", va="center")
     fig.text(b_center, top_row_y, "Explicit user framing", fontsize=9.3, weight="bold", ha="center", va="center", color=COLORS["ink"])
-    fig.text(axc.get_position().x0 - 0.020, c_title_y, "c", fontsize=14, weight="bold", ha="right", va="center")
+    fig.text(c_left - 0.020, c_title_y, "c", fontsize=14, weight="bold", ha="right", va="center")
     fig.text(c_center, c_title_y, "Conversations with ≥1 constructive turn", fontsize=9.3, weight="bold", ha="center", va="center", color=COLORS["ink"])
     fig.legend(comp_handles, ["Constructive", "Active", "Passive"], loc="center", bbox_to_anchor=(a_center, top_legend_y), ncol=3, frameon=False, handlelength=1.0, columnspacing=0.75, fontsize=7.6)
     fig.legend(intent_handles, ["Intent.", "Unintent."], loc="center", bbox_to_anchor=(b_center, top_legend_y), ncol=2, frameon=False, fontsize=7.3, handletextpad=0.2, columnspacing=0.8)
