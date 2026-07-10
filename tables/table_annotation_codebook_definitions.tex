@@ -1,7 +1,7 @@
 \begin{table*}[t]
 \fontsize{6.8pt}{7.5pt}\selectfont
 \centering
-\caption{\textbf{Annotation codebook definitions.} The table defines the labels used to translate learning-science constructs into observable turn-level signals. These labels are behavioural annotations of conversation text; they are not measures of durable learning, learner identity or instructional efficacy.}
+\caption{\textbf{Annotation codebook definitions.} The table defines the labels used to translate learning-science constructs into observable turn-level signals. \revise{Passive, active and constructive are user-engagement depth labels; emotional expression is a parallel descriptive label.} These labels are behavioural annotations of conversation text; they are not measures of durable learning, learner identity or instructional efficacy.}
 \label{tab:annotation_codebook_definitions}
 \setlength{\tabcolsep}{3pt}
 \renewcommand{\arraystretch}{1.02}
@@ -16,7 +16,7 @@ Family & Label & Definition & Boundary rule \\
 User engagement & Passive (\texttt{P}) & Reception, acknowledgement or minimal continuation without visible transformation of the assistant response. & Includes short confirmations or requests to continue; excludes task-relevant follow-up or reasoning. \\
 User engagement & Active (\texttt{A}) & Task-relevant action, follow-up, application or manipulation of supplied information. & The user does something with the response, but does not test, revise or extend an idea. \\
 User engagement & Constructive (\texttt{C}) & Highest-depth observable user engagement: elaborating, testing, revising, transferring or extending an idea or explanation. & Requires visible user reasoning or transformation; not inferred from long text alone. \\
-User expression & Emotional (\texttt{E}) & Explicit affective expression, such as frustration, gratitude, anxiety or excitement. & Coded separately from cognitive engagement and interpreted as visible expression in the log. \\
+\revise{Emotional descriptor} & \revise{Emotional expression (\texttt{E})} & \revise{Explicit emotion in the user turn, such as frustration, gratitude, anxiety or excitement.} & \revise{Coded in parallel with user engagement; not part of the passive--active--constructive cognitive-depth hierarchy.} \\
 \midrule
 Assistant support & Scaffolding & Assistant support that structures, diagnoses, regulates or redirects the user's process while leaving cognitive or task responsibility with the user. & Distinguished from reference responses that simply provide an answer, draft or deliverable. \\
 Support intent & \texttt{I1} metacognitive & Support aimed at planning, monitoring, reflection or regulation of the user's work. & Captures the purpose of support, not its surface form. \\

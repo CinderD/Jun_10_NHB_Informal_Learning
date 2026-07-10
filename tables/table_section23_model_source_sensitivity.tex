@@ -1,0 +1,21 @@
+\begin{table*}[p]
+\scriptsize
+\centering
+\caption{\revise{\textbf{Model/source sensitivity for Section~2.3 scaffolded-support models.} Pooled sensitivity models compare dataset fixed effects with recoverable assistant-model or source-family fixed effects. Model/source levels with at least 100 conversations are represented as fixed-effect indicators; rarer levels are absorbed into the reference category. Rows report the scaffolded-support coefficient from models predicting constructive-turn counts, any constructive turn and constructive-turn rate. These checks supplement the main setting-level estimates in Fig.~\ref{fig:s2_conversation_association}b and Table~\ref{tab:support_engagement_summary}.}}\label{tab:section23_model_source_sensitivity}
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.10}
+\resizebox{0.86\textwidth}{!}{%
+\begin{tabular}{lcc}
+\toprule
+Model & Dataset FE & Model/source FE \\
+\midrule
+Poisson count ratio & 2.38 [2.27, 2.48], $<.001$ & 2.35 [2.25, 2.45], $<.001$ \\
+Logit odds ratio & 2.04 [1.96, 2.12], $<.001$ & 2.00 [1.92, 2.08], $<.001$ \\
+Offset rate ratio & 1.94 [1.87, 2.01], $<.001$ & 1.91 [1.85, 1.98], $<.001$ \\
+\midrule
+Conversations & 128,569 & 128,569 \\
+Model/source fixed effects & -- & 40 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

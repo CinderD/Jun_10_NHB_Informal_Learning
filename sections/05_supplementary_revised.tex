@@ -16,49 +16,27 @@ Supplementary information is organized to support reproducibility and interpreta
 \subsection*{A.1\quad Corpus provenance and filtering ledger}
 \phantomsection\label{supp:a1}
 
-\paragraph{Scope of this appendix.}
-The main Methods define the public corpora, task settings, filtering sequence and final analytic sample. This appendix provides the auditable implementation records behind those statements: corpus-specific filtering counts, source counting units, retained metadata fields and validation evidence for filters and labels.
-
-\paragraph{Filtering ledger and source units.}
-Supplementary Table~\ref{tab:corpus_filtering_pipeline} reports the raw-to-final filtering ledger for each corpus, including source records, eligibility screens, task-filtering steps and final analytic samples. Supplementary Table~\ref{tab:corpus_provenance_artifacts} records public source links, source counting units and retained metadata used during conversion. These details are separated because public dataset-card turns, raw message rows and analysis turns are not identical counting units; for ShareChat, the ledger therefore reports platform-url conversations and message rows before deriving user and assistant turns.
+\revise{Supplementary Table~\ref{tab:corpus_filtering_pipeline} reports the corpus-specific filtering counts from public source records to the final analytic samples.}
 
 \input{tables/table_corpus_filtering_pipeline}
 
 \clearpage
   
+\revise{Supplementary Table~\ref{tab:corpus_provenance_artifacts} records the public source links, source counting units and retained metadata fields used during corpus conversion.}
+
 \input{tables/table_corpus_provenance_artifacts}
+
+\revise{Supplementary Table~\ref{tab:filter_classifier_validation} maps each non-native filter or analytic label to its assignment procedure, validation evidence and role in the analyses.}
 
 \input{tables/table_filter_classifier_validation}
 
 \clearpage
 
-\paragraph{Retained metadata fields.}
-\begin{center}
-\small
-\setlength{\tabcolsep}{4pt}
-\renewcommand{\arraystretch}{1.10}
-\begin{tabularx}{0.96\textwidth}{>{\raggedright\arraybackslash}p{0.24\textwidth}>{\raggedright\arraybackslash}p{0.38\textwidth}>{\raggedright\arraybackslash}X}
-\toprule
-Metadata group & Retained fields & Linked record \\
-\midrule
-Internal ordering & Conversation identifier, turn identifier, role label and turn order. & Conversation-level and adjacent-turn analysis units. \\
-\addlinespace
-Corpus and task fields & Corpus name, task setting, task-filter outputs and available language/topic fields. & Filtering ledger and validation map in Supplementary Tables~\ref{tab:corpus_filtering_pipeline}--\ref{tab:filter_classifier_validation}. \\
-\addlinespace
-Turn-level labels & User engagement labels, scaffolded-support labels, support-intent labels and support-form labels. & Codebook definitions and label audits in Supplementary Tables~\ref{tab:annotation_codebook_definitions}, \ref{tab:label_validation} and \ref{tab:production_label_validation}. \\
-\addlinespace
-Conversation context & User-framing label and derived conversation-level summaries such as turn counts. & Contextual analyses of user framing, task ecology and interaction depth. \\
-\addlinespace
-Model or source metadata & User-facing model snapshot, recovered model name, platform or assistant-family field where available. & Descriptive and robustness checks only; model/source labels are observational metadata. \\
-\bottomrule
-\end{tabularx}
-\end{center}
-
 \subsection*{A.2\quad Annotation ontology and operational examples}
 \phantomsection\label{supp:a2}
 
 \paragraph{Codebook and examples.}
-The Methods summarize the role-specific constructs used in the analysis. This section provides the operational codebook, boundary rules and examples needed to reproduce the annotation decisions. Supplementary Table~\ref{tab:annotation_codebook_definitions} gives the formal label definitions; Supplementary Table~\ref{tab:label_examples} gives paraphrased examples without reproducing raw user text; and Supplementary Tables~\ref{tab:complete_coding_case} and \ref{tab:complete_writing_case} provide de-identified illustrative case excerpts. Support-intent and support-form profiles are reported in Supplementary Tables~\ref{tab:support_intent_summary}, \ref{tab:support_intent_form_crosswalk} and \ref{tab:support_supply}.
+The Methods summarize the role-specific constructs used in the analysis. This section provides the operational codebook, boundary rules and examples needed to reproduce the annotation decisions. Supplementary Table~\ref{tab:annotation_codebook_definitions} gives the formal label definitions; Supplementary Table~\ref{tab:label_examples} gives paraphrased examples without reproducing raw user text; and Supplementary Tables~\ref{tab:complete_coding_case} and \ref{tab:complete_writing_case} provide de-identified illustrative case excerpts. \revise{Support-intent and support-form profiles are visualized in Supplementary Figure~\ref{fig:supp_support_supply}.}
 
 \input{tables/table_annotation_codebook_definitions}
 
@@ -82,7 +60,7 @@ Implementation details for the annotation workflow are summarized in Supplementa
 Human review served two measurement roles. First, human--human agreement assessed whether trained reviewers could apply the finalized codebook consistently. The coding codebook check combined three validation rounds covering 658 task turns, with 643 turns after deduplication; the writing check used 210 reviewed conversations. Supplementary Table~\ref{tab:label_validation} reports the per-label metrics for this codebook-operability layer. Second, human--LLM audits compared final LLM-assisted corpus-scale labels with human-confirmed labels after item-level review. These audits covered user framing, user engagement and assistant support across the six corpus-by-task settings and are reported in Supplementary Table~\ref{tab:production_label_validation}.
 
 \paragraph{Agreement metrics.}
-Agreement is reported with per-label F1, Matthews correlation coefficient (MCC) and Gwet's AC1 because the labels are sparse, prevalence-imbalanced and sometimes multi-label~\cite{matthews1975comparison,gwet2008computing}. In the human--human codebook checks, the focal labels used in the main analyses showed acceptable or better agreement: Constructive user engagement reached F1=0.85 in coding and F1=0.89 in writing, and scaffolded support reached F1=0.87 in coding and F1=0.97 in writing (Supplementary Table~\ref{tab:label_validation}). Complete per-label F1, MCC, Gwet AC1 and support values are reported in Supplementary Table~\ref{tab:label_validation}.
+Agreement is reported with per-label F1, Matthews correlation coefficient (MCC) and Gwet's AC1 because the labels are sparse, prevalence-imbalanced and sometimes multi-label~\cite{matthews1975comparison,gwet2008computing}. \revise{For interpretation, we treated F1 values around 0.70 or higher as acceptable for a sparse boundary label, values around 0.80 or higher as strong, and values around 0.90 or higher as very strong. MCC and Gwet's AC1 were used as complementary prevalence-aware checks, with values around 0.60 indicating substantial agreement and values around 0.80 or higher indicating strong agreement.} In the human--human codebook checks, the focal labels used in the main analyses showed acceptable or better agreement: Constructive user engagement reached F1=0.85 in coding and F1=0.89 in writing, and scaffolded support reached F1=0.87 in coding and F1=0.97 in writing (Supplementary Table~\ref{tab:label_validation}). Complete per-label F1, MCC, Gwet AC1 and support values are reported in Supplementary Table~\ref{tab:label_validation}.
 
 \paragraph{Corpus-scale label audits.}
 The consolidated human--LLM audits were stratified across the six corpus-by-task settings. The user-framing audit reviewed 450 first user turns, with 75 cases from each setting. Intentional-framing agreement reached F1=0.857, MCC=0.677 and Gwet AC1=0.671. The user-engagement audit reviewed 600 user turns, with 100 cases per setting; the constructive-versus-non-constructive distinction reached F1=0.922, MCC=0.840 and Gwet AC1=0.837. The assistant-side audit reviewed 180 assistant turns, with 30 cases per setting; scaffolded-support agreement reached F1=0.912, MCC=0.590 and Gwet AC1=0.791, and support-form F1 values ranged from 0.691 to 0.938 across M1--M6. Supplementary Table~\ref{tab:production_label_validation} reports the corresponding precision, recall, accuracy and positive-count fields.
@@ -129,6 +107,7 @@ where $T_i$ is the number of user turns, $F_i$ user framing, $Q_i$ task ecology,
 \end{align*}
 Supplementary Tables~\ref{tab:fig3_offset_rate_sensitivity} and \ref{tab:constructive_rate_context_logit} report the estimates.
 The grouped-binomial model is the Section~2.2 sensitivity for the conversation-length pattern in Fig.~\ref{fig:engagement_ecology}c, whereas the offset-rate Poisson model is the Section~2.3 sensitivity for the scaffolded-support count models in Fig.~\ref{fig:s2_conversation_association}b.
+\revise{Supplementary Tables~\ref{tab:section22_model_source_sensitivity} and \ref{tab:section23_model_source_sensitivity} report parallel model/source sensitivity checks in which dataset fixed effects are replaced by recoverable assistant-model or source-family indicators.}
 
 \paragraph{Adjacent-turn models.}
 Let $Z_{ij}$ indicate whether the next user turn after assistant turn $j$ is Constructive, $U_{ij}$ encode the immediately preceding user state, $A_{ij}$ encode scaffolded support at assistant turn $j$, $M_{ij}$ encode support-form labels M1--M6 and $R_{ij}$ denote task, framing, turn-position and fixed-effect controls. The integrated adjacent-turn model is
@@ -141,16 +120,12 @@ The broad scaffolded-support model omits $M_{ij}$ and $U_{ij}\times M_{ij}$; mod
 These models support the Section~2.5 adjacent-turn interpretation in Fig.~\ref{fig:temporal_coupling}d and Supplementary Tables~\ref{tab:integrated_regression}--\ref{tab:prior_state_support_form_interactions}; descriptive adjacent-turn lifts in Fig.~\ref{fig:temporal_coupling}a,b are summarized with bootstrap uncertainty in Supplementary Table~\ref{tab:key_contrast_significance}.
 
 \paragraph{Uncertainty and multiplicity.}
-Percentage-point contrasts use 1,000 conversation-level bootstrap resamples. Adjacent-turn contrasts use 1,000 conversation-cluster bootstrap resamples. Adjusted conversation-level GLMs use model-based standard errors; adjacent-turn regressions use conversation-cluster robust standard errors. Support-form bracket tests use Benjamini--Hochberg false-discovery-rate adjustment within each six-form comparison family~\cite{benjamini1995controlling}.
+Percentage-point contrasts use 1,000 conversation-level bootstrap resamples. Adjacent-turn contrasts use 1,000 conversation-cluster bootstrap resamples. \revise{Primary adjusted conversation-level GLMs use model-based standard errors, with HC1 or quasi-Poisson sensitivities reported where noted;} adjacent-turn regressions use conversation-cluster robust standard errors. Support-form bracket tests use Benjamini--Hochberg false-discovery-rate adjustment within each six-form comparison family~\cite{benjamini1995controlling}.
 
 \section*{Appendix B\quad Reporting boundary}
 \phantomsection\label{supp:appendix-b}
 
-\subsection*{B.1\quad Privacy-preserving reporting}
-\phantomsection\label{supp:b1}
-
-\paragraph{Reporting boundary.}
-The study analyses naturalistic public conversations, so reporting is restricted to aggregate statistics, de-identified examples, source-data summaries and validation metrics. The manuscript and release package do not redistribute bulk raw conversation logs, user identifiers, API credentials or linked user histories. Conversation and turn identifiers used in derived data are non-semantic internal identifiers rather than account identifiers. Operational examples are de-identified and usually paraphrased; Tables~\ref{tab:complete_coding_case} and \ref{tab:complete_writing_case} provide two illustrative case excerpts with personal details removed or generalized while preserving turn order and annotation decisions. The analyses do not link conversations into user histories or estimate longitudinal user-level trajectories; temporal claims are restricted to within-conversation ordering.
+\revise{We used the public source corpora as released by their original providers, with provider-side anonymization or de-identification already applied where applicable. We did not attempt to re-identify users, link conversations into user histories or redistribute bulk raw conversation logs. Reporting is therefore restricted to aggregate statistics, source-data summaries, validation metrics and two de-identified illustrative case excerpts that preserve turn order and annotation decisions.}
 
 \section*{Appendix C\quad Source tables and model outputs}
 \phantomsection\label{supp:appendix-c}
@@ -177,6 +152,10 @@ The study analyses naturalistic public conversations, so reporting is restricted
 
 \input{tables/table_constructive_rate_context_logit}
 
+\input{tables/table_section22_model_source_sensitivity}
+
+\input{tables/table_section23_model_source_sensitivity}
+
 \clearpage
 
 \input{tables/table_integrated_regression}
@@ -185,34 +164,29 @@ The study analyses naturalistic public conversations, so reporting is restricted
 
 \input{tables/table_prior_state_support_form_interactions}
 
-\input{tables/table_support_intent_summary}
-
-\input{tables/table_support_intent_form_crosswalk}
-
-\input{tables/table_support_supply}
-
 \clearpage
+
 \section*{Appendix D\quad Supporting figures}
 \phantomsection\label{supp:appendix-d}
 \setcounter{figure}{0}
 \renewcommand{\thefigure}{D\arabic{figure}}
 
 \paragraph{Support-form figures.}
-Supplementary Figure~\ref{fig:supp_support_supply} reports the support-form supply profile across the six WildChat, LMSYS Chat and ShareChat task settings. Operational examples for individual support-form labels are provided in Supplementary Table~\ref{tab:label_examples}.
+\revise{Supplementary Figure~\ref{fig:supp_support_supply} combines the support-intent and support-form summaries across WildChat, LMSYS Chat and ShareChat.} Operational examples for individual support-form labels are provided in Supplementary Table~\ref{tab:label_examples}.
 
 \paragraph{Model-snapshot figures.}
-Supplementary Figure~\ref{fig:supp_model_family} provides a compact WildChat-only model-family robustness layer. It asks whether the WildChat portion of the findings is concentrated in a particular user-facing model series or whether the same broad patterns remain visible across model families. LMSYS Chat and ShareChat remain represented in the six-setting tables and in the model/source-adjusted regressions, but they do not provide directly comparable user-facing model-snapshot structure for this visual repetition. The model-family figure is descriptive because model labels in naturalistic corpora are observational rather than experimentally assigned.
+Supplementary Figure~\ref{fig:supp_model_family} provides a compact WildChat-only model-family robustness layer. \revise{It groups all recoverable WildChat model snapshots that meet the model-fixed-effect sample threshold used in the robustness checks into four coarse families.} It asks whether the WildChat portion of the findings is concentrated in a particular user-facing model series or whether the same broad patterns remain visible across model families. LMSYS Chat and ShareChat remain represented in the six-setting tables and in the model/source-adjusted regressions, but they do not provide directly comparable user-facing model-snapshot structure for this visual repetition. The model-family figure is descriptive because model labels in naturalistic corpora are observational rather than experimentally assigned.
 
 \begin{figure*}[!htbp]
 \centering
-\includegraphics[width=0.92\textwidth]{figures/supplementary/SupplementaryFigure_SupportSupplyProfile.pdf}
-\caption{\textbf{Support-form supply within scaffolded assistant turns across the six task settings.} Cells report the percentage of scaffolded assistant turns containing each non-exclusive support-form label. Rows do not sum to 100\% because a single scaffolded turn can contain multiple support forms.}
+\includegraphics[width=0.98\textwidth]{figures/supplementary/SupplementaryFigure_SupportIntentFormProfile.pdf}
+\caption{\textbf{Support-intent and support-form profiles within scaffolded assistant turns.} \textbf{a--c,} Profiles for WildChat, LMSYS Chat and ShareChat, respectively. In each panel, top bars report the percentage of scaffolded assistant turns containing each support-form label (M1--M6), the central heatmap reports the percentage of turns with each support-intent label (I1--I3) that also contain each support-form label and right bars report the percentage of scaffolded assistant turns containing each support-intent label. Intent and support-form labels are non-exclusive, so values need not sum to 100\%.}
 \label{fig:supp_support_supply}
 \end{figure*}
 
 \begin{figure*}[p]
 \centering
 \includegraphics[width=\textwidth]{figures/supplementary/SupplementaryFigure_WildChatModelFamilyRobustness.pdf}
-\caption{\textbf{WildChat model-family robustness preserves the main directional patterns.} User-facing WildChat model snapshots are grouped into coarse model families. Diamonds show family-level summaries; small pale points show individual model snapshots within each family. \textbf{a,} Cognitive engagement prevalence. \textbf{b,} Adjusted scaffolded-support association, reported as Poisson count ratios. \textbf{c,} Adjacent-turn constructive lift after scaffolded versus reference assistant turns. The figure is descriptive because WildChat model labels are observational and may reflect time, user mix, task mix and logging context.}
+\caption{\textbf{WildChat model-family robustness preserves the main directional patterns.} \revise{All recoverable WildChat model snapshots meeting the model-fixed-effect sample threshold are shown as pale points and grouped into coarse model families.} Diamonds show family-level summaries. \textbf{a,} Cognitive engagement prevalence. \textbf{b,} Adjusted scaffolded-support association, reported as Poisson count ratios. \textbf{c,} Adjacent-turn constructive lift after scaffolded versus reference assistant turns. The figure is descriptive because WildChat model labels are observational and may reflect time, user mix, task mix and logging context.}
 \label{fig:supp_model_family}
 \end{figure*}

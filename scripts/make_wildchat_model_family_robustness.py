@@ -139,15 +139,16 @@ def main() -> None:
         _draw_panel(ax, grouped, *panel)
 
     handles = [
-        Line2D([0], [0], marker="D", color="none", markerfacecolor="#2F5F83", markeredgecolor="white", markersize=6.4, label="Coding family summary"),
-        Line2D([0], [0], marker="D", color="none", markerfacecolor="#C86A78", markeredgecolor="white", markersize=6.4, label="Writing family summary"),
-        Line2D([0], [0], marker="o", color=COLORS["line"], markerfacecolor=COLORS["line"], markeredgecolor="none", markersize=4.2, label="Individual model snapshots"),
+        Line2D([0], [0], marker="D", color="none", markerfacecolor="#2F5F83", markeredgecolor="white", markersize=6.4, label="Coding summary"),
+        Line2D([0], [0], marker="D", color="none", markerfacecolor="#C86A78", markeredgecolor="white", markersize=6.4, label="Writing summary"),
+        Line2D([0], [0], marker="o", color="none", markerfacecolor="#2F5F83", markeredgecolor="none", alpha=0.35, markersize=4.8, label="Coding snapshot"),
+        Line2D([0], [0], marker="o", color="none", markerfacecolor="#C86A78", markeredgecolor="none", alpha=0.35, markersize=4.8, label="Writing snapshot"),
     ]
-    fig.legend(handles=handles, loc="upper center", bbox_to_anchor=(0.56, 0.99), ncol=3, frameon=False, columnspacing=1.05, handletextpad=0.45)
+    fig.legend(handles=handles, loc="upper center", bbox_to_anchor=(0.56, 0.99), ncol=4, frameon=False, columnspacing=0.85, handletextpad=0.38)
     fig.text(
         0.12,
         0.045,
-        "Small points show user-facing WildChat model snapshots within each family; diamonds show coarse family summaries.",
+        "Small points show all WildChat model snapshots meeting the model-FE sample threshold; diamonds show coarse family summaries.",
         ha="left",
         va="bottom",
         fontsize=7.4,
