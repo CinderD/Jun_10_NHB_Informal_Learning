@@ -107,7 +107,7 @@ where $T_i$ is the number of user turns, $F_i$ user framing, $Q_i$ task ecology,
 \end{align*}
 Supplementary Tables~\ref{tab:fig3_offset_rate_sensitivity} and \ref{tab:constructive_rate_context_logit} report the estimates.
 The grouped-binomial model is the Section~2.2 sensitivity for the conversation-length pattern in Fig.~\ref{fig:engagement_ecology}c, whereas the offset-rate Poisson model is the Section~2.3 sensitivity for the scaffolded-support count models in Fig.~\ref{fig:s2_conversation_association}b.
-\revise{Supplementary Tables~\ref{tab:section22_model_source_sensitivity} and \ref{tab:section23_model_source_sensitivity} report parallel model/source sensitivity checks in which dataset fixed effects are replaced by recoverable assistant-model or source-family indicators.}
+\revise{Supplementary Table~\ref{tab:section21_model_source_breakdown} reports a model/source breakdown for the Section~2.1 descriptive prevalence measures. Supplementary Tables~\ref{tab:section22_model_source_sensitivity} and \ref{tab:section23_model_source_sensitivity} report parallel model/source sensitivity checks in which dataset fixed effects are replaced by recoverable assistant-model or source-family indicators. Supplementary Table~\ref{tab:section24_support_form_model_source_sensitivity} reports the corresponding Section~2.4 support-form sensitivity, restricted to scaffolded conversations and entering the six non-exclusive support-form labels jointly.}
 
 \paragraph{Adjacent-turn models.}
 Let $Z_{ij}$ indicate whether the next user turn after assistant turn $j$ is Constructive, $U_{ij}$ encode the immediately preceding user state, $A_{ij}$ encode scaffolded support at assistant turn $j$, $M_{ij}$ encode support-form labels M1--M6 and $R_{ij}$ denote task, framing, turn-position and fixed-effect controls. The integrated adjacent-turn model is
@@ -150,11 +150,17 @@ Percentage-point contrasts use 1,000 conversation-level bootstrap resamples. Adj
 
 \clearpage
 
+\input{tables/table_section21_model_source_breakdown}
+
+\clearpage
+
 \input{tables/table_constructive_rate_context_logit}
 
 \input{tables/table_section22_model_source_sensitivity}
 
 \input{tables/table_section23_model_source_sensitivity}
+
+\input{tables/table_section24_support_form_model_source_sensitivity}
 
 \clearpage
 

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import csv
 import math
-from collections import Counter
+from collections import Counter, defaultdict
 from pathlib import Path
 
 import numpy as np
@@ -26,6 +26,14 @@ SECTION22_TERMS = [
     ("coding_task", "Coding task ecology"),
     ("length_4_6_user_turns", "4--6 user turns"),
     ("length_7plus_user_turns", "7+ user turns"),
+]
+SUPPORT_FORM_TERMS = [
+    ("has_M1", "M1 feedback"),
+    ("has_M2", "M2 hinting"),
+    ("has_M3", "M3 instructing"),
+    ("has_M4", "M4 explaining"),
+    ("has_M5", "M5 modelling"),
+    ("has_M6", "M6 questioning"),
 ]
 
 
@@ -92,6 +100,88 @@ def _fill_fixed_effect_columns(
     model_key = f"model_source::{_assistant_model_key(row)}"
     if model_key in name_to_idx:
         X[i, name_to_idx[model_key]] = 1
+
+
+def _rate_count(row: dict[str, str], ratio_key: str, denominator_key: str) -> float:
+    return _f(row, ratio_key) * _f(row, denominator_key)
+
+
+def compute_section21_model_source_breakdown(rows: list[dict[str, str]]) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
+    grouped: dict[tuple[str, str], list[dict[str, str]]] = defaultdict(list)
+    for row in rows:
+        key = _assistant_model_key(row)
+        if key:
+            grouped[(row["_setting"], key)].append(row)
+
+    detail_rows: list[dict[str, str]] = []
+    for (setting, model_source), subset in sorted(grouped.items()):
+        if len(subset) < MODEL_SOURCE_MIN_COUNT:
+            continue
+        user_turns = sum(_f(row, "user_turns") for row in subset)
+        assistant_turns = sum(_f(row, "assistant_turns") for row in subset)
+        if user_turns <= 0 or assistant_turns <= 0:
+            continue
+        passive = sum(_rate_count(row, "Cog_P_ratio", "user_turns") for row in subset)
+        active = sum(_rate_count(row, "Cog_A_ratio", "user_turns") for row in subset)
+        constructive = sum(_f(row, "Cog_C_count") for row in subset)
+        emotional = sum(_rate_count(row, "Emo_ratio", "user_turns") for row in subset)
+        scaffolded = sum(_f(row, "num_S2") for row in subset)
+        cognitive = passive + active + constructive
+        detail_rows.append(
+            {
+                "section": "2.1",
+                "setting": setting,
+                "dataset": subset[0]["_dataset"],
+                "task": subset[0]["_task"],
+                "model_source": model_source,
+                "n_conversations": str(len(subset)),
+                "user_turns": f"{int(user_turns)}",
+                "assistant_turns": f"{int(assistant_turns)}",
+                "passive_pct_user_turns": f"{passive / user_turns * 100:.4f}",
+                "active_pct_user_turns": f"{active / user_turns * 100:.4f}",
+                "constructive_pct_user_turns": f"{constructive / user_turns * 100:.4f}",
+                "cognitive_overall_pct_user_turns": f"{cognitive / user_turns * 100:.4f}",
+                "emotional_expression_pct_user_turns": f"{emotional / user_turns * 100:.4f}",
+                "scaffolded_pct_assistant_turns": f"{scaffolded / assistant_turns * 100:.4f}",
+                "notes": "Model/source levels are shown when at least 100 conversations are available within the setting; WildChat uses chat_model, LMSYS uses model recovered from conversation identifiers and ShareChat uses public assistant/source family.",
+            }
+        )
+
+    summary_rows: list[dict[str, str]] = []
+    by_setting: dict[str, list[dict[str, str]]] = defaultdict(list)
+    for row in detail_rows:
+        by_setting[row["setting"]].append(row)
+    for setting, subset in sorted(by_setting.items()):
+        def vals(key: str) -> list[float]:
+            return [float(row[key]) for row in subset]
+
+        summary_rows.append(
+            {
+                "section": "2.1",
+                "setting": setting,
+                "n_model_source_levels_ge_100_conversations": str(len(subset)),
+                "cognitive_overall_min_pct": f"{min(vals('cognitive_overall_pct_user_turns')):.2f}",
+                "cognitive_overall_median_pct": f"{float(np.median(vals('cognitive_overall_pct_user_turns'))):.2f}",
+                "cognitive_overall_max_pct": f"{max(vals('cognitive_overall_pct_user_turns')):.2f}",
+                "constructive_min_pct": f"{min(vals('constructive_pct_user_turns')):.2f}",
+                "constructive_median_pct": f"{float(np.median(vals('constructive_pct_user_turns'))):.2f}",
+                "constructive_max_pct": f"{max(vals('constructive_pct_user_turns')):.2f}",
+                "scaffolded_min_pct": f"{min(vals('scaffolded_pct_assistant_turns')):.2f}",
+                "scaffolded_median_pct": f"{float(np.median(vals('scaffolded_pct_assistant_turns'))):.2f}",
+                "scaffolded_max_pct": f"{max(vals('scaffolded_pct_assistant_turns')):.2f}",
+                "notes": "Ranges summarize model/source levels with at least 100 conversations within each setting; full rows are exported in section21_model_source_engagement_breakdown.csv.",
+            }
+        )
+
+    for path, out_rows in [
+        (OUT / "section21_model_source_engagement_breakdown.csv", detail_rows),
+        (OUT / "section21_model_source_engagement_summary.csv", summary_rows),
+    ]:
+        with open(path, "w", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=list(out_rows[0].keys()), lineterminator="\n")
+            writer.writeheader()
+            writer.writerows(out_rows)
+    return detail_rows, summary_rows
 
 
 def _make_section22_design(
@@ -374,6 +464,103 @@ def compute_section23_model_source_sensitivity(rows: list[dict[str, str]]) -> li
     return out_rows
 
 
+def _make_section24_design(
+    rows: list[dict[str, str]],
+    include_dataset: bool,
+    include_model_source: bool,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, list[str], list[str], str, int, list[dict[str, str]]]:
+    scaffolded_rows = [row for row in rows if _f(row, "has_S2") > 0]
+    names = [
+        "Intercept",
+        "has_M1",
+        "has_M2",
+        "has_M3",
+        "has_M4",
+        "has_M5",
+        "has_M6",
+        "intentional_framing",
+        "coding_task",
+        "length_4_6_user_turns",
+        "length_7plus_user_turns",
+    ]
+    names, _, reference, recoverable_count = _add_fixed_effect_columns(
+        names, scaffolded_rows, include_dataset, include_model_source
+    )
+    X = np.zeros((len(scaffolded_rows), len(names)), dtype=float)
+    successes = np.zeros(len(scaffolded_rows), dtype=float)
+    trials = np.zeros(len(scaffolded_rows), dtype=float)
+    clusters: list[str] = []
+    name_to_idx = {name: idx for idx, name in enumerate(names)}
+    for i, row in enumerate(scaffolded_rows):
+        user_turns = _f(row, "user_turns")
+        X[i, name_to_idx["Intercept"]] = 1
+        for support_key, _ in SUPPORT_FORM_TERMS:
+            X[i, name_to_idx[support_key]] = _f(row, support_key)
+        X[i, name_to_idx["intentional_framing"]] = _f(row, "is_intentional")
+        X[i, name_to_idx["coding_task"]] = _f(row, "is_coding_topic")
+        X[i, name_to_idx["length_4_6_user_turns"]] = 1 if 4 <= user_turns <= 6 else 0
+        X[i, name_to_idx["length_7plus_user_turns"]] = 1 if user_turns >= 7 else 0
+        _fill_fixed_effect_columns(X, i, row, name_to_idx)
+        trials[i] = max(user_turns, 1.0)
+        successes[i] = min(_f(row, "Cog_C_count"), trials[i])
+        clusters.append(row["conv_id"])
+    return X, successes, trials, clusters, names, reference, recoverable_count, scaffolded_rows
+
+
+def compute_section24_support_form_model_source_sensitivity(rows: list[dict[str, str]]) -> list[dict[str, str]]:
+    out_rows: list[dict[str, str]] = []
+    for adjustment, include_dataset, include_model_source in [
+        ("dataset FE", True, False),
+        ("model/source FE", False, True),
+    ]:
+        X, successes, trials, clusters, names, reference, recoverable_count, scaffolded_rows = _make_section24_design(
+            rows, include_dataset, include_model_source
+        )
+        beta, se, ll = _fit_grouped_binomial_cluster(X, successes, trials, clusters)
+        fixed_effect_text = "dataset fixed effects" if include_dataset else "model/source fixed effects"
+        for support_key, label in SUPPORT_FORM_TERMS:
+            idx = names.index(support_key)
+            b = float(beta[idx])
+            s = float(se[idx])
+            p = _p_value(b, s)
+            out_rows.append(
+                {
+                    "section": "2.4",
+                    "model_type": "grouped-binomial constructive-turn rate",
+                    "adjustment": adjustment,
+                    "term": support_key,
+                    "label": label,
+                    "coef_log_odds": f"{b:.6f}",
+                    "se": f"{s:.6f}",
+                    "z": f"{b / s:.6f}" if s > 0 else "",
+                    "p_value": f"{p:.6g}",
+                    "estimate_type": "odds ratio",
+                    "estimate": f"{math.exp(b):.6f}",
+                    "ci_low": f"{math.exp(b - 1.96 * s):.6f}",
+                    "ci_high": f"{math.exp(b + 1.96 * s):.6f}",
+                    "n_conversations": str(len(scaffolded_rows)),
+                    "n_user_turns": f"{int(trials.sum())}",
+                    "n_constructive_turns": f"{int(successes.sum())}",
+                    "log_likelihood": f"{ll:.6f}",
+                    "model_source_reference": reference,
+                    "n_recoverable_model_source_levels": str(recoverable_count),
+                    "n_model_source_fixed_effects": str(sum(1 for n in names if n.startswith("model_source::"))),
+                    "formula": (
+                        "Cog_C_count out of user_turns ~ M1 + M2 + M3 + M4 + M5 + M6 + "
+                        "user framing + task ecology + length bucket + " + fixed_effect_text
+                    ),
+                    "se_type": "conversation-robust sandwich",
+                    "notes": "Pooled Section 2.4 sensitivity restricted to conversations containing scaffolded support; support-form labels are non-exclusive and entered jointly.",
+                }
+            )
+    path = OUT / "section24_support_form_model_source_sensitivity.csv"
+    with open(path, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=list(out_rows[0].keys()), lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(out_rows)
+    return out_rows
+
+
 def write_section22_table(rows: list[dict[str, str]]) -> None:
     by_key = {(row["outcome"], row["adjustment"], row["term"]): row for row in rows}
     path = ROOT / "tables" / "table_section22_model_source_sensitivity.tex"
@@ -411,6 +598,32 @@ def write_section22_table(rows: list[dict[str, str]]) -> None:
         f.write("\\bottomrule\n\\end{tabular}%\n}\n\\end{table*}\n")
 
 
+def write_section21_table(rows: list[dict[str, str]]) -> None:
+    path = ROOT / "tables" / "table_section21_model_source_breakdown.tex"
+    with open(path, "w") as f:
+        f.write("\\begin{table*}[p]\n\\scriptsize\n\\centering\n")
+        f.write(
+            "\\caption{\\revise{\\textbf{Model/source breakdown for Section~2.1 descriptive engagement measures.} "
+            "Ranges summarize recoverable assistant-model or source-family levels with at least 100 conversations within each task setting. "
+            "The full model/source rows, including passive, active, constructive, overall cognitive engagement, emotional expression and scaffolded-support percentages, are exported in the source CSV.}}\\label{tab:section21_model_source_breakdown}\n"
+        )
+        f.write("\\setlength{\\tabcolsep}{4pt}\n\\renewcommand{\\arraystretch}{1.10}\n")
+        f.write("\\resizebox{0.94\\textwidth}{!}{%\n")
+        f.write("\\begin{tabular}{lcccc}\n\\toprule\n")
+        f.write("Setting & Model/source levels & Cognitive overall, \\% & Constructive, \\% & Scaffolded support, \\% \\\\\n\\midrule\n")
+        for row in rows:
+            f.write(
+                f"{row['setting']} & {row['n_model_source_levels_ge_100_conversations']} & "
+                f"{row['cognitive_overall_min_pct']}--{row['cognitive_overall_max_pct']} "
+                f"(median {row['cognitive_overall_median_pct']}) & "
+                f"{row['constructive_min_pct']}--{row['constructive_max_pct']} "
+                f"(median {row['constructive_median_pct']}) & "
+                f"{row['scaffolded_min_pct']}--{row['scaffolded_max_pct']} "
+                f"(median {row['scaffolded_median_pct']}) \\\\\n"
+            )
+        f.write("\\bottomrule\n\\end{tabular}%\n}\n\\end{table*}\n")
+
+
 def write_section23_table(rows: list[dict[str, str]]) -> None:
     by_key = {(row["model_type"], row["adjustment"]): row for row in rows}
     path = ROOT / "tables" / "table_section23_model_source_sensitivity.tex"
@@ -444,12 +657,44 @@ def write_section23_table(rows: list[dict[str, str]]) -> None:
         f.write("\\bottomrule\n\\end{tabular}%\n}\n\\end{table*}\n")
 
 
+def write_section24_table(rows: list[dict[str, str]]) -> None:
+    by_key = {(row["adjustment"], row["term"]): row for row in rows}
+    path = ROOT / "tables" / "table_section24_support_form_model_source_sensitivity.tex"
+    with open(path, "w") as f:
+        f.write("\\begin{table*}[p]\n\\scriptsize\n\\centering\n")
+        f.write(
+            "\\caption{\\revise{\\textbf{Model/source sensitivity for Section~2.4 support-form models.} "
+            "The sensitivity is restricted to conversations containing scaffolded support and enters the six non-exclusive support-form indicators jointly. "
+            "Cells report odds ratios for constructive-turn rate with 95\\% confidence intervals and two-sided p values from conversation-robust standard errors. "
+            "This model/source check complements, but does not replace, the descriptive percentage-point support-form contrasts in Fig.~\\ref{fig:support_form_supply}.}}\\label{tab:section24_support_form_model_source_sensitivity}\n"
+        )
+        f.write("\\setlength{\\tabcolsep}{5pt}\n\\renewcommand{\\arraystretch}{1.10}\n")
+        f.write("\\resizebox{0.82\\textwidth}{!}{%\n")
+        f.write("\\begin{tabular}{lcc}\n\\toprule\n")
+        f.write("Support form & Dataset FE & Model/source FE \\\\\n\\midrule\n")
+        for term, label in SUPPORT_FORM_TERMS:
+            f.write(
+                f"{label} & {_or_cell(by_key[('dataset FE', term)])} & "
+                f"{_or_cell(by_key[('model/source FE', term)])} \\\\\n"
+            )
+        n = int(rows[0]["n_conversations"])
+        model_fe = int(next(row for row in rows if row["adjustment"] == "model/source FE")["n_model_source_fixed_effects"])
+        f.write("\\midrule\n")
+        f.write(f"Scaffolded conversations & {n:,} & {n:,} \\\\\n")
+        f.write(f"Model/source fixed effects & -- & {model_fe} \\\\\n")
+        f.write("\\bottomrule\n\\end{tabular}%\n}\n\\end{table*}\n")
+
+
 def main() -> None:
     rows = _load_level2_rows()
+    _, section21_summary = compute_section21_model_source_breakdown(rows)
     section22 = compute_section22_model_source_sensitivity(rows)
     section23 = compute_section23_model_source_sensitivity(rows)
+    section24 = compute_section24_support_form_model_source_sensitivity(rows)
+    write_section21_table(section21_summary)
     write_section22_table(section22)
     write_section23_table(section23)
+    write_section24_table(section24)
 
 
 if __name__ == "__main__":
