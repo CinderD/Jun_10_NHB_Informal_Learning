@@ -4,7 +4,7 @@ The manuscript currently compiles from PDF figures in `figures/`. Exact SVG expo
 
 | Manuscript figure | PDF used for compilation | SVG export |
 | --- | --- | --- |
-| Figure 1 | `figures/figure_1_all_wild_lmsys.png` | handled manually |
+| Figure 1 | `figures/figure_1_all_wild_lmsys_refined.png` | `figures_svg_editable/final_figures/figure_1_all_wild_lmsys_refined_editable.svg` |
 | Figure 2 | `figures/fig_engagement_ecology_compact_final.pdf` | `figures_svg_editable/final_figures/fig_engagement_ecology_compact_final.svg` |
 | Figure 3 | `figures/fig_support_association_wild_lmsys_with_ci.pdf` | `figures_svg_editable/final_figures/fig_support_association_wild_lmsys_with_ci.svg` |
 | Figure 6 | `figures/figure5_temporal_schematic_refined.pdf` | `figures_svg_editable/final_figures/figure5_temporal_schematic_refined.svg` |

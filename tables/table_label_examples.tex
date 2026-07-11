@@ -1,24 +1,34 @@
-\begin{table*}[t]
-\scriptsize
+\begin{table*}[p]
+\footnotesize
 \centering
 \caption{\textbf{Operational examples for turn-level labels.} Examples are de-identified and paraphrased from validation review patterns; they illustrate the decision rule rather than reproducing raw conversation text.}
 \label{tab:label_examples}
-\setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.02}
-\begin{tabularx}{\textwidth}{p{0.14\textwidth}p{0.31\textwidth}X}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.16}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.16\textwidth}>{\raggedright\arraybackslash}p{0.36\textwidth}X}
 \toprule
 Construct & Paraphrased turn & Annotation rationale \\
 \midrule
 \revise{\texttt{None} no visible cognitive engagement} & \revise{``New topic: write a short birthday message for my colleague.''} & \revise{The user starts an unrelated request rather than taking up, applying or reflecting on the preceding assistant response.} \\
+\addlinespace[2pt]
 \texttt{P} passive user engagement & ``Thanks, that makes sense.'' & Minimal uptake or acknowledgement without new reasoning, evaluation or task transformation. \\
+\addlinespace[2pt]
 \texttt{A} active user engagement & ``Can you convert that answer into a command I can run in my setup?'' & Task-relevant follow-up or manipulation of supplied information, but without elaborating or testing an idea. \\
+\addlinespace[2pt]
 \texttt{C} constructive user engagement & ``If the cache expires before the asynchronous callback returns, would the same race condition still happen?'' & The user tests an implication, boundary condition or transfer of the prior explanation. \\
+\addlinespace[2pt]
 Scaffolding & ``First isolate the failing step; that will show whether the issue is parsing or state management.'' & The assistant structures the user's process and leaves diagnostic or revision work with the user. \\
+\addlinespace[2pt]
 \texttt{M1} feedback & ``Your diagnosis is close; the bug is in the index offset, not the loop boundary.'' & Evaluative feedback on the user's prior attempt or understanding. \\
+\addlinespace[2pt]
 \texttt{M2} hinting & ``Before changing the model, look at whether the malformed token first appears before or after parsing.'' & A targeted cue points the user toward the next diagnostic distinction, but does not give the full procedure or fix. \\
+\addlinespace[2pt]
 \texttt{M3} instructing & ``Run the failing case, print the parser output, add a guard for empty fields, then rerun the test.'' & Explicit ordered steps tell the user what actions to take and in what sequence. \\
+\addlinespace[2pt]
 \texttt{M4} explaining & ``The exception occurs because the event loop is already running, so a nested call cannot acquire it.'' & A rationale or mechanism that clarifies why the issue occurs. \\
+\addlinespace[2pt]
 \texttt{M5} modelling & ``For this report section, use the pattern: claim, evidence, implication; for example, this delay matters because X, which means Y for the team.'' & A concrete template or worked example demonstrates a reusable form the user can adapt. \\
+\addlinespace[2pt]
 \texttt{M6} questioning & ``Which constraint matters more here: preserving tone or shortening the paragraph?'' & A question that advances problem solving or reflection. \\
 \bottomrule
 \end{tabularx}
