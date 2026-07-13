@@ -1,7 +1,7 @@
 \begin{table*}[p]
 \scriptsize
 \centering
-\caption{\textbf{Incremental contribution of scaffolding features in integrated adjacent-turn models.} Broad scaffolded support, support-form descriptors and the full scaffolding block each improve model fit after user/context controls, including when dataset fixed effects are replaced by recoverable model/source fixed effects. Likelihood-ratio block tests compare nested logistic regressions for whether the next user turn is constructive.}\label{tab:integrated_scaffolding_block_tests}
+\caption{\textbf{Incremental contribution of scaffolding features in integrated adjacent-turn models.} Broad scaffolded support, support-form descriptors and the full scaffolding block each improve model fit after user/context controls, including when dataset fixed effects are replaced by \revise{recoverable assistant-model or source-family fixed effects}. Likelihood-ratio block tests compare nested logistic regressions for whether the next user turn is constructive.}\label{tab:integrated_scaffolding_block_tests}
 \setlength{\tabcolsep}{4pt}
 \renewcommand{\arraystretch}{1.08}
 \resizebox{\textwidth}{!}{%
@@ -12,9 +12,9 @@ Scope & Added feature block & LR $\chi^2$ (df) & p value \\
 six task settings, dataset FE & Broad scaffolded support after user/context controls & 584.6 (1) & $<.001$ \\
 six task settings, dataset FE & M1--M6 descriptors within scaffolded support & 896.7 (6) & $<.001$ \\
 six task settings, dataset FE & Full scaffolding block after user/context controls & 1481.3 (7) & $<.001$ \\
-six task settings, model/source FE & Broad scaffolded support after user/context controls & 509.7 (1) & $<.001$ \\
-six task settings, model/source FE & M1--M6 descriptors within scaffolded support & 829.8 (6) & $<.001$ \\
-six task settings, model/source FE & Full scaffolding block after user/context controls & 1339.6 (7) & $<.001$ \\
+six task settings, \revise{metadata FE} & Broad scaffolded support after user/context controls & 509.7 (1) & $<.001$ \\
+six task settings, \revise{metadata FE} & M1--M6 descriptors within scaffolded support & 829.8 (6) & $<.001$ \\
+six task settings, \revise{metadata FE} & Full scaffolding block after user/context controls & 1339.6 (7) & $<.001$ \\
 WildChat only, model FE & Broad scaffolded support after user/context controls & 418.6 (1) & $<.001$ \\
 WildChat only, model FE & M1--M6 descriptors within scaffolded support & 519.4 (6) & $<.001$ \\
 WildChat only, model FE & Full scaffolding block after user/context controls & 937.9 (7) & $<.001$ \\

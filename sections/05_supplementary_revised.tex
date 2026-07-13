@@ -1,7 +1,7 @@
 \clearpage
 \section*{Supplementary information}
 \phantomsection\label{supp:info}
-Supplementary information is organized to support reproducibility and interpretation. \hyperref[supp:appendix-a]{Appendix A} records the corpus ledger, annotation ontology, corpus-scale annotation workflow, validation evidence and model specifications. \hyperref[supp:appendix-b]{Appendix B} records the reporting boundary. \hyperref[supp:appendix-c]{Appendix C} and \hyperref[supp:appendix-d]{Appendix D} contain the supporting tables and figures referenced from the main text and Appendix A--B.
+Supplementary information is organized to support reproducibility and interpretation. \hyperref[supp:appendix-a]{Appendix A} records the corpus ledger, annotation ontology, corpus-scale annotation workflow, validation evidence and model specifications. \hyperref[supp:appendix-b]{Appendix B} contains the supporting tables and model outputs referenced from the main text and Appendix A. \hyperref[supp:appendix-c]{Appendix C} contains the supporting figures.
 
 
 \providecommand{\appcomment}[1]{\par\noindent\textcolor{orange!85!black}{\textbf{Comment addressed:} #1}\par}
@@ -107,7 +107,7 @@ where $T_i$ is the number of user turns, $F_i$ user framing, $Q_i$ task ecology,
 \end{align*}
 Supplementary Tables~\ref{tab:fig3_offset_rate_sensitivity} and \ref{tab:constructive_rate_context_logit} report the estimates.
 The grouped-binomial model is the Section~2.2 sensitivity for the conversation-length pattern in Fig.~\ref{fig:engagement_ecology}c, whereas the offset-rate Poisson model is the Section~2.3 sensitivity for the scaffolded-support count models in Fig.~\ref{fig:s2_conversation_association}b.
-\revise{Supplementary Table~\ref{tab:section21_model_source_breakdown} reports a model/source breakdown for the Section~2.1 descriptive prevalence measures. Supplementary Tables~\ref{tab:section22_model_source_sensitivity} and \ref{tab:section23_model_source_sensitivity} report parallel model/source sensitivity checks in which dataset fixed effects are replaced by recoverable assistant-model or source-family indicators. Supplementary Table~\ref{tab:section24_support_form_model_source_sensitivity} reports the corresponding Section~2.4 support-form sensitivity, restricted to scaffolded conversations and entering the six non-exclusive support-form labels jointly.}
+\revise{Supplementary Table~\ref{tab:section21_model_source_breakdown} reports a metadata breakdown for the Section~2.1 descriptive prevalence measures. Supplementary Tables~\ref{tab:section22_model_source_sensitivity} and \ref{tab:section23_model_source_sensitivity} report parallel metadata sensitivity checks in which dataset fixed effects are replaced by recoverable assistant-model or source-family indicators. Supplementary Table~\ref{tab:section24_support_form_model_source_sensitivity} reports the corresponding Section~2.4 support-form sensitivity, restricted to scaffolded conversations and entering the six non-exclusive support-form labels jointly.}
 
 \paragraph{Adjacent-turn models.}
 Let $Z_{ij}$ indicate whether the next user turn after assistant turn $j$ is Constructive, $U_{ij}$ encode the immediately preceding user state, $A_{ij}$ encode scaffolded support at assistant turn $j$, $M_{ij}$ encode support-form labels M1--M6 and $R_{ij}$ denote task, framing, turn-position and fixed-effect controls. The integrated adjacent-turn model is
@@ -116,16 +116,11 @@ Let $Z_{ij}$ indicate whether the next user turn after assistant turn $j$ is Con
   = \alpha + \theta^\top U_{ij} + \beta A_{ij}
   + \phi^\top M_{ij} + \eta^\top (U_{ij}\times M_{ij}) + \rho^\top R_{ij}.
 \end{align*}
-The broad scaffolded-support model omits $M_{ij}$ and $U_{ij}\times M_{ij}$; model/source sensitivity checks replace dataset fixed effects in $R_{ij}$ with recoverable model or source-family indicators.
+The broad scaffolded-support model omits $M_{ij}$ and $U_{ij}\times M_{ij}$; \revise{metadata sensitivity checks replace dataset fixed effects in $R_{ij}$ with recoverable assistant-model or source-family indicators}.
 These models support the Section~2.5 adjacent-turn interpretation in Fig.~\ref{fig:temporal_coupling}d and Supplementary Tables~\ref{tab:integrated_regression}--\ref{tab:prior_state_support_form_interactions}; descriptive adjacent-turn lifts in Fig.~\ref{fig:temporal_coupling}a,b are summarized with bootstrap uncertainty in Supplementary Table~\ref{tab:key_contrast_significance}.
 
 \paragraph{Uncertainty and multiplicity.}
 Percentage-point contrasts use 1,000 conversation-level bootstrap resamples. Adjacent-turn contrasts use 1,000 conversation-cluster bootstrap resamples. \revise{Primary adjusted conversation-level GLMs use model-based standard errors, with HC1 or quasi-Poisson sensitivities reported where noted;} adjacent-turn regressions use conversation-cluster robust standard errors. Support-form bracket tests use Benjamini--Hochberg false-discovery-rate adjustment within each six-form comparison family~\cite{benjamini1995controlling}.
-
-% \section*{Appendix B\quad Reporting boundary}
-% \phantomsection\label{supp:appendix-b}
-
-% \revise{We used the public source corpora as released by their original providers, with provider-side anonymization or de-identification already applied where applicable. We did not attempt to re-identify users, link conversations into user histories or redistribute bulk raw conversation logs. Reporting is therefore restricted to aggregate statistics, source-data summaries, validation metrics and two de-identified illustrative case excerpts that preserve turn order and annotation decisions.}
 
 \section*{Appendix B\quad Source tables and model outputs}
 \phantomsection\label{supp:appendix-b}
@@ -166,6 +161,8 @@ Percentage-point contrasts use 1,000 conversation-level bootstrap resamples. Adj
 
 \input{tables/table_integrated_regression}
 
+\input{tables/table_setting_level_adjacent_models}
+
 \input{tables/table_integrated_scaffolding_block_tests}
 
 \input{tables/table_prior_state_support_form_interactions}
@@ -181,7 +178,7 @@ Percentage-point contrasts use 1,000 conversation-level bootstrap resamples. Adj
 \revise{Supplementary Figure~\ref{fig:supp_support_supply} combines the support-intent and support-form summaries across WildChat, LMSYS Chat and ShareChat.} Operational examples for individual support-form labels are provided in Supplementary Table~\ref{tab:label_examples}.
 
 \paragraph{Model-snapshot figures.}
-Supplementary Figure~\ref{fig:supp_model_family} provides a compact WildChat-only model-family robustness layer. \revise{It groups all recoverable WildChat model snapshots that meet the model-fixed-effect sample threshold used in the robustness checks into four coarse families.} It asks whether the WildChat portion of the findings is concentrated in a particular user-facing model series or whether the same broad patterns remain visible across model families. LMSYS Chat and ShareChat remain represented in the six-setting tables and in the model/source-adjusted regressions, but they do not provide directly comparable user-facing model-snapshot structure for this visual repetition. The model-family figure is descriptive because model labels in naturalistic corpora are observational rather than experimentally assigned.
+Supplementary Figure~\ref{fig:supp_model_family} provides a compact WildChat-only model-family robustness layer. \revise{It groups all recoverable WildChat model snapshots that meet the model-fixed-effect sample threshold used in the robustness checks into four coarse families.} It asks whether the WildChat portion of the findings is concentrated in a particular user-facing model series or whether the same broad patterns remain visible across model families. LMSYS Chat and ShareChat remain represented in the six-setting tables and in the \revise{metadata-adjusted regressions}, but they do not provide directly comparable user-facing model-snapshot structure for this visual repetition. The model-family figure is descriptive because model labels in naturalistic corpora are observational rather than experimentally assigned.
 
 \begin{figure*}[!htbp]
 \centering

@@ -1,13 +1,13 @@
 \begin{table*}[p]
 \scriptsize
 \centering
-\caption{\revise{\textbf{Model/source sensitivity for Section~2.2 context models.} The dataset fixed-effect models match the context models reported for Section~2.2. The model/source sensitivity replaces dataset fixed effects with recoverable assistant-model or source-family indicators. Model/source levels with at least 100 conversations are represented as fixed-effect indicators; rarer levels are absorbed into the reference category. Cells report odds ratios with 95\% confidence intervals and two-sided p values from conversation-robust standard errors.}}\label{tab:section22_model_source_sensitivity}
+\caption{\revise{\textbf{Metadata sensitivity for Section~2.2 context models.} The dataset fixed-effect models match the context models reported for Section~2.2. The metadata sensitivity replaces dataset fixed effects with recoverable assistant-model or source-family indicators. Metadata levels with at least 100 conversations are represented as fixed-effect indicators; rarer levels are absorbed into the reference category. Cells report odds ratios with 95\% confidence intervals and two-sided p values from conversation-robust standard errors.}}\label{tab:section22_model_source_sensitivity}
 \setlength{\tabcolsep}{5pt}
 \renewcommand{\arraystretch}{1.10}
 \resizebox{0.92\textwidth}{!}{%
 \begin{tabular}{llcc}
 \toprule
-Outcome & Predictor & Dataset FE & Model/source FE \\
+Outcome & Predictor & Dataset FE & \revise{Metadata FE} \\
 \midrule
 Any constructive turn & Intentional framing & 3.03 [2.93, 3.13], $<.001$ & 3.05 [2.95, 3.16], $<.001$ \\
  & Coding task ecology & 1.89 [1.71, 2.08], $<.001$ & 1.89 [1.71, 2.08], $<.001$ \\
@@ -20,7 +20,7 @@ Constructive-turn rate & Intentional framing & 2.78 [2.68, 2.88], $<.001$ & 2.80
  & 7+ user turns & 1.06 [1.01, 1.11], .010 & 1.07 [1.02, 1.12], .008 \\
 \midrule
 Conversations & & 128,569 & 128,569 \\
-Model/source fixed effects & & -- & 40 \\
+\revise{Metadata fixed effects} & & -- & 40 \\
 \bottomrule
 \end{tabular}%
 }

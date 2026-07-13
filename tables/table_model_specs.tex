@@ -20,7 +20,7 @@ Scaffolding presence & Conversations; constructive-turn count and any constructi
 \begin{table*}[p]
 \scriptsize
 \centering
-\caption{\textbf{Additional analytic model families and robustness checks.} These analyses qualify the main associations by support form, temporal scale and available model or source metadata.}
+\caption{\textbf{Additional analytic model families and robustness checks.} These analyses qualify the main associations by support form, temporal scale and available \revise{model or source metadata}.}
 \label{tab:model_specs_additional}
 \setlength{\tabcolsep}{4pt}
 \renewcommand{\arraystretch}{1.12}
@@ -30,7 +30,7 @@ Analysis family & Unit and outcome & Main contrast or model & Scope \\
 \midrule
 Support-form associations & Scaffolded conversations; constructive engagement ratios. & Mean differences for conversations containing a given support-form label versus scaffolded conversations without that label, summarized by user framing and task ecology. & Descriptive because support-form labels are non-exclusive and can co-occur in the same assistant turn. \\
 Local temporal coupling & Adjacent assistant--user or user--assistant turn pairs; next constructive user turn or next scaffolded assistant turn. & Conditional probability contrasts around adjacent turns; detailed estimands are listed in Supplementary Table~\ref{tab:temporal_estimands}. & Interpreted as local ordering and state-dependent coupling, not as randomized support effects. \\
-Integrated adjacent-turn regression & Adjacent assistant--user turn pairs; next constructive user turn. & Logistic regression combining prior user state, scaffolded-support presence, support forms, task/framing context, prior-state $\times$ support-form interactions and dataset or model/source fixed effects. & Tests whether the local coupling pattern depends jointly on user state and support form; standard errors are clustered by conversation. \\
+Integrated adjacent-turn regression & Adjacent assistant--user turn pairs; next constructive user turn. & Logistic regression combining prior user state, scaffolded-support presence, support forms, task/framing context, prior-state $\times$ support-form interactions and dataset or \revise{metadata} fixed effects. & Tests whether the local coupling pattern depends jointly on user state and support form; standard errors are clustered by conversation. \\
 Coarse temporal boundary checks & Conversations containing scaffolded support; constructive engagement before and after the first scaffolded turn. & Mean after-minus-before contrast reported as an exploratory appendix check. & Not used as evidence of accumulation because the first scaffolded turn may be selected by difficulty, uncertainty or an already developing exchange. \\
 WildChat model robustness & WildChat conversations or turns; main prevalence, association and temporal outcomes. & Repetition across user-facing model snapshots or coarse model families. & Robustness summaries only; model labels are observational and may be confounded with time, user mix and task mix. \\
 \bottomrule
