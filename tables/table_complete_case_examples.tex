@@ -106,7 +106,7 @@
 {WildChat writing}
 {Intentional}
 {4-turn excerpt}
-{The excerpt separates brief correctness feedback from a later explanation of why the sentence works.}}\\[5pt]
+{The excerpt separates an initial correction request from a constructive follow-up that questions the feedback and asks for the rationale behind the sentence.}}\\[5pt]
 \multicolumn{3}{p{0.96\textwidth}}{\caselegend}\\[5pt]
 \toprule
 \textbf{Turn} & \textbf{De-identified raw transcript} & \textbf{Label and annotation cue} \\
@@ -119,11 +119,11 @@
 \endhead
 \bottomrule
 \endfoot
-\userturn{U1} & ``Correct my grammar if I'm wrong: `Is there still the new car smell after the car wash?' '' & \constructivebadge\par The user supplies their own sentence and asks for grammar correction. \\
+\userturn{U1} & ``Correct my grammar if I'm wrong: `Is there still the new car smell after the car wash?' '' & \activebadge\par The user supplies their own sentence and asks for a correctness check; this is an initial correction request rather than a constructive follow-up. \\
 \addlinespace[4pt]
 \assistantturn{A1} & ``Your grammar is correct!'' & \scaffoldbadge\quad \casecode{I1}\ \casecode{M1}\par The reply gives concise \supportkey{correctness feedback} on the user's own sentence. \\
 \addlinespace[4pt]
-\userturn{U2} & ``Sounds kinda wrong to me, but I think it's correct. Can u explain to me why it is correct?'' & \activebadge\par The user asks for clarification of the prior feedback rather than proposing a new revision. \\
+\userturn{U2} & ``Sounds kinda wrong to me, but I think it's correct. Can u explain to me why it is correct?'' & \constructivebadge\par The user evaluates the feedback against their own intuition and asks for the grammatical rationale behind the judgement. \\
 \addlinespace[4pt]
 \assistantturn{A2} & ``Yes, I can explain why it is correct. The sentence is a question which begins with the helping verb `is' followed by the subject `there' and then the predicate `still the new car smell.' The phrase `after the car wash' is a prepositional phrase that modifies the predicate.'' & \scaffoldbadge\quad \casecode{I2}\ \casecode{M1}\ \casecode{M4}\par The reply confirms the feedback and \supportkey{explains the grammatical structure}. \\
 \addlinespace[3pt]
