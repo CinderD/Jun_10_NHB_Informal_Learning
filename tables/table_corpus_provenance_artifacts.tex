@@ -11,7 +11,7 @@ Corpus & Public source link & Source unit and local conversion note & Corpus-spe
 \midrule
 WildChat & WildChat-4.8M public release: \url{https://huggingface.co/datasets/allenai/WildChat-4.8M}. & Public human--LLM conversations were converted to ordered user and assistant messages before task filtering. & Available language/topic fields and user-facing model metadata where available. \\
 \addlinespace
-LMSYS Chat & LMSYS Chat-1M public release: \url{https://huggingface.co/datasets/lmsys/lmsys-chat-1m}. & The public release contains one record per chat conversation; retained records were converted to ordered user and assistant messages after the English and minimum-turn screens. & Language-filter status, available moderation/redaction fields and model names recoverable from conversation identifiers. \\
+LMSYS Chat & LMSYS Chat-1M public release: \url{https://huggingface.co/datasets/lmsys/lmsys-chat-1m}. & The public release contains one record per chat conversation; retained records were converted to ordered user and assistant messages after the English and minimum-turn screens. & Language-filter status, available moderation/redaction fields and model names parsed from conversation identifiers. \\
 \addlinespace
 ShareChat & ShareChat public release associated with Yan et al.~\cite{yan2025sharechat}: \url{https://huggingface.co/datasets/tucnguyen/ShareChat}. & The public dataset card reports conversations and public turns. Local conversion used message rows and platform URL as the conversation key before deriving user and assistant turns. & Platform URL conversation keys, source platform or assistant-family fields and final conversation-level language flag. \\
 \bottomrule
