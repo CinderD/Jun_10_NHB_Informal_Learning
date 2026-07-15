@@ -172,7 +172,7 @@ def _write_source_data(data: dict[str, dict[str, object]]) -> None:
         for i, (intent, intent_label) in enumerate(INTENTS):
             rows.append(
                 {
-                    "figure": "Supplementary Figure D1",
+                    "figure": "Fig. C1",
                     "dataset": label,
                     "panel_element": "right intent bar",
                     "support_intent": intent,
@@ -185,7 +185,7 @@ def _write_source_data(data: dict[str, dict[str, object]]) -> None:
             for j, (form, form_label) in enumerate(FORMS):
                 rows.append(
                     {
-                        "figure": "Supplementary Figure D1",
+                        "figure": "Fig. C1",
                         "dataset": label,
                         "panel_element": "intent-by-form heatmap",
                         "support_intent": intent,
@@ -198,7 +198,7 @@ def _write_source_data(data: dict[str, dict[str, object]]) -> None:
         for j, (form, form_label) in enumerate(FORMS):
             rows.append(
                 {
-                    "figure": "Supplementary Figure D1",
+                    "figure": "Fig. C1",
                     "dataset": label,
                     "panel_element": "top support-form bar",
                     "support_intent": "",

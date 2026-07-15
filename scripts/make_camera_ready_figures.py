@@ -989,12 +989,12 @@ def make_figure5() -> None:
     )
     form_states = ["prior constructive", "prior active", "prior passive"]
     form_or = {
-        "M1 feedback": np.array([0.7250, 0.8319, 2.1609]),
-        "M4 explaining": np.array([1.7221, 2.1213, 2.8755]),
+        "M1 feedback": np.array([0.724405, 0.831064, 2.164378]),
+        "M4 explaining": np.array([1.721071, 2.127293, 2.880485]),
     }
     form_ci = {
-        "M1 feedback": np.array([[0.6451, 0.8148], [0.7254, 0.9539], [1.1570, 4.0359]]),
-        "M4 explaining": np.array([[1.4532, 2.0406], [1.8721, 2.4036], [1.5473, 5.3435]]),
+        "M1 feedback": np.array([[0.644579, 0.814117], [0.724753, 0.952968], [1.159327, 4.040732]]),
+        "M4 explaining": np.array([[1.452430, 2.039399], [1.877418, 2.410424], [1.551771, 5.346918]]),
     }
 
     ref_color = "#B8C4CF"

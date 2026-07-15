@@ -1,7 +1,7 @@
 \begin{table}[!htbp]
 \centering
 \scriptsize
-\caption{\textbf{Functional prompt-template summary for filtering and annotation.} The table summarizes the scientific content of the prompt templates used for corpus construction and turn-level annotation. Full prompt text, JSON schemas, parser checks and retry logic are archived with the reproducibility code; API keys, endpoints and other credentials are excluded.}
+\caption{\textbf{Functional prompt-template summary for filtering and annotation.} The table summarizes the scientific content of the prompt templates used for corpus construction and turn-level annotation. The archived release includes this prompt-family summary, output-field requirements and implementation controls for parser checks, retry logic and rule-based post-processing; API keys, endpoints and other credentials are excluded.}
 \label{tab:prompt_template_summary}
 \setlength{\tabcolsep}{4.5pt}
 \renewcommand{\arraystretch}{1.16}
@@ -11,7 +11,7 @@ Prompt family & Input unit & Required output fields & Core decision rule \\
 \midrule
 Semantic task filter & Conversation excerpt and available metadata after keyword prefiltering and minimum-turn screening. & Task label, English-oriented flag where applicable, confidence or score and short rationale. & Retain conversations whose substantive user goal matched coding-oriented or writing-oriented task ecology, rather than an incidental mention of code or writing. \\
 \addlinespace
-Conversation-level user framing & Opening user turn or early exchange context. & \texttt{learning\_intent}: intentional or unintentional; rationale. & Mark intentional framing only when the user explicitly oriented the exchange toward understanding, exploration, explanation, improvement or learning, not merely task completion. \\
+Conversation-level user framing & Opening user turn. & \texttt{learning\_intent}: intentional or unintentional; rationale. & Mark intentional framing only when the user explicitly oriented the exchange toward understanding, exploration, explanation, improvement or learning, not merely task completion. \\
 \addlinespace
 User-turn engagement & User turn with preceding local context. & \revise{One engagement label: none, passive, active or constructive; separate emotional-expression flag; rationale and boundary flags.} & \revise{Classify the user's observable contribution as acknowledgement, task-relevant follow-up or substantive testing, revision, diagnosis, critique or extension, and separately mark explicit emotional expression.} \\
 \addlinespace
@@ -22,6 +22,6 @@ Language and strict-English checks & Conversation text after task filtering. & C
 \end{tabularx}
 \vspace{2pt}
 \begin{minipage}{0.98\textwidth}
-\footnotesize \textit{Note.} The table reports the constructs and output fields needed to interpret the labels; operational prompt files and schemas are provided in the archived code release.
+\footnotesize \textit{Note.} The table reports the constructs and output fields needed to interpret the labels; implementation controls are summarized in Supplementary Table~\ref{tab:annotation_implementation_controls}.
 \end{minipage}
 \end{table}

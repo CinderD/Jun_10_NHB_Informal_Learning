@@ -1,82 +1,82 @@
 figure,dataset,panel_element,support_intent,support_form,estimate,unit,notes
-Supplementary Figure D1,WildChat,right intent bar,I1,,6.872839,percent of scaffolded assistant turns,Support-intent labels are non-exclusive.
-Supplementary Figure D1,WildChat,intent-by-form heatmap,I1,M1,11.938601,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,WildChat,intent-by-form heatmap,I1,M2,21.304719,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,WildChat,intent-by-form heatmap,I1,M3,12.947698,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,WildChat,intent-by-form heatmap,I1,M4,6.822058,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,WildChat,intent-by-form heatmap,I1,M5,2.003980,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,WildChat,intent-by-form heatmap,I1,M6,79.306424,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,WildChat,right intent bar,I2,,93.538398,percent of scaffolded assistant turns,Support-intent labels are non-exclusive.
-Supplementary Figure D1,WildChat,intent-by-form heatmap,I2,M1,11.610397,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,WildChat,intent-by-form heatmap,I2,M2,12.346620,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,WildChat,intent-by-form heatmap,I2,M3,43.533245,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,WildChat,intent-by-form heatmap,I2,M4,67.679278,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,WildChat,intent-by-form heatmap,I2,M5,21.921699,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,WildChat,intent-by-form heatmap,I2,M6,2.159588,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,WildChat,right intent bar,I3,,0.638834,percent of scaffolded assistant turns,Support-intent labels are non-exclusive.
-Supplementary Figure D1,WildChat,intent-by-form heatmap,I3,M1,47.706422,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,WildChat,intent-by-form heatmap,I3,M2,25.535168,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,WildChat,intent-by-form heatmap,I3,M3,37.614679,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,WildChat,intent-by-form heatmap,I3,M4,34.250765,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,WildChat,intent-by-form heatmap,I3,M5,10.244648,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,WildChat,intent-by-form heatmap,I3,M6,20.183486,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,WildChat,top support-form bar,,M1,11.754772,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
-Supplementary Figure D1,WildChat,top support-form bar,,M2,12.768034,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
-Supplementary Figure D1,WildChat,top support-form bar,,M3,40.875098,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
-Supplementary Figure D1,WildChat,top support-form bar,,M4,63.354480,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
-Supplementary Figure D1,WildChat,top support-form bar,,M5,20.528530,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
-Supplementary Figure D1,WildChat,top support-form bar,,M6,6.900000,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
-Supplementary Figure D1,LMSYS Chat,right intent bar,I1,,11.542359,percent of scaffolded assistant turns,Support-intent labels are non-exclusive.
-Supplementary Figure D1,LMSYS Chat,intent-by-form heatmap,I1,M1,4.828244,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,LMSYS Chat,intent-by-form heatmap,I1,M2,10.763359,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,LMSYS Chat,intent-by-form heatmap,I1,M3,3.606870,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,LMSYS Chat,intent-by-form heatmap,I1,M4,1.984733,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,LMSYS Chat,intent-by-form heatmap,I1,M5,0.591603,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,LMSYS Chat,intent-by-form heatmap,I1,M6,91.755725,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,LMSYS Chat,right intent bar,I2,,88.202123,percent of scaffolded assistant turns,Support-intent labels are non-exclusive.
-Supplementary Figure D1,LMSYS Chat,intent-by-form heatmap,I2,M1,6.715449,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,LMSYS Chat,intent-by-form heatmap,I2,M2,9.008042,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,LMSYS Chat,intent-by-form heatmap,I2,M3,27.546077,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,LMSYS Chat,intent-by-form heatmap,I2,M4,70.301184,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,LMSYS Chat,intent-by-form heatmap,I2,M5,17.761351,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,LMSYS Chat,intent-by-form heatmap,I2,M6,2.177713,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,LMSYS Chat,right intent bar,I3,,0.889907,percent of scaffolded assistant turns,Support-intent labels are non-exclusive.
-Supplementary Figure D1,LMSYS Chat,intent-by-form heatmap,I3,M1,35.643564,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,LMSYS Chat,intent-by-form heatmap,I3,M2,24.257426,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,LMSYS Chat,intent-by-form heatmap,I3,M3,19.306931,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,LMSYS Chat,intent-by-form heatmap,I3,M4,17.326733,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,LMSYS Chat,intent-by-form heatmap,I3,M5,3.217822,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,LMSYS Chat,intent-by-form heatmap,I3,M6,40.346535,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,LMSYS Chat,top support-form bar,,M1,6.652934,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
-Supplementary Figure D1,LMSYS Chat,top support-form bar,,M2,8.677490,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
-Supplementary Figure D1,LMSYS Chat,top support-form bar,,M3,23.609419,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
-Supplementary Figure D1,LMSYS Chat,top support-form bar,,M4,60.439693,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
-Supplementary Figure D1,LMSYS Chat,top support-form bar,,M5,14.475624,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
-Supplementary Figure D1,LMSYS Chat,top support-form bar,,M6,13.736744,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
-Supplementary Figure D1,ShareChat,right intent bar,I1,,16.090266,percent of scaffolded assistant turns,Support-intent labels are non-exclusive.
-Supplementary Figure D1,ShareChat,intent-by-form heatmap,I1,M1,9.709544,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,ShareChat,intent-by-form heatmap,I1,M2,25.394191,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,ShareChat,intent-by-form heatmap,I1,M3,15.767635,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,ShareChat,intent-by-form heatmap,I1,M4,19.751037,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,ShareChat,intent-by-form heatmap,I1,M5,4.896266,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,ShareChat,intent-by-form heatmap,I1,M6,94.439834,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,ShareChat,right intent bar,I2,,86.233142,percent of scaffolded assistant turns,Support-intent labels are non-exclusive.
-Supplementary Figure D1,ShareChat,intent-by-form heatmap,I2,M1,15.825333,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,ShareChat,intent-by-form heatmap,I2,M2,13.889749,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,ShareChat,intent-by-form heatmap,I2,M3,28.135646,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,ShareChat,intent-by-form heatmap,I2,M4,84.623723,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,ShareChat,intent-by-form heatmap,I2,M5,22.359864,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,ShareChat,intent-by-form heatmap,I2,M6,12.527098,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,ShareChat,right intent bar,I3,,3.164641,percent of scaffolded assistant turns,Support-intent labels are non-exclusive.
-Supplementary Figure D1,ShareChat,intent-by-form heatmap,I3,M1,64.978903,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,ShareChat,intent-by-form heatmap,I3,M2,24.472574,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,ShareChat,intent-by-form heatmap,I3,M3,24.472574,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,ShareChat,intent-by-form heatmap,I3,M4,49.367089,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,ShareChat,intent-by-form heatmap,I3,M5,10.970464,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,ShareChat,intent-by-form heatmap,I3,M6,39.240506,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
-Supplementary Figure D1,ShareChat,top support-form bar,,M1,15.702978,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
-Supplementary Figure D1,ShareChat,top support-form bar,,M2,15.014795,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
-Supplementary Figure D1,ShareChat,top support-form bar,,M3,25.082721,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
-Supplementary Figure D1,ShareChat,top support-form bar,,M4,73.263560,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
-Supplementary Figure D1,ShareChat,top support-form bar,,M5,19.524329,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
-Supplementary Figure D1,ShareChat,top support-form bar,,M6,22.898905,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
+Fig. C1,WildChat,right intent bar,I1,,6.872839,percent of scaffolded assistant turns,Support-intent labels are non-exclusive.
+Fig. C1,WildChat,intent-by-form heatmap,I1,M1,11.938601,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,WildChat,intent-by-form heatmap,I1,M2,21.304719,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,WildChat,intent-by-form heatmap,I1,M3,12.947698,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,WildChat,intent-by-form heatmap,I1,M4,6.822058,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,WildChat,intent-by-form heatmap,I1,M5,2.003980,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,WildChat,intent-by-form heatmap,I1,M6,79.306424,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,WildChat,right intent bar,I2,,93.538398,percent of scaffolded assistant turns,Support-intent labels are non-exclusive.
+Fig. C1,WildChat,intent-by-form heatmap,I2,M1,11.610397,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,WildChat,intent-by-form heatmap,I2,M2,12.346620,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,WildChat,intent-by-form heatmap,I2,M3,43.533245,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,WildChat,intent-by-form heatmap,I2,M4,67.679278,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,WildChat,intent-by-form heatmap,I2,M5,21.921699,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,WildChat,intent-by-form heatmap,I2,M6,2.159588,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,WildChat,right intent bar,I3,,0.638834,percent of scaffolded assistant turns,Support-intent labels are non-exclusive.
+Fig. C1,WildChat,intent-by-form heatmap,I3,M1,47.706422,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,WildChat,intent-by-form heatmap,I3,M2,25.535168,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,WildChat,intent-by-form heatmap,I3,M3,37.614679,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,WildChat,intent-by-form heatmap,I3,M4,34.250765,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,WildChat,intent-by-form heatmap,I3,M5,10.244648,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,WildChat,intent-by-form heatmap,I3,M6,20.183486,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,WildChat,top support-form bar,,M1,11.754772,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
+Fig. C1,WildChat,top support-form bar,,M2,12.768034,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
+Fig. C1,WildChat,top support-form bar,,M3,40.875098,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
+Fig. C1,WildChat,top support-form bar,,M4,63.354480,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
+Fig. C1,WildChat,top support-form bar,,M5,20.528530,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
+Fig. C1,WildChat,top support-form bar,,M6,6.900000,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
+Fig. C1,LMSYS Chat,right intent bar,I1,,11.542359,percent of scaffolded assistant turns,Support-intent labels are non-exclusive.
+Fig. C1,LMSYS Chat,intent-by-form heatmap,I1,M1,4.828244,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,LMSYS Chat,intent-by-form heatmap,I1,M2,10.763359,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,LMSYS Chat,intent-by-form heatmap,I1,M3,3.606870,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,LMSYS Chat,intent-by-form heatmap,I1,M4,1.984733,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,LMSYS Chat,intent-by-form heatmap,I1,M5,0.591603,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,LMSYS Chat,intent-by-form heatmap,I1,M6,91.755725,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,LMSYS Chat,right intent bar,I2,,88.202123,percent of scaffolded assistant turns,Support-intent labels are non-exclusive.
+Fig. C1,LMSYS Chat,intent-by-form heatmap,I2,M1,6.715449,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,LMSYS Chat,intent-by-form heatmap,I2,M2,9.008042,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,LMSYS Chat,intent-by-form heatmap,I2,M3,27.546077,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,LMSYS Chat,intent-by-form heatmap,I2,M4,70.301184,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,LMSYS Chat,intent-by-form heatmap,I2,M5,17.761351,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,LMSYS Chat,intent-by-form heatmap,I2,M6,2.177713,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,LMSYS Chat,right intent bar,I3,,0.889907,percent of scaffolded assistant turns,Support-intent labels are non-exclusive.
+Fig. C1,LMSYS Chat,intent-by-form heatmap,I3,M1,35.643564,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,LMSYS Chat,intent-by-form heatmap,I3,M2,24.257426,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,LMSYS Chat,intent-by-form heatmap,I3,M3,19.306931,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,LMSYS Chat,intent-by-form heatmap,I3,M4,17.326733,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,LMSYS Chat,intent-by-form heatmap,I3,M5,3.217822,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,LMSYS Chat,intent-by-form heatmap,I3,M6,40.346535,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,LMSYS Chat,top support-form bar,,M1,6.652934,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
+Fig. C1,LMSYS Chat,top support-form bar,,M2,8.677490,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
+Fig. C1,LMSYS Chat,top support-form bar,,M3,23.609419,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
+Fig. C1,LMSYS Chat,top support-form bar,,M4,60.439693,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
+Fig. C1,LMSYS Chat,top support-form bar,,M5,14.475624,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
+Fig. C1,LMSYS Chat,top support-form bar,,M6,13.736744,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
+Fig. C1,ShareChat,right intent bar,I1,,16.090266,percent of scaffolded assistant turns,Support-intent labels are non-exclusive.
+Fig. C1,ShareChat,intent-by-form heatmap,I1,M1,9.709544,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,ShareChat,intent-by-form heatmap,I1,M2,25.394191,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,ShareChat,intent-by-form heatmap,I1,M3,15.767635,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,ShareChat,intent-by-form heatmap,I1,M4,19.751037,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,ShareChat,intent-by-form heatmap,I1,M5,4.896266,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,ShareChat,intent-by-form heatmap,I1,M6,94.439834,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,ShareChat,right intent bar,I2,,86.233142,percent of scaffolded assistant turns,Support-intent labels are non-exclusive.
+Fig. C1,ShareChat,intent-by-form heatmap,I2,M1,15.825333,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,ShareChat,intent-by-form heatmap,I2,M2,13.889749,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,ShareChat,intent-by-form heatmap,I2,M3,28.135646,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,ShareChat,intent-by-form heatmap,I2,M4,84.623723,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,ShareChat,intent-by-form heatmap,I2,M5,22.359864,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,ShareChat,intent-by-form heatmap,I2,M6,12.527098,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,ShareChat,right intent bar,I3,,3.164641,percent of scaffolded assistant turns,Support-intent labels are non-exclusive.
+Fig. C1,ShareChat,intent-by-form heatmap,I3,M1,64.978903,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,ShareChat,intent-by-form heatmap,I3,M2,24.472574,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,ShareChat,intent-by-form heatmap,I3,M3,24.472574,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,ShareChat,intent-by-form heatmap,I3,M4,49.367089,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,ShareChat,intent-by-form heatmap,I3,M5,10.970464,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,ShareChat,intent-by-form heatmap,I3,M6,39.240506,percent of turns with the intent label,Cells condition on scaffolded assistant turns containing the row support-intent label; labels are non-exclusive.
+Fig. C1,ShareChat,top support-form bar,,M1,15.702978,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
+Fig. C1,ShareChat,top support-form bar,,M2,15.014795,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
+Fig. C1,ShareChat,top support-form bar,,M3,25.082721,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
+Fig. C1,ShareChat,top support-form bar,,M4,73.263560,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
+Fig. C1,ShareChat,top support-form bar,,M5,19.524329,percent of scaffolded assistant turns,Support-form labels are non-exclusive.
+Fig. C1,ShareChat,top support-form bar,,M6,22.898905,percent of scaffolded assistant turns,Support-form labels are non-exclusive.

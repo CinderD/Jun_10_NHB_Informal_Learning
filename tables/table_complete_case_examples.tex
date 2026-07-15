@@ -59,7 +59,7 @@
 \setlength{\tabcolsep}{3pt}
 \renewcommand{\arraystretch}{1.18}
 \begin{longtable}{>{\raggedright\arraybackslash}p{0.11\textwidth}>{\raggedright\arraybackslash}p{0.58\textwidth}>{\raggedright\arraybackslash}p{0.25\textwidth}}
-\caption{\textbf{De-identified coding case excerpt with turn-level labels.} A retained WildChat coding conversation, lightly excerpted and formatted for readability. Badges encode role, user engagement and assistant support labels.}
+\caption{\textbf{De-identified coding case excerpt with turn-level labels.} A retained WildChat coding conversation excerpt formatted for readability. Badges encode role, user engagement and assistant support labels.}
 \label{tab:complete_coding_case}\\
 \multicolumn{3}{p{0.96\textwidth}}{\caseheader{Coding case}{wxWidgets menu debugging}
 {WildChat coding}
@@ -68,12 +68,12 @@
 {Feedback and instructions diagnose a likely cause; a follow-up troubleshooting response uses checks and a request for context to continue debugging.}}\\[5pt]
 \multicolumn{3}{p{0.96\textwidth}}{\caselegend}\\[5pt]
 \toprule
-\textbf{Turn} & \textbf{De-identified raw transcript} & \textbf{Label and annotation cue} \\
+\textbf{Turn} & \textbf{De-identified excerpt} & \textbf{Label and annotation cue} \\
 \midrule
 \endfirsthead
-\caption[]{\textbf{De-identified coding case excerpt with raw transcript and turn-level labels} (continued).}\\
+\caption[]{\textbf{De-identified coding case excerpt with turn-level labels} (continued).}\\
 \toprule
-\textbf{Turn} & \textbf{De-identified raw transcript} & \textbf{Label and annotation cue} \\
+\textbf{Turn} & \textbf{De-identified excerpt} & \textbf{Label and annotation cue} \\
 \midrule
 \endhead
 \bottomrule
@@ -100,33 +100,33 @@
 \setlength{\tabcolsep}{3pt}
 \renewcommand{\arraystretch}{1.18}
 \begin{longtable}{>{\raggedright\arraybackslash}p{0.11\textwidth}>{\raggedright\arraybackslash}p{0.58\textwidth}>{\raggedright\arraybackslash}p{0.25\textwidth}}
-\caption{\textbf{De-identified writing case excerpt with turn-level labels.} A retained WildChat writing conversation, lightly excerpted and formatted for readability. Badges encode role, user engagement and assistant support labels.}
+\caption{\textbf{De-identified writing case excerpt with turn-level labels.} A retained WildChat writing conversation excerpt formatted for readability. Badges encode role, user engagement and assistant support labels.}
 \label{tab:complete_writing_case}\\
-\multicolumn{3}{p{0.96\textwidth}}{\caseheader{Writing case}{Grammar feedback and explanation}
+\multicolumn{3}{p{0.96\textwidth}}{\caseheader{Writing case}{Thesis revision rationale}
 {WildChat writing}
 {Intentional}
 {4-turn excerpt}
-{The excerpt separates an initial correction request from a constructive follow-up that questions the feedback and asks for the rationale behind the sentence.}}\\[5pt]
+{The exchange asks why a report sentence is weak, applies the explanation to a revised claim and receives feedback on the revised reasoning.}}\\[5pt]
 \multicolumn{3}{p{0.96\textwidth}}{\caselegend}\\[5pt]
 \toprule
-\textbf{Turn} & \textbf{De-identified raw transcript} & \textbf{Label and annotation cue} \\
+\textbf{Turn} & \textbf{De-identified excerpt} & \textbf{Label and annotation cue} \\
 \midrule
 \endfirsthead
-\caption[]{\textbf{De-identified writing case excerpt with raw transcript and turn-level labels} (continued).}\\
+\caption[]{\textbf{De-identified writing case excerpt with turn-level labels} (continued).}\\
 \toprule
-\textbf{Turn} & \textbf{De-identified raw transcript} & \textbf{Label and annotation cue} \\
+\textbf{Turn} & \textbf{De-identified excerpt} & \textbf{Label and annotation cue} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-\userturn{U1} & ``Correct my grammar if I'm wrong: `Is there still the new car smell after the car wash?' '' & \activebadge\par The user supplies their own sentence and asks for a correctness check; this is an initial correction request rather than a constructive follow-up. \\
+\userturn{U1} & ``I'm revising a short report introduction and want to understand why this sentence sounds vague: `This project is good for users because it improves the system.' What makes it weak, and how should I think about making the claim more specific?'' & \constructivebadge\par The user identifies a writing problem, asks for the rationale behind the weakness and requests a revision principle rather than only a corrected sentence. \\
 \addlinespace[4pt]
-\assistantturn{A1} & ``Your grammar is correct!'' & \scaffoldbadge\quad \casecode{I1}\ \casecode{M1}\par The reply gives concise \supportkey{correctness feedback} on the user's own sentence. \\
+\assistantturn{A1} & ``The sentence is grammatical, but it is vague because `good for users' and `improves the system' do not say who benefits, what changes or why the change matters. A stronger version should name the user group, the concrete action and the outcome. For example, ask yourself: what task becomes easier, faster or less error-prone?'' & \scaffoldbadge\quad \casecode{I2}\ \casecode{M1}\ \casecode{M2}\ \casecode{M4}\par The reply gives feedback on the draft, explains the weakness and offers a guiding diagnostic question. \\
 \addlinespace[4pt]
-\userturn{U2} & ``Sounds kinda wrong to me, but I think it's correct. Can u explain to me why it is correct?'' & \constructivebadge\par The user evaluates the feedback against their own intuition and asks for the grammatical rationale behind the judgement. \\
+\userturn{U2} & ``So the problem is not grammar but that the sentence hides the causal link. Would this be stronger: `The project reduces repeated data entry for clinic staff by combining two forms into one workflow'?'' & \constructivebadge\par The user restates the principle, diagnoses the original weakness and tests a revised claim against the explanation. \\
 \addlinespace[4pt]
-\assistantturn{A2} & ``Yes, I can explain why it is correct. The sentence is a question which begins with the helping verb `is' followed by the subject `there' and then the predicate `still the new car smell.' The phrase `after the car wash' is a prepositional phrase that modifies the predicate.'' & \scaffoldbadge\quad \casecode{I2}\ \casecode{M1}\ \casecode{M4}\par The reply confirms the feedback and \supportkey{explains the grammatical structure}. \\
+\assistantturn{A2} & ``Yes, that is stronger. It names the audience, the mechanism and the benefit, so the reader can see why the project matters. If this is for a formal report, you could make it more concise: `By combining two forms into one workflow, the project reduces repeated data entry for clinic staff.' '' & \scaffoldbadge\quad \casecode{I1}\ \casecode{I2}\ \casecode{M1}\ \casecode{M4}\par The reply gives feedback on the user's revision and explains why the revised sentence better supports the report claim. \\
 \addlinespace[3pt]
-\casecontinued{A2 cont.} & ``The sentence is questioning if the new car smell is still present after the car has been washed. So, in summary, your original sentence is grammatically correct.'' & \casecontinued{Same assistant response; explanation and feedback continued.} \\
+\casecontinued{A2 cont.} & ``You can then follow it with evidence, such as time saved or fewer duplicate entries, if the report requires support for the claim.'' & \casecontinued{Same assistant response; feedback and explanation continued.} \\
 \end{longtable}
 \endgroup

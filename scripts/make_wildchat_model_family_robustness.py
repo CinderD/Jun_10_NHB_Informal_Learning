@@ -148,7 +148,7 @@ def main() -> None:
     fig.text(
         0.12,
         0.045,
-        "Small points show all WildChat model snapshots meeting the model-FE sample threshold; diamonds show coarse family summaries.",
+        "Small points show WildChat model snapshots; diamonds show family summaries; thin lines show the within-family min-max range.",
         ha="left",
         va="bottom",
         fontsize=7.4,

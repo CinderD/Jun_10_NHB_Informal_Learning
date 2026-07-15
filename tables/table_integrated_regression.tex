@@ -1,7 +1,7 @@
 \begin{table*}[p]
 \scriptsize
 \centering
-\caption{\textbf{Integrated adjacent-turn regression combining user state, assistant scaffolding and model controls.} Prior user state is the largest predictor of next-turn constructive engagement, broad scaffolded support remains positive after controls and M4 explaining is the most stable positive support-form coefficient. The scaffolded-support row is estimated in a broad scaffolded-support model; M1, M4 and M6 rows are estimated in a decomposed support-form model with co-occurring support forms. Estimates are odds ratios with 95\% confidence intervals and two-sided p values from conversation-cluster robust standard errors.}\label{tab:integrated_regression}
+\caption{\textbf{Integrated adjacent-turn regression combining user state, assistant scaffolding and model controls.} Prior user state is the largest predictor of next-turn constructive engagement, broad scaffolded support remains positive after controls and M4 explaining is the most stable positive support-form coefficient. The scaffolded-support row is estimated in a broad scaffolded-support model; support-form rows are estimated in a decomposed support-form model with broad scaffolded-support presence and co-occurring M1--M6 support forms; \todayrevise{all six support-form labels are shown to avoid restricting the table to selected focal forms.} Estimates are odds ratios with 95\% confidence intervals and two-sided p values from conversation-cluster robust standard errors. \todayrevise{The metadata-block LR row compares the pooled dataset-fixed-effect and metadata-fixed-effect adjacent-turn specifications: the metadata design contains 43 non-reference assistant-model or service-source indicators in place of two dataset indicators, giving 41 net degrees of freedom; intercepts and reference levels are not counted.}}\label{tab:integrated_regression}
 \setlength{\tabcolsep}{4pt}
 \renewcommand{\arraystretch}{1.10}
 \resizebox{\textwidth}{!}{%
@@ -16,7 +16,10 @@ Prior user passive & 2.08 [1.76, 2.44], $<.001$ & 2.07 [1.76, 2.44], $<.001$ & 2
 Intentional framing & 1.40 [1.35, 1.46], $<.001$ & 1.42 [1.37, 1.48], $<.001$ & 1.40 [1.33, 1.47], $<.001$ \\
 Coding task & 1.37 [1.22, 1.54], $<.001$ & 1.37 [1.22, 1.54], $<.001$ & 1.21 [1.05, 1.40], .009 \\
 M1 feedback & 0.79 [0.73, 0.86], $<.001$ & 0.80 [0.74, 0.86], $<.001$ & 0.74 [0.67, 0.82], $<.001$ \\
+M2 hinting & 1.02 [0.95, 1.10], .546 & 1.03 [0.96, 1.11], .448 & 1.07 [0.98, 1.16], .122 \\
+M3 instructing & 0.91 [0.86, 0.97], .005 & 0.93 [0.87, 0.99], .020 & 0.94 [0.87, 1.01], .099 \\
 M4 explaining & 2.15 [1.99, 2.32], $<.001$ & 2.12 [1.96, 2.30], $<.001$ & 2.11 [1.92, 2.31], $<.001$ \\
+M5 modelling & 0.78 [0.73, 0.83], $<.001$ & 0.78 [0.73, 0.84], $<.001$ & 0.80 [0.73, 0.86], $<.001$ \\
 M6 questioning & 0.82 [0.72, 0.93], .002 & 0.84 [0.74, 0.96], .008 & 1.08 [0.93, 1.25], .340 \\
 \midrule
 \todayrevise{Metadata block} & Reference & LR $\chi^2_{41}=714.4$, $p<.001$ & LR $\chi^2_{13}=553.2$, $p<.001$ \\

@@ -218,7 +218,7 @@ def figure4() -> None:
         for setting, value in zip(settings, values):
             supply_rows.append(
                 {
-                    "figure": "Supplementary Figure D3",
+                    "figure": "Fig. C1",
                     "panel": "",
                     "setting": setting,
                     "measure": "support-form supply within scaffolded assistant turns",
@@ -257,8 +257,8 @@ def figure5() -> None:
         "SC writing": [39.6, 29.3, 26.5],
     }
     form_or = {
-        "M1 feedback": [(0.7250, 0.6451, 0.8148), (0.8319, 0.7254, 0.9539), (2.1609, 1.1570, 4.0359)],
-        "M4 explaining": [(1.7221, 1.4532, 2.0406), (2.1213, 1.8721, 2.4036), (2.8755, 1.5473, 5.3435)],
+        "M1 feedback": [(0.724405, 0.644579, 0.814117), (0.831064, 0.724753, 0.952968), (2.164378, 1.159327, 4.040732)],
+        "M4 explaining": [(1.721071, 1.452430, 2.039399), (2.127293, 1.877418, 2.410424), (2.880485, 1.551771, 5.346918)],
     }
     rows: list[dict[str, object]] = []
     for setting in order:
@@ -286,7 +286,10 @@ This directory contains CSV source data for the manuscript's numeric main figure
 - `figure3_source_data.csv`: scaffolded versus reference constructive ratios, adjusted model estimates, framing-stratified estimates and post-answer depth differences.
 - `figure4_source_data.csv`: support-form constructive associations and Benjamini-Hochberg q values.
 - `figure5_source_data.csv`: adjacent-turn lifts, prior-state conditional probabilities, reverse scaffolded-support probabilities and focal prior-state x support-form odds ratios.
-- `supplementary_support_supply_source_data.csv`: support-form supply profiles used in Supplementary Figure D1.
+- `support_intent_form_profile_source_data.csv`: support-intent by support-form heatmap values and marginal bar values used in Fig. C1.
+- `supplementary_support_supply_source_data.csv`: setting-level support-form supply values used to construct the Fig. C1 marginal support-form bars.
+- `wildchat_model_family_robustness_source_data.csv`: WildChat model-family summaries and model-snapshot background points used in Fig. C2.
+- `validation/`: human-confirmed validation metrics for user-framing, user-engagement and assistant scaffolding/support-form corpus-scale label audits. These files contain aggregate metrics and mismatch metadata, not raw conversation text.
 
 Figure 1 is a conceptual framework figure and has no numeric source data. Supplementary table source files are stored under `tables/`, and regression/statistical output CSV files are stored under `outputs/integrated_regression/`.
 

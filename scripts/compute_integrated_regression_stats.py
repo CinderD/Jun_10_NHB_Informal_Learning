@@ -1659,7 +1659,10 @@ def write_tex_tables() -> None:
         ("intentional_framing", "Intentional framing"),
         ("coding_task", "Coding task"),
         ("M1", "M1 feedback"),
+        ("M2", "M2 hinting"),
+        ("M3", "M3 instructing"),
         ("M4", "M4 explaining"),
+        ("M5", "M5 modelling"),
         ("M6", "M6 questioning"),
     ]
     by_pooled_broad = {r["term"]: r for r in pooled_broad}
@@ -1740,7 +1743,7 @@ def write_tex_tables() -> None:
             "The outcome is the number of constructive user turns out of total user turns in each conversation, modelled with a grouped-binomial logistic regression. "
             "The model includes user framing, task ecology, conversation-length bucket and dataset fixed effects, using user-turn counts as denominators to reduce the mechanical opportunity effect in any-constructive-turn outcomes. "
             "Cells report odds ratios with 95\\% confidence intervals and two-sided p values from conversation-robust standard errors. "
-            "The reference category is unintentional framing, writing-oriented task, 2--3 user turns and WildChat.}\\label{tab:constructive_rate_context_logit}\n"
+            "The reference category is unintentional framing, writing-oriented task, 2--3 user turns and WildChat.}\\label{tab:constructive_context_logit}\n"
         )
         f.write("\\setlength{\\tabcolsep}{6pt}\n\\renewcommand{\\arraystretch}{1.08}\n")
         f.write("\\resizebox{0.64\\textwidth}{!}{%\n")
@@ -1789,8 +1792,9 @@ def write_tex_tables() -> None:
         f.write(
             "\\caption{\\textbf{Setting-level integrated adjacent-turn models.} "
             "Each column reports a separate within-setting logistic regression for whether the next user turn is constructive. "
+            "This table is a heterogeneity check for the pooled integrated model in Supplementary Table~\\ref{tab:integrated_regression}: the split by corpus-by-task setting checks whether the pooled adjacent-turn pattern is shared across coding and writing settings and across corpora, rather than serving as six separate primary claims. "
             "The scaffolded-support row comes from a broad scaffolded-support model. Support-form rows come from a decomposed model that includes broad scaffolded-support presence and co-occurring M1--M6 forms, so form coefficients compare variation within scaffolded support rather than replacing the broad scaffolded-support contrast. "
-            "All models include prior user state, intentional framing, assistant-turn index and recoverable model/source fixed effects where available. "
+            "All models include prior user state, intentional framing, assistant-turn index and available assistant-model or service-source fixed effects where available. "
             "Cells report odds ratios with 95\\% confidence intervals and two-sided p values from conversation-cluster robust standard errors.}\\label{tab:setting_level_adjacent_models}\n"
         )
         f.write("\\setlength{\\tabcolsep}{3pt}\n\\renewcommand{\\arraystretch}{1.12}\n")
@@ -1800,7 +1804,7 @@ def write_tex_tables() -> None:
         first_rows = {setting: next(r for r in setting_level if r["setting"] == setting) for setting in settings}
         f.write("A2U pairs & " + " & ".join(f"{int(first_rows[s]['n_pairs']):,}" for s in settings) + " \\\\\n")
         f.write("Conversations & " + " & ".join(f"{int(first_rows[s]['n_conversations']):,}" for s in settings) + " \\\\\n")
-        f.write("Model/source FE count & " + " & ".join(first_rows[s]["model_source_fe_count"] for s in settings) + " \\\\\n\\midrule\n")
+        f.write("Metadata FE count & " + " & ".join(first_rows[s]["model_source_fe_count"] for s in settings) + " \\\\\n\\midrule\n")
         for term, label in SETTING_LEVEL_TERMS:
             f.write(
                 label
@@ -1816,14 +1820,14 @@ def write_tex_tables() -> None:
         f.write("\\scriptsize\n\\centering\n")
         f.write(
             "\\caption{\\textbf{Integrated adjacent-turn regression combining user state, assistant scaffolding and model controls.} "
-            "The outcome is whether the next user turn is constructive. The scaffolded-support row is estimated in a broad scaffolded-support model; M1, M4 and M6 rows are estimated in a decomposed support-form model that includes broad scaffolded-support presence and co-occurring support forms. Estimates are odds ratios with 95\\% confidence intervals and two-sided p values from conversation-cluster robust standard errors. The primary pooled model uses dataset fixed effects; the model/source sensitivity adds recoverable assistant model or source-family fixed effects.}\\label{tab:integrated_regression}\n"
+            "The outcome is whether the next user turn is constructive. The scaffolded-support row is estimated in a broad scaffolded-support model; support-form rows are estimated in a decomposed support-form model that includes broad scaffolded-support presence and co-occurring M1--M6 support forms; all six support-form labels are shown to avoid restricting the table to selected focal forms. Estimates are odds ratios with 95\\% confidence intervals and two-sided p values from conversation-cluster robust standard errors. The primary pooled model uses dataset fixed effects; the metadata sensitivity uses assistant-model or service-source fixed effects. The metadata-block LR row compares the pooled dataset-fixed-effect and metadata-fixed-effect adjacent-turn specifications: the metadata design contains 43 non-reference assistant-model or service-source indicators in place of two dataset indicators, giving 41 net degrees of freedom; intercepts and reference levels are not counted.}\\label{tab:integrated_regression}\n"
         )
         f.write("\\setlength{\\tabcolsep}{4pt}\n\\renewcommand{\\arraystretch}{1.10}\n")
         f.write("\\resizebox{\\textwidth}{!}{%\n")
         f.write("\\begin{tabular}{lccc}\n\\toprule\n")
-        f.write("Predictor & Pooled dataset FE & Pooled model/source FE & WildChat model FE \\\\\n\\midrule\n")
+        f.write("Predictor & Pooled dataset FE & Pooled metadata FE & WildChat model FE \\\\\n\\midrule\n")
         for term, label in wanted:
-            if term in {"M1", "M4", "M6"}:
+            if term.startswith("M"):
                 row_pooled = by_pooled_full[term]
                 row_pooled_model = by_pooled_model_full[term]
                 row_wild = by_wild_full[term]
@@ -1834,7 +1838,7 @@ def write_tex_tables() -> None:
             f.write(f"{label} & {cell(row_pooled)} & {cell(row_pooled_model)} & {cell(row_wild)} \\\\\n")
         f.write("\\midrule\n")
         f.write(
-            f"Model/source block & Reference & LR $\\chi^2_{{{pooled_block['df']}}}={float(pooled_block['lr_chi2']):.1f}$, $p<.001$ & LR $\\chi^2_{{{wild_block['df']}}}={float(wild_block['lr_chi2']):.1f}$, $p<.001$ \\\\\n"
+            f"Metadata block & Reference & LR $\\chi^2_{{{pooled_block['df']}}}={float(pooled_block['lr_chi2']):.1f}$, $p<.001$ & LR $\\chi^2_{{{wild_block['df']}}}={float(wild_block['lr_chi2']):.1f}$, $p<.001$ \\\\\n"
         )
         f.write("\\bottomrule\n\\end{tabular}%\n}\n")
         f.write("\\end{table*}\n")
