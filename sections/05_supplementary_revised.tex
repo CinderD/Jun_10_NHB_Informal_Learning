@@ -129,8 +129,8 @@ These models support the Section~2.5 adjacent-turn interpretation in Fig.~\ref{f
 Percentage-point contrasts use 1,000 conversation-level bootstrap resamples. Adjacent-turn contrasts use 1,000 conversation-cluster bootstrap resamples. \revise{Primary adjusted conversation-level GLMs use model-based standard errors, with HC1 or quasi-Poisson sensitivities reported where noted;} adjacent-turn regressions use conversation-cluster robust standard errors. Support-form bracket tests use Benjamini--Hochberg false-discovery-rate adjustment within each six-form comparison family~\cite{benjamini1995controlling}.
 
 \paragraph{Metadata robustness checks.}
-\latestrevise{Assistant-model metadata in WildChat and LMSYS Chat, and service-source metadata in ShareChat, were used as robustness checks rather than as primary predictors. Section~2.1 uses these metadata descriptively: Supplementary Table~\ref{tab:section21_model_source_breakdown} reports the range of engagement and scaffolding prevalence across metadata levels within each setting. Sections~2.2--2.4 use pooled regression sensitivities: the dataset-fixed-effect specifications are refitted after replacing dataset fixed effects with assistant-model or service-source fixed effects (Supplementary Tables~\ref{tab:section22_model_source_sensitivity}--\ref{tab:section24_support_form_model_source_sensitivity}). Section~2.5 uses both pooled metadata-adjusted adjacent-turn regressions and separate corpus-by-task regressions, because the adjacent-turn model combines prior user state, assistant support and support form within local sequences (Supplementary Tables~\ref{tab:integrated_regression}--\ref{tab:prior_state_support_form_interactions}).}
-\latestrevise{The interpretation follows the reported estimand. In descriptive metadata breakdowns, ranges show heterogeneity across available assistant-model or service-source levels and are not causal model comparisons. In odds-ratio, count-ratio and rate-ratio tables, values above 1 indicate a positive association with constructive engagement, values below 1 indicate a negative association and confidence intervals excluding 1 indicate that the coefficient is statistically distinguishable from the null under that specification. The main robustness comparison is whether the focal association keeps the same direction and comparable magnitude when dataset fixed effects are replaced by metadata fixed effects. Pooled tables summarize whether the overall association is absorbed by assistant-model or service-source heterogeneity; setting-level adjacent-turn tables check whether the pooled local sequence pattern is concentrated in one corpus-by-task setting.}
+\latestrevise{Assistant-model metadata in WildChat and LMSYS Chat, and service-source metadata in ShareChat, provided an additional robustness layer for checking whether the reported patterns were stable across observable model and platform variation. These metadata enter the analyses in three ways. For Section~2.1, Supplementary Table~\ref{tab:section21_model_source_breakdown} reports descriptive ranges of engagement and scaffolding prevalence across metadata levels within each setting. For Sections~2.2--2.4, pooled sensitivity models refit the dataset-fixed-effect specifications after replacing dataset fixed effects with assistant-model or service-source fixed effects (Supplementary Tables~\ref{tab:section22_model_source_sensitivity}--\ref{tab:section24_support_form_model_source_sensitivity}). For Section~2.5, metadata-adjusted adjacent-turn regressions are reported both in pooled form and separately by corpus-by-task setting, because that model combines prior user state, assistant support and support form within local sequences (Supplementary Tables~\ref{tab:integrated_regression}--\ref{tab:prior_state_support_form_interactions}).}
+\latestrevise{The tables should be read according to their estimand. Descriptive ranges show how prevalence measures vary across available assistant-model or service-source levels. In odds-ratio, count-ratio and rate-ratio tables, values above 1 indicate higher constructive engagement associated with the focal predictor, values below 1 indicate lower constructive engagement and confidence intervals excluding 1 indicate that the coefficient is statistically distinguishable from the null under that specification. The key robustness signal is preservation of direction and comparable magnitude when dataset fixed effects are replaced by metadata fixed effects. Pooled tables summarize corpus-wide stability; setting-level adjacent-turn tables show whether the local sequence pattern is shared across corpus-by-task settings.}
 
 \section*{Appendix B\quad Source tables and model outputs}
 \phantomsection\label{supp:appendix-b}
@@ -143,23 +143,43 @@ Percentage-point contrasts use 1,000 conversation-level bootstrap resamples. Adj
 
 \input{tables/table_label_validation}
 
+\clearpage
+
 \input{tables/table_production_label_validation}
+
+\clearpage
 
 \input{tables/table_wildchat_post_labelling_review}
 
+\clearpage
+
 \input{tables/table_setting_model_covariates}
+
+\clearpage
 
 \input{tables/table_key_contrast_significance}
 
+\clearpage
+
 \input{tables/table_fig3_offset_rate_sensitivity}
+
+\clearpage
 
 \input{tables/table_section21_model_source_breakdown}
 
+\clearpage
+
 \input{tables/table_constructive_rate_context_logit}
+
+\clearpage
 
 \input{tables/table_section22_model_source_sensitivity}
 
+\clearpage
+
 \input{tables/table_section23_model_source_sensitivity}
+
+\clearpage
 
 \input{tables/table_section24_support_form_model_source_sensitivity}
 
@@ -167,9 +187,15 @@ Percentage-point contrasts use 1,000 conversation-level bootstrap resamples. Adj
 
 \input{tables/table_integrated_regression}
 
+\clearpage
+
 \input{tables/table_setting_level_adjacent_models}
 
+\clearpage
+
 \input{tables/table_integrated_scaffolding_block_tests}
+
+\clearpage
 
 \input{tables/table_prior_state_support_form_interactions}
 
