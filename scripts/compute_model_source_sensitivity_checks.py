@@ -657,44 +657,15 @@ def write_section23_table(rows: list[dict[str, str]]) -> None:
         f.write("\\bottomrule\n\\end{tabular}%\n}\n\\end{table*}\n")
 
 
-def write_section24_table(rows: list[dict[str, str]]) -> None:
-    by_key = {(row["adjustment"], row["term"]): row for row in rows}
-    path = ROOT / "tables" / "table_section24_support_form_model_source_sensitivity.tex"
-    with open(path, "w") as f:
-        f.write("\\begin{table*}[p]\n\\scriptsize\n\\centering\n")
-        f.write(
-            "\\caption{\\revise{\\textbf{Model/source sensitivity for Section~2.4 support-form models.} "
-            "The sensitivity is restricted to conversations containing scaffolded support and enters the six non-exclusive support-form indicators jointly. "
-            "Cells report odds ratios for constructive-turn rate with 95\\% confidence intervals and two-sided p values from conversation-robust standard errors. "
-            "This model/source check complements, but does not replace, the descriptive percentage-point support-form contrasts in Fig.~\\ref{fig:support_form_supply}.}}\\label{tab:section24_support_form_model_source_sensitivity}\n"
-        )
-        f.write("\\setlength{\\tabcolsep}{5pt}\n\\renewcommand{\\arraystretch}{1.10}\n")
-        f.write("\\resizebox{0.82\\textwidth}{!}{%\n")
-        f.write("\\begin{tabular}{lcc}\n\\toprule\n")
-        f.write("Support form & Dataset FE & Model/source FE \\\\\n\\midrule\n")
-        for term, label in SUPPORT_FORM_TERMS:
-            f.write(
-                f"{label} & {_or_cell(by_key[('dataset FE', term)])} & "
-                f"{_or_cell(by_key[('model/source FE', term)])} \\\\\n"
-            )
-        n = int(rows[0]["n_conversations"])
-        model_fe = int(next(row for row in rows if row["adjustment"] == "model/source FE")["n_model_source_fixed_effects"])
-        f.write("\\midrule\n")
-        f.write(f"Scaffolded conversations & {n:,} & {n:,} \\\\\n")
-        f.write(f"Model/source fixed effects & -- & {model_fe} \\\\\n")
-        f.write("\\bottomrule\n\\end{tabular}%\n}\n\\end{table*}\n")
-
-
 def main() -> None:
     rows = _load_level2_rows()
     _, section21_summary = compute_section21_model_source_breakdown(rows)
     section22 = compute_section22_model_source_sensitivity(rows)
     section23 = compute_section23_model_source_sensitivity(rows)
-    section24 = compute_section24_support_form_model_source_sensitivity(rows)
+    compute_section24_support_form_model_source_sensitivity(rows)
     write_section21_table(section21_summary)
     write_section22_table(section22)
     write_section23_table(section23)
-    write_section24_table(section24)
 
 
 if __name__ == "__main__":
