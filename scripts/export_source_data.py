@@ -49,10 +49,10 @@ def figure2() -> None:
         "Passive": [1.2, 1.6, 4.3, 6.9, 7.3, 14.6],
     }
     framing = {
-        ("Cognitive", "intentional"): [76.6, 72.6, 73.8, 28.2, 28.2, 46.4],
-        ("Cognitive", "unintentional"): [32.5, 25.3, 28.0, 10.5, 10.3, 24.9],
-        ("Constructive", "intentional"): [13.1, 8.0, 22.0, 5.2, 3.5, 7.2],
-        ("Constructive", "unintentional"): [5.7, 3.6, 9.2, 1.5, 1.0, 3.2],
+        ("Cognitive", "intentional"): [76.6, 74.546, 73.8, 28.2, 28.2, 46.4],
+        ("Cognitive", "unintentional"): [32.5, 23.268, 28.0, 10.5, 10.3, 24.9],
+        ("Constructive", "intentional"): [13.1, 7.579, 22.0, 5.2, 3.5, 7.2],
+        ("Constructive", "unintentional"): [5.7, 3.117, 9.2, 1.5, 1.0, 3.2],
     }
     depth = {
         "WC coding": [15.1, 28.6, 46.3],
@@ -280,7 +280,7 @@ def figure5() -> None:
 def readme() -> None:
     text = """# Figure source data
 
-This directory contains CSV source data for the manuscript's numeric main figures.
+This directory contains CSV source data for the manuscript's numeric main figures and Appendix C visual summaries.
 
 - `figure2_source_data.csv`: engagement composition, user-framing contrasts and conversation-length gradients.
 - `figure3_source_data.csv`: scaffolded versus reference constructive ratios, adjusted model estimates, framing-stratified estimates and post-answer depth differences.

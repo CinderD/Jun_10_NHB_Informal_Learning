@@ -329,10 +329,10 @@ def make_figure2() -> None:
     active = np.array([80.4, 86.4, 62.0, 79.5, 82.7, 69.7])
     constructive = np.array([18.4, 12.0, 33.7, 13.6, 10.0, 15.7])
     passive = np.array([1.2, 1.6, 4.3, 6.9, 7.3, 14.6])
-    cog_intent = np.array([76.6, 72.6, 73.8, 28.2, 28.2, 46.4])
-    cog_unintent = np.array([32.5, 25.3, 28.0, 10.5, 10.3, 24.9])
-    con_intent = np.array([13.1, 8.0, 22.0, 5.2, 3.5, 7.2])
-    con_unintent = np.array([5.7, 3.6, 9.2, 1.5, 1.0, 3.2])
+    cog_intent = np.array([76.6, 74.546, 73.8, 28.2, 28.2, 46.4])
+    cog_unintent = np.array([32.5, 23.268, 28.0, 10.5, 10.3, 24.9])
+    con_intent = np.array([13.1, 7.579, 22.0, 5.2, 3.5, 7.2])
+    con_unintent = np.array([5.7, 3.117, 9.2, 1.5, 1.0, 3.2])
     depth = {
         "WC coding": [0.151, 0.286, 0.463],
         "LMSYS coding": [0.095, 0.205, 0.339],
