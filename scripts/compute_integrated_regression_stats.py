@@ -1643,7 +1643,6 @@ def write_tex_tables() -> None:
     pooled = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_pooled.csv")))
     pooled_model = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_pooled_model_source_fe.csv")))
     wild = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_wildchat_model_fe.csv")))
-    setting_level = list(csv.DictReader(open(OUT / "setting_level_adjacent_turn_logit_model_source_fe.csv")))
     blocks = list(csv.DictReader(open(OUT / "integrated_model_block_tests.csv")))
     scaf_blocks = list(csv.DictReader(open(OUT / "integrated_scaffolding_block_tests.csv")))
     state_form_blocks = list(csv.DictReader(open(OUT / "prior_state_support_form_interaction_block_tests.csv")))
@@ -1672,7 +1671,6 @@ def write_tex_tables() -> None:
     by_pooled_model_full = {r["term"]: r for r in pooled_model}
     by_wild_full = {r["term"]: r for r in wild}
     settings = ["WC coding", "LMSYS coding", "SC coding", "WC writing", "LMSYS writing", "SC writing"]
-    by_setting_term = {(r["setting"], r["term"]): r for r in setting_level}
 
     def cell(r: dict[str, str]) -> str:
         p = float(r["p_value"])
@@ -1683,11 +1681,6 @@ def write_tex_tables() -> None:
         p = float(r["p_value"])
         ptxt = "$<.001$" if p < 0.001 else f"{p:.3f}".replace("0.", ".")
         return f"{float(r['estimate_rr']):.2f} [{float(r['ci_low']):.2f}, {float(r['ci_high']):.2f}], {ptxt}"
-
-    def compact_cell(r: dict[str, str]) -> str:
-        p = float(r["p_value"])
-        ptxt = "$<.001$" if p < 0.001 else f"{p:.3f}".replace("0.", ".")
-        return f"\\makecell{{{float(r['odds_ratio']):.2f} [{float(r['ci_low']):.2f}, {float(r['ci_high']):.2f}]\\\\{ptxt}}}"
 
     def signed_pp(value: str) -> str:
         numeric = float(value)
@@ -1783,34 +1776,6 @@ def write_tex_tables() -> None:
             r = next(row for row in fig3_offset_rows if row["setting"] == setting and row["se_type"] == "quasi_poisson_scaled")
             f.write(
                 f"{setting} & {rr_cell(r)} & {float(r['pearson_dispersion']):.2f} & {int(r['n_conversations']):,} \\\\\n"
-            )
-        f.write("\\bottomrule\n\\end{tabular}%\n}\n\\end{table*}\n")
-
-    setting_table_path = ROOT / "tables" / "table_setting_level_adjacent_models.tex"
-    with open(setting_table_path, "w") as f:
-        f.write("\\begin{table*}[p]\n\\tiny\n\\centering\n")
-        f.write(
-            "\\caption{\\textbf{Setting-level integrated adjacent-turn models.} "
-            "Each column reports a separate within-setting logistic regression for whether the next user turn is constructive. "
-            "This table is a heterogeneity check for the pooled integrated model in Supplementary Table~\\ref{tab:integrated_regression}: the split by corpus-by-task setting checks whether the pooled adjacent-turn pattern is shared across coding and writing settings and across corpora, rather than serving as six separate primary claims. "
-            "The scaffolded-support row comes from a broad scaffolded-support model. Support-form rows come from a decomposed model that includes broad scaffolded-support presence and co-occurring M1--M6 forms, so form coefficients compare variation within scaffolded support rather than replacing the broad scaffolded-support contrast. "
-            "All models include prior user state, intentional framing, assistant-turn index and available assistant-model or service-source fixed effects where available. "
-            "Cells report odds ratios with 95\\% confidence intervals and two-sided p values from conversation-cluster robust standard errors.}\\label{tab:setting_level_adjacent_models}\n"
-        )
-        f.write("\\setlength{\\tabcolsep}{3pt}\n\\renewcommand{\\arraystretch}{1.12}\n")
-        f.write("\\resizebox{\\textwidth}{!}{%\n")
-        f.write("\\begin{tabular}{lcccccc}\n\\toprule\n")
-        f.write("Predictor & WC coding & LMSYS coding & SC coding & WC writing & LMSYS writing & SC writing \\\\\n\\midrule\n")
-        first_rows = {setting: next(r for r in setting_level if r["setting"] == setting) for setting in settings}
-        f.write("A2U pairs & " + " & ".join(f"{int(first_rows[s]['n_pairs']):,}" for s in settings) + " \\\\\n")
-        f.write("Conversations & " + " & ".join(f"{int(first_rows[s]['n_conversations']):,}" for s in settings) + " \\\\\n")
-        f.write("Metadata FE count & " + " & ".join(first_rows[s]["model_source_fe_count"] for s in settings) + " \\\\\n\\midrule\n")
-        for term, label in SETTING_LEVEL_TERMS:
-            f.write(
-                label
-                + " & "
-                + " & ".join(compact_cell(by_setting_term[(setting, term)]) for setting in settings)
-                + " \\\\\n"
             )
         f.write("\\bottomrule\n\\end{tabular}%\n}\n\\end{table*}\n")
 
@@ -1961,7 +1926,6 @@ def write_report() -> None:
     pooled = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_pooled.csv")))
     pooled_model = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_pooled_model_source_fe.csv")))
     wild = list(csv.DictReader(open(OUT / "integrated_adjacent_turn_logit_wildchat_model_fe.csv")))
-    setting_level = list(csv.DictReader(open(OUT / "setting_level_adjacent_turn_logit_model_source_fe.csv")))
     blocks = list(csv.DictReader(open(OUT / "integrated_model_block_tests.csv")))
     scaf_blocks = list(csv.DictReader(open(OUT / "integrated_scaffolding_block_tests.csv")))
     state_form_blocks = list(csv.DictReader(open(OUT / "prior_state_support_form_interaction_block_tests.csv")))
@@ -1999,13 +1963,6 @@ def write_report() -> None:
             f.write(f"- {setting}: RR {float(r['estimate_rr']):.3f}, 95% CI [{float(r['ci_low']):.3f}, {float(r['ci_high']):.3f}], p={r['p_value']}.\n")
         f.write("\n")
         f.write("Integrated adjacent-turn logit outcome: whether the next user turn is constructive. Broad scaffolded-support models include scaffolded-support presence without M1-M6. Support-form decomposed models include broad scaffolded support plus M1-M6, so M coefficients describe form-level variation within scaffolded support. Standard errors are clustered by conversation.\n\n")
-        f.write("Setting-level adjacent-turn models: separate model/source-adjusted regressions were fitted within each of the six task settings to check dataset-by-factor heterogeneity rather than relying only on pooled fixed effects. These outputs are exported to `setting_level_adjacent_turn_logit_model_source_fe.csv` and summarized in Supplementary Table C.\n\n")
-        for term in ["scaffolded_support_S2", "prior_user_constructive", "M1", "M4", "M6"]:
-            sub = [r for r in setting_level if r["term"] == term]
-            positive = sum(float(r["odds_ratio"]) > 1 for r in sub)
-            significant = sum(float(r["p_value"]) < 0.05 for r in sub)
-            f.write(f"- Setting-level {term}: OR>1 in {positive}/{len(sub)} settings; p<0.05 in {significant}/{len(sub)} settings.\n")
-        f.write("\n")
         f.write("Key pooled estimates with dataset fixed effects. Scaffolded-support and user/context rows come from broad scaffolded-support models; M rows come from support-form decomposed models:\n\n")
         for term in ["scaffolded_support_S2", "prior_user_constructive", "prior_user_active", "prior_user_passive", "intentional_framing", "coding_task", "M1", "M4", "M6"]:
             r = by_pooled_full[term] if term in {"M1", "M4", "M6"} else by_pooled_broad[term]
