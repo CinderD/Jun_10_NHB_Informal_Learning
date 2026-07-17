@@ -1167,6 +1167,10 @@ def make_figure5() -> None:
             ax.plot([s1, s2], [ref_y, scaf_y], color=guide, lw=0.9, zorder=1)
             ax.scatter(s1, ref_y, s=24, color=ref_color, edgecolor=COLORS["ink"], lw=0.45, zorder=3)
             ax.scatter(s2, scaf_y, s=24, color=scaf_color, edgecolor=COLORS["ink"], lw=0.45, zorder=3)
+            if _has_ci(ref_ci):
+                ax.errorbar(s1, ref_y, xerr=_xerr(s1, ref_ci), fmt="none", ecolor=ref_err, elinewidth=0.95, capsize=2.15, capthick=0.9, zorder=4)
+            if _has_ci(scaf_ci):
+                ax.errorbar(s2, scaf_y, xerr=_xerr(s2, scaf_ci), fmt="none", ecolor=scaf_err, elinewidth=0.95, capsize=2.15, capthick=0.9, zorder=4)
             dx = s2 - s1
             if dx >= 0:
                 x_label = min(s2 + 0.95, 37.0)
@@ -1321,7 +1325,7 @@ def make_figure5() -> None:
     fig.text(
         0.50,
         0.038,
-        "WC = WildChat; LMSYS = LMSYS Chat; SC = ShareChat. Error bars show 95% CI: bootstrap CIs in a and model CIs in d.",
+        "WC = WildChat; LMSYS = LMSYS Chat; SC = ShareChat. Error bars show 95% CI: bootstrap CIs in a/b and model CIs in d.",
         ha="center",
         fontsize=6.8,
         color=COLORS["muted"],
