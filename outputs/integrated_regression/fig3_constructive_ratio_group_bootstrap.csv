@@ -1,0 +1,13 @@
+setting,group,estimate,estimate_label,ci_low,ci_high,method,n_conversations
+WC coding,non-scaffolded reference,5.5626,turn-weighted constructive ratio,5.2405,5.9124,"conversation bootstrap within scaffolded-support group, weighted by user turns",8001
+WC coding,scaffolded support,10.1265,turn-weighted constructive ratio,9.8746,10.3967,"conversation bootstrap within scaffolded-support group, weighted by user turns",23877
+LMSYS coding,non-scaffolded reference,3.9665,turn-weighted constructive ratio,3.7610,4.1647,"conversation bootstrap within scaffolded-support group, weighted by user turns",14971
+LMSYS coding,scaffolded support,6.4707,turn-weighted constructive ratio,6.2151,6.7228,"conversation bootstrap within scaffolded-support group, weighted by user turns",17143
+SC coding,non-scaffolded reference,8.9800,turn-weighted constructive ratio,7.3616,10.6554,"conversation bootstrap within scaffolded-support group, weighted by user turns",540
+SC coding,scaffolded support,16.3192,turn-weighted constructive ratio,15.2408,17.4021,"conversation bootstrap within scaffolded-support group, weighted by user turns",1941
+WC writing,non-scaffolded reference,1.7372,turn-weighted constructive ratio,1.6493,1.8246,"conversation bootstrap within scaffolded-support group, weighted by user turns",23899
+WC writing,scaffolded support,2.7293,turn-weighted constructive ratio,2.5742,2.8855,"conversation bootstrap within scaffolded-support group, weighted by user turns",15635
+LMSYS writing,non-scaffolded reference,1.0692,turn-weighted constructive ratio,0.9632,1.1808,"conversation bootstrap within scaffolded-support group, weighted by user turns",13505
+LMSYS writing,scaffolded support,2.1567,turn-weighted constructive ratio,1.9587,2.3519,"conversation bootstrap within scaffolded-support group, weighted by user turns",7518
+SC writing,non-scaffolded reference,3.4391,turn-weighted constructive ratio,2.5390,4.3481,"conversation bootstrap within scaffolded-support group, weighted by user turns",837
+SC writing,scaffolded support,6.6385,turn-weighted constructive ratio,5.2917,8.2025,"conversation bootstrap within scaffolded-support group, weighted by user turns",702

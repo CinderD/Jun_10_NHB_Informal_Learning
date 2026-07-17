@@ -141,6 +141,169 @@ def _bootstrap_diff(
     return point, float(low), float(high), _two_sided_p_from_bootstrap(point, draws)
 
 
+def _ratio(sample: np.ndarray) -> float:
+    den = sample[:, 1].sum()
+    return float(sample[:, 0].sum() / den) if den else float("nan")
+
+
+def _bootstrap_ratio_ci(
+    arr: np.ndarray,
+    n_boot: int = 1000,
+    seed: int = 20260618,
+) -> tuple[float, float, float]:
+    point = _ratio(arr)
+    rng = np.random.default_rng(seed)
+    idx = np.arange(arr.shape[0])
+    draws = np.empty(n_boot)
+    for i in range(n_boot):
+        draws[i] = _ratio(arr[rng.choice(idx, size=len(idx), replace=True)])
+    draws = draws[np.isfinite(draws)]
+    low, high = np.percentile(draws, [2.5, 97.5])
+    return point, float(low), float(high)
+
+
+def compute_fig3_constructive_group_bootstrap() -> None:
+    rows_out: list[dict[str, str]] = []
+    groups = [("0", "non-scaffolded reference"), ("1", "scaffolded support")]
+    for setting_idx, (setting, (_, _, path)) in enumerate(LEVEL2.items()):
+        rows = _read_csv(path)
+        for group_idx, (has_s2_value, group_label) in enumerate(groups):
+            group_rows = [r for r in rows if (r.get("has_S2") == "1") == (has_s2_value == "1")]
+            arr = np.asarray(
+                [[_f(r, "Cog_C_count"), _f(r, "user_turns")] for r in group_rows],
+                dtype=float,
+            )
+            point, low, high = _bootstrap_ratio_ci(
+                arr,
+                seed=20260618 + setting_idx * 10 + group_idx,
+            )
+            rows_out.append(
+                {
+                    "setting": setting,
+                    "group": group_label,
+                    "estimate": f"{point * 100:.4f}",
+                    "estimate_label": "turn-weighted constructive ratio",
+                    "ci_low": f"{low * 100:.4f}",
+                    "ci_high": f"{high * 100:.4f}",
+                    "method": "conversation bootstrap within scaffolded-support group, weighted by user turns",
+                    "n_conversations": str(len(group_rows)),
+                }
+            )
+    out_path = OUT / "fig3_constructive_ratio_group_bootstrap.csv"
+    with open(out_path, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=list(rows_out[0].keys()), lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows_out)
+
+
+def compute_fig5_prior_state_conditional_bootstrap() -> None:
+    rows_out: list[dict[str, str]] = []
+    states = [
+        ("C", "prior constructive"),
+        ("A", "prior active"),
+        ("P", "prior passive"),
+    ]
+    supports = [
+        ("S1", "non-scaffolded reference"),
+        ("S2", "scaffolded support"),
+    ]
+    for setting_idx, (setting, (_, _, path)) in enumerate(LEVEL3_A2U.items()):
+        pairs = [r for r in _read_csv(path) if r.get("asst_Support_Type") in {"S1", "S2"}]
+        conv_ids = sorted({r["conv_id"] for r in pairs})
+        conv_index = {conv_id: i for i, conv_id in enumerate(conv_ids)}
+        bin_labels = [(state_code, state_label, support_code, support_label) for state_code, state_label in states for support_code, support_label in supports]
+        arrays = {
+            (state_label, support_label): np.zeros((len(conv_ids), 2), dtype=float)
+            for _, state_label, _, support_label in bin_labels
+        }
+        for r in pairs:
+            prior = r.get("prev_user_Cognitive_level") or ""
+            support = r.get("asst_Support_Type") or ""
+            state_label = next((label for code, label in states if prior == code), None)
+            support_label = next((label for code, label in supports if support == code), None)
+            if state_label is None or support_label is None:
+                continue
+            arr = arrays[(state_label, support_label)]
+            i = conv_index[r["conv_id"]]
+            arr[i, 0] += 1 if r.get("next_user_is_C") == "1" else 0
+            arr[i, 1] += 1
+        for bin_idx, (_, state_label, _, support_label) in enumerate(bin_labels):
+            arr = arrays[(state_label, support_label)]
+            point, low, high = _bootstrap_ratio_ci(
+                arr,
+                seed=20260619 + setting_idx * 20 + bin_idx,
+            )
+            rows_out.append(
+                {
+                    "setting": setting,
+                    "prior_user_state": state_label,
+                    "support_condition": support_label,
+                    "estimate": f"{point * 100:.4f}",
+                    "estimate_label": "P(next constructive turn)",
+                    "ci_low": f"{low * 100:.4f}",
+                    "ci_high": f"{high * 100:.4f}",
+                    "method": "conversation-cluster bootstrap over A2U pairs",
+                    "n_pairs": str(int(arr[:, 1].sum())),
+                    "n_conversations": str(len(conv_ids)),
+                    "n_conversations_with_pairs": str(int(np.count_nonzero(arr[:, 1]))),
+                }
+            )
+    out_path = OUT / "fig5_prior_state_conditional_prob_bootstrap.csv"
+    with open(out_path, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=list(rows_out[0].keys()), lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows_out)
+
+
+def compute_fig5_overall_adjacent_prob_bootstrap() -> None:
+    rows_out: list[dict[str, str]] = []
+    supports = [
+        ("S1", "non-scaffolded reference"),
+        ("S2", "scaffolded support"),
+    ]
+    for setting_idx, (setting, (_, _, path)) in enumerate(LEVEL3_A2U.items()):
+        pairs = [r for r in _read_csv(path) if r.get("asst_Support_Type") in {"S1", "S2"}]
+        conv_ids = sorted({r["conv_id"] for r in pairs})
+        conv_index = {conv_id: i for i, conv_id in enumerate(conv_ids)}
+        arrays = {
+            support_label: np.zeros((len(conv_ids), 2), dtype=float)
+            for _, support_label in supports
+        }
+        for r in pairs:
+            support_label = next((label for code, label in supports if r.get("asst_Support_Type") == code), None)
+            if support_label is None:
+                continue
+            arr = arrays[support_label]
+            i = conv_index[r["conv_id"]]
+            arr[i, 0] += 1 if r.get("next_user_is_C") == "1" else 0
+            arr[i, 1] += 1
+        for support_idx, (_, support_label) in enumerate(supports):
+            arr = arrays[support_label]
+            point, low, high = _bootstrap_ratio_ci(
+                arr,
+                seed=20260620 + setting_idx * 10 + support_idx,
+            )
+            rows_out.append(
+                {
+                    "setting": setting,
+                    "support_condition": support_label,
+                    "estimate": f"{point * 100:.4f}",
+                    "estimate_label": "P(next constructive turn)",
+                    "ci_low": f"{low * 100:.4f}",
+                    "ci_high": f"{high * 100:.4f}",
+                    "method": "conversation-cluster bootstrap over A2U pairs",
+                    "n_pairs": str(int(arr[:, 1].sum())),
+                    "n_conversations": str(len(conv_ids)),
+                    "n_conversations_with_pairs": str(int(np.count_nonzero(arr[:, 1]))),
+                }
+            )
+    out_path = OUT / "fig5_overall_adjacent_prob_bootstrap.csv"
+    with open(out_path, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=list(rows_out[0].keys()), lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows_out)
+
+
 def compute_key_contrasts() -> None:
     rows_out: list[dict[str, str]] = []
     for setting, (_, _, path) in LEVEL2.items():
@@ -2011,6 +2174,9 @@ def write_report() -> None:
 
 def main() -> None:
     compute_key_contrasts()
+    compute_fig3_constructive_group_bootstrap()
+    compute_fig5_overall_adjacent_prob_bootstrap()
+    compute_fig5_prior_state_conditional_bootstrap()
     compute_fig3_offset_rate_sensitivity()
     compute_constructive_context_logit()
     compute_integrated_logit()

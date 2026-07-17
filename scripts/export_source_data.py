@@ -132,9 +132,14 @@ def figure3() -> None:
     strat_int_ci = [(1.801625, 2.149207), (1.552075, 1.800528), (1.679535, 2.660174), (1.427233, 1.747571), (1.886383, 2.887607), (1.235605, 2.782114)]
     strat_unint = [1.633274, 1.582937, 1.680661, 1.566670, 1.841921, 2.234555]
     strat_unint_ci = [(1.512785, 1.763359), (1.447858, 1.730617), (1.327630, 2.127566), (1.421943, 1.726128), (1.585813, 2.139391), (1.675959, 2.979332)]
+    group_boot = {
+        (r["setting"], r["group"]): r
+        for r in read_csv(STATS / "fig3_constructive_ratio_group_bootstrap.csv")
+    }
     rows: list[dict[str, object]] = []
     for setting, ref, scaf in zip(labels, no_s2, has_s2):
         for group, value in [("non-scaffolded reference", ref), ("scaffolded support", scaf)]:
+            boot = group_boot[(setting, group)]
             rows.append(
                 {
                     "figure": "Figure 3",
@@ -142,12 +147,12 @@ def figure3() -> None:
                     "setting": setting,
                     "measure": "turn-weighted constructive ratio",
                     "group": group,
-                    "estimate": value,
+                    "estimate": boot["estimate"],
                     "unit": "percent",
-                    "ci_low": "",
-                    "ci_high": "",
+                    "ci_low": boot["ci_low"],
+                    "ci_high": boot["ci_high"],
                     "p_value": "",
-                    "notes": "Group ratio is total constructive user turns divided by total user turns.",
+                    "notes": "Group ratio is total constructive user turns divided by total user turns; CI is a conversation-level bootstrap within scaffolded-support group.",
                 }
             )
     adjusted = {
@@ -243,10 +248,15 @@ def figure5() -> None:
         for r in read_csv(STATS / "key_percentage_lifts_significance.csv")
         if r["contrast"] == "adjacent_next_constructive_s2_minus_s1"
     }
+    overall_rows = read_csv(STATS / "fig5_overall_adjacent_prob_bootstrap.csv")
+    overall = {
+        (r["setting"], r["support_condition"]): r
+        for r in overall_rows
+    }
+    cond_rows = read_csv(STATS / "fig5_prior_state_conditional_prob_bootstrap.csv")
     cond = {
-        "prior constructive": {"WC coding": (26.0563, 30.0682), "LMSYS coding": (21.9201, 24.1834), "SC coding": (32.24, 36.75), "WC writing": (6.0528, 12.3195), "LMSYS writing": (11.4618, 9.0909), "SC writing": (22.91, 25.74)},
-        "prior active": {"WC coding": (9.6341, 11.7894), "LMSYS coding": (6.1476, 8.3811), "SC coding": (14.45, 17.51), "WC writing": (1.9286, 2.5838), "LMSYS writing": (2.1687, 2.0536), "SC writing": (6.24, 7.46)},
-        "prior passive": {"WC coding": (12.9630, 15.0327), "LMSYS coding": (7.3482, 13.8462), "SC coding": (9.23, 28.77), "WC writing": (2.1182, 3.5857), "LMSYS writing": (2.2831, 4.7619), "SC writing": (1.38, 9.33)},
+        (r["prior_user_state"], r["setting"], r["support_condition"]): r
+        for r in cond_rows
     }
     next_s2 = {
         "WC coding": [65.5, 50.7, 29.5],
@@ -262,12 +272,59 @@ def figure5() -> None:
     }
     rows: list[dict[str, object]] = []
     for setting in order:
+        for support_condition in ["non-scaffolded reference", "scaffolded support"]:
+            r = overall[(setting, support_condition)]
+            rows.append(
+                {
+                    "figure": "Figure 5",
+                    "panel": "a",
+                    "setting": setting,
+                    "measure": "P(next constructive turn)",
+                    "group": support_condition,
+                    "estimate": r["estimate"],
+                    "unit": "percent",
+                    "ci_low": r["ci_low"],
+                    "ci_high": r["ci_high"],
+                    "n_conversations": r["n_conversations"],
+                    "notes": "Conversation-cluster bootstrap CI over assistant-to-user pairs.",
+                }
+            )
         r = adjacent[setting]
-        rows.append({"figure": "Figure 5", "panel": "a", "setting": setting, "measure": "next-turn constructive lift", "group": "scaffolded minus reference", "estimate": r["estimate"], "unit": "percentage-point difference", "ci_low": r["ci_low"], "ci_high": r["ci_high"], "p_value": r["p_value"], "n_conversations": r["n_conversations"], "notes": "Conversation-cluster bootstrap CI and two-sided p value over assistant-to-user pairs."})
-    for state, vals in cond.items():
-        for setting, (ref, scaf) in vals.items():
-            rows.append({"figure": "Figure 5", "panel": "b", "setting": setting, "measure": "P(next constructive turn)", "group": f"{state}: non-scaffolded reference", "estimate": ref, "unit": "percent", "ci_low": "", "ci_high": "", "notes": ""})
-            rows.append({"figure": "Figure 5", "panel": "b", "setting": setting, "measure": "P(next constructive turn)", "group": f"{state}: scaffolded support", "estimate": scaf, "unit": "percent", "ci_low": "", "ci_high": "", "notes": ""})
+        rows.append(
+            {
+                "figure": "Figure 5",
+                "panel": "a",
+                "setting": setting,
+                "measure": "next-turn constructive lift annotation",
+                "group": "scaffolded minus reference",
+                "estimate": r["estimate"],
+                "unit": "percentage-point difference",
+                "ci_low": r["ci_low"],
+                "ci_high": r["ci_high"],
+                "p_value": r["p_value"],
+                "n_conversations": r["n_conversations"],
+                "notes": "Lift annotation and contrast CI from the same conversation-cluster bootstrap over assistant-to-user pairs.",
+            }
+        )
+    for state in ["prior constructive", "prior active", "prior passive"]:
+        for setting in order:
+            for support_condition in ["non-scaffolded reference", "scaffolded support"]:
+                r = cond[(state, setting, support_condition)]
+                rows.append(
+                    {
+                        "figure": "Figure 5",
+                        "panel": "b",
+                        "setting": setting,
+                        "measure": "P(next constructive turn)",
+                        "group": f"{state}: {support_condition}",
+                        "estimate": r["estimate"],
+                        "unit": "percent",
+                        "ci_low": r["ci_low"],
+                        "ci_high": r["ci_high"],
+                        "n_conversations": r["n_conversations"],
+                        "notes": "Conversation-cluster bootstrap CI over assistant-to-user pairs.",
+                    }
+                )
     for setting, values in next_s2.items():
         for state, value in zip(["prior constructive", "prior active", "prior passive"], values):
             rows.append({"figure": "Figure 5", "panel": "c", "setting": setting, "measure": "P(next assistant scaffolded)", "group": state, "estimate": value, "unit": "percent", "ci_low": "", "ci_high": "", "notes": ""})
@@ -285,7 +342,7 @@ This directory contains CSV source data for the manuscript's numeric main figure
 - `figure2_source_data.csv`: engagement composition, user-framing contrasts and conversation-length gradients.
 - `figure3_source_data.csv`: scaffolded versus reference constructive ratios, adjusted model estimates, framing-stratified estimates and post-answer depth differences.
 - `figure4_source_data.csv`: support-form constructive associations and Benjamini-Hochberg q values.
-- `figure5_source_data.csv`: adjacent-turn lifts, prior-state conditional probabilities, reverse scaffolded-support probabilities and focal prior-state x support-form odds ratios.
+- `figure5_source_data.csv`: overall adjacent-turn probabilities with lift annotations, prior-state conditional probabilities, reverse scaffolded-support probabilities and focal prior-state x support-form odds ratios.
 - `support_intent_form_profile_source_data.csv`: support-intent by support-form heatmap values and marginal bar values used in Fig. C1.
 - `supplementary_support_supply_source_data.csv`: setting-level support-form supply values used to construct the Fig. C1 marginal support-form bars.
 - `wildchat_model_family_robustness_source_data.csv`: WildChat model-family summaries and model-snapshot background points used in Fig. C2.

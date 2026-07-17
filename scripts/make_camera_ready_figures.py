@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import csv
 import os
 from pathlib import Path
 
@@ -19,6 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 FIG_DIR = ROOT / "figures"
 SUPP_FIG_DIR = FIG_DIR / "supplementary"
 SVG_DIR = ROOT / "figures_svg_editable" / "final_figures"
+STATS_DIR = ROOT / "outputs" / "integrated_regression"
 
 
 COLORS = {
@@ -91,6 +93,11 @@ def _save_supp(fig: plt.Figure, stem: str) -> None:
     fig.savefig(svg_path, bbox_inches="tight", pad_inches=0.025)
     svg_path.write_text("\n".join(line.rstrip() for line in svg_path.read_text().splitlines()) + "\n")
     plt.close(fig)
+
+
+def _read_csv(path: Path) -> list[dict[str, str]]:
+    with path.open(newline="") as f:
+        return list(csv.DictReader(f))
 
 
 def _clean(ax):
@@ -468,6 +475,30 @@ def make_figure3() -> None:
     # versus without scaffolded support. These match Supplementary Table C6.
     no_s2 = np.array([5.5626, 3.9665, 8.9800, 1.7372, 1.0692, 3.4391])
     has_s2 = np.array([10.1265, 6.4707, 16.3192, 2.7293, 2.1567, 6.6385])
+    group_boot = {
+        (r["setting"], r["group"]): r
+        for r in _read_csv(STATS_DIR / "fig3_constructive_ratio_group_bootstrap.csv")
+    }
+    no_s2 = np.array([float(group_boot[(label, "non-scaffolded reference")]["estimate"]) for label in labels])
+    has_s2 = np.array([float(group_boot[(label, "scaffolded support")]["estimate"]) for label in labels])
+    no_s2_ci = np.array(
+        [
+            [
+                float(group_boot[(label, "non-scaffolded reference")]["ci_low"]),
+                float(group_boot[(label, "non-scaffolded reference")]["ci_high"]),
+            ]
+            for label in labels
+        ]
+    )
+    has_s2_ci = np.array(
+        [
+            [
+                float(group_boot[(label, "scaffolded support")]["ci_low"]),
+                float(group_boot[(label, "scaffolded support")]["ci_high"]),
+            ]
+            for label in labels
+        ]
+    )
     depth_diff = np.array([2.23, 1.42, 3.36, 3.13, 2.10, 3.38])
     pois = np.array([1.852, 1.622, 1.893, 1.569, 1.985, 2.491])
     logit = np.array([1.761, 1.544, 2.140, 1.437, 1.764, 1.757])
@@ -521,11 +552,35 @@ def make_figure3() -> None:
     axc = fig.add_subplot(gs[1, 0])
     axd = fig.add_subplot(gs[1, 1])
 
-    def dumbbell(ax, left, right, ylabels, title, xlabel, xlim, diff_fmt="{:+.1f}", scale=1, value_fmt="{:.1f}"):
+    def dumbbell(ax, left, right, ylabels, title, xlabel, xlim, diff_fmt="{:+.1f}", scale=1, value_fmt="{:.1f}", left_ci=None, right_ci=None):
         y = np.arange(len(ylabels))
         x_range = xlim[1] - xlim[0]
         for i in range(len(ylabels)):
             ax.plot([left[i], right[i]], [i, i], color="#B9C2CB", lw=2.4, zorder=1)
+            if left_ci is not None:
+                ax.errorbar(
+                    left[i],
+                    i,
+                    xerr=np.array([[left[i] - left_ci[i, 0]], [left_ci[i, 1] - left[i]]]),
+                    fmt="none",
+                    ecolor="#7E8B97",
+                    elinewidth=0.75,
+                    capsize=1.8,
+                    capthick=0.75,
+                    zorder=2,
+                )
+            if right_ci is not None:
+                ax.errorbar(
+                    right[i],
+                    i,
+                    xerr=np.array([[right[i] - right_ci[i, 0]], [right_ci[i, 1] - right[i]]]),
+                    fmt="none",
+                    ecolor="#2F6F61",
+                    elinewidth=0.75,
+                    capsize=1.8,
+                    capthick=0.75,
+                    zorder=2,
+                )
             ax.scatter(left[i], i, s=58, color=COLORS["s1"], edgecolor="white", linewidth=0.8, zorder=3)
             ax.scatter(right[i], i, s=58, color=COLORS["s2"], edgecolor="white", linewidth=0.8, zorder=3)
             left_label_y = i + 0.27 if i < len(ylabels) - 1 else i - 0.27
@@ -544,7 +599,17 @@ def make_figure3() -> None:
         ax.spines[["top", "right", "left"]].set_visible(False)
         ax.tick_params(axis="y", length=0, pad=2)
 
-    dumbbell(axa, no_s2, has_s2, labels, "Conversation-level constructive ratio", "Constructive user turns (%)", (0, 19.6))
+    dumbbell(
+        axa,
+        no_s2,
+        has_s2,
+        labels,
+        "Conversation-level constructive ratio",
+        "Constructive user turns (%)",
+        (0, 19.6),
+        left_ci=no_s2_ci,
+        right_ci=has_s2_ci,
+    )
     a_handles = [
         Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["s1"], markeredgecolor=COLORS["ink"], markersize=6.5),
         Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["s2"], markeredgecolor=COLORS["ink"], markersize=6.5),
@@ -912,70 +977,74 @@ def make_support_supply_supplement() -> None:
 def make_figure5() -> None:
     order = ["WC coding", "LMSYS coding", "SC coding", "WC writing", "LMSYS writing", "SC writing"]
     keys = order
-    # 95% CIs were recalculated from the same A2U pair files and level-2
-    # conversation metrics that produce the point estimates.
-    lift = np.array([2.6756, 2.0051, 6.21, 1.1281, 0.2666, 3.35])
+    adjacent = {
+        r["setting"]: r
+        for r in _read_csv(STATS_DIR / "key_percentage_lifts_significance.csv")
+        if r["contrast"] == "adjacent_next_constructive_s2_minus_s1"
+    }
+    lift = np.array([float(adjacent[setting]["estimate"]) for setting in order])
     lift_ci = np.array(
         [
-            [2.2904, 3.0607],
-            [1.5400, 2.5000],
-            [np.nan, np.nan],
-            [0.9487, 1.3075],
-            [0.0200, 0.5200],
-            [np.nan, np.nan],
+            [float(adjacent[setting]["ci_low"]), float(adjacent[setting]["ci_high"])]
+            for setting in order
         ]
     )
+    overall_rows = _read_csv(STATS_DIR / "fig5_overall_adjacent_prob_bootstrap.csv")
+    overall_lookup = {
+        (r["setting"], r["support_condition"]): r
+        for r in overall_rows
+    }
+    overall_ref = np.array([float(overall_lookup[(setting, "non-scaffolded reference")]["estimate"]) for setting in order])
+    overall_scaf = np.array([float(overall_lookup[(setting, "scaffolded support")]["estimate"]) for setting in order])
+    overall_ref_ci = np.array(
+        [
+            [
+                float(overall_lookup[(setting, "non-scaffolded reference")]["ci_low"]),
+                float(overall_lookup[(setting, "non-scaffolded reference")]["ci_high"]),
+            ]
+            for setting in order
+        ]
+    )
+    overall_scaf_ci = np.array(
+        [
+            [
+                float(overall_lookup[(setting, "scaffolded support")]["ci_low"]),
+                float(overall_lookup[(setting, "scaffolded support")]["ci_high"]),
+            ]
+            for setting in order
+        ]
+    )
+    cond_rows = _read_csv(STATS_DIR / "fig5_prior_state_conditional_prob_bootstrap.csv")
+    cond_lookup = {
+        (r["prior_user_state"], r["setting"], r["support_condition"]): r
+        for r in cond_rows
+    }
+    prior_states = ["prior constructive", "prior active", "prior passive"]
     cond = {
-        "prior constructive": {
-            "WC coding": (26.0563, 30.0682),
-            "LMSYS coding": (21.9201, 24.1834),
-            "SC coding": (32.24, 36.75),
-            "WC writing": (6.0528, 12.3195),
-            "LMSYS writing": (11.4618, 9.0909),
-            "SC writing": (22.91, 25.74),
-        },
-        "prior active": {
-            "WC coding": (9.6341, 11.7894),
-            "LMSYS coding": (6.1476, 8.3811),
-            "SC coding": (14.45, 17.51),
-            "WC writing": (1.9286, 2.5838),
-            "LMSYS writing": (2.1687, 2.0536),
-            "SC writing": (6.24, 7.46),
-        },
-        "prior passive": {
-            "WC coding": (12.9630, 15.0327),
-            "LMSYS coding": (7.3482, 13.8462),
-            "SC coding": (9.23, 28.77),
-            "WC writing": (2.1182, 3.5857),
-            "LMSYS writing": (2.2831, 4.7619),
-            "SC writing": (1.38, 9.33),
-        },
+        state: {
+            setting: (
+                float(cond_lookup[(state, setting, "non-scaffolded reference")]["estimate"]),
+                float(cond_lookup[(state, setting, "scaffolded support")]["estimate"]),
+            )
+            for setting in order
+        }
+        for state in prior_states
     }
     cond_ci = {
-        "prior constructive": {
-            "WC coding": ((24.5124, 27.6619), (28.8784, 31.2854)),
-            "LMSYS coding": ((20.2489, 23.5914), (22.0800, 26.2868)),
-            "SC coding": ((np.nan, np.nan), (np.nan, np.nan)),
-            "WC writing": ((5.0744, 7.2055), (10.5635, 14.3206)),
-            "LMSYS writing": ((8.9170, 14.0066), (6.0877, 12.0942)),
-            "SC writing": ((np.nan, np.nan), (np.nan, np.nan)),
-        },
-        "prior active": {
-            "WC coding": ((9.2175, 10.0673), (11.3335, 12.2611)),
-            "LMSYS coding": ((5.8291, 6.4661), (7.7615, 9.0006)),
-            "SC coding": ((np.nan, np.nan), (np.nan, np.nan)),
-            "WC writing": ((1.6596, 2.2403), (2.2383, 2.9809)),
-            "LMSYS writing": ((1.7641, 2.5732), (1.4846, 2.6227)),
-            "SC writing": ((np.nan, np.nan), (np.nan, np.nan)),
-        },
-        "prior passive": {
-            "WC coding": ((9.4704, 17.4946), (10.2307, 21.5475)),
-            "LMSYS coding": ((4.4575, 10.2389), (5.4496, 22.2427)),
-            "SC coding": ((np.nan, np.nan), (np.nan, np.nan)),
-            "WC writing": ((1.3602, 3.2845), (1.8977, 6.6729)),
-            "LMSYS writing": ((0.8843, 3.6819), (-0.4968, 10.0206)),
-            "SC writing": ((np.nan, np.nan), (np.nan, np.nan)),
-        },
+        state: {
+            setting: (
+                (
+                    float(cond_lookup[(state, setting, "non-scaffolded reference")]["ci_low"]),
+                    float(cond_lookup[(state, setting, "non-scaffolded reference")]["ci_high"]),
+                ),
+                (
+                    float(cond_lookup[(state, setting, "scaffolded support")]["ci_low"]),
+                    float(cond_lookup[(state, setting, "scaffolded support")]["ci_high"]),
+                ),
+            )
+            for setting in order
+        }
+        for state in prior_states
     }
     next_s2 = np.array(
         [
@@ -1033,42 +1102,57 @@ def make_figure5() -> None:
     axd_m4 = fig.add_subplot(gs[1, 3], sharey=axd_m1)
 
     y = np.arange(len(order))
-    axa.barh(y, lift, height=0.18, color=scaf_color, alpha=0.52, edgecolor="none", zorder=2)
-    valid_lift_ci = ~np.isnan(lift_ci).any(axis=1)
-    if valid_lift_ci.any():
+    for i, name in enumerate(order):
+        ref = overall_ref[i]
+        scaf = overall_scaf[i]
+        ref_ci = overall_ref_ci[i]
+        scaf_ci = overall_scaf_ci[i]
+        axa.plot([ref, scaf], [i - 0.055, i + 0.055], color=guide, lw=1.0, zorder=1)
         axa.errorbar(
-            lift[valid_lift_ci],
-            y[valid_lift_ci],
-            xerr=np.vstack([lift[valid_lift_ci] - lift_ci[valid_lift_ci, 0], lift_ci[valid_lift_ci, 1] - lift[valid_lift_ci]]),
+            ref,
+            i - 0.055,
+            xerr=_xerr(ref, (ref_ci[0], ref_ci[1])),
             fmt="none",
-            ecolor=COLORS["ink"],
-            elinewidth=1.15,
-            capsize=3.0,
-            capthick=1.10,
-            zorder=6,
+            ecolor=ref_err,
+            elinewidth=0.82,
+            capsize=1.9,
+            capthick=0.8,
+            zorder=2,
         )
-    axa.scatter(lift, y, s=74, color=scaf_color, edgecolor="white", lw=1.05, zorder=7)
-    for i, val in enumerate(lift):
-        label_x = val + 0.18
+        axa.errorbar(
+            scaf,
+            i + 0.055,
+            xerr=_xerr(scaf, (scaf_ci[0], scaf_ci[1])),
+            fmt="none",
+            ecolor=scaf_err,
+            elinewidth=0.82,
+            capsize=1.9,
+            capthick=0.8,
+            zorder=2,
+        )
+        axa.scatter(ref, i - 0.055, s=34, color=ref_color, edgecolor=COLORS["ink"], lw=0.5, zorder=3)
+        axa.scatter(scaf, i + 0.055, s=34, color=scaf_color, edgecolor=COLORS["ink"], lw=0.5, zorder=3)
+        label_x = max(ref, scaf) + 0.50
         label_ha = "left"
-        if val > 5.5:
-            label_x = val - 0.18
+        if label_x > 21.4:
+            label_x = max(ref, scaf) - 0.52
             label_ha = "right"
         axa.text(
-            min(label_x, 7.48),
+            label_x,
             i,
-            _pp(val),
+            _pp(lift[i]),
             va="center",
             ha=label_ha,
-            fontsize=7.3,
+            fontsize=7.1,
             color=COLORS["ink"],
-            bbox=dict(facecolor="white", edgecolor="none", alpha=0.92, pad=0.10),
-            zorder=8,
+            bbox=dict(facecolor="white", edgecolor="none", alpha=0.88, pad=0.10),
+            zorder=5,
         )
     axa.set_yticks(y, order)
     axa.invert_yaxis()
-    axa.set_xlim(0, 7.75)
-    axa.set_xlabel("Next-turn constructive lift (pp)")
+    axa.set_xlim(0, 22.4)
+    axa.set_xticks([0, 5, 10, 15, 20])
+    axa.set_xlabel("P(next constructive turn) (%)")
     axa.grid(axis="x", color=COLORS["grid"], lw=0.65)
     axa.spines[["top", "right"]].set_visible(False)
     axa.spines["left"].set_linewidth(0.9)
@@ -1215,7 +1299,7 @@ def make_figure5() -> None:
         fig.text(pos.x0 - label_dx, y_pos, label, ha="left", va="bottom", fontsize=13, fontweight="bold", color=COLORS["ink"])
         fig.text(pos.x0, y_pos + 0.002, title, ha="left", va="bottom", fontsize=9.2, fontweight="bold", color=COLORS["ink"])
 
-    _panel_header(axa, "a", "Overall adjacent-turn lift", top_header_y)
+    _panel_header(axa, "a", "Overall adjacent-turn contrast", top_header_y)
     _panel_header(axc, "c", "P(next assistant scaffolded | prior user state)", bottom_header_y)
     _panel_header(axd_m1, "d", "Support-form signal by prior state", bottom_header_y, label_dx=0.045)
 
@@ -1241,7 +1325,7 @@ def make_figure5() -> None:
     fig.text(
         0.50,
         0.038,
-        "WC = WildChat; LMSYS = LMSYS Chat; SC = ShareChat. Error bars show 95% CI where displayed; panel d reports pooled model/source FE odds ratios.",
+        "WC = WildChat; LMSYS = LMSYS Chat; SC = ShareChat. Error bars show 95% CI: bootstrap CIs in a/b and model CIs in d.",
         ha="center",
         fontsize=6.8,
         color=COLORS["muted"],

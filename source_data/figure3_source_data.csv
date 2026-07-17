@@ -1,16 +1,16 @@
 figure,panel,setting,measure,group,estimate,unit,ci_low,ci_high,p_value,notes
-Figure 3,a,WC coding,turn-weighted constructive ratio,non-scaffolded reference,5.5626,percent,,,,Group ratio is total constructive user turns divided by total user turns.
-Figure 3,a,WC coding,turn-weighted constructive ratio,scaffolded support,10.1265,percent,,,,Group ratio is total constructive user turns divided by total user turns.
-Figure 3,a,LMSYS coding,turn-weighted constructive ratio,non-scaffolded reference,3.9665,percent,,,,Group ratio is total constructive user turns divided by total user turns.
-Figure 3,a,LMSYS coding,turn-weighted constructive ratio,scaffolded support,6.4707,percent,,,,Group ratio is total constructive user turns divided by total user turns.
-Figure 3,a,SC coding,turn-weighted constructive ratio,non-scaffolded reference,8.98,percent,,,,Group ratio is total constructive user turns divided by total user turns.
-Figure 3,a,SC coding,turn-weighted constructive ratio,scaffolded support,16.3192,percent,,,,Group ratio is total constructive user turns divided by total user turns.
-Figure 3,a,WC writing,turn-weighted constructive ratio,non-scaffolded reference,1.7372,percent,,,,Group ratio is total constructive user turns divided by total user turns.
-Figure 3,a,WC writing,turn-weighted constructive ratio,scaffolded support,2.7293,percent,,,,Group ratio is total constructive user turns divided by total user turns.
-Figure 3,a,LMSYS writing,turn-weighted constructive ratio,non-scaffolded reference,1.0692,percent,,,,Group ratio is total constructive user turns divided by total user turns.
-Figure 3,a,LMSYS writing,turn-weighted constructive ratio,scaffolded support,2.1567,percent,,,,Group ratio is total constructive user turns divided by total user turns.
-Figure 3,a,SC writing,turn-weighted constructive ratio,non-scaffolded reference,3.4391,percent,,,,Group ratio is total constructive user turns divided by total user turns.
-Figure 3,a,SC writing,turn-weighted constructive ratio,scaffolded support,6.6385,percent,,,,Group ratio is total constructive user turns divided by total user turns.
+Figure 3,a,WC coding,turn-weighted constructive ratio,non-scaffolded reference,5.5626,percent,5.2405,5.9124,,Group ratio is total constructive user turns divided by total user turns; CI is a conversation-level bootstrap within scaffolded-support group.
+Figure 3,a,WC coding,turn-weighted constructive ratio,scaffolded support,10.1265,percent,9.8746,10.3967,,Group ratio is total constructive user turns divided by total user turns; CI is a conversation-level bootstrap within scaffolded-support group.
+Figure 3,a,LMSYS coding,turn-weighted constructive ratio,non-scaffolded reference,3.9665,percent,3.7610,4.1647,,Group ratio is total constructive user turns divided by total user turns; CI is a conversation-level bootstrap within scaffolded-support group.
+Figure 3,a,LMSYS coding,turn-weighted constructive ratio,scaffolded support,6.4707,percent,6.2151,6.7228,,Group ratio is total constructive user turns divided by total user turns; CI is a conversation-level bootstrap within scaffolded-support group.
+Figure 3,a,SC coding,turn-weighted constructive ratio,non-scaffolded reference,8.9800,percent,7.3616,10.6554,,Group ratio is total constructive user turns divided by total user turns; CI is a conversation-level bootstrap within scaffolded-support group.
+Figure 3,a,SC coding,turn-weighted constructive ratio,scaffolded support,16.3192,percent,15.2408,17.4021,,Group ratio is total constructive user turns divided by total user turns; CI is a conversation-level bootstrap within scaffolded-support group.
+Figure 3,a,WC writing,turn-weighted constructive ratio,non-scaffolded reference,1.7372,percent,1.6493,1.8246,,Group ratio is total constructive user turns divided by total user turns; CI is a conversation-level bootstrap within scaffolded-support group.
+Figure 3,a,WC writing,turn-weighted constructive ratio,scaffolded support,2.7293,percent,2.5742,2.8855,,Group ratio is total constructive user turns divided by total user turns; CI is a conversation-level bootstrap within scaffolded-support group.
+Figure 3,a,LMSYS writing,turn-weighted constructive ratio,non-scaffolded reference,1.0692,percent,0.9632,1.1808,,Group ratio is total constructive user turns divided by total user turns; CI is a conversation-level bootstrap within scaffolded-support group.
+Figure 3,a,LMSYS writing,turn-weighted constructive ratio,scaffolded support,2.1567,percent,1.9587,2.3519,,Group ratio is total constructive user turns divided by total user turns; CI is a conversation-level bootstrap within scaffolded-support group.
+Figure 3,a,SC writing,turn-weighted constructive ratio,non-scaffolded reference,3.4391,percent,2.5390,4.3481,,Group ratio is total constructive user turns divided by total user turns; CI is a conversation-level bootstrap within scaffolded-support group.
+Figure 3,a,SC writing,turn-weighted constructive ratio,scaffolded support,6.6385,percent,5.2917,8.2025,,Group ratio is total constructive user turns divided by total user turns; CI is a conversation-level bootstrap within scaffolded-support group.
 Figure 3,b,WC coding,Poisson count ratio,scaffolded support,1.852129,ratio,1.748968,1.961375,1.24792e-98,Model-based 95% CI and two-sided p value.
 Figure 3,b,LMSYS coding,Poisson count ratio,scaffolded support,1.621977,ratio,1.531958,1.717285,6.77109e-62,Model-based 95% CI and two-sided p value.
 Figure 3,b,SC coding,Poisson count ratio,scaffolded support,1.892754,ratio,1.605713,2.231107,2.87745e-14,Model-based 95% CI and two-sided p value.

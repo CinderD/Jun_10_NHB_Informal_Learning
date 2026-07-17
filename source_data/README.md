@@ -5,7 +5,7 @@ This directory contains CSV source data for the manuscript's numeric main figure
 - `figure2_source_data.csv`: engagement composition, user-framing contrasts and conversation-length gradients.
 - `figure3_source_data.csv`: scaffolded versus reference constructive ratios, adjusted model estimates, framing-stratified estimates and post-answer depth differences.
 - `figure4_source_data.csv`: support-form constructive associations and Benjamini-Hochberg q values.
-- `figure5_source_data.csv`: adjacent-turn lifts, prior-state conditional probabilities, reverse scaffolded-support probabilities and focal prior-state x support-form odds ratios.
+- `figure5_source_data.csv`: overall adjacent-turn probabilities with lift annotations, prior-state conditional probabilities, reverse scaffolded-support probabilities and focal prior-state x support-form odds ratios.
 - `support_intent_form_profile_source_data.csv`: support-intent by support-form heatmap values and marginal bar values used in Fig. C1.
 - `supplementary_support_supply_source_data.csv`: setting-level support-form supply values used to construct the Fig. C1 marginal support-form bars.
 - `wildchat_model_family_robustness_source_data.csv`: WildChat model-family summaries and model-snapshot background points used in Fig. C2.

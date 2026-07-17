@@ -17,7 +17,7 @@ The results follow the analytic sequence in Fig.~\ref{fig:conceptual_framework}:
 
 \subsection{Everyday human--LLM conversations contain learning-oriented engagement}\label{subsec:2.1}
 
-Learning-oriented engagement was visible across all six task settings. Across 491,685 user turns, 31.9\% showed cognitive engagement and 4.9\% reached constructive engagement, \revise{a subset of cognitive engagement and} the deepest observable user-side signal in the annotation scheme (Table~\ref{tab:dataset_overview}). \revise{Explicit emotional expression was much less visible (0.74\% of user turns), consistent with the coding and writing focus of the sample.} Thus, everyday human--LLM conversations often contained observable user participation in the exchange, but deeper constructive sense-making remained selective rather than routine.
+Learning-oriented engagement was visible across all six task settings. Across 491,685 user turns, 31.9\% showed cognitive engagement and 4.9\% reached constructive engagement, \revise{a subset of cognitive engagement and} the deepest observable user-side signal in the annotation scheme (Table~\ref{tab:dataset_overview}). Thus, everyday human--LLM conversations often contained observable user participation in the exchange, but deeper constructive sense-making remained selective rather than routine.
 
 
 
@@ -106,17 +106,11 @@ The association remained positive after accounting for observed user framing and
 \textbf{b,} Covariate-adjusted within-setting associations between scaffolded-support presence and constructive participation, reported as Poisson count ratios and logistic odds ratios.
 \textbf{c,} Poisson count ratios for scaffolded-support presence stratified by explicit versus non-explicit learning-oriented framing.
 \textbf{d,} Difference in the number of turns after the first assistant response between scaffolded and reference conversations.
-Numbers indicate scaffolded-minus-reference differences, except panels b and c, which report model estimates. Error bars in panels b and c show model-based 95\% confidence intervals; bootstrap confidence intervals for the descriptive contrasts in panels a and d are reported in Supplementary Table~\ref{tab:key_contrast_significance}. WC, WildChat; LMSYS, LMSYS Chat; SC, ShareChat.
+Numbers indicate scaffolded-minus-reference differences, except panels b and c, which report model estimates. Error bars in panel a show conversation-level bootstrap 95\% confidence intervals for the displayed group ratios; panels b and c show model-based 95\% confidence intervals. Bootstrap confidence intervals for the descriptive contrasts in panels a and d are reported in Supplementary Table~\ref{tab:key_contrast_significance}. WC, WildChat; LMSYS, LMSYS Chat; SC, ShareChat.
 }
 
   \label{fig:s2_conversation_association}
 \end{figure*}
-
-
-
-\input{tables/table4}
-
-
 
 
 \subsection{Support form differentiates the scaffolding--engagement association}\label{subsec:support_form}\label{subsec:2.4}
@@ -171,11 +165,11 @@ Together, these analyses refine the conversation-level support result. Scaffolde
     % }
     \caption{
 \textbf{Support--engagement coupling is state- and form-dependent across task settings.}
-\textbf{a,} Next-turn constructive lift after scaffolded versus reference assistant turns.
+\textbf{a,} Overall probability of a constructive next user turn after scaffolded versus reference assistant turns; annotations show scaffolded-minus-reference differences.
 \textbf{b,} Probability of a constructive next user turn by prior user state and assistant support condition; annotations show scaffolded-minus-reference differences.
 \textbf{c,} Probability that the next assistant turn contains scaffolded support by prior user state.
 \textbf{d,} \todayrevise{Pooled metadata-adjusted odds ratios} for focal support forms within prior user states. M1 feedback and M4 explaining are shown because Section~\ref{subsec:support_form} identified them as focal positive conversation-level forms; full M1--M6 interaction estimates are reported in Supplementary Table~\ref{tab:prior_state_support_form_interactions}, and operational support-form examples are provided in Supplementary Table~\ref{tab:label_examples}.
-Error bars show 95\% confidence intervals where displayed. Panel d reports adjacent-turn logistic models with conversation-cluster robust standard errors. WC, WildChat; LMSYS, LMSYS Chat; SC, ShareChat.
+Error bars in panels a and b show conversation-cluster bootstrap 95\% confidence intervals over adjacent assistant-to-user pairs; panel d reports adjacent-turn logistic models with conversation-cluster robust standard errors. WC, WildChat; LMSYS, LMSYS Chat; SC, ShareChat.
 }
   \label{fig:temporal_coupling}
 \end{figure}
