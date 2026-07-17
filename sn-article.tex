@@ -123,7 +123,8 @@
 %%  \sfx{IV}}\email{iauthor@gmail.com}
 %%=============================================================%%
 
-\author[1]{\fnm{Zixin} \sur{Chen}\textsuperscript{\textdagger}}\email{zchendf@connect.ust.hk}
+\Newlabel{zixin-intern}{1†}
+\author[zixin-intern]{\fnm{Zixin} \sur{Chen}}\email{zchendf@connect.ust.hk}
 
 \author*[2]{\fnm{Haotian} \sur{Li}}\email{haotian.li@microsoft.com}
 
@@ -138,7 +139,8 @@
 
 \affil[3]{\orgname{Johns Hopkins University}, \orgaddress{\city{Baltimore}, \postcode{21218}, \state{Maryland}, \country{United States}}}
 
-\affil[\textdagger]{This work was done during Z.C.'s internship at Microsoft Research Asia}
+\makeatletter\gdef\@presentaddresstxt{}\makeatother
+\presentaddress{\footnotesize $^{\dagger}$This work was done during Z.C.'s internship at Microsoft Research Asia.}
 
 \input{sections/00-abstract}
 

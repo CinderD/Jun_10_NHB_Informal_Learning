@@ -557,17 +557,19 @@ def make_figure3() -> None:
         x_range = xlim[1] - xlim[0]
         for i in range(len(ylabels)):
             ax.plot([left[i], right[i]], [i, i], color="#B9C2CB", lw=2.4, zorder=1)
+            ax.scatter(left[i], i, s=58, color=COLORS["s1"], edgecolor="white", linewidth=0.8, zorder=3)
+            ax.scatter(right[i], i, s=58, color=COLORS["s2"], edgecolor="white", linewidth=0.8, zorder=3)
             if left_ci is not None:
                 ax.errorbar(
                     left[i],
                     i,
                     xerr=np.array([[left[i] - left_ci[i, 0]], [left_ci[i, 1] - left[i]]]),
                     fmt="none",
-                    ecolor="#7E8B97",
-                    elinewidth=0.75,
-                    capsize=1.8,
-                    capthick=0.75,
-                    zorder=2,
+                    ecolor="#6F7D89",
+                    elinewidth=1.05,
+                    capsize=2.4,
+                    capthick=1.0,
+                    zorder=4,
                 )
             if right_ci is not None:
                 ax.errorbar(
@@ -575,14 +577,12 @@ def make_figure3() -> None:
                     i,
                     xerr=np.array([[right[i] - right_ci[i, 0]], [right_ci[i, 1] - right[i]]]),
                     fmt="none",
-                    ecolor="#2F6F61",
-                    elinewidth=0.75,
-                    capsize=1.8,
-                    capthick=0.75,
-                    zorder=2,
+                    ecolor="#1F6658",
+                    elinewidth=1.05,
+                    capsize=2.4,
+                    capthick=1.0,
+                    zorder=4,
                 )
-            ax.scatter(left[i], i, s=58, color=COLORS["s1"], edgecolor="white", linewidth=0.8, zorder=3)
-            ax.scatter(right[i], i, s=58, color=COLORS["s2"], edgecolor="white", linewidth=0.8, zorder=3)
             left_label_y = i + 0.27 if i < len(ylabels) - 1 else i - 0.27
             value_box = dict(facecolor="white", edgecolor="none", alpha=0.88, pad=0.08)
             ax.text(left[i], left_label_y, value_fmt.format(left[i]), fontsize=7.0, ha="center", va="center", color=COLORS["muted"], bbox=value_box, zorder=4)
@@ -1108,16 +1108,18 @@ def make_figure5() -> None:
         ref_ci = overall_ref_ci[i]
         scaf_ci = overall_scaf_ci[i]
         axa.plot([ref, scaf], [i - 0.055, i + 0.055], color=guide, lw=1.0, zorder=1)
+        axa.scatter(ref, i - 0.055, s=34, color=ref_color, edgecolor=COLORS["ink"], lw=0.5, zorder=3)
+        axa.scatter(scaf, i + 0.055, s=34, color=scaf_color, edgecolor=COLORS["ink"], lw=0.5, zorder=3)
         axa.errorbar(
             ref,
             i - 0.055,
             xerr=_xerr(ref, (ref_ci[0], ref_ci[1])),
             fmt="none",
             ecolor=ref_err,
-            elinewidth=0.82,
-            capsize=1.9,
-            capthick=0.8,
-            zorder=2,
+            elinewidth=1.05,
+            capsize=2.35,
+            capthick=1.0,
+            zorder=4,
         )
         axa.errorbar(
             scaf,
@@ -1125,13 +1127,11 @@ def make_figure5() -> None:
             xerr=_xerr(scaf, (scaf_ci[0], scaf_ci[1])),
             fmt="none",
             ecolor=scaf_err,
-            elinewidth=0.82,
-            capsize=1.9,
-            capthick=0.8,
-            zorder=2,
+            elinewidth=1.05,
+            capsize=2.35,
+            capthick=1.0,
+            zorder=4,
         )
-        axa.scatter(ref, i - 0.055, s=34, color=ref_color, edgecolor=COLORS["ink"], lw=0.5, zorder=3)
-        axa.scatter(scaf, i + 0.055, s=34, color=scaf_color, edgecolor=COLORS["ink"], lw=0.5, zorder=3)
         label_x = max(ref, scaf) + 0.50
         label_ha = "left"
         if label_x > 21.4:
@@ -1165,12 +1165,12 @@ def make_figure5() -> None:
             scaf_y = i + 0.075
             ref_ci, scaf_ci = cond_ci[title][name]
             ax.plot([s1, s2], [ref_y, scaf_y], color=guide, lw=0.9, zorder=1)
-            if _has_ci(ref_ci):
-                ax.errorbar(s1, ref_y, xerr=_xerr(s1, ref_ci), fmt="none", ecolor=ref_err, elinewidth=0.7, capsize=1.7, capthick=0.7, zorder=2)
-            if _has_ci(scaf_ci):
-                ax.errorbar(s2, scaf_y, xerr=_xerr(s2, scaf_ci), fmt="none", ecolor=scaf_err, elinewidth=0.7, capsize=1.7, capthick=0.7, zorder=2)
             ax.scatter(s1, ref_y, s=24, color=ref_color, edgecolor=COLORS["ink"], lw=0.45, zorder=3)
             ax.scatter(s2, scaf_y, s=24, color=scaf_color, edgecolor=COLORS["ink"], lw=0.45, zorder=3)
+            if _has_ci(ref_ci):
+                ax.errorbar(s1, ref_y, xerr=_xerr(s1, ref_ci), fmt="none", ecolor=ref_err, elinewidth=0.95, capsize=2.15, capthick=0.9, zorder=4)
+            if _has_ci(scaf_ci):
+                ax.errorbar(s2, scaf_y, xerr=_xerr(s2, scaf_ci), fmt="none", ecolor=scaf_err, elinewidth=0.95, capsize=2.15, capthick=0.9, zorder=4)
             dx = s2 - s1
             if dx >= 0:
                 x_label = min(s2 + 0.95, 37.0)
