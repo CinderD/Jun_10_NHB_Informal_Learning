@@ -584,11 +584,10 @@ def make_figure3() -> None:
                     zorder=4,
                 )
             left_label_y = i + 0.27 if i < len(ylabels) - 1 else i - 0.27
-            value_box = dict(facecolor="white", edgecolor="none", alpha=0.88, pad=0.08)
-            ax.text(left[i], left_label_y, value_fmt.format(left[i]), fontsize=7.0, ha="center", va="center", color=COLORS["muted"], bbox=value_box, zorder=4)
-            ax.text(right[i], i - 0.30, value_fmt.format(right[i]), fontsize=7.0, ha="center", va="center", color=COLORS["ink"], bbox=value_box, zorder=4)
+            ax.text(left[i], left_label_y, value_fmt.format(left[i]), fontsize=7.0, ha="center", va="center", color=COLORS["muted"], zorder=4)
+            ax.text(right[i], i - 0.30, value_fmt.format(right[i]), fontsize=7.0, ha="center", va="center", color=COLORS["ink"], zorder=4)
             diff_x = min(right[i] + x_range * 0.055, xlim[1] - 0.38)
-            ax.text(diff_x, i, diff_fmt.format((right[i] - left[i]) * scale), fontsize=8.1, ha="left", va="center", color=COLORS["ink"], bbox=dict(facecolor="white", edgecolor="none", alpha=0.94, pad=0.10), zorder=5)
+            ax.text(diff_x, i, diff_fmt.format((right[i] - left[i]) * scale), fontsize=8.1, ha="left", va="center", color=COLORS["ink"], zorder=5)
         ax.set_yticks(y, ylabels)
         ax.invert_yaxis()
         ax.set_ylim(len(ylabels) - 0.55, -0.85)
@@ -707,8 +706,9 @@ def make_figure3() -> None:
     ]
 
     y_depth = np.arange(len(labels))
-    axd.axvline(0, color=COLORS["ink"], lw=0.9)
-    axd.barh(y_depth, depth_diff, color=COLORS["s2"], edgecolor="white", linewidth=0.8, height=0.56)
+    axd.set_axisbelow(True)
+    axd.axvline(0, color=COLORS["ink"], lw=0.9, zorder=0)
+    axd.barh(y_depth, depth_diff, color=COLORS["s2"], edgecolor="none", linewidth=0.0, height=0.56, zorder=2)
     for i, val in enumerate(depth_diff):
         axd.text(val + 0.08, i, f"+{val:.2f}", va="center", ha="left", fontsize=8.2, color=COLORS["ink"])
     axd.set_yticks(y_depth, labels)
@@ -717,7 +717,7 @@ def make_figure3() -> None:
     axd.set_xlim(0, 3.85)
     axd.set_title("")
     axd.set_xlabel("Scaffolded - reference (turns)")
-    axd.grid(axis="x", color=COLORS["grid"], lw=0.8)
+    axd.grid(axis="x", color=COLORS["grid"], lw=0.8, zorder=0)
     axd.spines[["top", "right", "left"]].set_visible(False)
     axd.tick_params(axis="y", length=0, pad=2)
 
@@ -1132,10 +1132,10 @@ def make_figure5() -> None:
             capthick=1.0,
             zorder=4,
         )
-        label_x = max(ref, scaf) + 0.50
+        label_x = max(ref, scaf, ref_ci[1], scaf_ci[1]) + 0.45
         label_ha = "left"
         if label_x > 21.4:
-            label_x = max(ref, scaf) - 0.52
+            label_x = 21.55
             label_ha = "right"
         axa.text(
             label_x,
@@ -1145,7 +1145,6 @@ def make_figure5() -> None:
             ha=label_ha,
             fontsize=7.1,
             color=COLORS["ink"],
-            bbox=dict(facecolor="white", edgecolor="none", alpha=0.88, pad=0.10),
             zorder=5,
         )
     axa.set_yticks(y, order)
@@ -1186,7 +1185,6 @@ def make_figure5() -> None:
                 ha="left",
                 fontsize=6.8,
                 color=COLORS["ink"],
-                bbox=dict(facecolor="white", edgecolor="none", alpha=0.86, pad=0.12),
                 zorder=5,
             )
         ax.set_title(title, pad=3, fontsize=8.1)
@@ -1228,20 +1226,22 @@ def make_figure5() -> None:
     for ax, label, color, show_y in form_specs:
         vals = form_or[label]
         ci = form_ci[label]
+        ax.scatter(vals, y2, s=22, color=color, edgecolor=COLORS["ink"], lw=0.45, zorder=4)
         ax.errorbar(
             vals,
             y2,
             xerr=np.vstack([vals - ci[:, 0], ci[:, 1] - vals]),
             fmt="none",
             ecolor=color,
-            elinewidth=0.8,
-            capsize=2.2,
-            capthick=0.8,
-            zorder=3,
+            elinewidth=1.18,
+            capsize=3.6,
+            capthick=1.12,
+            zorder=5,
         )
-        ax.scatter(vals, y2, s=27, color=color, edgecolor=COLORS["ink"], lw=0.45, zorder=4)
-        for x, yv in zip(vals, y2):
+        for idx, (x, yv) in enumerate(zip(vals, y2)):
             label_x = min(x + 0.13, 5.22)
+            if x < 1:
+                label_x = min(max(x + 0.20, ci[idx, 1] + 0.09), 5.22)
             ax.text(
                 label_x,
                 yv,
@@ -1250,7 +1250,6 @@ def make_figure5() -> None:
                 ha="left",
                 fontsize=7.1,
                 color=COLORS["ink"],
-                bbox=dict(facecolor="white", edgecolor="none", alpha=0.90, pad=0.12),
                 zorder=5,
             )
         ax.set_xlim(0.20, 5.55)

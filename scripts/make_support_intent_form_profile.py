@@ -238,14 +238,15 @@ def _draw_dataset(fig: plt.Figure, spec, payload: dict[str, object], letter: str
     intent_share = payload["intent_share"]
 
     x = np.arange(len(FORMS))
-    ax_top.bar(x, form_share, color=COLORS["blue_light"], edgecolor="white", linewidth=0.7, width=0.78)
+    ax_top.set_axisbelow(True)
+    ax_top.bar(x, form_share, color=COLORS["blue_light"], edgecolor="none", linewidth=0.0, width=0.78, zorder=2)
     for xi, val in zip(x, form_share):
         ax_top.text(xi, val + 2.2, f"{val:.0f}", ha="center", va="bottom", fontsize=6.8, color=COLORS["ink"])
     ax_top.set_ylim(0, max(100, np.nanmax(form_share) + 12))
     ax_top.set_yticks([0, 50, 100])
     ax_top.set_yticklabels(["0", "50", "100"], fontsize=6.7, color=COLORS["muted"])
     ax_top.set_xticks([])
-    ax_top.grid(axis="y", color=COLORS["grid"], linewidth=0.65)
+    ax_top.grid(axis="y", color=COLORS["grid"], linewidth=0.65, zorder=0)
     _clean_spines(ax_top)
     ax_top.spines["bottom"].set_visible(False)
     ax_top.set_title(label, loc="left", pad=2, fontsize=10.2, fontweight="bold", color=COLORS["ink"])
@@ -282,7 +283,8 @@ def _draw_dataset(fig: plt.Figure, spec, payload: dict[str, object], letter: str
     ax_heat.set_ylabel("Support intent", labelpad=6)
 
     y = np.arange(len(INTENTS))
-    ax_side.barh(y, intent_share, color="#D7AA5C", edgecolor="white", linewidth=0.7, height=0.62)
+    ax_side.set_axisbelow(True)
+    ax_side.barh(y, intent_share, color="#D7AA5C", edgecolor="none", linewidth=0.0, height=0.62, zorder=2)
     for yi, val in zip(y, intent_share):
         ax_side.text(val + 2.3, yi, f"{val:.0f}", ha="left", va="center", fontsize=6.8, color=COLORS["ink"])
     ax_side.set_xlim(0, max(100, np.nanmax(intent_share) + 14))
@@ -290,7 +292,7 @@ def _draw_dataset(fig: plt.Figure, spec, payload: dict[str, object], letter: str
     ax_side.set_yticks([])
     ax_side.set_xticks([0, 50, 100])
     ax_side.set_xticklabels(["0", "50", "100"], fontsize=6.7, color=COLORS["muted"])
-    ax_side.grid(axis="x", color=COLORS["grid"], linewidth=0.65)
+    ax_side.grid(axis="x", color=COLORS["grid"], linewidth=0.65, zorder=0)
     _clean_spines(ax_side)
     ax_side.set_xlabel("I1-I3 share\nof scaffolded\nturns (%)", labelpad=6, fontsize=7.0, color=COLORS["muted"])
     return im
