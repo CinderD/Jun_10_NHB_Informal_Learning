@@ -1182,11 +1182,11 @@ def make_figure5() -> None:
                 ci_right = max(ci_right, scaf_ci[1])
             x_label = ci_right + 0.82
             label_ha = "left"
-            text_y = scaf_y - 0.24
+            text_y = scaf_y - 0.28
             if x_label > 37.75:
                 x_label = 37.75
                 label_ha = "right"
-                text_y = scaf_y - 0.30
+                text_y = scaf_y - 0.62
             ax.text(
                 x_label,
                 text_y,
@@ -1250,18 +1250,22 @@ def make_figure5() -> None:
             zorder=5,
         )
         for idx, (x, yv) in enumerate(zip(vals, y2)):
-            label_x = min(x + 0.13, 5.22)
-            if x < 1:
-                label_x = min(max(x + 0.20, ci[idx, 1] + 0.09), 5.22)
+            label_x = ci[idx, 1] + 0.13
+            label_ha = "left"
+            if ci[idx, 1] < 1:
+                label_x = 1.08
+            if label_x > 5.35:
+                label_x = 5.35
+                label_ha = "right"
             ax.text(
                 label_x,
-                yv,
+                yv - 0.17,
                 f"{x:.2f}",
                 va="center",
-                ha="left",
+                ha=label_ha,
                 fontsize=7.1,
                 color=COLORS["ink"],
-                zorder=5,
+                zorder=6,
             )
         ax.set_xlim(0.20, 5.55)
         ax.set_xticks([1, 3, 5])
@@ -1278,6 +1282,7 @@ def make_figure5() -> None:
         else:
             ax.tick_params(axis="y", left=False, labelleft=False)
     axd_m1.invert_yaxis()
+    axd_m1.set_ylim(len(form_states) - 0.35, -0.40)
 
     fig.subplots_adjust(left=0.105, right=0.985, top=0.815, bottom=0.135)
 
