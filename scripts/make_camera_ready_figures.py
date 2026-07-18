@@ -586,8 +586,12 @@ def make_figure3() -> None:
             left_label_y = i + 0.27 if i < len(ylabels) - 1 else i - 0.27
             ax.text(left[i], left_label_y, value_fmt.format(left[i]), fontsize=7.0, ha="center", va="center", color=COLORS["muted"], zorder=4)
             ax.text(right[i], i - 0.30, value_fmt.format(right[i]), fontsize=7.0, ha="center", va="center", color=COLORS["ink"], zorder=4)
-            diff_x = min(right[i] + x_range * 0.055, xlim[1] - 0.38)
-            ax.text(diff_x, i, diff_fmt.format((right[i] - left[i]) * scale), fontsize=8.1, ha="left", va="center", color=COLORS["ink"], zorder=5)
+            right_edge = right_ci[i, 1] if right_ci is not None else right[i]
+            diff_x = min(max(right[i], right_edge) + x_range * 0.050, xlim[1] - 0.18)
+            diff_ha = "left"
+            if diff_x >= xlim[1] - 0.25:
+                diff_ha = "right"
+            ax.text(diff_x, i, diff_fmt.format((right[i] - left[i]) * scale), fontsize=8.1, ha=diff_ha, va="center", color=COLORS["ink"], zorder=5)
         ax.set_yticks(y, ylabels)
         ax.invert_yaxis()
         ax.set_ylim(len(ylabels) - 0.55, -0.85)
@@ -1171,18 +1175,24 @@ def make_figure5() -> None:
             if _has_ci(scaf_ci):
                 ax.errorbar(s2, scaf_y, xerr=_xerr(s2, scaf_ci), fmt="none", ecolor=scaf_err, elinewidth=0.95, capsize=2.15, capthick=0.9, zorder=4)
             dx = s2 - s1
-            if dx >= 0:
-                x_label = min(s2 + 0.95, 37.0)
-                text_y = scaf_y
-            else:
-                x_label = min(max(s1, s2) + 1.35, 37.0)
-                text_y = scaf_y + 0.18
+            ci_right = max(s1, s2)
+            if _has_ci(ref_ci):
+                ci_right = max(ci_right, ref_ci[1])
+            if _has_ci(scaf_ci):
+                ci_right = max(ci_right, scaf_ci[1])
+            x_label = ci_right + 0.82
+            label_ha = "left"
+            text_y = scaf_y - 0.24
+            if x_label > 37.75:
+                x_label = 37.75
+                label_ha = "right"
+                text_y = scaf_y - 0.30
             ax.text(
                 x_label,
                 text_y,
                 _pp(dx),
                 va="center",
-                ha="left",
+                ha=label_ha,
                 fontsize=6.8,
                 color=COLORS["ink"],
                 zorder=5,
@@ -1191,6 +1201,7 @@ def make_figure5() -> None:
         ax.set_yticks(y)
         ax.set_yticklabels(order if ax is axs_b[0] else [])
         ax.invert_yaxis()
+        ax.set_ylim(len(keys) - 0.25, -0.55)
         ax.set_xlim(0, 38.5)
         ax.set_xticks([0, 10, 20, 30])
         ax.grid(axis="x", color=COLORS["grid"], lw=0.65)
