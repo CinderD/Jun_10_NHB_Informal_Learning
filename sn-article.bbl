@@ -1,0 +1,298 @@
+\begin{thebibliography}{10}
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\burl{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\providecommand{\bibinfo}[2]{#2}
+\providecommand{\eprint}[2][]{\url{#2}}
+\providecommand{\doi}[1]{\url{https://doi.org/#1}}
+\bibcommenthead
+
+\bibitem{chatterji2025people}
+\bibinfo{author}{Chatterji, A.} \emph{et~al.}
+\newblock \bibinfo{title}{How people use {ChatGPT}}.
+\newblock \bibinfo{type}{Tech. Rep.} \bibinfo{number}{Working Paper 34255}, \bibinfo{institution}{National Bureau of Economic Research} (\bibinfo{year}{2025}).
+
+\bibitem{noy2023experimental}
+\bibinfo{author}{Noy, S.} \& \bibinfo{author}{Zhang, W.}
+\newblock \bibinfo{title}{Experimental evidence on the productivity effects of generative artificial intelligence}.
+\newblock \emph{\bibinfo{journal}{Science}} \textbf{\bibinfo{volume}{381}}, \bibinfo{pages}{187--192} (\bibinfo{year}{2023}).
+
+\bibitem{brynjolfsson2025generative}
+\bibinfo{author}{Brynjolfsson, E.}, \bibinfo{author}{Li, D.} \& \bibinfo{author}{Raymond, L.}
+\newblock \bibinfo{title}{Generative {AI} at work}.
+\newblock \emph{\bibinfo{journal}{Q. J. Econ.}} \textbf{\bibinfo{volume}{140}}, \bibinfo{pages}{889--942} (\bibinfo{year}{2025}).
+
+\bibitem{costaGomes2026healthqueries}
+\bibinfo{author}{Costa-Gomes, B.} \emph{et~al.}
+\newblock \bibinfo{title}{Public use of a generalist {LLM} chatbot for health queries}.
+\newblock \emph{\bibinfo{journal}{Nat. Health}} \textbf{\bibinfo{volume}{1}}, \bibinfo{pages}{689--696} (\bibinfo{year}{2026}).
+
+\bibitem{anzai1979theory}
+\bibinfo{author}{Anzai, Y.} \& \bibinfo{author}{Simon, H.~A.}
+\newblock \bibinfo{title}{The theory of learning by doing.}
+\newblock \emph{\bibinfo{journal}{Psychol. Rev.}} \textbf{\bibinfo{volume}{86}}, \bibinfo{pages}{124--140} (\bibinfo{year}{1979}).
+
+\bibitem{kolb2014experiential}
+\bibinfo{author}{Kolb, D.~A.}
+\newblock \emph{\bibinfo{title}{Experiential Learning: Experience as the Source of Learning and Development}} \bibinfo{edition}{2nd} edn (\bibinfo{publisher}{Pearson FT Press}, \bibinfo{address}{Upper Saddle River, NJ}, \bibinfo{year}{2015}).
+
+\bibitem{risko2016cognitive}
+\bibinfo{author}{Risko, E.~F.} \& \bibinfo{author}{Gilbert, S.~J.}
+\newblock \bibinfo{title}{Cognitive offloading}.
+\newblock \emph{\bibinfo{journal}{Trends Cogn. Sci.}} \textbf{\bibinfo{volume}{20}}, \bibinfo{pages}{676--688} (\bibinfo{year}{2016}).
+
+\bibitem{gerlich2025ai}
+\bibinfo{author}{Gerlich, M.}
+\newblock \bibinfo{title}{{AI} tools in society: Impacts on cognitive offloading and the future of critical thinking}.
+\newblock \emph{\bibinfo{journal}{Societies}} \textbf{\bibinfo{volume}{15}}, \bibinfo{pages}{6} (\bibinfo{year}{2025}).
+
+\bibitem{barke2023grounded}
+\bibinfo{author}{Barke, S.}, \bibinfo{author}{James, M.~B.} \& \bibinfo{author}{Polikarpova, N.}
+\newblock \bibinfo{title}{Grounded copilot: How programmers interact with code-generating models}.
+\newblock \emph{\bibinfo{journal}{Proc. ACM Program. Lang.}} \textbf{\bibinfo{volume}{7}}, \bibinfo{pages}{85--111} (\bibinfo{year}{2023}).
+
+\bibitem{kobiella2024if}
+\bibinfo{author}{Kobiella, C.}, \bibinfo{author}{Flores~L{\'o}pez, Y.~S.}, \bibinfo{author}{Waltenberger, F.}, \bibinfo{author}{Draxler, F.} \& \bibinfo{author}{Schmidt, A.}
+\newblock \bibinfo{title}{{``If the machine is as good as me, then what use am I?''}---how the use of {ChatGPT} changes young professionals' perception of productivity and accomplishment}.
+\newblock \emph{\bibinfo{journal}{Proc. CHI Conf. Hum. Factors Comput. Syst.}} \bibinfo{pages}{1--16} (\bibinfo{year}{2024}).
+
+\bibitem{eraut2004informal}
+\bibinfo{author}{Eraut, M.}
+\newblock \bibinfo{title}{Informal learning in the workplace}.
+\newblock \emph{\bibinfo{journal}{Stud. Contin. Educ.}} \textbf{\bibinfo{volume}{26}}, \bibinfo{pages}{247--273} (\bibinfo{year}{2004}).
+
+\bibitem{marsick2015informal}
+\bibinfo{author}{Marsick, V.~J.} \& \bibinfo{author}{Watkins, K.}
+\newblock \emph{\bibinfo{title}{Informal and incidental learning in the workplace (Routledge Revivals)}}  (\bibinfo{publisher}{Routledge}, \bibinfo{address}{London}, \bibinfo{year}{2015}).
+
+\bibitem{schugurensky2000forms}
+\bibinfo{author}{Schugurensky, D.}
+\newblock \bibinfo{title}{The forms of informal learning: Towards a conceptualization of the field}.
+\newblock \bibinfo{type}{Tech. Rep.} \bibinfo{number}{NALL Working Paper 19}, \bibinfo{institution}{Centre for the Study of Education and Work, OISE/UT}, \bibinfo{address}{Toronto} (\bibinfo{year}{2000}).
+\newblock \urlprefix\url{https://hdl.handle.net/1807/2733}.
+
+\bibitem{kasneci2023chatgpt}
+\bibinfo{author}{Kasneci, E.} \emph{et~al.}
+\newblock \bibinfo{title}{{ChatGPT} for good? {On} opportunities and challenges of large language models for education}.
+\newblock \emph{\bibinfo{journal}{Learn. Individ. Differ.}} \textbf{\bibinfo{volume}{103}}, \bibinfo{pages}{102274} (\bibinfo{year}{2023}).
+
+\bibitem{meyer2024using}
+\bibinfo{author}{Meyer, J.} \emph{et~al.}
+\newblock \bibinfo{title}{Using {LLM}s to bring evidence-based feedback into the classroom: {AI}-generated feedback increases secondary students' text revision, motivation, and positive emotions}.
+\newblock \emph{\bibinfo{journal}{Comput. Educ. Artif. Intell.}} \textbf{\bibinfo{volume}{6}}, \bibinfo{pages}{100199} (\bibinfo{year}{2024}).
+
+\bibitem{arif2024generation}
+\bibinfo{author}{Arif, T.}, \bibinfo{author}{Asthana, S.} \& \bibinfo{author}{Collins-Thompson, K.}
+\newblock \bibinfo{title}{Generation and assessment of multiple-choice questions from video transcripts using large language models}.
+\newblock \emph{\bibinfo{journal}{Proc. 11th ACM Conf. Learn. @ Scale}} \bibinfo{pages}{530--534} (\bibinfo{year}{2024}).
+
+\bibitem{jin2024teach}
+\bibinfo{author}{Jin, H.}, \bibinfo{author}{Lee, S.}, \bibinfo{author}{Shin, H.} \& \bibinfo{author}{Kim, J.}
+\newblock \bibinfo{title}{Teach {AI} how to code: Using large language models as teachable agents for programming education}.
+\newblock \emph{\bibinfo{journal}{Proc. CHI Conf. Hum. Factors Comput. Syst.}} \bibinfo{pages}{1--28} (\bibinfo{year}{2024}).
+
+\bibitem{lim2024identify}
+\bibinfo{author}{Lim, H.}, \bibinfo{author}{Choi, D.} \& \bibinfo{author}{Hong, H.}
+\newblock \bibinfo{title}{Identify design problems through questioning: Exploring role-playing interactions with large language models to foster design questioning skills}.
+\newblock \emph{\bibinfo{journal}{Companion Proc. CSCW}} \bibinfo{pages}{598--602} (\bibinfo{year}{2024}).
+
+\bibitem{yan2024promises}
+\bibinfo{author}{Yan, L.}, \bibinfo{author}{Greiff, S.}, \bibinfo{author}{Teuber, Z.} \& \bibinfo{author}{Ga{\v{s}}evi{\'c}, D.}
+\newblock \bibinfo{title}{Promises and challenges of generative artificial intelligence for human learning}.
+\newblock \emph{\bibinfo{journal}{Nat. Hum. Behav.}} \textbf{\bibinfo{volume}{8}}, \bibinfo{pages}{1839--1850} (\bibinfo{year}{2024}).
+
+\bibitem{futterer2026learningcoach}
+\bibinfo{author}{F{\"u}tterer, T.} \emph{et~al.}
+\newblock \bibinfo{title}{Why using {AI} as a learning coach can improve education}.
+\newblock \emph{\bibinfo{journal}{Nat. Hum. Behav.}}  (\bibinfo{year}{2026}).
+\newblock \urlprefix\url{https://doi.org/10.1038/s41562-026-02524-2}.
+
+\bibitem{terzimehic2026conversational}
+\bibinfo{author}{Terzimehi{\'c}, N.}, \bibinfo{author}{B{\"u}hler, B.} \& \bibinfo{author}{Kasneci, E.}
+\newblock \bibinfo{title}{Conversational {AI} as a catalyst for informal learning: An empirical large-scale study on {LLM} use in everyday learning}.
+\newblock \emph{\bibinfo{journal}{Comput. Educ. Artif. Intell.}} \textbf{\bibinfo{volume}{11}}, \bibinfo{pages}{100634} (\bibinfo{year}{2026}).
+
+\bibitem{vanlehn2011relative}
+\bibinfo{author}{VanLehn, K.}
+\newblock \bibinfo{title}{The relative effectiveness of human tutoring, intelligent tutoring systems, and other tutoring systems}.
+\newblock \emph{\bibinfo{journal}{Educ. Psychol.}} \textbf{\bibinfo{volume}{46}}, \bibinfo{pages}{197--221} (\bibinfo{year}{2011}).
+
+\bibitem{fredricks2004school}
+\bibinfo{author}{Fredricks, J.~A.}, \bibinfo{author}{Blumenfeld, P.~C.} \& \bibinfo{author}{Paris, A.~H.}
+\newblock \bibinfo{title}{School engagement: Potential of the concept, state of the evidence}.
+\newblock \emph{\bibinfo{journal}{Rev. Educ. Res.}} \textbf{\bibinfo{volume}{74}}, \bibinfo{pages}{59--109} (\bibinfo{year}{2004}).
+
+\bibitem{chi2014icap}
+\bibinfo{author}{Chi, M.~T.} \& \bibinfo{author}{Wylie, R.}
+\newblock \bibinfo{title}{The {ICAP} framework: Linking cognitive engagement to active learning outcomes}.
+\newblock \emph{\bibinfo{journal}{Educ. Psychol.}} \textbf{\bibinfo{volume}{49}}, \bibinfo{pages}{219--243} (\bibinfo{year}{2014}).
+
+\bibitem{koedinger2007exploring}
+\bibinfo{author}{Koedinger, K.~R.} \& \bibinfo{author}{Aleven, V.}
+\newblock \bibinfo{title}{Exploring the assistance dilemma in experiments with cognitive tutors}.
+\newblock \emph{\bibinfo{journal}{Educ. Psychol. Rev.}} \textbf{\bibinfo{volume}{19}}, \bibinfo{pages}{239--264} (\bibinfo{year}{2007}).
+
+\bibitem{zhao2024wildchat}
+\bibinfo{author}{Zhao, W.} \emph{et~al.}
+\newblock \bibinfo{title}{{WildChat}: {1M} {ChatGPT} interaction logs in the wild}.
+\newblock \emph{\bibinfo{journal}{Proc. 12th Int. Conf. Learn. Represent.}}  (\bibinfo{year}{2024}).
+\newblock \urlprefix\url{https://openreview.net/forum?id=Bl8u7ZRlbM}.
+
+\bibitem{zheng2023lmsyschat1m}
+\bibinfo{author}{Zheng, L.} \emph{et~al.}
+\newblock \bibinfo{title}{{LMSYS-Chat-1M}: A large-scale real-world {LLM} conversation dataset}.
+\newblock \emph{\bibinfo{journal}{Proc. 12th Int. Conf. Learn. Represent.}}  (\bibinfo{year}{2024}).
+\newblock \urlprefix\url{https://openreview.net/forum?id=BOfDKxfwt0}.
+
+\bibitem{yan2025sharechat}
+\bibinfo{author}{Yan, Y.}, \bibinfo{author}{Nguyen, T.}, \bibinfo{author}{Su, B.}, \bibinfo{author}{Lieffers, M.} \& \bibinfo{author}{Le, T.}
+\newblock \bibinfo{title}{{ShareChat}: A dataset of chatbot conversations in the wild} (\bibinfo{year}{2025}).
+\newblock \bibinfo{note}{Preprint at \url{https://doi.org/10.48550/arXiv.2512.17843}}.
+
+\bibitem{handa2025economic}
+\bibinfo{author}{Handa, K.} \emph{et~al.}
+\newblock \bibinfo{title}{Which economic tasks are performed with {AI}? {Evidence} from millions of {Claude} conversations} (\bibinfo{year}{2025}).
+\newblock \bibinfo{note}{Preprint at \url{https://doi.org/10.48550/arXiv.2503.04761}}.
+
+\bibitem{wood1976role}
+\bibinfo{author}{Wood, D.}, \bibinfo{author}{Bruner, J.~S.} \& \bibinfo{author}{Ross, G.}
+\newblock \bibinfo{title}{The role of tutoring in problem solving}.
+\newblock \emph{\bibinfo{journal}{J. Child Psychol. Psychiatry}} \textbf{\bibinfo{volume}{17}}, \bibinfo{pages}{89--100} (\bibinfo{year}{1976}).
+
+\bibitem{van2010scaffolding}
+\bibinfo{author}{Van~de Pol, J.}, \bibinfo{author}{Volman, M.} \& \bibinfo{author}{Beishuizen, J.}
+\newblock \bibinfo{title}{Scaffolding in teacher--student interaction: A decade of research}.
+\newblock \emph{\bibinfo{journal}{Educ. Psychol. Rev.}} \textbf{\bibinfo{volume}{22}}, \bibinfo{pages}{271--296} (\bibinfo{year}{2010}).
+
+\bibitem{winkler2020sara}
+\bibinfo{author}{Winkler, R.}, \bibinfo{author}{Hobert, S.}, \bibinfo{author}{Salovaara, A.}, \bibinfo{author}{S{\"o}llner, M.} \& \bibinfo{author}{Leimeister, J.~M.}
+\newblock \bibinfo{title}{Sara, the lecturer: Improving learning in online education with a scaffolding-based conversational agent}.
+\newblock \emph{\bibinfo{journal}{Proc. CHI Conf. Hum. Factors Comput. Syst.}} \bibinfo{pages}{1--14} (\bibinfo{year}{2020}).
+
+\bibitem{quintana2018scaffolding}
+\bibinfo{author}{Quintana, C.} \emph{et~al.}
+\newblock \bibinfo{title}{A scaffolding design framework for software to support science inquiry}.
+\newblock \emph{\bibinfo{journal}{J. Learn. Sci.}} \textbf{\bibinfo{volume}{13}}, \bibinfo{pages}{337--386} (\bibinfo{year}{2004}).
+
+\bibitem{keuning2018systematic}
+\bibinfo{author}{Keuning, H.}, \bibinfo{author}{Jeuring, J.} \& \bibinfo{author}{Heeren, B.}
+\newblock \bibinfo{title}{A systematic literature review of automated feedback generation for programming exercises}.
+\newblock \emph{\bibinfo{journal}{ACM Trans. Comput. Educ.}} \textbf{\bibinfo{volume}{19}}, \bibinfo{pages}{1--43} (\bibinfo{year}{2018}).
+
+\bibitem{flower1981cognitive}
+\bibinfo{author}{Flower, L.} \& \bibinfo{author}{Hayes, J.~R.}
+\newblock \bibinfo{title}{A cognitive process theory of writing}.
+\newblock \emph{\bibinfo{journal}{Coll. Compos. Commun.}} \textbf{\bibinfo{volume}{32}}, \bibinfo{pages}{365--387} (\bibinfo{year}{1981}).
+
+\bibitem{sommers1980revision}
+\bibinfo{author}{Sommers, N.}
+\newblock \bibinfo{title}{Revision strategies of student writers and experienced adult writers}.
+\newblock \emph{\bibinfo{journal}{Coll. Compos. Commun.}} \textbf{\bibinfo{volume}{31}}, \bibinfo{pages}{378--388} (\bibinfo{year}{1980}).
+
+\bibitem{hattie2007power}
+\bibinfo{author}{Hattie, J.} \& \bibinfo{author}{Timperley, H.}
+\newblock \bibinfo{title}{The power of feedback}.
+\newblock \emph{\bibinfo{journal}{Rev. Educ. Res.}} \textbf{\bibinfo{volume}{77}}, \bibinfo{pages}{81--112} (\bibinfo{year}{2007}).
+
+\bibitem{shute2008focus}
+\bibinfo{author}{Shute, V.~J.}
+\newblock \bibinfo{title}{Focus on formative feedback}.
+\newblock \emph{\bibinfo{journal}{Rev. Educ. Res.}} \textbf{\bibinfo{volume}{78}}, \bibinfo{pages}{153--189} (\bibinfo{year}{2008}).
+
+\bibitem{nicol2006formative}
+\bibinfo{author}{Nicol, D.~J.} \& \bibinfo{author}{Macfarlane-Dick, D.}
+\newblock \bibinfo{title}{Formative assessment and self-regulated learning: A model and seven principles of good feedback practice}.
+\newblock \emph{\bibinfo{journal}{Stud. High. Educ.}} \textbf{\bibinfo{volume}{31}}, \bibinfo{pages}{199--218} (\bibinfo{year}{2006}).
+
+\bibitem{chi1989self}
+\bibinfo{author}{Chi, M. T.~H.}, \bibinfo{author}{Bassok, M.}, \bibinfo{author}{Lewis, M.~W.}, \bibinfo{author}{Reimann, P.} \& \bibinfo{author}{Glaser, R.}
+\newblock \bibinfo{title}{Self-explanations: How students study and use examples in learning to solve problems}.
+\newblock \emph{\bibinfo{journal}{Cogn. Sci.}} \textbf{\bibinfo{volume}{13}}, \bibinfo{pages}{145--182} (\bibinfo{year}{1989}).
+
+\bibitem{renkl1997learning}
+\bibinfo{author}{Renkl, A.}
+\newblock \bibinfo{title}{Learning from worked-out examples: A study on individual differences}.
+\newblock \emph{\bibinfo{journal}{Cogn. Sci.}} \textbf{\bibinfo{volume}{21}}, \bibinfo{pages}{1--29} (\bibinfo{year}{1997}).
+
+\bibitem{aleven2003help}
+\bibinfo{author}{Aleven, V.}, \bibinfo{author}{Stahl, E.}, \bibinfo{author}{Schworm, S.}, \bibinfo{author}{Fischer, F.} \& \bibinfo{author}{Wallace, R.}
+\newblock \bibinfo{title}{Help seeking and help design in interactive learning environments}.
+\newblock \emph{\bibinfo{journal}{Rev. Educ. Res.}} \textbf{\bibinfo{volume}{73}}, \bibinfo{pages}{277--320} (\bibinfo{year}{2003}).
+
+\bibitem{reiser2004scaffolding}
+\bibinfo{author}{Reiser, B.~J.}
+\newblock \bibinfo{title}{Scaffolding complex learning: The mechanisms of structuring and problematizing student work}.
+\newblock \emph{\bibinfo{journal}{J. Learn. Sci.}} \textbf{\bibinfo{volume}{13}}, \bibinfo{pages}{273--304} (\bibinfo{year}{2004}).
+
+\bibitem{yin2025chatbotfeedback}
+\bibinfo{author}{Yin, J.} \emph{et~al.}
+\newblock \bibinfo{title}{Effects of different {AI}-driven chatbot feedback on learning outcomes and brain activity}.
+\newblock \emph{\bibinfo{journal}{npj Sci. Learn.}} \textbf{\bibinfo{volume}{10}}, \bibinfo{pages}{17} (\bibinfo{year}{2025}).
+
+\bibitem{brown1989situated}
+\bibinfo{author}{Brown, J.~S.}, \bibinfo{author}{Collins, A.} \& \bibinfo{author}{Duguid, P.}
+\newblock \bibinfo{title}{Situated cognition and the culture of learning}.
+\newblock \emph{\bibinfo{journal}{Educ. Res.}} \textbf{\bibinfo{volume}{18}}, \bibinfo{pages}{32--42} (\bibinfo{year}{1989}).
+
+\bibitem{collins2018cognitive}
+\bibinfo{author}{Collins, A.}, \bibinfo{author}{Brown, J.~S.} \& \bibinfo{author}{Newman, S.~E.}
+\newblock \bibinfo{title}{Cognitive apprenticeship: Teaching the crafts of reading, writing, and mathematics}.
+\newblock \bibinfo{howpublished}{In Resnick, L. B. (ed.) \emph{Knowing, Learning, and Instruction: Essays in Honor of Robert Glaser}, 453--494. Lawrence Erlbaum Associates, Hillsdale, NJ} (\bibinfo{year}{1989}).
+
+\bibitem{burton2024collective}
+\bibinfo{author}{Burton, J.~W.} \emph{et~al.}
+\newblock \bibinfo{title}{How large language models can reshape collective intelligence}.
+\newblock \emph{\bibinfo{journal}{Nat. Hum. Behav.}} \textbf{\bibinfo{volume}{8}}, \bibinfo{pages}{1643--1655} (\bibinfo{year}{2024}).
+
+\bibitem{lazer2009computational}
+\bibinfo{author}{Lazer, D.} \emph{et~al.}
+\newblock \bibinfo{title}{Computational social science}.
+\newblock \emph{\bibinfo{journal}{Science}} \textbf{\bibinfo{volume}{323}}, \bibinfo{pages}{721--723} (\bibinfo{year}{2009}).
+
+\bibitem{salganik2017bitbybit}
+\bibinfo{author}{Salganik, M.~J.}
+\newblock \emph{\bibinfo{title}{Bit by Bit: Social Research in the Digital Age}}  (\bibinfo{publisher}{Princeton University Press}, \bibinfo{address}{Princeton, NJ}, \bibinfo{year}{2017}).
+
+\bibitem{allenai2025wildchat48m}
+\bibinfo{author}{{Allen Institute for AI}}.
+\newblock \bibinfo{title}{{WildChat-4.8M}}.
+\newblock \bibinfo{howpublished}{\url{https://huggingface.co/datasets/allenai/WildChat-4.8M}} (\bibinfo{year}{2025}).
+
+\bibitem{hernan2020causal}
+\bibinfo{author}{Hern{\'a}n, M.~A.} \& \bibinfo{author}{Robins, J.~M.}
+\newblock \emph{\bibinfo{title}{Causal Inference: What If}}  (\bibinfo{publisher}{Chapman \& Hall/CRC}, \bibinfo{address}{Boca Raton}, \bibinfo{year}{2020}).
+
+\bibitem{gilardi2023chatgpt}
+\bibinfo{author}{Gilardi, F.}, \bibinfo{author}{Alizadeh, M.} \& \bibinfo{author}{Kubli, M.}
+\newblock \bibinfo{title}{{ChatGPT} outperforms crowd workers for text-annotation tasks}.
+\newblock \emph{\bibinfo{journal}{Proc. Natl Acad. Sci. USA}} \textbf{\bibinfo{volume}{120}}, \bibinfo{pages}{e2305016120} (\bibinfo{year}{2023}).
+
+\bibitem{ziems2024can}
+\bibinfo{author}{Ziems, C.} \emph{et~al.}
+\newblock \bibinfo{title}{Can large language models transform computational social science?}
+\newblock \emph{\bibinfo{journal}{Comput. Linguist.}} \textbf{\bibinfo{volume}{50}}, \bibinfo{pages}{237--291} (\bibinfo{year}{2024}).
+
+\bibitem{matthews1975comparison}
+\bibinfo{author}{Matthews, B.~W.}
+\newblock \bibinfo{title}{Comparison of the predicted and observed secondary structure of {T4} phage lysozyme}.
+\newblock \emph{\bibinfo{journal}{Biochim. Biophys. Acta}} \textbf{\bibinfo{volume}{405}}, \bibinfo{pages}{442--451} (\bibinfo{year}{1975}).
+
+\bibitem{gwet2008computing}
+\bibinfo{author}{Gwet, K.~L.}
+\newblock \bibinfo{title}{Computing inter-rater reliability and its variance in the presence of high agreement}.
+\newblock \emph{\bibinfo{journal}{Br. J. Math. Stat. Psychol.}} \textbf{\bibinfo{volume}{61}}, \bibinfo{pages}{29--48} (\bibinfo{year}{2008}).
+
+\bibitem{mccullagh1989generalized}
+\bibinfo{author}{McCullagh, P.} \& \bibinfo{author}{Nelder, J.~A.}
+\newblock \emph{\bibinfo{title}{Generalized Linear Models}} \bibinfo{edition}{2nd} edn, Vol.~\bibinfo{volume}{37} of \emph{\bibinfo{series}{Monographs on Statistics and Applied Probability}} (\bibinfo{publisher}{Chapman \& Hall}, \bibinfo{address}{London}, \bibinfo{year}{1989}).
+
+\bibitem{agresti2013categorical}
+\bibinfo{author}{Agresti, A.}
+\newblock \emph{\bibinfo{title}{Categorical Data Analysis}} \bibinfo{edition}{3rd} edn (\bibinfo{publisher}{John Wiley \& Sons}, \bibinfo{address}{Hoboken, NJ}, \bibinfo{year}{2013}).
+
+\bibitem{benjamini1995controlling}
+\bibinfo{author}{Benjamini, Y.} \& \bibinfo{author}{Hochberg, Y.}
+\newblock \bibinfo{title}{Controlling the false discovery rate: a practical and powerful approach to multiple testing}.
+\newblock \emph{\bibinfo{journal}{J. R. Stat. Soc. B}} \textbf{\bibinfo{volume}{57}}, \bibinfo{pages}{289--300} (\bibinfo{year}{1995}).
+
+\end{thebibliography}

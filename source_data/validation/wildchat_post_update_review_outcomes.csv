@@ -1,3 +1,0 @@
-sample,task,role,n_turns,accepted,relabelled,bad_data,relabel_to_summary,notes
-wildchat_pc_final_review_100,coding,user,100,70,27,3,"21 to No engagement; 3 to Active; 1 to Passive; 2 to Constructive","Final user-turn post-update review file: review_wildchat_pc_final_coding_review_100_2026-03-28.json."
-wildchat_pc_final_review_100,writing,user,100,79,16,5,"7 to Active; 2 to Constructive; 7 to No engagement","Final user-turn post-update review file: review_wildchat_pc_final_writing_review_100_2026-03-28.json."
